@@ -1,0 +1,13 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SUsim", "SUsim.vcproj", "{9926C1F5-D07F-43FF-959C-7CD14594951D}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug|Win32
+		ConfigName.1 = Release|Win32
+		ConfigName.2 = Unicode Debug|Win32
+		ConfigName.3 = Unicode Release|Win32
+	EndGlobalSection
+EndGlobal
