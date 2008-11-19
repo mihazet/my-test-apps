@@ -103,6 +103,8 @@ SUSimDlg::~SUSimDlg()
 void SUSimDlg::Init()
 {
 ////@begin SUSimDlg member initialisation
+    m_boardNameTextCtrl = NULL;
+    m_enableBtn = NULL;
 ////@end SUSimDlg member initialisation
 }
 
@@ -132,9 +134,12 @@ void SUSimDlg::CreateControls()
     wxStaticText* itemStaticText6 = new wxStaticText( itemDialog1, wxID_STATIC, _("Assign response board name"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 0);
 
-    wxTextCtrl* itemTextCtrl7 = new wxTextCtrl( itemDialog1, ID_TEXTCTRL1, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
-    itemTextCtrl7->SetMaxLength(15);
-    itemBoxSizer5->Add(itemTextCtrl7, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    m_boardNameTextCtrl = new wxTextCtrl( itemDialog1, ID_TEXTCTRL1, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
+    m_boardNameTextCtrl->SetMaxLength(15);
+    m_boardNameTextCtrl->SetHelpText(_("You can assign a board name for this simulated target.\nWhen query request coming from remote, this simulated\ntarget will use the specific board name as its response\nmessage. The max length of board name is 15 bytes."));
+    if (SUSimDlg::ShowToolTips())
+        m_boardNameTextCtrl->SetToolTip(_("You can assign a board name for this simulated target.\nWhen query request coming from remote, this simulated\ntarget will use the specific board name as its response\nmessage. The max length of board name is 15 bytes."));
+    itemBoxSizer5->Add(m_boardNameTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText8 = new wxStaticText( itemDialog1, wxID_STATIC, _("Select one response action"), wxDefaultPosition, wxDefaultSize, 0 );
     itemStaticBoxSizer4->Add(itemStaticText8, 0, wxALIGN_LEFT|wxALL, 5);
@@ -154,14 +159,20 @@ void SUSimDlg::CreateControls()
     itemListBox9Strings.Add(_("Bootloader Size Error"));
     wxListBox* itemListBox9 = new wxListBox( itemDialog1, ID_LISTBOX, wxDefaultPosition, wxDefaultSize, itemListBox9Strings, wxLB_SINGLE );
     itemListBox9->SetStringSelection(_("No Error"));
+    itemListBox9->SetHelpText(_("You can choose one result from this list box. The result\nwill be used as requested action response back to remote.\nYou can test the how the official Updater react."));
+    if (SUSimDlg::ShowToolTips())
+        itemListBox9->SetToolTip(_("You can choose one result from this list box. The result\nwill be used as requested action response back to remote.\nYou can test the how the official Updater react."));
     itemStaticBoxSizer4->Add(itemListBox9, 0, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer10 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer3->Add(itemBoxSizer10, 0, wxGROW|wxALL, 5);
 
-    wxToggleButton* itemToggleButton11 = new wxToggleButton( itemDialog1, ID_TOGGLEBUTTON, _("Enable"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemToggleButton11->SetValue(false);
-    itemBoxSizer10->Add(itemToggleButton11, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    m_enableBtn = new wxToggleButton( itemDialog1, ID_TOGGLEBUTTON, _("Enable"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_enableBtn->SetValue(false);
+    m_enableBtn->SetHelpText(_("A toggle button to enable/disable the simulated\ntarget functions."));
+    if (SUSimDlg::ShowToolTips())
+        m_enableBtn->SetToolTip(_("A toggle button to enable/disable the simulated\ntarget functions."));
+    itemBoxSizer10->Add(m_enableBtn, 0, wxGROW|wxALL, 5);
 
     wxStaticBox* itemStaticBoxSizer12Static = new wxStaticBox(itemDialog1, wxID_ANY, _("Transaction Log"));
     wxStaticBoxSizer* itemStaticBoxSizer12 = new wxStaticBoxSizer(itemStaticBoxSizer12Static, wxVERTICAL);

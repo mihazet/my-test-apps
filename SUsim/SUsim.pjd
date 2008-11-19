@@ -185,7 +185,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"MinGW"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"MinGW"</string>
           <string name="Build mode">"Debug"</string>
@@ -243,7 +243,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"MinGW"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"MinGW"</string>
           <string name="Build mode">"Release"</string>
@@ -301,7 +301,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"MinGW"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"MinGW"</string>
           <string name="Build mode">"Debug"</string>
@@ -359,7 +359,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"MinGW"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"MinGW"</string>
           <string name="Build mode">"Release"</string>
@@ -417,7 +417,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"VC++ Project"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"VC++ Project"</string>
           <string name="Build mode">"Debug"</string>
@@ -485,7 +485,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"VC++ Project"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"VC++ Project"</string>
           <string name="Build mode">"Release"</string>
@@ -553,7 +553,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"VC++ Project"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"VC++ Project"</string>
           <string name="Build mode">"Debug"</string>
@@ -621,7 +621,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"VC++ Project"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"VC++ Project"</string>
           <string name="Build mode">"Release"</string>
@@ -780,8 +780,8 @@
           <bool name="proxy-wxSTAY_ON_TOP">0</bool>
           <bool name="proxy-wxDIALOG_NO_PARENT">0</bool>
           <bool name="proxy-wxCLOSE_BOX">1</bool>
-          <bool name="proxy-wxMAXIMIZE_BOX">0</bool>
-          <bool name="proxy-wxMINIMIZE_BOX">0</bool>
+          <bool name="proxy-wxMAXIMIZE_BOX">1</bool>
+          <bool name="proxy-wxMINIMIZE_BOX">1</bool>
           <bool name="proxy-wxDIALOG_MODAL">1</bool>
           <bool name="proxy-wxNO_BORDER">0</bool>
           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
@@ -996,10 +996,13 @@
                     <bool name="proxy-Separate files">0</bool>
                     <string name="proxy-Implementation filename">""</string>
                     <string name="proxy-Header filename">""</string>
-                    <string name="proxy-Member variable name">""</string>
+                    <string name="proxy-Member variable name">"m_boardNameTextCtrl"</string>
                     <string name="proxy-Initial value">""</string>
                     <long name="proxy-Max length">15</long>
-                    <string name="proxy-Help text">""</string>
+                    <string name="proxy-Help text">"You can assign a board name for this simulated target.
+When query request coming from remote, this simulated
+target will use the specific board name as its response
+message. The max length of board name is 15 bytes."</string>
                     <string name="proxy-Tooltip text">""</string>
                     <string name="proxy-Background colour">""</string>
                     <string name="proxy-Foreground colour">""</string>
@@ -1152,7 +1155,9 @@
                   <string name="proxy-Member variable name">""</string>
                   <string name="proxy-Strings">"No Error|Syntax Error|Ram Checksum Error|Brec Checksum Error|Unknown Load Mode|Version Error|Memory Allocation Error|Erase Flash Error|Read Flash Error|Write Flash Error|Firmware Size Error|Bootloader Size Error"</string>
                   <string name="proxy-Initial value">"No Error"</string>
-                  <string name="proxy-Help text">""</string>
+                  <string name="proxy-Help text">"You can choose one result from this list box. The result
+will be used as requested action response back to remote.
+You can test the how the official Updater react."</string>
                   <string name="proxy-Tooltip text">""</string>
                   <string name="proxy-Background colour">""</string>
                   <string name="proxy-Foreground colour">""</string>
@@ -1248,10 +1253,11 @@
                   <bool name="proxy-Separate files">0</bool>
                   <string name="proxy-Implementation filename">""</string>
                   <string name="proxy-Header filename">""</string>
-                  <string name="proxy-Member variable name">""</string>
+                  <string name="proxy-Member variable name">"m_enableBtn"</string>
                   <string name="proxy-Label">"Enable"</string>
                   <bool name="proxy-Initial value">0</bool>
-                  <string name="proxy-Help text">""</string>
+                  <string name="proxy-Help text">"A toggle button to enable/disable the simulated
+target functions."</string>
                   <string name="proxy-Tooltip text">""</string>
                   <string name="proxy-Data variable">""</string>
                   <string name="proxy-Data validator">""</string>
@@ -1281,7 +1287,7 @@
                   <long name="proxy-Width">-1</long>
                   <long name="proxy-Height">-1</long>
                   <string name="proxy-AlignH">"Centre"</string>
-                  <string name="proxy-AlignV">"Centre"</string>
+                  <string name="proxy-AlignV">"Expand"</string>
                   <long name="proxy-Stretch factor">0</long>
                   <long name="proxy-Border">5</long>
                   <bool name="proxy-wxLEFT">1</bool>

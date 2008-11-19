@@ -26,6 +26,7 @@
  */
 
 ////@begin forward declarations
+class wxToggleButton;
 ////@end forward declarations
 
 /*!
@@ -38,7 +39,7 @@
 #define ID_LISTBOX 10003
 #define ID_TOGGLEBUTTON 10001
 #define ID_TEXTCTRL 10002
-#define SYMBOL_SUSIMDLG_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxTAB_TRAVERSAL
+#define SYMBOL_SUSIMDLG_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxTAB_TRAVERSAL
 #define SYMBOL_SUSIMDLG_TITLE _("Software Update SimTest")
 #define SYMBOL_SUSIMDLG_IDNAME ID_SUSIMDLG
 #define SYMBOL_SUSIMDLG_SIZE wxSize(400, 300)
@@ -89,6 +90,8 @@ public:
     static bool ShowToolTips();
 
 ////@begin SUSimDlg member variables
+    wxTextCtrl* m_boardNameTextCtrl;
+    wxToggleButton* m_enableBtn;
 ////@end SUSimDlg member variables
 };
 
