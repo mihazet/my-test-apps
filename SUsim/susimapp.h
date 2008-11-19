@@ -19,6 +19,7 @@
 
 ////@begin includes
 #include "wx/image.h"
+#include "susimdlg.h"
 ////@end includes
 
 /*!
@@ -57,9 +58,11 @@ public:
     virtual int OnExit();
 
 ////@begin SUsimApp event handler declarations
+
 ////@end SUsimApp event handler declarations
 
 ////@begin SUsimApp member function declarations
+
 ////@end SUsimApp member function declarations
 
 ////@begin SUsimApp member variables
