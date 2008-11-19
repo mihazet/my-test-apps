@@ -17,6 +17,7 @@
  * Includes
  */
 
+#include "wx/socket.h"
 ////@begin includes
 #include "wx/tglbtn.h"
 ////@end includes
@@ -37,6 +38,7 @@ class wxToggleButton;
 #define ID_SUSIMDLG 10000
 #define ID_TEXTCTRL1 10004
 #define ID_LISTBOX 10003
+#define ID_LISTBOX1 10005
 #define ID_TOGGLEBUTTON 10001
 #define ID_TEXTCTRL 10002
 #define SYMBOL_SUSIMDLG_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxTAB_TRAVERSAL
@@ -91,7 +93,11 @@ public:
 
 ////@begin SUSimDlg member variables
     wxTextCtrl* m_boardNameTextCtrl;
+    wxListBox* m_response;
+    wxListBox* m_interface;
     wxToggleButton* m_enableBtn;
+private:
+    wxDatagramSocket * m_udpSocket;
 ////@end SUSimDlg member variables
 };
 
