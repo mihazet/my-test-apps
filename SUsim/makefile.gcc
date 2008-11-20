@@ -26,7 +26,7 @@ WARNINGFLAGS=-Wall
 OPTFLAGS=-O0
 DEBUGFLAGS=-D__WXDEBUG__ -ggdb
 LINKERFLAGS=-Wl,--subsystem,windows -mwindows
-LIBS=-lwxmsw28d_xrc -lwxmsw28d_richtext -lwxmsw28d_aui -lwxmsw28d_adv -lwxmsw28d_html -lwxmsw28d_core -lwxbase28d -lwxbase28d_net -lwxbase28d_xml -lwxtiffd -lwxjpegd -lwxpngd -lwxzlibd -lwxregexd -lwxexpatd -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+LIBS=-lwxmsw28d_xrc -lwxmsw28d_richtext -lwxmsw28d_aui -lwxmsw28d_adv -lwxmsw28d_html -lwxmsw28d_core -lwxbase28d -lwxbase28d_net -lwxbase28d_xml -lwxtiffd -lwxjpegd -lwxpngd -lwxzlibd -lwxregexd -lwxexpatd -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -liphlpapi
 CPPINC=-I"$(WXWIN)/include" -I"$(WXWIN)/contrib/include" -I"$(WXWIN)/lib/gcc_lib/mswd"
 LIBPATH=-L"$(WXWIN)/lib/gcc_lib"
 RESPATH=--include-dir "$(WXWIN)/include" --include-dir "$(WXWIN)/contrib/include" --include-dir "$(WXWIN)/lib/gcc_lib/mswd"
@@ -50,7 +50,7 @@ WARNINGFLAGS=-Wall
 OPTFLAGS=-O
 DEBUGFLAGS=
 LINKERFLAGS=-Wl,--subsystem,windows -mwindows
-LIBS=-lwxmsw28_xrc -lwxmsw28_richtext -lwxmsw28_aui -lwxmsw28_adv -lwxmsw28_html -lwxmsw28_core -lwxbase28 -lwxbase28_net -lwxbase28_xml -lwxtiff -lwxjpeg -lwxpng -lwxzlib -lwxregex -lwxexpat -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+LIBS=-lwxmsw28_xrc -lwxmsw28_richtext -lwxmsw28_aui -lwxmsw28_adv -lwxmsw28_html -lwxmsw28_core -lwxbase28 -lwxbase28_net -lwxbase28_xml -lwxtiff -lwxjpeg -lwxpng -lwxzlib -lwxregex -lwxexpat -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -liphlpapi
 CPPINC=-I"$(WXWIN)/include" -I"$(WXWIN)/contrib/include" -I"$(WXWIN)/lib/gcc_lib/msw"
 LIBPATH=-L"$(WXWIN)/lib/gcc_lib"
 RESPATH=--include-dir "$(WXWIN)/include" --include-dir "$(WXWIN)/contrib/include" --include-dir "$(WXWIN)/lib/gcc_lib/msw"
@@ -74,7 +74,7 @@ WARNINGFLAGS=-Wall
 OPTFLAGS=-O0
 DEBUGFLAGS=-D__WXDEBUG__ -ggdb
 LINKERFLAGS=-Wl,--subsystem,windows -mwindows
-LIBS=-lwxmsw28ud_xrc -lwxmsw28ud_richtext -lwxmsw28ud_aui -lwxmsw28ud_adv -lwxmsw28ud_html -lwxmsw28ud_core -lwxbase28ud -lwxbase28ud_net -lwxbase28ud_xml -lwxtiffd -lwxjpegd -lwxpngd -lwxzlibd -lwxregexud -lwxexpatd -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+LIBS=-lwxmsw28ud_xrc -lwxmsw28ud_richtext -lwxmsw28ud_aui -lwxmsw28ud_adv -lwxmsw28ud_html -lwxmsw28ud_core -lwxbase28ud -lwxbase28ud_net -lwxbase28ud_xml -lwxtiffd -lwxjpegd -lwxpngd -lwxzlibd -lwxregexud -lwxexpatd -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -liphlpapi
 CPPINC=-I"$(WXWIN)/include" -I"$(WXWIN)/contrib/include" -I"$(WXWIN)/lib/gcc_lib/mswud"
 LIBPATH=-L"$(WXWIN)/lib/gcc_lib"
 RESPATH=--include-dir "$(WXWIN)/include" --include-dir "$(WXWIN)/contrib/include" --include-dir "$(WXWIN)/lib/gcc_lib/mswud"
@@ -97,7 +97,7 @@ WARNINGFLAGS=-Wall
 OPTFLAGS=-O
 DEBUGFLAGS=
 LINKERFLAGS=-Wl,--subsystem,windows -mwindows
-LIBS=-lwxmsw28u_xrc -lwxmsw28u_richtext -lwxmsw28u_aui -lwxmsw28u_adv -lwxmsw28u_html -lwxmsw28u_core -lwxbase28u -lwxbase28u_net -lwxbase28u_xml -lwxtiff -lwxjpeg -lwxpng -lwxzlib -lwxregexu -lwxexpat -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+LIBS=-lwxmsw28u_xrc -lwxmsw28u_richtext -lwxmsw28u_aui -lwxmsw28u_adv -lwxmsw28u_html -lwxmsw28u_core -lwxbase28u -lwxbase28u_net -lwxbase28u_xml -lwxtiff -lwxjpeg -lwxpng -lwxzlib -lwxregexu -lwxexpat -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -liphlpapi
 CPPINC=-I"$(WXWIN)/include" -I"$(WXWIN)/contrib/include" -I"$(WXWIN)/lib/gcc_lib/mswu"
 LIBPATH=-L"$(WXWIN)/lib/gcc_lib"
 RESPATH=--include-dir "$(WXWIN)/include" --include-dir "$(WXWIN)/contrib/include" --include-dir "$(WXWIN)/lib/gcc_lib/mswu"
@@ -108,7 +108,7 @@ endif
 endif
 endif
 
-OBJECTS=$(OBJECTPATH)/susimapp.o $(OBJECTPATH)/susimdlg.o $(OBJECTPATH)/$(RCFILEOBJ)
+OBJECTS=$(OBJECTPATH)/netadapters.o $(OBJECTPATH)/susimapp.o $(OBJECTPATH)/susimdlg.o $(OBJECTPATH)/$(RCFILEOBJ)
 
 all:	$(BUILDPATHS) $(OUTPUTPATH)/$(PROGRAM)
 
@@ -128,6 +128,9 @@ $(OUTPUTPATH)/$(PROGRAM):	$(OBJECTS)
 
 $(OBJECTPATH)/$(RCFILEOBJ):	$(RCFILESRC)
 	$(RESCOMP) --use-temp-file -i$< -o$@ $(RESPATH) --include-dir . --define NOPCH
+
+$(OBJECTPATH)/netadapters.o:	netadapters.cpp netadapters.h
+	$(CXX) -c -o $@ $(CPPFLAGS) $(GCCFLAGS) $(DEBUGFLAGS) $(OPTFLAGS) $(WARNINGFLAGS) $(CPPINC) netadapters.cpp
 
 $(OBJECTPATH)/susimapp.o:	susimapp.cpp susimapp.h susimdlg.h
 	$(CXX) -c -o $@ $(CPPFLAGS) $(GCCFLAGS) $(DEBUGFLAGS) $(OPTFLAGS) $(WARNINGFLAGS) $(CPPINC) susimapp.cpp

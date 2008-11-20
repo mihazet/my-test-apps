@@ -17,6 +17,7 @@
  * Includes
  */
 
+#include "netadapters.h"
 #include "wx/socket.h"
 ////@begin includes
 #include "wx/tglbtn.h"
@@ -75,6 +76,8 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
+    void LoadInterface();
+
 ////@begin SUSimDlg event handler declarations
 
 ////@end SUSimDlg event handler declarations
@@ -98,6 +101,7 @@ public:
     wxToggleButton* m_enableBtn;
 private:
     wxDatagramSocket * m_udpSocket;
+    NetAdapters m_adapters;
 ////@end SUSimDlg member variables
 };
 

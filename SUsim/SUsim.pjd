@@ -221,7 +221,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
+          <string name="Libraries">"-lwxmsw28d_xrc -lwxmsw28d_richtext -lwxmsw28d_aui -lwxmsw28d_adv -lwxmsw28d_html -lwxmsw28d_core -lwxbase28d -lwxbase28d_net -lwxbase28d_xml -lwxtiffd -lwxjpegd -lwxpngd -lwxzlibd -lwxregexd -lwxexpatd -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -liphlpapi"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%"</string>
@@ -280,7 +280,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% -liphlpapi"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%"</string>
@@ -339,7 +339,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% -liphlpapi"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%"</string>
@@ -398,7 +398,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% -liphlpapi"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%"</string>
@@ -458,7 +458,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% iphlpapi.lib"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%"</string>
@@ -527,7 +527,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% iphlpapi.lib"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%"</string>
@@ -596,7 +596,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% iphlpapi.lib"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%"</string>
@@ -665,7 +665,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% iphlpapi.lib"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%"</string>
@@ -756,6 +756,7 @@
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
           <string name="variable-0">"m_udpSocket|wxDatagramSocket *|||2|0|"</string>
+          <string name="variable-1">"m_adapters|NetAdapters|||2|0|"</string>
           <string name="proxy-Id name">"ID_SUSIMDLG"</string>
           <long name="proxy-Id value">10000</long>
           <string name="proxy-Class">"SUSimDlg"</string>
@@ -1696,6 +1697,29 @@ target functions."</string>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"19/11/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"netadapters.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"netadapters.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"netadapters.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"netadapters.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"20/11/2008"</string>
           <string name="language">""</string>
         </document>
       </document>

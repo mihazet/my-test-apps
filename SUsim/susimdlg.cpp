@@ -61,6 +61,7 @@ SUSimDlg::SUSimDlg( wxWindow* parent, wxWindowID id, const wxString& caption, co
 {
     Init();
     Create(parent, id, caption, pos, size, style);
+    LoadInterface();
 }
 
 
@@ -242,3 +243,16 @@ wxIcon SUSimDlg::GetIconResource( const wxString& name )
 
 
 
+void SUSimDlg::LoadInterface()
+{
+    size_t numAdapters = m_adapters.GetAdapterCount();
+    
+    if (numAdapters > 0) {
+        wxString p[numAdapters];
+        
+        for (size_t id = 0; id < numAdapters; id++)
+            p[id] = m_adapters.GetAdapterIpAddress(id);
+            
+        m_interface->Set(numAdapters, p);
+    }
+}
