@@ -814,7 +814,7 @@
                         <string name="proxy-Custom ctor arguments">""</string>
                       </document>
                       <document>
-                        <string name="title">"wxTextCtrl: ID_TEXTCTRL"</string>
+                        <string name="title">"wxTextCtrl: ID_TEXTCTRL_FILE_PATH"</string>
                         <string name="type">"dialog-control-document"</string>
                         <string name="filename">""</string>
                         <string name="icon-name">"textctrl"</string>
@@ -824,7 +824,7 @@
                         <long name="locked">0</long>
                         <string name="created">"21/11/2008"</string>
                         <string name="proxy-type">"wbTextCtrlProxy"</string>
-                        <string name="proxy-Id name">"ID_TEXTCTRL"</string>
+                        <string name="proxy-Id name">"ID_TEXTCTRL_FILE_PATH"</string>
                         <long name="proxy-Id value">10006</long>
                         <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxTextCtrl"</string>
@@ -855,12 +855,12 @@
                         <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                         <bool name="proxy-wxTE_PROCESS_TAB">0</bool>
                         <bool name="proxy-wxTE_PASSWORD">0</bool>
-                        <bool name="proxy-wxTE_READONLY">0</bool>
+                        <bool name="proxy-wxTE_READONLY">1</bool>
                         <bool name="proxy-wxTE_RICH">0</bool>
                         <bool name="proxy-wxTE_RICH2">0</bool>
                         <bool name="proxy-wxTE_AUTO_URL">0</bool>
                         <bool name="proxy-wxTE_NOHIDESEL">0</bool>
-                        <bool name="proxy-wxTE_LEFT">0</bool>
+                        <bool name="proxy-wxTE_LEFT">1</bool>
                         <bool name="proxy-wxTE_CENTRE">0</bool>
                         <bool name="proxy-wxTE_RIGHT">0</bool>
                         <bool name="proxy-wxHSCROLL">0</bool>
@@ -896,7 +896,7 @@
                         <string name="proxy-Custom ctor arguments">""</string>
                       </document>
                       <document>
-                        <string name="title">"wxButton: ID_BUTTON"</string>
+                        <string name="title">"wxButton: ID_BUTTON_LOAD_FILE"</string>
                         <string name="type">"dialog-control-document"</string>
                         <string name="filename">""</string>
                         <string name="icon-name">"dialogcontrol"</string>
@@ -906,7 +906,7 @@
                         <long name="locked">0</long>
                         <string name="created">"21/11/2008"</string>
                         <string name="proxy-type">"wbButtonProxy"</string>
-                        <string name="proxy-Id name">"ID_BUTTON"</string>
+                        <string name="proxy-Id name">"ID_BUTTON_LOAD_FILE"</string>
                         <long name="proxy-Id value">10007</long>
                         <string name="proxy-Name">""</string>
                         <string name="proxy-Class">"wxButton"</string>
@@ -1199,7 +1199,7 @@
                             <string name="proxy-Custom ctor arguments">""</string>
                           </document>
                           <document>
-                            <string name="title">"wxStaticText: wxID_STATIC"</string>
+                            <string name="title">"wxStaticText: wxID_STATIC_FILE_SIZE"</string>
                             <string name="type">"dialog-control-document"</string>
                             <string name="filename">""</string>
                             <string name="icon-name">"statictext"</string>
@@ -1209,8 +1209,8 @@
                             <long name="locked">0</long>
                             <string name="created">"21/11/2008"</string>
                             <string name="proxy-type">"wbStaticTextProxy"</string>
-                            <string name="proxy-Id name">"wxID_STATIC"</string>
-                            <long name="proxy-Id value">5105</long>
+                            <string name="proxy-Id name">"wxID_STATIC_FILE_SIZE"</string>
+                            <long name="proxy-Id value">10015</long>
                             <string name="proxy-Name">""</string>
                             <string name="proxy-Class">"wxStaticText"</string>
                             <string name="proxy-Base class">"wxStaticText"</string>
@@ -1219,7 +1219,7 @@
                             <string name="proxy-Implementation filename">""</string>
                             <string name="proxy-Header filename">""</string>
                             <string name="proxy-Member variable name">""</string>
-                            <string name="proxy-Label">"show byte"</string>
+                            <string name="proxy-Label">"show bytes"</string>
                             <long name="proxy-Wrapping width">-1</long>
                             <string name="proxy-Help text">""</string>
                             <string name="proxy-Tooltip text">""</string>
@@ -1339,7 +1339,7 @@
                             <string name="proxy-Custom ctor arguments">""</string>
                           </document>
                           <document>
-                            <string name="title">"wxStaticText: wxID_STATIC"</string>
+                            <string name="title">"wxStaticText: wxID_STATIC_MU_BYTE"</string>
                             <string name="type">"dialog-control-document"</string>
                             <string name="filename">""</string>
                             <string name="icon-name">"statictext"</string>
@@ -1349,8 +1349,8 @@
                             <long name="locked">0</long>
                             <string name="created">"21/11/2008"</string>
                             <string name="proxy-type">"wbStaticTextProxy"</string>
-                            <string name="proxy-Id name">"wxID_STATIC"</string>
-                            <long name="proxy-Id value">5105</long>
+                            <string name="proxy-Id name">"wxID_STATIC_MU_BYTE"</string>
+                            <long name="proxy-Id value">10016</long>
                             <string name="proxy-Name">""</string>
                             <string name="proxy-Class">"wxStaticText"</string>
                             <string name="proxy-Base class">"wxStaticText"</string>
@@ -1359,7 +1359,7 @@
                             <string name="proxy-Implementation filename">""</string>
                             <string name="proxy-Header filename">""</string>
                             <string name="proxy-Member variable name">""</string>
-                            <string name="proxy-Label">"show byte"</string>
+                            <string name="proxy-Label">"show bytes"</string>
                             <long name="proxy-Wrapping width">-1</long>
                             <string name="proxy-Help text">""</string>
                             <string name="proxy-Tooltip text">""</string>
@@ -1479,7 +1479,7 @@
                             <string name="proxy-Custom ctor arguments">""</string>
                           </document>
                           <document>
-                            <string name="title">"wxStaticText: wxID_STATIC"</string>
+                            <string name="title">"wxStaticText: wxID_STATIC_MU_CNT"</string>
                             <string name="type">"dialog-control-document"</string>
                             <string name="filename">""</string>
                             <string name="icon-name">"statictext"</string>
@@ -1489,8 +1489,8 @@
                             <long name="locked">0</long>
                             <string name="created">"21/11/2008"</string>
                             <string name="proxy-type">"wbStaticTextProxy"</string>
-                            <string name="proxy-Id name">"wxID_STATIC"</string>
-                            <long name="proxy-Id value">5105</long>
+                            <string name="proxy-Id name">"wxID_STATIC_MU_CNT"</string>
+                            <long name="proxy-Id value">10017</long>
                             <string name="proxy-Name">""</string>
                             <string name="proxy-Class">"wxStaticText"</string>
                             <string name="proxy-Base class">"wxStaticText"</string>
@@ -1499,7 +1499,7 @@
                             <string name="proxy-Implementation filename">""</string>
                             <string name="proxy-Header filename">""</string>
                             <string name="proxy-Member variable name">""</string>
-                            <string name="proxy-Label">"show byte"</string>
+                            <string name="proxy-Label">"show bytes"</string>
                             <long name="proxy-Wrapping width">-1</long>
                             <string name="proxy-Help text">""</string>
                             <string name="proxy-Tooltip text">""</string>
@@ -1619,7 +1619,7 @@
                             <string name="proxy-Custom ctor arguments">""</string>
                           </document>
                           <document>
-                            <string name="title">"wxStaticText: wxID_STATIC"</string>
+                            <string name="title">"wxStaticText: wxID_STATIC_LU_BYTE"</string>
                             <string name="type">"dialog-control-document"</string>
                             <string name="filename">""</string>
                             <string name="icon-name">"statictext"</string>
@@ -1629,8 +1629,8 @@
                             <long name="locked">0</long>
                             <string name="created">"21/11/2008"</string>
                             <string name="proxy-type">"wbStaticTextProxy"</string>
-                            <string name="proxy-Id name">"wxID_STATIC"</string>
-                            <long name="proxy-Id value">5105</long>
+                            <string name="proxy-Id name">"wxID_STATIC_LU_BYTE"</string>
+                            <long name="proxy-Id value">10018</long>
                             <string name="proxy-Name">""</string>
                             <string name="proxy-Class">"wxStaticText"</string>
                             <string name="proxy-Base class">"wxStaticText"</string>
@@ -1639,7 +1639,7 @@
                             <string name="proxy-Implementation filename">""</string>
                             <string name="proxy-Header filename">""</string>
                             <string name="proxy-Member variable name">""</string>
-                            <string name="proxy-Label">"show byte"</string>
+                            <string name="proxy-Label">"show bytes"</string>
                             <long name="proxy-Wrapping width">-1</long>
                             <string name="proxy-Help text">""</string>
                             <string name="proxy-Tooltip text">""</string>
@@ -1759,7 +1759,7 @@
                             <string name="proxy-Custom ctor arguments">""</string>
                           </document>
                           <document>
-                            <string name="title">"wxStaticText: wxID_STATIC"</string>
+                            <string name="title">"wxStaticText: wxID_STATIC_LU_CNT"</string>
                             <string name="type">"dialog-control-document"</string>
                             <string name="filename">""</string>
                             <string name="icon-name">"statictext"</string>
@@ -1769,8 +1769,8 @@
                             <long name="locked">0</long>
                             <string name="created">"21/11/2008"</string>
                             <string name="proxy-type">"wbStaticTextProxy"</string>
-                            <string name="proxy-Id name">"wxID_STATIC"</string>
-                            <long name="proxy-Id value">5105</long>
+                            <string name="proxy-Id name">"wxID_STATIC_LU_CNT"</string>
+                            <long name="proxy-Id value">10019</long>
                             <string name="proxy-Name">""</string>
                             <string name="proxy-Class">"wxStaticText"</string>
                             <string name="proxy-Base class">"wxStaticText"</string>
@@ -1779,7 +1779,7 @@
                             <string name="proxy-Implementation filename">""</string>
                             <string name="proxy-Header filename">""</string>
                             <string name="proxy-Member variable name">""</string>
-                            <string name="proxy-Label">"show byte"</string>
+                            <string name="proxy-Label">"show bytes"</string>
                             <long name="proxy-Wrapping width">-1</long>
                             <string name="proxy-Help text">""</string>
                             <string name="proxy-Tooltip text">""</string>
@@ -1992,7 +1992,7 @@
                           <string name="proxy-Custom ctor arguments">""</string>
                         </document>
                         <document>
-                          <string name="title">"wxChoice: ID_CHOICE"</string>
+                          <string name="title">"wxChoice: ID_CHOICE_PORT"</string>
                           <string name="type">"dialog-control-document"</string>
                           <string name="filename">""</string>
                           <string name="icon-name">"choice"</string>
@@ -2002,7 +2002,7 @@
                           <long name="locked">0</long>
                           <string name="created">"21/11/2008"</string>
                           <string name="proxy-type">"wbChoiceProxy"</string>
-                          <string name="proxy-Id name">"ID_CHOICE"</string>
+                          <string name="proxy-Id name">"ID_CHOICE_PORT"</string>
                           <long name="proxy-Id value">10008</long>
                           <string name="proxy-Name">""</string>
                           <string name="proxy-Class">"wxChoice"</string>
@@ -2052,7 +2052,7 @@
                           <string name="proxy-Custom ctor arguments">""</string>
                         </document>
                         <document>
-                          <string name="title">"wxButton: ID_BUTTON1"</string>
+                          <string name="title">"wxButton: ID_BUTTON_SCAN_PORT"</string>
                           <string name="type">"dialog-control-document"</string>
                           <string name="filename">""</string>
                           <string name="icon-name">"dialogcontrol"</string>
@@ -2062,7 +2062,7 @@
                           <long name="locked">0</long>
                           <string name="created">"21/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
-                          <string name="proxy-Id name">"ID_BUTTON1"</string>
+                          <string name="proxy-Id name">"ID_BUTTON_SCAN_PORT"</string>
                           <long name="proxy-Id value">10013</long>
                           <string name="proxy-Name">""</string>
                           <string name="proxy-Class">"wxButton"</string>
@@ -2072,7 +2072,7 @@
                           <string name="proxy-Implementation filename">""</string>
                           <string name="proxy-Header filename">""</string>
                           <string name="proxy-Member variable name">""</string>
-                          <string name="proxy-Label">"Re-check available port"</string>
+                          <string name="proxy-Label">"Re-scan available port"</string>
                           <bool name="proxy-Default">0</bool>
                           <string name="proxy-Help text">""</string>
                           <string name="proxy-Tooltip text">""</string>
@@ -2188,7 +2188,7 @@
                           <string name="proxy-Custom ctor arguments">""</string>
                         </document>
                         <document>
-                          <string name="title">"wxChoice: ID_CHOICE1"</string>
+                          <string name="title">"wxChoice: ID_CHOICE_BAUD"</string>
                           <string name="type">"dialog-control-document"</string>
                           <string name="filename">""</string>
                           <string name="icon-name">"choice"</string>
@@ -2198,7 +2198,7 @@
                           <long name="locked">0</long>
                           <string name="created">"21/11/2008"</string>
                           <string name="proxy-type">"wbChoiceProxy"</string>
-                          <string name="proxy-Id name">"ID_CHOICE1"</string>
+                          <string name="proxy-Id name">"ID_CHOICE_BAUD"</string>
                           <long name="proxy-Id value">10009</long>
                           <string name="proxy-Name">""</string>
                           <string name="proxy-Class">"wxChoice"</string>
@@ -2388,7 +2388,7 @@
                           <string name="proxy-Custom ctor arguments">""</string>
                         </document>
                         <document>
-                          <string name="title">"wxChoice: ID_CHOICE2"</string>
+                          <string name="title">"wxChoice: ID_CHOICE_CHAR_SIZE"</string>
                           <string name="type">"dialog-control-document"</string>
                           <string name="filename">""</string>
                           <string name="icon-name">"choice"</string>
@@ -2398,7 +2398,7 @@
                           <long name="locked">0</long>
                           <string name="created">"21/11/2008"</string>
                           <string name="proxy-type">"wbChoiceProxy"</string>
-                          <string name="proxy-Id name">"ID_CHOICE2"</string>
+                          <string name="proxy-Id name">"ID_CHOICE_CHAR_SIZE"</string>
                           <long name="proxy-Id value">10010</long>
                           <string name="proxy-Name">""</string>
                           <string name="proxy-Class">"wxChoice"</string>
@@ -2588,7 +2588,7 @@
                           <string name="proxy-Custom ctor arguments">""</string>
                         </document>
                         <document>
-                          <string name="title">"wxChoice: ID_CHOICE3"</string>
+                          <string name="title">"wxChoice: ID_CHOICE_PARITY"</string>
                           <string name="type">"dialog-control-document"</string>
                           <string name="filename">""</string>
                           <string name="icon-name">"choice"</string>
@@ -2598,7 +2598,7 @@
                           <long name="locked">0</long>
                           <string name="created">"21/11/2008"</string>
                           <string name="proxy-type">"wbChoiceProxy"</string>
-                          <string name="proxy-Id name">"ID_CHOICE3"</string>
+                          <string name="proxy-Id name">"ID_CHOICE_PARITY"</string>
                           <long name="proxy-Id value">10011</long>
                           <string name="proxy-Name">""</string>
                           <string name="proxy-Class">"wxChoice"</string>
@@ -2788,7 +2788,7 @@
                           <string name="proxy-Custom ctor arguments">""</string>
                         </document>
                         <document>
-                          <string name="title">"wxChoice: ID_CHOICE4"</string>
+                          <string name="title">"wxChoice: ID_CHOICE_STOP_BITS"</string>
                           <string name="type">"dialog-control-document"</string>
                           <string name="filename">""</string>
                           <string name="icon-name">"choice"</string>
@@ -2798,7 +2798,7 @@
                           <long name="locked">0</long>
                           <string name="created">"21/11/2008"</string>
                           <string name="proxy-type">"wbChoiceProxy"</string>
-                          <string name="proxy-Id name">"ID_CHOICE4"</string>
+                          <string name="proxy-Id name">"ID_CHOICE_STOP_BITS"</string>
                           <long name="proxy-Id value">10012</long>
                           <string name="proxy-Name">""</string>
                           <string name="proxy-Class">"wxChoice"</string>
@@ -2999,7 +2999,7 @@
                           <string name="proxy-Implementation filename">""</string>
                           <string name="proxy-Header filename">""</string>
                           <string name="proxy-Member variable name">""</string>
-                          <string name="proxy-Label">"In theory, transmitting these data requires:"</string>
+                          <string name="proxy-Label">"In theory, transmitting these bytes requires:"</string>
                           <long name="proxy-Wrapping width">-1</long>
                           <string name="proxy-Help text">""</string>
                           <string name="proxy-Tooltip text">""</string>
@@ -3049,7 +3049,7 @@
                           <string name="proxy-Custom ctor arguments">""</string>
                         </document>
                         <document>
-                          <string name="title">"wxStaticText: wxID_STATIC"</string>
+                          <string name="title">"wxStaticText: wxID_STATIC_THEORY_TRANSMIT_TIME"</string>
                           <string name="type">"dialog-control-document"</string>
                           <string name="filename">""</string>
                           <string name="icon-name">"statictext"</string>
@@ -3059,8 +3059,8 @@
                           <long name="locked">0</long>
                           <string name="created">"21/11/2008"</string>
                           <string name="proxy-type">"wbStaticTextProxy"</string>
-                          <string name="proxy-Id name">"wxID_STATIC"</string>
-                          <long name="proxy-Id value">5105</long>
+                          <string name="proxy-Id name">"wxID_STATIC_THEORY_TRANSMIT_TIME"</string>
+                          <long name="proxy-Id value">10020</long>
                           <string name="proxy-Name">""</string>
                           <string name="proxy-Class">"wxStaticText"</string>
                           <string name="proxy-Base class">"wxStaticText"</string>
@@ -3165,7 +3165,7 @@
                           <string name="proxy-Implementation filename">""</string>
                           <string name="proxy-Header filename">""</string>
                           <string name="proxy-Member variable name">""</string>
-                          <string name="proxy-Label">"In pratice, transmitting these data spends:"</string>
+                          <string name="proxy-Label">"In pratice, transmitting these bytes spends:"</string>
                           <long name="proxy-Wrapping width">-1</long>
                           <string name="proxy-Help text">""</string>
                           <string name="proxy-Tooltip text">""</string>
@@ -3215,7 +3215,7 @@
                           <string name="proxy-Custom ctor arguments">""</string>
                         </document>
                         <document>
-                          <string name="title">"wxStaticText: wxID_STATIC"</string>
+                          <string name="title">"wxStaticText: wxID_STATIC_PRATICE_TRANSMIT_TIME"</string>
                           <string name="type">"dialog-control-document"</string>
                           <string name="filename">""</string>
                           <string name="icon-name">"statictext"</string>
@@ -3225,8 +3225,8 @@
                           <long name="locked">0</long>
                           <string name="created">"21/11/2008"</string>
                           <string name="proxy-type">"wbStaticTextProxy"</string>
-                          <string name="proxy-Id name">"wxID_STATIC"</string>
-                          <long name="proxy-Id value">5105</long>
+                          <string name="proxy-Id name">"wxID_STATIC_PRATICE_TRANSMIT_TIME"</string>
+                          <long name="proxy-Id value">10021</long>
                           <string name="proxy-Name">""</string>
                           <string name="proxy-Class">"wxStaticText"</string>
                           <string name="proxy-Base class">"wxStaticText"</string>
