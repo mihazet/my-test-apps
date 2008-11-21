@@ -81,6 +81,7 @@ bool SendUart::Create( wxWindow* parent, wxWindowID id, const wxString& caption,
     }
     Centre();
 ////@end SendUart creation
+    ReplaceRowColLabel();
     return true;
 }
 
@@ -332,4 +333,15 @@ wxIcon SendUart::GetIconResource( const wxString& name )
     wxUnusedVar(name);
     return wxNullIcon;
 ////@end SendUart icon retrieval
+}
+
+void SendUart::ReplaceRowColLabel(void)
+{
+    for (size_t id = 0; id < 16; id++)
+    {
+        wxString s;
+        s.Printf(wxT("%X"), id);
+        ((wxGrid *)FindWindow(ID_GRID_BYTE_COUNTER))->SetRowLabelValue(id, s);
+        ((wxGrid *)FindWindow(ID_GRID_BYTE_COUNTER))->SetColLabelValue(id, s);
+    }
 }

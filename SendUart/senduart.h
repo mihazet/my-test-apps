@@ -68,6 +68,8 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
+    void ReplaceRowColLabel(void);
+
 ////@begin SendUart event handler declarations
 
 ////@end SendUart event handler declarations
