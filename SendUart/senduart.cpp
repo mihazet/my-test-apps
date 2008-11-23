@@ -23,6 +23,7 @@
 ////@begin includes
 #include "wx/bookctrl.h"
 ////@end includes
+#include "wx/file.h"
 
 #include "senduart.h"
 
@@ -44,6 +45,8 @@ IMPLEMENT_DYNAMIC_CLASS( SendUart, wxPropertySheetDialog )
 BEGIN_EVENT_TABLE( SendUart, wxPropertySheetDialog )
 
 ////@begin SendUart event table entries
+    EVT_FILEPICKER_CHANGED( ID_FILECTRL_FILE_LOCATION, SendUart::OnFileLocationChanged )
+
 ////@end SendUart event table entries
 
 END_EVENT_TABLE()
@@ -323,3 +326,48 @@ wxIcon SendUart::GetIconResource( const wxString& name )
     return wxNullIcon;
 ////@end SendUart icon retrieval
 }
+
+
+/*!
+ * wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION
+ */
+
+void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
+{
+    wxFile file;
+    uint32_t byteCounter[256];
+    size_t id, fileLen, row, col;
+    unsigned char *pBuf = NULL;
+    wxString cntStr;
+    
+    if (file.Open(event.GetPath().c_str()) && file.IsOpened())
+    {
+        // reset byte counter
+        for (id = 0; id < 256; id++)
+            byteCounter[id] = 0;
+        
+        fileLen = (size_t)file.Length();
+        pBuf = (unsigned char *)malloc(fileLen);
+        if (pBuf)
+        {
+            if (fileLen == file.Read(pBuf, fileLen))
+                for (id = 0; id < fileLen; id++)
+                    byteCounter[pBuf[id]]++;
+            free(pBuf);
+            for (row = 0; row < 16; row++)
+            {
+                for (col = 0; col < 16; col++)
+                {
+                    id = 16 * row + col;
+                    cntStr.Printf(wxT("%u"), byteCounter[id]);
+                    ((wxGrid *)FindWindow(ID_GRID_BYTE_COUNTER))->SetCellValue(row, col, cntStr);
+                    ((wxGrid *)FindWindow(ID_GRID_BYTE_COUNTER))->SetReadOnly(row, col);
+                }
+            }   
+        }
+            
+        // close file
+        file.Close();
+    }
+}
+

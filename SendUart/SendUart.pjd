@@ -742,6 +742,7 @@
                     <long name="locked">0</long>
                     <string name="created">"24/11/2008"</string>
                     <string name="proxy-type">"wbFilePickerCtrlProxy"</string>
+                    <string name="event-handler-0">"wxEVT_FILEPICKER_CHANGED|OnFileLocationChanged|NONE||SendUart"</string>
                     <string name="proxy-Id name">"ID_FILECTRL_FILE_LOCATION"</string>
                     <long name="proxy-Id value">10000</long>
                     <string name="proxy-Name">""</string>

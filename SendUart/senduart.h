@@ -71,6 +71,9 @@ public:
 
 ////@begin SendUart event handler declarations
 
+    /// wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION
+    void OnFileLocationChanged( wxFileDirPickerEvent& event );
+
 ////@end SendUart event handler declarations
 
 ////@begin SendUart member function declarations
