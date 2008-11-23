@@ -336,10 +336,10 @@ wxIcon SendUart::GetIconResource( const wxString& name )
 void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
 {
     wxFile file;
-    uint32_t byteCounter[256];
+    uint32_t byteCounter[256], muCnt = 0, luCnt = 0xFFFFFFFFL;
     size_t id, fileLen, row, col;
-    unsigned char *pBuf = NULL;
-    wxString cntStr;
+    unsigned char *pBuf = NULL, muByte, luByte;
+    wxString str;
     
     if (file.Open(event.GetPath().c_str()) && file.IsOpened())
     {
@@ -348,6 +348,8 @@ void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
             byteCounter[id] = 0;
         
         fileLen = (size_t)file.Length();
+        str.Printf(_("%u"), fileLen);
+        ((wxStaticText *)FindWindow(wxID_STATIC_FILE_SIZE))->SetLabel(str);
         pBuf = (unsigned char *)malloc(fileLen);
         if (pBuf)
         {
@@ -360,11 +362,29 @@ void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
                 for (col = 0; col < 16; col++)
                 {
                     id = 16 * row + col;
-                    cntStr.Printf(wxT("%u"), byteCounter[id]);
-                    ((wxGrid *)FindWindow(ID_GRID_BYTE_COUNTER))->SetCellValue(row, col, cntStr);
+                    str.Printf(wxT("%u"), byteCounter[id]);
+                    if (byteCounter[id] > muCnt)
+                    {
+                        muByte = id;
+                        muCnt = byteCounter[id];
+                    }
+                    if ((byteCounter[id] < luCnt) && (byteCounter[id] != 0))
+                    {
+                        luByte = id;
+                        luCnt = byteCounter[id];
+                    }
+                    ((wxGrid *)FindWindow(ID_GRID_BYTE_COUNTER))->SetCellValue(row, col, str);
                     ((wxGrid *)FindWindow(ID_GRID_BYTE_COUNTER))->SetReadOnly(row, col);
                 }
-            }   
+            }
+            str.Printf(wxT("0x%X"), muByte);
+            ((wxStaticText *)FindWindow(wxID_STATIC_MU_BYTE))->SetLabel(str);
+            str.Printf(wxT("%u"), muCnt);
+            ((wxStaticText *)FindWindow(wxID_STATIC_MU_CNT))->SetLabel(str);
+            str.Printf(wxT("0x%X"), luByte);
+            ((wxStaticText *)FindWindow(wxID_STATIC_LU_BYTE))->SetLabel(str);
+            str.Printf(wxT("%u"), luCnt);
+            ((wxStaticText *)FindWindow(wxID_STATIC_LU_CNT))->SetLabel(str);
         }
             
         // close file
