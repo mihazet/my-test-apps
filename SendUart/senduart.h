@@ -69,6 +69,9 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
+    /// Replace byte counter grid row and column label
+    void ReplaceRowColLabel(void);
+
 ////@begin SendUart event handler declarations
 
     /// wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION

@@ -289,6 +289,7 @@ void SendUart::CreateControls()
     GetBookCtrl()->AddPage(itemPanel3, _("Transmission"));
 
 ////@end SendUart content construction
+    ReplaceRowColLabel();
 }
 
 
@@ -371,3 +372,20 @@ void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
     }
 }
 
+
+/*!
+ * Replace byte counter grid row and column label
+ */
+
+void SendUart::ReplaceRowColLabel(void)
+{
+    wxString label;
+    size_t id;
+    
+    for (id = 0; id < 16; id++)
+    {
+        label.Printf(wxT("%X"), id);
+        ((wxGrid *)FindWindow(ID_GRID_BYTE_COUNTER))->SetRowLabelValue(id, label);
+        ((wxGrid *)FindWindow(ID_GRID_BYTE_COUNTER))->SetColLabelValue(id, label);
+    }
+}
