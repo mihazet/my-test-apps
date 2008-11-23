@@ -3,7 +3,7 @@
 // Purpose:     
 // Author:      YHYang
 // Modified by: 
-// Created:     11/21/2008 2:10:40 PM
+// Created:     23/11/2008 21:21:49
 // RCS-ID:      
 // Copyright:   Copyright 2008, Delta Electronics, Inc. All rights reserved.
 // Licence:     
@@ -18,7 +18,7 @@
  */
 
 ////@begin includes
-#include "wx/notebook.h"
+#include "wx/propdlg.h"
 #include "wx/grid.h"
 ////@end includes
 
@@ -34,7 +34,7 @@
  */
 
 ////@begin control identifiers
-#define SYMBOL_SENDUART_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxTAB_TRAVERSAL
+#define SYMBOL_SENDUART_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
 #define SYMBOL_SENDUART_TITLE _("SendUart")
 #define SYMBOL_SENDUART_IDNAME ID_SENDUART
 #define SYMBOL_SENDUART_SIZE wxDefaultSize
@@ -46,7 +46,7 @@
  * SendUart class declaration
  */
 
-class SendUart: public wxDialog
+class SendUart: public wxPropertySheetDialog
 {    
     DECLARE_DYNAMIC_CLASS( SendUart )
     DECLARE_EVENT_TABLE()
@@ -68,8 +68,6 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
-    void ReplaceRowColLabel(void);
-
 ////@begin SendUart event handler declarations
 
 ////@end SendUart event handler declarations
@@ -89,8 +87,7 @@ public:
 ////@begin SendUart member variables
     /// Control identifiers
     enum {
-        ID_SENDUART = 10000,
-        ID_NOTEBOOK = 10001,
+        ID_SENDUART = 10022,
         ID_PANEL_GENERATION = 10002,
         ID_PANEL_TRANSMISSION = 10003,
         ID_BUTTON_FILE_LOCATION = 10005,
