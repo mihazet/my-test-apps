@@ -19,6 +19,7 @@
 
 ////@begin includes
 #include "wx/propdlg.h"
+#include "wx/filepicker.h"
 #include "wx/grid.h"
 ////@end includes
 
@@ -90,9 +91,7 @@ public:
         ID_SENDUART = 10022,
         ID_PANEL_GENERATION = 10002,
         ID_PANEL_TRANSMISSION = 10003,
-        ID_BUTTON_FILE_LOCATION = 10005,
-        ID_TEXTCTRL_FILE_PATH = 10006,
-        ID_BUTTON_LOAD_FILE = 10007,
+        ID_FILECTRL_FILE_LOCATION = 10000,
         ID_GRID_BYTE_COUNTER = 10004,
         wxID_STATIC_FILE_SIZE = 10015,
         wxID_STATIC_MU_BYTE = 10016,
