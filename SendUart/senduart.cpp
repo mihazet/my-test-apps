@@ -364,6 +364,7 @@ void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
     size_t id, row, col;
     unsigned char muByte = 0, luByte = 0;
     wxString str;
+    double num;
     
     if (file.Open(event.GetPath().c_str()) && file.IsOpened())
     {
@@ -379,6 +380,8 @@ void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
         m_pBuffer = (unsigned char *)malloc(m_bufferSize);
         if (m_pBuffer)
         {
+            if (((wxChoice *)FindWindow(ID_CHOICE_BAUD))->GetStringSelection().ToDouble(&num))
+                ((wxStaticText *)FindWindow(wxID_STATIC_THEORY_TRANSMIT_TIME))->SetLabel(wxString::Format(_("%f millisecond."), m_bufferSize * 10000 / num));
             if (m_bufferSize == (size_t)file.Read(m_pBuffer, m_bufferSize))
                 for (id = 0; id < m_bufferSize; id++)
                     byteCounter[m_pBuffer[id]]++;
@@ -621,8 +624,11 @@ bool SendUart::IsOpened(void)
 void SendUart::OnChoiceBaudSelected( wxCommandEvent& event )
 {
     long num;
+    double dNum;
     if (event.GetString().ToLong(&num))
         if (IsOpened())
             m_com.SetBaudRate((wxBaud)num);
+    if ((event.GetString().ToDouble(&dNum)) && (m_pBuffer != NULL) && (m_bufferSize > 0))
+        ((wxChoice *)FindWindow(wxID_STATIC_THEORY_TRANSMIT_TIME))->SetLabel(wxString::Format(_("%f millisecond."), m_bufferSize * 10000 / dNum));
 }
 
