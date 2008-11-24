@@ -481,6 +481,8 @@
           <long name="working-mode">0</long>
           <string name="variable-0">"m_pBuffer|unsigned char *||NULL|2|0|"</string>
           <string name="variable-1">"m_bufferSize|size_t||0|2|0|"</string>
+          <string name="variable-2">"m_com|wxSerialPort|||2|0|"</string>
+          <string name="variable-3">"m_serialDCS|wxSerialPort_DCS|||2|0|"</string>
           <string name="proxy-Id name">"ID_SENDUART"</string>
           <long name="proxy-Id value">10022</long>
           <string name="proxy-Class">"SendUart"</string>

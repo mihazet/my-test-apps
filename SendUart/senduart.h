@@ -22,6 +22,7 @@
 #include "wx/filepicker.h"
 #include "wx/grid.h"
 ////@end includes
+#include "serport.h"
 
 /*!
  * Forward declarations
@@ -107,6 +108,8 @@ public:
 private:
     unsigned char * m_pBuffer;
     size_t m_bufferSize;
+    wxSerialPort m_com;
+    wxSerialPort_DCS m_serialDCS;
     /// Control identifiers
     enum {
         ID_SENDUART = 10022,

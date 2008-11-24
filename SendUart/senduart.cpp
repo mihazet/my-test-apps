@@ -26,7 +26,6 @@
 #include "wx/file.h"
 
 #include "senduart.h"
-#include "serport.h"
 
 ////@begin XPM images
 ////@end XPM images
@@ -425,19 +424,19 @@ void SendUart::ReplaceRowColLabel(void)
 void SendUart::ScanPort(void)
 {
     const char *ports[] = {
-        wxCOM1, wxCOM2, wxCOM3, wxCOM4, wxCOM5, wxCOM6, wxCOM7, wxCOM8, wxCOM9, wxCOM10, wxCOM11, wxCOM12
+        wxCOM1, wxCOM2, wxCOM3, wxCOM4, wxCOM5, wxCOM6, wxCOM7, wxCOM8,
+        wxCOM9, wxCOM10, wxCOM11, wxCOM12, wxCOM13, wxCOM14, wxCOM15, wxCOM16,
     };
     wxArrayString result;
-    wxSerialPort com;
     for (size_t id = 0; id < (sizeof(ports) >> 2); id++)
     {
         COMMCONFIG cc;
         DWORD dwSize = sizeof(cc);
         if (::GetDefaultCommConfig(ports[id], &cc, &dwSize)) {
 		  if(cc.dwProviderSubType == PST_RS232) {
-			 if(com.Open(ports[id]) >= 0) {
+			 if(m_com.Open(ports[id]) >= 0) {
 				result.Add(wxString(ports[id]));
-				com.Close();
+				m_com.Close();
 			 }
 		  }
 	   }
@@ -466,21 +465,20 @@ void SendUart::OnButtonScanPortClick( wxCommandEvent& event )
 
 void SendUart::OnButtonTransmitClick( wxCommandEvent& event )
 {
-    wxSerialPort com;
     const char *dev;
     long num;
     
     dev = ((wxChoice *)FindWindow(ID_CHOICE_PORT))->GetStringSelection().c_str();
-    com.Open(dev);
-    if (com.IsOpen())
+    m_com.Open(dev);
+    if (m_com.IsOpen())
     {
         if (((wxChoice *)FindWindow(ID_CHOICE_BAUD))->GetStringSelection().ToLong(&num))
-            com.SetBaudRate((wxBaud)num);
+            m_com.SetBaudRate((wxBaud)num);
         if (m_pBuffer)
-            com.Write((char *)m_pBuffer, m_bufferSize);
+            m_com.Write((char *)m_pBuffer, m_bufferSize);
         else
             wxLogError(wxT("Fail to write data to specific serial port."));
-        com.Close();
+        m_com.Close();
     }
     else
     {
