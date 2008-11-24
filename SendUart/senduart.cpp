@@ -26,6 +26,7 @@
 #include "wx/file.h"
 
 #include "senduart.h"
+#include "serport.h"
 
 ////@begin XPM images
 ////@end XPM images
@@ -46,6 +47,8 @@ BEGIN_EVENT_TABLE( SendUart, wxPropertySheetDialog )
 
 ////@begin SendUart event table entries
     EVT_FILEPICKER_CHANGED( ID_FILECTRL_FILE_LOCATION, SendUart::OnFileLocationChanged )
+
+    EVT_BUTTON( ID_BUTTON_SCAN_PORT, SendUart::OnButtonScanPortClick )
 
 ////@end SendUart event table entries
 
@@ -293,6 +296,7 @@ void SendUart::CreateControls()
 
 ////@end SendUart content construction
     ReplaceRowColLabel();
+    ScanPort();
 }
 
 
@@ -413,3 +417,45 @@ void SendUart::ReplaceRowColLabel(void)
         ((wxGrid *)FindWindow(ID_GRID_BYTE_COUNTER))->SetColLabelValue(id, label);
     }
 }
+
+/*!
+ * scan available serial port
+ */
+
+void SendUart::ScanPort(void)
+{
+    const char *ports[] = {
+        wxCOM1, wxCOM2, wxCOM3, wxCOM4, wxCOM5, wxCOM6, wxCOM7, wxCOM8, wxCOM9, wxCOM10, wxCOM11, wxCOM12
+    };
+    wxArrayString result;
+    wxSerialPort com;
+    for (size_t id = 0; id < (sizeof(ports) >> 2); id++)
+    {
+        COMMCONFIG cc;
+        DWORD dwSize = sizeof(cc);
+        if (::GetDefaultCommConfig(ports[id], &cc, &dwSize)) {
+		  if(cc.dwProviderSubType == PST_RS232) {
+			 if(com.Open(ports[id]) >= 0) {
+				result.Add(wxString(ports[id]));
+				com.Close();
+			 }
+		  }
+	   }
+    }
+    
+    ((wxChoice *)FindWindow(ID_CHOICE_PORT))->Clear();
+    ((wxChoice *)FindWindow(ID_CHOICE_PORT))->Append(result);
+    if (!result.IsEmpty())
+        ((wxChoice *)FindWindow(ID_CHOICE_PORT))->SetSelection(0);
+}
+
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_SCAN_PORT
+ */
+
+void SendUart::OnButtonScanPortClick( wxCommandEvent& event )
+{
+    ScanPort();
+}
+

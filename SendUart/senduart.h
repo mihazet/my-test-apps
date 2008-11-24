@@ -72,10 +72,16 @@ public:
     /// Replace byte counter grid row and column label
     void ReplaceRowColLabel(void);
 
+    /// scan available serial port
+    void ScanPort(void);
+
 ////@begin SendUart event handler declarations
 
     /// wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION
     void OnFileLocationChanged( wxFileDirPickerEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_SCAN_PORT
+    void OnButtonScanPortClick( wxCommandEvent& event );
 
 ////@end SendUart event handler declarations
 

@@ -88,7 +88,7 @@
     <string name="app_class_name">"Application"</string>
     <bool name="generate_app_class">0</bool>
     <string name="external_symbol_filenames">""</string>
-    <string name="configuration">"MinGW Release"</string>
+    <string name="configuration">"MinGW Debug"</string>
     <string name="source_encoding">"iso-8859-1"</string>
     <string name="xrc_encoding">"utf-8"</string>
     <string name="project_encoding">"utf-8"</string>
@@ -342,7 +342,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,-I../../wxctb-0.13/include"</string>
+          <string name="Include path">"%AUTO%,wxctb-0.13/include,wxctb-0.13/include/wx/ctb-0.13"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
@@ -401,7 +401,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,-I../../wxctb-0.13/include"</string>
+          <string name="Include path">"%AUTO%,wxctb-0.13/include,wxctb-0.13/include/wx/ctb-0.13"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
@@ -2025,6 +2025,7 @@
                       <long name="locked">0</long>
                       <string name="created">"23/11/2008"</string>
                       <string name="proxy-type">"wbButtonProxy"</string>
+                      <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonScanPortClick|NONE||SendUart"</string>
                       <string name="proxy-Id name">"ID_BUTTON_SCAN_PORT"</string>
                       <long name="proxy-Id value">10013</long>
                       <string name="proxy-Name">""</string>
