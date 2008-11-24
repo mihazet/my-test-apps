@@ -1893,6 +1893,8 @@
                       <long name="locked">0</long>
                       <string name="created">"24/11/2008"</string>
                       <string name="proxy-type">"wbButtonProxy"</string>
+                      <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonConnectClick|NONE||SendUart"</string>
+                      <string name="event-handler-1">"wxEVT_UPDATE_UI|OnButtonConnectUpdate|NONE||"</string>
                       <string name="proxy-Id name">"ID_BUTTON_CONNECT"</string>
                       <long name="proxy-Id value">10001</long>
                       <string name="proxy-Name">""</string>
@@ -1959,6 +1961,8 @@
                       <long name="locked">0</long>
                       <string name="created">"24/11/2008"</string>
                       <string name="proxy-type">"wbButtonProxy"</string>
+                      <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonDisconnectClick|NONE||SendUart"</string>
+                      <string name="event-handler-1">"wxEVT_UPDATE_UI|OnButtonDisconnectUpdate|NONE||"</string>
                       <string name="proxy-Id name">"ID_BUTTON_DISCONNECT"</string>
                       <long name="proxy-Id value">10005</long>
                       <string name="proxy-Name">""</string>
@@ -2193,6 +2197,7 @@
                       <long name="locked">0</long>
                       <string name="created">"23/11/2008"</string>
                       <string name="proxy-type">"wbChoiceProxy"</string>
+                      <string name="event-handler-0">"wxEVT_UPDATE_UI|OnChoicePortUpdate|NONE||"</string>
                       <string name="proxy-Id name">"ID_CHOICE_PORT"</string>
                       <long name="proxy-Id value">10008</long>
                       <string name="proxy-Name">""</string>
@@ -2323,6 +2328,7 @@
                       <long name="locked">0</long>
                       <string name="created">"23/11/2008"</string>
                       <string name="proxy-type">"wbChoiceProxy"</string>
+                      <string name="event-handler-0">"wxEVT_COMMAND_CHOICE_SELECTED|OnChoiceBaudSelected|NONE||SendUart"</string>
                       <string name="proxy-Id name">"ID_CHOICE_BAUD"</string>
                       <long name="proxy-Id value">10009</long>
                       <string name="proxy-Name">""</string>
@@ -2453,6 +2459,7 @@
                       <long name="locked">0</long>
                       <string name="created">"23/11/2008"</string>
                       <string name="proxy-type">"wbChoiceProxy"</string>
+                      <string name="event-handler-0">"wxEVT_UPDATE_UI|OnChoiceCharSizeUpdate|NONE||"</string>
                       <string name="proxy-Id name">"ID_CHOICE_CHAR_SIZE"</string>
                       <long name="proxy-Id value">10010</long>
                       <string name="proxy-Name">""</string>
@@ -2583,6 +2590,7 @@
                       <long name="locked">0</long>
                       <string name="created">"23/11/2008"</string>
                       <string name="proxy-type">"wbChoiceProxy"</string>
+                      <string name="event-handler-0">"wxEVT_UPDATE_UI|OnChoiceParityUpdate|NONE||"</string>
                       <string name="proxy-Id name">"ID_CHOICE_PARITY"</string>
                       <long name="proxy-Id value">10011</long>
                       <string name="proxy-Name">""</string>
@@ -2713,6 +2721,7 @@
                       <long name="locked">0</long>
                       <string name="created">"23/11/2008"</string>
                       <string name="proxy-type">"wbChoiceProxy"</string>
+                      <string name="event-handler-0">"wxEVT_UPDATE_UI|OnChoiceStopBitsUpdate|NONE||"</string>
                       <string name="proxy-Id name">"ID_CHOICE_STOP_BITS"</string>
                       <long name="proxy-Id value">10012</long>
                       <string name="proxy-Name">""</string>

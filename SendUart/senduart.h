@@ -76,13 +76,43 @@ public:
     /// scan available serial port
     void ScanPort(void);
 
+    /// Check if we're in opened state
+    bool IsOpened(void);
+
 ////@begin SendUart event handler declarations
 
     /// wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION
     void OnFileLocationChanged( wxFileDirPickerEvent& event );
 
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_CONNECT
+    void OnButtonConnectClick( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_BUTTON_CONNECT
+    void OnButtonConnectUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_DISCONNECT
+    void OnButtonDisconnectClick( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_BUTTON_DISCONNECT
+    void OnButtonDisconnectUpdate( wxUpdateUIEvent& event );
+
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_SCAN_PORT
     void OnButtonScanPortClick( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_CHOICE_PORT
+    void OnChoicePortUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_COMMAND_CHOICE_SELECTED event handler for ID_CHOICE_BAUD
+    void OnChoiceBaudSelected( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_CHOICE_CHAR_SIZE
+    void OnChoiceCharSizeUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_CHOICE_PARITY
+    void OnChoiceParityUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_CHOICE_STOP_BITS
+    void OnChoiceStopBitsUpdate( wxUpdateUIEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_TRANSMIT
     void OnButtonTransmitClick( wxCommandEvent& event );

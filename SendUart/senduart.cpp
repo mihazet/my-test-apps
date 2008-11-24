@@ -47,7 +47,23 @@ BEGIN_EVENT_TABLE( SendUart, wxPropertySheetDialog )
 ////@begin SendUart event table entries
     EVT_FILEPICKER_CHANGED( ID_FILECTRL_FILE_LOCATION, SendUart::OnFileLocationChanged )
 
+    EVT_BUTTON( ID_BUTTON_CONNECT, SendUart::OnButtonConnectClick )
+    EVT_UPDATE_UI( ID_BUTTON_CONNECT, SendUart::OnButtonConnectUpdate )
+
+    EVT_BUTTON( ID_BUTTON_DISCONNECT, SendUart::OnButtonDisconnectClick )
+    EVT_UPDATE_UI( ID_BUTTON_DISCONNECT, SendUart::OnButtonDisconnectUpdate )
+
     EVT_BUTTON( ID_BUTTON_SCAN_PORT, SendUart::OnButtonScanPortClick )
+
+    EVT_UPDATE_UI( ID_CHOICE_PORT, SendUart::OnChoicePortUpdate )
+
+    EVT_CHOICE( ID_CHOICE_BAUD, SendUart::OnChoiceBaudSelected )
+
+    EVT_UPDATE_UI( ID_CHOICE_CHAR_SIZE, SendUart::OnChoiceCharSizeUpdate )
+
+    EVT_UPDATE_UI( ID_CHOICE_PARITY, SendUart::OnChoiceParityUpdate )
+
+    EVT_UPDATE_UI( ID_CHOICE_STOP_BITS, SendUart::OnChoiceStopBitsUpdate )
 
     EVT_BUTTON( ID_BUTTON_TRANSMIT, SendUart::OnButtonTransmitClick )
     EVT_UPDATE_UI( ID_BUTTON_TRANSMIT, SendUart::OnButtonTransmitUpdate )
@@ -103,6 +119,8 @@ SendUart::~SendUart()
 ////@end SendUart destruction
     if (m_pBuffer)
         free(m_pBuffer);
+    if (IsOpened())
+        m_com.Close();
 }
 
 
@@ -455,7 +473,8 @@ void SendUart::ScanPort(void)
 
 void SendUart::OnButtonScanPortClick( wxCommandEvent& event )
 {
-    ScanPort();
+    if (!IsOpened())
+        ScanPort();
 }
 
 
@@ -465,24 +484,17 @@ void SendUart::OnButtonScanPortClick( wxCommandEvent& event )
 
 void SendUart::OnButtonTransmitClick( wxCommandEvent& event )
 {
-    const char *dev;
-    long num;
-    
-    dev = ((wxChoice *)FindWindow(ID_CHOICE_PORT))->GetStringSelection().c_str();
-    m_com.Open(dev);
-    if (m_com.IsOpen())
+    size_t writeByte = 0;
+
+    if (m_com.IsOpen() && m_pBuffer)
     {
-        if (((wxChoice *)FindWindow(ID_CHOICE_BAUD))->GetStringSelection().ToLong(&num))
-            m_com.SetBaudRate((wxBaud)num);
-        if (m_pBuffer)
-            m_com.Write((char *)m_pBuffer, m_bufferSize);
-        else
-            wxLogError(wxT("Fail to write data to specific serial port."));
-        m_com.Close();
+        writeByte = m_com.Write((char *)m_pBuffer, m_bufferSize);
+        if (writeByte != m_bufferSize)
+            wxLogError(_("Failed to write data to serial port! Error = %d"), writeByte);
     }
     else
     {
-        wxLogError(wxT("Can't open specific serial port, it may be busy now!\nPlease run re-scan available port!"));
+        wxLogError(_("Can not transmit in non-connection state!"));
     }
 }
 
@@ -493,9 +505,124 @@ void SendUart::OnButtonTransmitClick( wxCommandEvent& event )
 
 void SendUart::OnButtonTransmitUpdate( wxUpdateUIEvent& event )
 {
-    if (m_pBuffer)
-        event.Enable(true);
-    else
-        event.Enable(false);
+    event.Enable((m_pBuffer != NULL) && (m_bufferSize > 0) && IsOpened());
+}
+
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_CONNECT
+ */
+
+void SendUart::OnButtonConnectClick( wxCommandEvent& event )
+{
+    wxString selectedPort = ((wxChoice *)FindWindow(ID_CHOICE_PORT))->GetStringSelection();
+    long num = 0;
+    
+    if (!selectedPort.IsEmpty())
+    {
+        if (((wxChoice *)FindWindow(ID_CHOICE_BAUD))->GetStringSelection().ToLong(&num))
+            m_serialDCS.baud = (wxBaud)num;
+        if (((wxChoice *)FindWindow(ID_CHOICE_CHAR_SIZE))->GetStringSelection().ToLong(&num))
+            m_serialDCS.wordlen = (unsigned char)num;
+        num = ((wxChoice *)FindWindow(ID_CHOICE_PARITY))->GetCurrentSelection();
+        m_serialDCS.parity = (wxParity)num;
+        if (((wxChoice *)FindWindow(ID_CHOICE_STOP_BITS))->GetStringSelection().ToLong(&num))
+            m_serialDCS.stopbits = (unsigned char)num;
+        m_com.Open(selectedPort.c_str(), &m_serialDCS);
+    }
+}
+
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_BUTTON_CONNECT
+ */
+
+void SendUart::OnButtonConnectUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable(!IsOpened());
+}
+
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_DISCONNECT
+ */
+
+void SendUart::OnButtonDisconnectClick( wxCommandEvent& event )
+{
+    if (m_com.IsOpen())
+        m_com.Close();
+}
+
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_BUTTON_DISCONNECT
+ */
+
+void SendUart::OnButtonDisconnectUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable(IsOpened());
+}
+
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_CHOICE_PORT
+ */
+
+void SendUart::OnChoicePortUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable(!IsOpened());
+}
+
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_CHOICE_CHAR_SIZE
+ */
+
+void SendUart::OnChoiceCharSizeUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable(!IsOpened());
+}
+
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_CHOICE_PARITY
+ */
+
+void SendUart::OnChoiceParityUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable(!IsOpened());
+}
+
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_CHOICE_STOP_BITS
+ */
+
+void SendUart::OnChoiceStopBitsUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable(!IsOpened());
+}
+
+
+/*!
+ * Check if we're in opened state
+ */
+
+bool SendUart::IsOpened(void)
+{
+    return (m_com.IsOpen() == 1);
+}
+
+
+/*!
+ * wxEVT_COMMAND_CHOICE_SELECTED event handler for ID_CHOICE_BAUD
+ */
+
+void SendUart::OnChoiceBaudSelected( wxCommandEvent& event )
+{
+    long num;
+    if (event.GetString().ToLong(&num))
+        if (IsOpened())
+            m_com.SetBaudRate((wxBaud)num);
 }
 
