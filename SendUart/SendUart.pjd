@@ -88,7 +88,7 @@
     <string name="app_class_name">"Application"</string>
     <bool name="generate_app_class">0</bool>
     <string name="external_symbol_filenames">""</string>
-    <string name="configuration">"MinGW Unicode Release"</string>
+    <string name="configuration">"MinGW Release"</string>
     <string name="source_encoding">"iso-8859-1"</string>
     <string name="xrc_encoding">"utf-8"</string>
     <string name="project_encoding">"utf-8"</string>
@@ -224,7 +224,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%"</string>
+          <string name="Include path">"%AUTO%,-I../../wxctb-0.13/include"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
@@ -283,7 +283,125 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%"</string>
+          <string name="Include path">"%AUTO%,-I../../wxctb-0.13/include"</string>
+          <string name="Resource flags">"%AUTO%"</string>
+          <string name="Resource path">"%AUTO%"</string>
+          <string name="wxWidgets build path">"%AUTO%"</string>
+          <string name="wxWidgets build command">"%AUTO%"</string>
+          <string name="wxWidgets clean command">"%AUTO%"</string>
+          <string name="PATH variable">"%AUTO%"</string>
+          <bool name="Suppress source rules">0</bool>
+          <bool name="Enable makefile generation">1</bool>
+          <string name="CFG">""</string>
+        </document>
+        <document>
+          <string name="title">"MinGW Debug"</string>
+          <string name="type">"mingw-config-data-document"</string>
+          <string name="filename">""</string>
+          <string name="icon-name">""</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <string name="template-name">"MinGW"</string>
+          <bool name="dirty">0</bool>
+          <long name="makefile-last-written">0</long>
+          <string name="Compiler name">"MinGW"</string>
+          <string name="Build mode">"Debug"</string>
+          <string name="Unicode mode">"ANSI"</string>
+          <string name="Shared mode">"Static"</string>
+          <string name="Modularity">"Modular"</string>
+          <string name="GUI mode">"GUI"</string>
+          <string name="Toolkit">"wxMSW"</string>
+          <string name="Runtime linking">"Dynamic"</string>
+          <string name="Use exceptions">"Yes"</string>
+          <string name="Use ODBC">"No"</string>
+          <string name="Use OpenGL">"No"</string>
+          <string name="wxWidgets version">"%WXVERSION%"</string>
+          <string name="Executable name">"%EXECUTABLE%"</string>
+          <string name="Program arguments">""</string>
+          <string name="Working path">"%AUTO%"</string>
+          <string name="Output path">"%AUTO%"</string>
+          <string name="Objects path">"%AUTO%"</string>
+          <string name="Compiler location">"%AUTO%"</string>
+          <string name="wxWidgets location">"%AUTO%"</string>
+          <string name="C++ command">"%AUTO%"</string>
+          <string name="C command">"%AUTO%"</string>
+          <string name="Resource compiler">"%AUTO%"</string>
+          <string name="Make command">"%AUTO%"</string>
+          <string name="Project makefile">"%AUTO%"</string>
+          <string name="wxWidgets makefile">"%AUTO%"</string>
+          <string name="Compiler bin path">"%AUTO%"</string>
+          <string name="Compiler include path">"%AUTO%"</string>
+          <string name="Compiler lib path">"%AUTO%"</string>
+          <string name="Preprocessor flags">"%AUTO%"</string>
+          <string name="Optimizations">"%AUTO%"</string>
+          <string name="Warnings">"%AUTO%"</string>
+          <string name="Debug flags">"%AUTO%"</string>
+          <string name="Extra compile flags">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO%"</string>
+          <string name="Library path">"%AUTO%"</string>
+          <string name="Linker flags">"%AUTO%"</string>
+          <string name="Include path">"%AUTO%,-I../../wxctb-0.13/include"</string>
+          <string name="Resource flags">"%AUTO%"</string>
+          <string name="Resource path">"%AUTO%"</string>
+          <string name="wxWidgets build path">"%AUTO%"</string>
+          <string name="wxWidgets build command">"%AUTO%"</string>
+          <string name="wxWidgets clean command">"%AUTO%"</string>
+          <string name="PATH variable">"%AUTO%"</string>
+          <bool name="Suppress source rules">0</bool>
+          <bool name="Enable makefile generation">1</bool>
+          <string name="CFG">""</string>
+        </document>
+        <document>
+          <string name="title">"MinGW Release"</string>
+          <string name="type">"mingw-config-data-document"</string>
+          <string name="filename">""</string>
+          <string name="icon-name">""</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <string name="template-name">"MinGW"</string>
+          <bool name="dirty">0</bool>
+          <long name="makefile-last-written">0</long>
+          <string name="Compiler name">"MinGW"</string>
+          <string name="Build mode">"Release"</string>
+          <string name="Unicode mode">"ANSI"</string>
+          <string name="Shared mode">"Static"</string>
+          <string name="Modularity">"Modular"</string>
+          <string name="GUI mode">"GUI"</string>
+          <string name="Toolkit">"wxMSW"</string>
+          <string name="Runtime linking">"Dynamic"</string>
+          <string name="Use exceptions">"Yes"</string>
+          <string name="Use ODBC">"No"</string>
+          <string name="Use OpenGL">"No"</string>
+          <string name="wxWidgets version">"%WXVERSION%"</string>
+          <string name="Executable name">"%EXECUTABLE%"</string>
+          <string name="Program arguments">""</string>
+          <string name="Working path">"%AUTO%"</string>
+          <string name="Output path">"%AUTO%"</string>
+          <string name="Objects path">"%AUTO%"</string>
+          <string name="Compiler location">"%AUTO%"</string>
+          <string name="wxWidgets location">"%AUTO%"</string>
+          <string name="C++ command">"%AUTO%"</string>
+          <string name="C command">"%AUTO%"</string>
+          <string name="Resource compiler">"%AUTO%"</string>
+          <string name="Make command">"%AUTO%"</string>
+          <string name="Project makefile">"%AUTO%"</string>
+          <string name="wxWidgets makefile">"%AUTO%"</string>
+          <string name="Compiler bin path">"%AUTO%"</string>
+          <string name="Compiler include path">"%AUTO%"</string>
+          <string name="Compiler lib path">"%AUTO%"</string>
+          <string name="Preprocessor flags">"%AUTO%"</string>
+          <string name="Optimizations">"%AUTO%"</string>
+          <string name="Warnings">"%AUTO%"</string>
+          <string name="Debug flags">"%AUTO%"</string>
+          <string name="Extra compile flags">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO%"</string>
+          <string name="Library path">"%AUTO%"</string>
+          <string name="Linker flags">"%AUTO%"</string>
+          <string name="Include path">"%AUTO%,-I../../wxctb-0.13/include"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
@@ -3249,6 +3367,18 @@
           <string name="language">""</string>
         </document>
         <document>
+          <string name="title">"SendUart.vcproj"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"SendUart.vcproj"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"24/11/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"makefile.gcc"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"makefile.gcc"</string>
@@ -3259,6 +3389,243 @@
           <long name="locked">0</long>
           <string name="created">"21/11/2008"</string>
           <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wxCTB"</string>
+          <string name="type">"html-folder-document"</string>
+          <string name="filename">""</string>
+          <string name="icon-name">"folder"</string>
+          <long name="is-transient">1</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <string name="created">"24/11/2008"</string>
+          <document>
+            <string name="title">"src"</string>
+            <string name="type">"html-folder-document"</string>
+            <string name="filename">""</string>
+            <string name="icon-name">"folder"</string>
+            <long name="is-transient">1</long>
+            <long name="owns-file">1</long>
+            <long name="title-mode">0</long>
+            <long name="locked">0</long>
+            <string name="created">"24/11/2008"</string>
+            <document>
+              <string name="title">"fifo.cpp"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/src/fifo.cpp"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"getopt.cpp"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/src/getopt.cpp"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"iobase.cpp"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/src/iobase.cpp"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"kbhit.cpp"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/src/kbhit.cpp"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"serport.cpp"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/src/win32/serport.cpp"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"timer.cpp"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/src/win32/timer.cpp"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+          </document>
+          <document>
+            <string name="title">"include"</string>
+            <string name="type">"html-folder-document"</string>
+            <string name="filename">""</string>
+            <string name="icon-name">"folder"</string>
+            <long name="is-transient">1</long>
+            <long name="owns-file">1</long>
+            <long name="title-mode">0</long>
+            <long name="locked">0</long>
+            <string name="created">"24/11/2008"</string>
+            <document>
+              <string name="title">"ctb.h"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/include/wx/ctb-0.13/ctb.h"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"fifo.h"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/include/wx/ctb-0.13/fifo.h"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"getopt.h"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/include/wx/ctb-0.13/getopt.h"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"getopt.h"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/include/wx/ctb-0.13/win32/getopt.h"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"iobase.h"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/include/wx/ctb-0.13/iobase.h"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"kbhit.h"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/include/wx/ctb-0.13/kbhit.h"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"serport.h"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/include/wx/ctb-0.13/serport.h"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"serport.h"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/include/wx/ctb-0.13/win32/serport.h"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"serportx.h"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/include/wx/ctb-0.13/serportx.h"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"timer.h"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/include/wx/ctb-0.13/timer.h"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+            <document>
+              <string name="title">"timer.h"</string>
+              <string name="type">"source-editor-document"</string>
+              <string name="filename">"wxctb-0.13/include/wx/ctb-0.13/win32/timer.h"</string>
+              <string name="icon-name">"source-editor"</string>
+              <long name="is-transient">0</long>
+              <long name="owns-file">0</long>
+              <long name="title-mode">1</long>
+              <long name="locked">0</long>
+              <string name="created">"24/11/2008"</string>
+              <string name="language">""</string>
+            </document>
+          </document>
         </document>
       </document>
       <document>
