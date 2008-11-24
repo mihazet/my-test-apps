@@ -24,6 +24,8 @@
 #include "wx/bookctrl.h"
 ////@end includes
 #include "wx/file.h"
+#include "wx/datetime.h"
+#include "wx/longlong.h"
 
 #include "senduart.h"
 
@@ -488,12 +490,21 @@ void SendUart::OnButtonScanPortClick( wxCommandEvent& event )
 void SendUart::OnButtonTransmitClick( wxCommandEvent& event )
 {
     size_t writeByte = 0;
+    wxDateTime start, end;
+    wxTimeSpan diff;
 
     if (m_com.IsOpen() && m_pBuffer)
     {
+        start = wxDateTime::UNow();
         writeByte = m_com.Write((char *)m_pBuffer, m_bufferSize);
         if (writeByte != m_bufferSize)
             wxLogError(_("Failed to write data to serial port! Error = %d"), writeByte);
+        else
+        {
+            end = wxDateTime::UNow();
+            diff = end.Subtract(start);
+            ((wxStaticText *)FindWindow(wxID_STATIC_PRATICE_TRANSMIT_TIME))->SetLabel(diff.GetMilliseconds().ToString() + wxString::Format(_(" millisecond.")));
+        }
     }
     else
     {
@@ -629,6 +640,6 @@ void SendUart::OnChoiceBaudSelected( wxCommandEvent& event )
         if (IsOpened())
             m_com.SetBaudRate((wxBaud)num);
     if ((event.GetString().ToDouble(&dNum)) && (m_pBuffer != NULL) && (m_bufferSize > 0))
-        ((wxChoice *)FindWindow(wxID_STATIC_THEORY_TRANSMIT_TIME))->SetLabel(wxString::Format(_("%f millisecond."), m_bufferSize * 10000 / dNum));
+        ((wxStaticText *)FindWindow(wxID_STATIC_THEORY_TRANSMIT_TIME))->SetLabel(wxString::Format(_("%f millisecond."), m_bufferSize * 10000 / dNum));
 }
 
