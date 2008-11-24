@@ -96,6 +96,8 @@ SendUart::~SendUart()
 {
 ////@begin SendUart destruction
 ////@end SendUart destruction
+    if (m_pBuffer)
+        free(m_pBuffer);
 }
 
 
@@ -106,6 +108,7 @@ SendUart::~SendUart()
 void SendUart::Init()
 {
 ////@begin SendUart member initialisation
+    m_pBuffer = NULL;
 ////@end SendUart member initialisation
 }
 
@@ -338,7 +341,7 @@ void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
     wxFile file;
     uint32_t byteCounter[256], muCnt = 0, luCnt = 0xFFFFFFFFL;
     size_t id, fileLen, row, col;
-    unsigned char *pBuf = NULL, muByte, luByte;
+    unsigned char muByte = 0, luByte = 0;
     wxString str;
     
     if (file.Open(event.GetPath().c_str()) && file.IsOpened())
@@ -350,13 +353,14 @@ void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
         fileLen = (size_t)file.Length();
         str.Printf(_("%u"), fileLen);
         ((wxStaticText *)FindWindow(wxID_STATIC_FILE_SIZE))->SetLabel(str);
-        pBuf = (unsigned char *)malloc(fileLen);
-        if (pBuf)
+        if (m_pBuffer)
+            free(m_pBuffer);
+        m_pBuffer = (unsigned char *)malloc(fileLen);
+        if (m_pBuffer)
         {
-            if (fileLen == file.Read(pBuf, fileLen))
+            if (fileLen == (size_t)file.Read(m_pBuffer, fileLen))
                 for (id = 0; id < fileLen; id++)
-                    byteCounter[pBuf[id]]++;
-            free(pBuf);
+                    byteCounter[m_pBuffer[id]]++;
             for (row = 0; row < 16; row++)
             {
                 for (col = 0; col < 16; col++)

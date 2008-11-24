@@ -92,6 +92,8 @@ public:
     static bool ShowToolTips();
 
 ////@begin SendUart member variables
+private:
+    unsigned char * m_pBuffer;
     /// Control identifiers
     enum {
         ID_SENDUART = 10022,
