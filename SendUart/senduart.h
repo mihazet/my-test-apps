@@ -83,6 +83,12 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_SCAN_PORT
     void OnButtonScanPortClick( wxCommandEvent& event );
 
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_TRANSMIT
+    void OnButtonTransmitClick( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_BUTTON_TRANSMIT
+    void OnButtonTransmitUpdate( wxUpdateUIEvent& event );
+
 ////@end SendUart event handler declarations
 
 ////@begin SendUart member function declarations
@@ -100,6 +106,7 @@ public:
 ////@begin SendUart member variables
 private:
     unsigned char * m_pBuffer;
+    size_t m_bufferSize;
     /// Control identifiers
     enum {
         ID_SENDUART = 10022,

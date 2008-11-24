@@ -88,7 +88,7 @@
     <string name="app_class_name">"Application"</string>
     <bool name="generate_app_class">0</bool>
     <string name="external_symbol_filenames">""</string>
-    <string name="configuration">"MinGW Debug"</string>
+    <string name="configuration">"MinGW Release"</string>
     <string name="source_encoding">"iso-8859-1"</string>
     <string name="xrc_encoding">"utf-8"</string>
     <string name="project_encoding">"utf-8"</string>
@@ -305,7 +305,7 @@
           <long name="locked">0</long>
           <string name="template-name">"MinGW"</string>
           <bool name="dirty">0</bool>
-          <long name="makefile-last-written">0</long>
+          <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"MinGW"</string>
           <string name="Build mode">"Debug"</string>
           <string name="Unicode mode">"ANSI"</string>
@@ -364,7 +364,7 @@
           <long name="locked">0</long>
           <string name="template-name">"MinGW"</string>
           <bool name="dirty">0</bool>
-          <long name="makefile-last-written">0</long>
+          <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"MinGW"</string>
           <string name="Build mode">"Release"</string>
           <string name="Unicode mode">"ANSI"</string>
@@ -480,6 +480,7 @@
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
           <string name="variable-0">"m_pBuffer|unsigned char *||NULL|2|0|"</string>
+          <string name="variable-1">"m_bufferSize|size_t||0|2|0|"</string>
           <string name="proxy-Id name">"ID_SENDUART"</string>
           <long name="proxy-Id value">10022</long>
           <string name="proxy-Class">"SendUart"</string>
@@ -2572,7 +2573,7 @@
                       <string name="proxy-Implementation filename">""</string>
                       <string name="proxy-Header filename">""</string>
                       <string name="proxy-Member variable name">""</string>
-                      <string name="proxy-Strings">"None|Even|Odd|Mark|Space"</string>
+                      <string name="proxy-Strings">"None|Odd|Even|Mark|Space"</string>
                       <string name="proxy-Initial value">"None"</string>
                       <string name="proxy-Help text">""</string>
                       <string name="proxy-Tooltip text">""</string>
@@ -3285,6 +3286,8 @@
                       <long name="locked">0</long>
                       <string name="created">"23/11/2008"</string>
                       <string name="proxy-type">"wbButtonProxy"</string>
+                      <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonTransmitClick|NONE||SendUart"</string>
+                      <string name="event-handler-1">"wxEVT_UPDATE_UI|OnButtonTransmitUpdate|NONE||SendUart"</string>
                       <string name="proxy-Id name">"ID_BUTTON_TRANSMIT"</string>
                       <long name="proxy-Id value">10014</long>
                       <string name="proxy-Name">""</string>

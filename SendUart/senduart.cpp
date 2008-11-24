@@ -50,6 +50,9 @@ BEGIN_EVENT_TABLE( SendUart, wxPropertySheetDialog )
 
     EVT_BUTTON( ID_BUTTON_SCAN_PORT, SendUart::OnButtonScanPortClick )
 
+    EVT_BUTTON( ID_BUTTON_TRANSMIT, SendUart::OnButtonTransmitClick )
+    EVT_UPDATE_UI( ID_BUTTON_TRANSMIT, SendUart::OnButtonTransmitUpdate )
+
 ////@end SendUart event table entries
 
 END_EVENT_TABLE()
@@ -112,6 +115,7 @@ void SendUart::Init()
 {
 ////@begin SendUart member initialisation
     m_pBuffer = NULL;
+    m_bufferSize = 0;
 ////@end SendUart member initialisation
 }
 
@@ -244,8 +248,8 @@ void SendUart::CreateControls()
 
     wxArrayString itemChoice36Strings;
     itemChoice36Strings.Add(_("None"));
-    itemChoice36Strings.Add(_("Even"));
     itemChoice36Strings.Add(_("Odd"));
+    itemChoice36Strings.Add(_("Even"));
     itemChoice36Strings.Add(_("Mark"));
     itemChoice36Strings.Add(_("Space"));
     wxChoice* itemChoice36 = new wxChoice( itemPanel3, ID_CHOICE_PARITY, wxDefaultPosition, wxDefaultSize, itemChoice36Strings, 0 );
@@ -344,7 +348,7 @@ void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
 {
     wxFile file;
     uint32_t byteCounter[256], muCnt = 0, luCnt = 0xFFFFFFFFL;
-    size_t id, fileLen, row, col;
+    size_t id, row, col;
     unsigned char muByte = 0, luByte = 0;
     wxString str;
     
@@ -354,16 +358,16 @@ void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
         for (id = 0; id < 256; id++)
             byteCounter[id] = 0;
         
-        fileLen = (size_t)file.Length();
-        str.Printf(_("%u"), fileLen);
+        m_bufferSize = (size_t)file.Length();
+        str.Printf(_("%u"), m_bufferSize);
         ((wxStaticText *)FindWindow(wxID_STATIC_FILE_SIZE))->SetLabel(str);
         if (m_pBuffer)
             free(m_pBuffer);
-        m_pBuffer = (unsigned char *)malloc(fileLen);
+        m_pBuffer = (unsigned char *)malloc(m_bufferSize);
         if (m_pBuffer)
         {
-            if (fileLen == (size_t)file.Read(m_pBuffer, fileLen))
-                for (id = 0; id < fileLen; id++)
+            if (m_bufferSize == (size_t)file.Read(m_pBuffer, m_bufferSize))
+                for (id = 0; id < m_bufferSize; id++)
                     byteCounter[m_pBuffer[id]]++;
             for (row = 0; row < 16; row++)
             {
@@ -457,5 +461,47 @@ void SendUart::ScanPort(void)
 void SendUart::OnButtonScanPortClick( wxCommandEvent& event )
 {
     ScanPort();
+}
+
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_TRANSMIT
+ */
+
+void SendUart::OnButtonTransmitClick( wxCommandEvent& event )
+{
+    wxSerialPort com;
+    const char *dev;
+    long num;
+    
+    dev = ((wxChoice *)FindWindow(ID_CHOICE_PORT))->GetStringSelection().c_str();
+    com.Open(dev);
+    if (com.IsOpen())
+    {
+        if (((wxChoice *)FindWindow(ID_CHOICE_BAUD))->GetStringSelection().ToLong(&num))
+            com.SetBaudRate((wxBaud)num);
+        if (m_pBuffer)
+            com.Write((char *)m_pBuffer, m_bufferSize);
+        else
+            wxLogError(wxT("Fail to write data to specific serial port."));
+        com.Close();
+    }
+    else
+    {
+        wxLogError(wxT("Can't open specific serial port, it may be busy now!\nPlease run re-scan available port!"));
+    }
+}
+
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_BUTTON_TRANSMIT
+ */
+
+void SendUart::OnButtonTransmitUpdate( wxUpdateUIEvent& event )
+{
+    if (m_pBuffer)
+        event.Enable(true);
+    else
+        event.Enable(false);
 }
 
