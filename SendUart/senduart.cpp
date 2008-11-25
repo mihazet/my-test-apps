@@ -382,8 +382,11 @@ void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
         m_pBuffer = (unsigned char *)malloc(m_bufferSize);
         if (m_pBuffer)
         {
+            // show theory transmit time
             if (((wxChoice *)FindWindow(ID_CHOICE_BAUD))->GetStringSelection().ToDouble(&num))
-                ((wxStaticText *)FindWindow(wxID_STATIC_THEORY_TRANSMIT_TIME))->SetLabel(wxString::Format(_("%f millisecond."), m_bufferSize * 10000 / num));
+                ((wxStaticText *)FindWindow(wxID_STATIC_THEORY_TRANSMIT_TIME))->SetLabel(wxString::Format(_("%f second."), m_bufferSize * 10 / num));
+            ((wxStaticText *)FindWindow(wxID_STATIC_PRATICE_TRANSMIT_TIME))->SetLabel(_("-"));
+
             if (m_bufferSize == (size_t)file.Read(m_pBuffer, m_bufferSize))
                 for (id = 0; id < m_bufferSize; id++)
                     byteCounter[m_pBuffer[id]]++;
@@ -495,15 +498,15 @@ void SendUart::OnButtonTransmitClick( wxCommandEvent& event )
 
     if (m_com.IsOpen() && m_pBuffer)
     {
-        start = wxDateTime::UNow();
+        start = wxDateTime::Now();
         writeByte = m_com.Write((char *)m_pBuffer, m_bufferSize);
         if (writeByte != m_bufferSize)
             wxLogError(_("Failed to write data to serial port! Error = %d"), writeByte);
         else
         {
-            end = wxDateTime::UNow();
+            end = wxDateTime::Now();
             diff = end.Subtract(start);
-            ((wxStaticText *)FindWindow(wxID_STATIC_PRATICE_TRANSMIT_TIME))->SetLabel(diff.GetMilliseconds().ToString() + wxString::Format(_(" millisecond.")));
+            ((wxStaticText *)FindWindow(wxID_STATIC_PRATICE_TRANSMIT_TIME))->SetLabel(diff.GetSeconds().ToString() + wxString::Format(_(" second.")));
         }
     }
     else
