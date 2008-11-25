@@ -79,6 +79,9 @@ public:
     /// Check if we're in opened state
     bool IsOpened(void);
 
+    /// Read command list from active group
+    void LoadCommand(void);
+
 ////@begin SendUart event handler declarations
 
     /// wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION

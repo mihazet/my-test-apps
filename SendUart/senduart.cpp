@@ -26,8 +26,10 @@
 #include "wx/file.h"
 #include "wx/datetime.h"
 #include "wx/longlong.h"
+#include "wx/config.h"
 
 #include "senduart.h"
+#include "senduartapp.h"
 
 ////@begin XPM images
 ////@end XPM images
@@ -162,7 +164,7 @@ void SendUart::CreateControls()
     itemGrid6->SetDefaultRowSize(18);
     itemGrid6->SetColLabelSize(18);
     itemGrid6->SetRowLabelSize(28);
-    itemGrid6->CreateGrid(50, 2, wxGrid::wxGridSelectRows);
+    itemGrid6->CreateGrid(1, 2, wxGrid::wxGridSelectRows);
     itemStaticBoxSizer5->Add(itemGrid6, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer7 = new wxBoxSizer(wxVERTICAL);
@@ -183,7 +185,7 @@ void SendUart::CreateControls()
     itemFlexGridSizer12->Add(itemButton13, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 
     wxButton* itemButton14 = new wxButton( itemPanel2, ID_BUTTON_ID0_2, _("2"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-    itemFlexGridSizer12->Add(itemButton14, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxADJUST_MINSIZE, 0);
+    itemFlexGridSizer12->Add(itemButton14, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 
     wxButton* itemButton15 = new wxButton( itemPanel2, ID_BUTTON_ID0_3, _("3"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
     itemFlexGridSizer12->Add(itemButton15, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5);
@@ -192,7 +194,7 @@ void SendUart::CreateControls()
     itemFlexGridSizer12->Add(itemButton16, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 
     wxButton* itemButton17 = new wxButton( itemPanel2, ID_BUTTON_ID0_5, _("5"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-    itemFlexGridSizer12->Add(itemButton17, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxADJUST_MINSIZE, 0);
+    itemFlexGridSizer12->Add(itemButton17, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 
     wxButton* itemButton18 = new wxButton( itemPanel2, ID_BUTTON_ID0_6, _("6"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
     itemFlexGridSizer12->Add(itemButton18, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5);
@@ -201,7 +203,7 @@ void SendUart::CreateControls()
     itemFlexGridSizer12->Add(itemButton19, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 
     wxButton* itemButton20 = new wxButton( itemPanel2, ID_BUTTON_ID0_8, _("8"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-    itemFlexGridSizer12->Add(itemButton20, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxADJUST_MINSIZE, 0);
+    itemFlexGridSizer12->Add(itemButton20, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 
     wxButton* itemButton21 = new wxButton( itemPanel2, ID_BUTTON_ID0_9, _("9"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
     itemFlexGridSizer12->Add(itemButton21, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5);
@@ -433,6 +435,7 @@ void SendUart::CreateControls()
 
 ////@end SendUart content construction
     ReplaceRowColLabel();
+    LoadCommand();
     ScanPort();
 }
 
@@ -768,3 +771,43 @@ void SendUart::OnChoiceBaudSelected( wxCommandEvent& event )
         ((wxStaticText *)FindWindow(wxID_STATIC_THEORY_TRANSMIT_TIME))->SetLabel(wxString::Format(_("%f millisecond."), m_bufferSize * 10000 / dNum));
 }
 
+
+/*!
+ * Read command list from active group
+ */
+
+void SendUart::LoadCommand(void)
+{
+    wxString actGrp, propIdx, propStr;
+    bool cont;
+    long dummy;
+    int row = 0;
+    wxGridCellAttr *cellAttr = NULL;
+    wxGrid *grid = (wxGrid *)FindWindow(ID_GRID_CMD_LIST);
+    wxConfig *cfg = wxGetApp().m_appConfig;
+    
+    cfg->SetPath(wxT("/CommandGroup")); 
+    if (cfg->Read(wxT("ActiveGroup"), &actGrp) && cfg->HasGroup(actGrp) && grid)
+    {
+        // command enumerration
+        cfg->SetPath(actGrp);
+        cont = cfg->GetFirstGroup(propIdx, dummy);
+        while (cont)
+        {
+            cfg->Read(propIdx + wxT("/Property"), &propStr);
+            grid->SetCellValue(row++, 0, propStr);
+            cont = cfg->GetNextGroup(propIdx, dummy);
+            if (cont)
+                grid->AppendRows();
+        }
+        
+        // set read only on property column
+        cellAttr = grid->GetOrCreateCellAttr(0, 0);
+        if (cellAttr)
+            cellAttr->SetReadOnly();
+        grid->SetColAttr(0, cellAttr);
+        
+        // autosize
+        grid->AutoSizeColumn(0);
+    }
+}

@@ -74,6 +74,7 @@ SendUartApp::SendUartApp()
 void SendUartApp::Init()
 {
 ////@begin SendUartApp member initialisation
+	m_appConfig = NULL;
 ////@end SendUartApp member initialisation
 }
 
@@ -82,7 +83,8 @@ void SendUartApp::Init()
  */
 
 bool SendUartApp::OnInit()
-{    
+{
+    GenDefaultAppConfig();
 ////@begin SendUartApp initialisation
 	// Remove the comment markers above and below this block
 	// to make permanent changes to the code.
@@ -122,3 +124,36 @@ int SendUartApp::OnExit()
 ////@end SendUartApp cleanup
 }
 
+
+/*!
+ * generate default app config if no config exists
+ */
+
+void SendUartApp::GenDefaultAppConfig(void)
+{
+    wxString str;
+
+    wxGetApp().SetVendorName(wxT("Delta Electronics, Inc."));
+    if (!m_appConfig)
+        m_appConfig = new wxConfig(wxGetApp().GetClassName(), wxGetApp().GetVendorName());
+    
+    m_appConfig->SetPath(wxT("/CommandGroup"));
+    if (!m_appConfig->Read(wxT("ActiveGroup"), &str, wxT("VW5129AF")))
+        m_appConfig->Write(wxT("ActiveGroup"), str);
+        
+    if (!m_appConfig->HasGroup(wxT("VW5129AF")))
+    {
+        m_appConfig->SetPath(wxT("VW5129AF"));
+        InitAppConfigForNumeric(wxT("Contrast"), 1, 0x00000000L, 255L, 0L);
+        InitAppConfigForNumeric(wxT("Brightness"), 2, 0x01000000L, 255L, 0L);
+    }
+}
+void SendUartApp::InitAppConfigForNumeric(wxString prop, long idx, long code, long max, long min)
+{
+    wxString str = wxString::Format(wxT("%02lu"), idx);
+    m_appConfig->Write(str + wxT("/Property"), prop);
+    m_appConfig->Write(str + wxT("/Type"), wxT("Numeric"));
+    m_appConfig->Write(str + wxT("/Code"), code);
+    m_appConfig->Write(str + wxT("/Max"), max);
+    m_appConfig->Write(str + wxT("/Min"), min);
+}

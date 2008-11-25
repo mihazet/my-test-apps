@@ -21,6 +21,7 @@
 #include "wx/image.h"
 #include "senduart.h"
 ////@end includes
+#include "wx/config.h"
 
 /*!
  * Forward declarations
@@ -57,6 +58,11 @@ public:
     /// Called on exit
     virtual int OnExit();
 
+    /// generate default app config if no config exists
+    void GenDefaultAppConfig(void);
+
+    void InitAppConfigForNumeric(wxString prop, long idx, long code, long max, long min);
+
 ////@begin SendUartApp event handler declarations
 
 ////@end SendUartApp event handler declarations
@@ -66,6 +72,8 @@ public:
 ////@end SendUartApp member function declarations
 
 ////@begin SendUartApp member variables
+public:
+	wxConfig * m_appConfig;
 ////@end SendUartApp member variables
 };
 
