@@ -729,7 +729,7 @@
                     <string name="proxy-Implementation filename">""</string>
                     <string name="proxy-Header filename">""</string>
                     <string name="proxy-Member variable name">""</string>
-                    <long name="proxy-Rows">50</long>
+                    <long name="proxy-Rows">1</long>
                     <long name="proxy-Columns">2</long>
                     <long name="proxy-Column width">80</long>
                     <long name="proxy-Row height">18</long>

@@ -208,7 +208,7 @@ void SendUart::CreateControls()
     itemGrid6->SetDefaultRowSize(18);
     itemGrid6->SetColLabelSize(18);
     itemGrid6->SetRowLabelSize(28);
-    itemGrid6->CreateGrid(50, 2, wxGrid::wxGridSelectRows);
+    itemGrid6->CreateGrid(1, 2, wxGrid::wxGridSelectRows);
     itemStaticBoxSizer5->Add(itemGrid6, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer7 = new wxBoxSizer(wxVERTICAL);
