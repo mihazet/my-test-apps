@@ -84,6 +84,12 @@ public:
 
 ////@begin SendUart event handler declarations
 
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ID0_1
+    void OnButtonId0Click( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ID1_1
+    void OnButtonId1Click( wxCommandEvent& event );
+
     /// wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION
     void OnFileLocationChanged( wxFileDirPickerEvent& event );
 

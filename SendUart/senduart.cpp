@@ -49,6 +49,50 @@ IMPLEMENT_DYNAMIC_CLASS( SendUart, wxPropertySheetDialog )
 BEGIN_EVENT_TABLE( SendUart, wxPropertySheetDialog )
 
 ////@begin SendUart event table entries
+    EVT_BUTTON( ID_BUTTON_ID0_1, SendUart::OnButtonId0Click )
+
+    EVT_BUTTON( ID_BUTTON_ID0_2, SendUart::OnButtonId0Click )
+
+    EVT_BUTTON( ID_BUTTON_ID0_3, SendUart::OnButtonId0Click )
+
+    EVT_BUTTON( ID_BUTTON_ID0_4, SendUart::OnButtonId0Click )
+
+    EVT_BUTTON( ID_BUTTON_ID0_5, SendUart::OnButtonId0Click )
+
+    EVT_BUTTON( ID_BUTTON_ID0_6, SendUart::OnButtonId0Click )
+
+    EVT_BUTTON( ID_BUTTON_ID0_7, SendUart::OnButtonId0Click )
+
+    EVT_BUTTON( ID_BUTTON_ID0_8, SendUart::OnButtonId0Click )
+
+    EVT_BUTTON( ID_BUTTON_ID0_9, SendUart::OnButtonId0Click )
+
+    EVT_BUTTON( ID_BUTTON_ID0_0, SendUart::OnButtonId0Click )
+
+    EVT_BUTTON( ID_BUTTON_ID0_STAR, SendUart::OnButtonId0Click )
+
+    EVT_BUTTON( ID_BUTTON_ID1_1, SendUart::OnButtonId1Click )
+
+    EVT_BUTTON( ID_BUTTON_ID1_2, SendUart::OnButtonId1Click )
+
+    EVT_BUTTON( ID_BUTTON_ID1_3, SendUart::OnButtonId1Click )
+
+    EVT_BUTTON( ID_BUTTON_ID1_4, SendUart::OnButtonId1Click )
+
+    EVT_BUTTON( ID_BUTTON_ID1_5, SendUart::OnButtonId1Click )
+
+    EVT_BUTTON( ID_BUTTON_ID1_6, SendUart::OnButtonId1Click )
+
+    EVT_BUTTON( ID_BUTTON_ID1_7, SendUart::OnButtonId1Click )
+
+    EVT_BUTTON( ID_BUTTON_ID1_8, SendUart::OnButtonId1Click )
+
+    EVT_BUTTON( ID_BUTTON_ID1_9, SendUart::OnButtonId1Click )
+
+    EVT_BUTTON( ID_BUTTON_ID1_0, SendUart::OnButtonId1Click )
+
+    EVT_BUTTON( ID_BUTTON_ID1_STAR, SendUart::OnButtonId1Click )
+
     EVT_FILEPICKER_CHANGED( ID_FILECTRL_FILE_LOCATION, SendUart::OnFileLocationChanged )
 
     EVT_BUTTON( ID_BUTTON_CONNECT, SendUart::OnButtonConnectClick )
@@ -164,7 +208,7 @@ void SendUart::CreateControls()
     itemGrid6->SetDefaultRowSize(18);
     itemGrid6->SetColLabelSize(18);
     itemGrid6->SetRowLabelSize(28);
-    itemGrid6->CreateGrid(1, 2, wxGrid::wxGridSelectRows);
+    itemGrid6->CreateGrid(50, 2, wxGrid::wxGridSelectRows);
     itemStaticBoxSizer5->Add(itemGrid6, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer7 = new wxBoxSizer(wxVERTICAL);
@@ -811,3 +855,24 @@ void SendUart::LoadCommand(void)
         grid->AutoSizeColumn(0);
     }
 }
+
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ID0_1
+ */
+
+void SendUart::OnButtonId0Click( wxCommandEvent& event )
+{
+    ((wxStaticText *)FindWindow(wxID_STATIC_ID0))->SetLabel(((wxButton *)FindWindow(event.GetId()))->GetLabel());
+}
+
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ID1_1
+ */
+
+void SendUart::OnButtonId1Click( wxCommandEvent& event )
+{
+    ((wxStaticText *)FindWindow(wxID_STATIC_ID1))->SetLabel(((wxButton *)FindWindow(event.GetId()))->GetLabel());
+}
+

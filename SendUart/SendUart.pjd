@@ -1047,6 +1047,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId0Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID0_1"</string>
                           <long name="proxy-Id value">10023</long>
                           <string name="proxy-Name">""</string>
@@ -1117,6 +1118,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId0Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID0_2"</string>
                           <long name="proxy-Id value">10024</long>
                           <string name="proxy-Name">""</string>
@@ -1187,6 +1189,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId0Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID0_3"</string>
                           <long name="proxy-Id value">10025</long>
                           <string name="proxy-Name">""</string>
@@ -1257,6 +1260,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId0Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID0_4"</string>
                           <long name="proxy-Id value">10029</long>
                           <string name="proxy-Name">""</string>
@@ -1327,6 +1331,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId0Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID0_5"</string>
                           <long name="proxy-Id value">10030</long>
                           <string name="proxy-Name">""</string>
@@ -1393,6 +1398,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId0Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID0_6"</string>
                           <long name="proxy-Id value">10031</long>
                           <string name="proxy-Name">""</string>
@@ -1459,6 +1465,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId0Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID0_7"</string>
                           <long name="proxy-Id value">10035</long>
                           <string name="proxy-Name">""</string>
@@ -1525,6 +1532,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId0Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID0_8"</string>
                           <long name="proxy-Id value">10036</long>
                           <string name="proxy-Name">""</string>
@@ -1591,6 +1599,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId0Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID0_9"</string>
                           <long name="proxy-Id value">10037</long>
                           <string name="proxy-Name">""</string>
@@ -1657,6 +1666,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId0Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID0_0"</string>
                           <long name="proxy-Id value">10041</long>
                           <string name="proxy-Name">""</string>
@@ -1723,6 +1733,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId0Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID0_STAR"</string>
                           <long name="proxy-Id value">10042</long>
                           <string name="proxy-Name">""</string>
@@ -1986,6 +1997,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId1Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID1_1"</string>
                           <long name="proxy-Id value">10026</long>
                           <string name="proxy-Name">""</string>
@@ -2052,6 +2064,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId1Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID1_2"</string>
                           <long name="proxy-Id value">10027</long>
                           <string name="proxy-Name">""</string>
@@ -2118,6 +2131,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId1Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID1_3"</string>
                           <long name="proxy-Id value">10028</long>
                           <string name="proxy-Name">""</string>
@@ -2184,6 +2198,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId1Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID1_4"</string>
                           <long name="proxy-Id value">10032</long>
                           <string name="proxy-Name">""</string>
@@ -2250,6 +2265,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId1Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID1_5"</string>
                           <long name="proxy-Id value">10033</long>
                           <string name="proxy-Name">""</string>
@@ -2316,6 +2332,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId1Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID1_6"</string>
                           <long name="proxy-Id value">10034</long>
                           <string name="proxy-Name">""</string>
@@ -2382,6 +2399,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId1Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID1_7"</string>
                           <long name="proxy-Id value">10038</long>
                           <string name="proxy-Name">""</string>
@@ -2448,6 +2466,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId1Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID1_8"</string>
                           <long name="proxy-Id value">10039</long>
                           <string name="proxy-Name">""</string>
@@ -2514,6 +2533,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId1Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID1_9"</string>
                           <long name="proxy-Id value">10040</long>
                           <string name="proxy-Name">""</string>
@@ -2580,6 +2600,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId1Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID1_0"</string>
                           <long name="proxy-Id value">10044</long>
                           <string name="proxy-Name">""</string>
@@ -2646,6 +2667,7 @@
                           <long name="locked">0</long>
                           <string name="created">"25/11/2008"</string>
                           <string name="proxy-type">"wbButtonProxy"</string>
+                          <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonId1Click|NONE||SendUart"</string>
                           <string name="proxy-Id name">"ID_BUTTON_ID1_STAR"</string>
                           <long name="proxy-Id value">10045</long>
                           <string name="proxy-Name">""</string>
