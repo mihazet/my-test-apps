@@ -19,8 +19,8 @@
 
 ////@begin includes
 #include "wx/propdlg.h"
-#include "wx/filepicker.h"
 #include "wx/grid.h"
+#include "wx/filepicker.h"
 ////@end includes
 #include "serport.h"
 
@@ -144,6 +144,32 @@ private:
     enum {
         ID_SENDUART = 10022,
         ID_PANEL_GENERATION = 10002,
+        ID_GRID_CMD_LIST = 10006,
+        ID_BUTTON_ID0_1 = 10023,
+        ID_BUTTON_ID0_2 = 10024,
+        ID_BUTTON_ID0_3 = 10025,
+        ID_BUTTON_ID0_4 = 10029,
+        ID_BUTTON_ID0_5 = 10030,
+        ID_BUTTON_ID0_6 = 10031,
+        ID_BUTTON_ID0_7 = 10035,
+        ID_BUTTON_ID0_8 = 10036,
+        ID_BUTTON_ID0_9 = 10037,
+        ID_BUTTON_ID0_0 = 10041,
+        ID_BUTTON_ID0_STAR = 10042,
+        wxID_STATIC_ID0 = 10043,
+        wxID_STATIC_ID1 = 10046,
+        ID_BUTTON_ID1_1 = 10026,
+        ID_BUTTON_ID1_2 = 10027,
+        ID_BUTTON_ID1_3 = 10028,
+        ID_BUTTON_ID1_4 = 10032,
+        ID_BUTTON_ID1_5 = 10033,
+        ID_BUTTON_ID1_6 = 10034,
+        ID_BUTTON_ID1_7 = 10038,
+        ID_BUTTON_ID1_8 = 10039,
+        ID_BUTTON_ID1_9 = 10040,
+        ID_BUTTON_ID1_0 = 10044,
+        ID_BUTTON_ID1_STAR = 10045,
+        ID_GRID_GEN_DATA = 10007,
         ID_PANEL_TRANSMISSION = 10003,
         ID_FILECTRL_FILE_LOCATION = 10000,
         ID_GRID_BYTE_COUNTER = 10004,
