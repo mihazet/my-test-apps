@@ -87,6 +87,9 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ID_1
     void OnButtonIdClick( wxCommandEvent& event );
 
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ID_NEXT
+    void OnButtonIdNextClick( wxCommandEvent& event );
+
     /// wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION
     void OnFileLocationChanged( wxFileDirPickerEvent& event );
 
@@ -162,6 +165,7 @@ private:
         ID_BUTTON_ID_9 = 10037,
         ID_BUTTON_ID_0 = 10041,
         ID_BUTTON_ID_STAR = 10042,
+        ID_BUTTON_ID_NEXT = 10026,
         wxID_STATIC_ID0 = 10043,
         wxID_STATIC_ID1 = 10046,
         ID_GRID_GEN_DATA = 10007,
