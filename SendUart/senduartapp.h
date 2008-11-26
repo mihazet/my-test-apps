@@ -63,6 +63,12 @@ public:
 
     void InitAppConfigForNumeric(wxString prop, long idx, long code, long max, long min);
 
+    void InitAppConfigForPairNumeric(wxString prop, long idx, long code, long max1, long min1, long max2, long min2);
+
+    void InitAppConfigForNumeric2Byte(wxString prop, long idx, long code, long max, long min);
+
+    void InitAppConfigForNumericHex(wxString prop, long idx, long code, long max, long min);
+
 ////@begin SendUartApp event handler declarations
 
 ////@end SendUartApp event handler declarations
