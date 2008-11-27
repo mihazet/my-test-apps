@@ -69,6 +69,10 @@ public:
 
     void InitAppConfigForNumericHex(wxString prop, long idx, long code, long max, long min);
 
+    void GenIfNotExist(const wxString& key, const wxString& defVal);
+    
+    void GenIfNotExist(const wxString& key, long defVal);
+
 ////@begin SendUartApp event handler declarations
 
 ////@end SendUartApp event handler declarations

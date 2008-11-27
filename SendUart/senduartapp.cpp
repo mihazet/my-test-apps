@@ -131,19 +131,22 @@ int SendUartApp::OnExit()
 
 void SendUartApp::GenDefaultAppConfig(void)
 {
-    wxString str;
-    long order = 1;
+    long order;
 
     wxGetApp().SetVendorName(wxT("Delta Electronics, Inc."));
     if (!m_appConfig)
         m_appConfig = new wxConfig(wxGetApp().GetClassName(), wxGetApp().GetVendorName());
     
+    //
+    // Add default commands for every group
+    //
     m_appConfig->SetPath(wxT("/CommandGroup"));
-    if (!m_appConfig->Read(wxT("ActiveGroup"), &str, wxT("VW5129AF")))
-        m_appConfig->Write(wxT("ActiveGroup"), str);
-        
+    GenIfNotExist(wxT("ActiveGroup"), wxT("VW5129AF"));
+
+    /* group: VW5129AF */
     if (!m_appConfig->HasGroup(wxT("VW5129AF")))
     {
+        order = 1; // reset order in every group start
         m_appConfig->SetPath(wxT("VW5129AF"));
         InitAppConfigForNumeric(wxT("Contrast"), order++, 0x00000000L, 255L, 0L);
         InitAppConfigForNumeric(wxT("Brightness"), order++, 0x01000000L, 255L, 0L);
@@ -211,6 +214,20 @@ void SendUartApp::GenDefaultAppConfig(void)
         InitAppConfigForNumeric(wxT("Lamp Auto Switch"), order++, 0x4E000000L, 1L, 0L);
         InitAppConfigForNumeric(wxT("White Peaking"), order++, 0x4F000000L, 100L, 0L);
     }
+    
+    //
+    // Add default app setting
+    //
+    m_appConfig->SetPath(wxT("/App"));
+    GenIfNotExist(wxT("ID0"), wxT("0"));
+    GenIfNotExist(wxT("ID1"), wxT("0"));
+    GenIfNotExist(wxT("GenDataDestination"), 0L);
+    GenIfNotExist(wxT("TransmitDataSource"), 0L);
+    GenIfNotExist(wxT("UsedUartPort"), wxT("Any"));
+    GenIfNotExist(wxT("UsedUartBaud"), 0L);
+    GenIfNotExist(wxT("UsedUartCharSize"), 0L);
+    GenIfNotExist(wxT("UsedUartParity"), 0L);
+    GenIfNotExist(wxT("UsedUartStopBits"), 0L);
 }
 void SendUartApp::InitAppConfigForNumeric(wxString prop, long idx, long code, long max, long min)
 {
@@ -249,4 +266,16 @@ void SendUartApp::InitAppConfigForNumericHex(wxString prop, long idx, long code,
     m_appConfig->Write(str + wxT("/Code"), code);
     m_appConfig->Write(str + wxT("/Max"), max);
     m_appConfig->Write(str + wxT("/Min"), min);
+}
+void SendUartApp::GenIfNotExist(const wxString& key, const wxString& defVal)
+{
+    wxString val;
+    if (!m_appConfig->Read(key, &val, defVal))
+        m_appConfig->Write(key, val);
+}
+void SendUartApp::GenIfNotExist(const wxString& key, long defVal)
+{
+    long val;
+    if (!m_appConfig->Read(key, &val, defVal))
+        m_appConfig->Write(key, val);
 }
