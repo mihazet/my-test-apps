@@ -90,8 +90,14 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ID_NEXT
     void OnButtonIdNextClick( wxCommandEvent& event );
 
+    /// wxEVT_UPDATE_UI event handler for ID_FILECTRL_USER_FILE_SAVE
+    void OnFilectrlUserFileSaveUpdate( wxUpdateUIEvent& event );
+
     /// wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION
     void OnFileLocationChanged( wxFileDirPickerEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_FILECTRL_FILE_LOCATION
+    void OnFilectrlFileLocationUpdate( wxUpdateUIEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_CONNECT
     void OnButtonConnectClick( wxCommandEvent& event );
@@ -175,7 +181,12 @@ private:
         wxID_STATIC_ID0 = 10043,
         wxID_STATIC_ID1 = 10046,
         ID_GRID_GEN_DATA = 10007,
+        ID_RADIOBUTTON_GEN_TO_INTERNAL_BUFFER = 10039,
+        ID_RADIOBUTTON_GEN_TO_USER_FILE = 10040,
+        ID_FILECTRL_USER_FILE_SAVE = 10044,
         ID_PANEL_TRANSMISSION = 10003,
+        ID_RADIOBUTTON_TRANSMIT_INTERNAL_BUFFER = 10045,
+        ID_RADIOBUTTON_TRANSMIT_USER_FILE = 10047,
         ID_FILECTRL_FILE_LOCATION = 10000,
         ID_GRID_BYTE_COUNTER = 10004,
         wxID_STATIC_FILE_SIZE = 10015,
