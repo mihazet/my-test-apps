@@ -20,6 +20,7 @@
 ////@begin includes
 #include "wx/propdlg.h"
 #include "wx/grid.h"
+#include "wx/statline.h"
 #include "wx/filepicker.h"
 ////@end includes
 #include "serport.h"
@@ -180,6 +181,12 @@ private:
         ID_BUTTON_ID_NEXT = 10026,
         wxID_STATIC_ID0 = 10043,
         wxID_STATIC_ID1 = 10046,
+        ID_BUTTON = 10048,
+        ID_BUTTON1 = 10049,
+        ID_TEXTCTRL_CMD_COUNT = 10051,
+        ID_BUTTON2 = 10050,
+        ID_TEXTCTRL = 10053,
+        ID_BUTTON3 = 10052,
         ID_GRID_GEN_DATA = 10007,
         ID_RADIOBUTTON_GEN_TO_INTERNAL_BUFFER = 10039,
         ID_RADIOBUTTON_GEN_TO_USER_FILE = 10040,
