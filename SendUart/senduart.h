@@ -83,6 +83,9 @@ public:
     /// Read command list from active group
     void LoadCommand(void);
 
+    /// Read application configuration
+    void LoadAppConfig(void);
+
 ////@begin SendUart event handler declarations
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ID_1

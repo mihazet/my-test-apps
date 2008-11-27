@@ -539,6 +539,7 @@ void SendUart::CreateControls()
 ////@end SendUart content construction
     ReplaceRowColLabel();
     LoadCommand();
+    LoadAppConfig();
     ScanPort();
 }
 
@@ -984,3 +985,35 @@ void SendUart::OnFilectrlFileLocationUpdate( wxUpdateUIEvent& event )
         event.Enable(rb->GetValue());
 }
 
+
+/*!
+ * Read application configuration
+ */
+
+void SendUart::LoadAppConfig(void)
+{
+    wxString strVal;
+    long numVal;
+    wxConfig *cfg = wxGetApp().m_appConfig;
+    
+    cfg->SetPath(wxT("/App"));
+
+    cfg->Read(wxT("ID0"), &strVal);
+    ((wxStaticText *)FindWindow(wxID_STATIC_ID0))->SetLabel(strVal);
+    cfg->Read(wxT("ID1"), &strVal);
+    ((wxStaticText *)FindWindow(wxID_STATIC_ID1))->SetLabel(strVal);
+    cfg->Read(wxT("GenDataDestination"), &numVal);
+    ((wxRadioButton *)FindWindow(ID_RADIOBUTTON_GEN_TO_INTERNAL_BUFFER))->SetValue(numVal == 0);
+    ((wxRadioButton *)FindWindow(ID_RADIOBUTTON_GEN_TO_USER_FILE))->SetValue(numVal == 1);
+    cfg->Read(wxT("TransmitDataSource"), &numVal);
+    ((wxRadioButton *)FindWindow(ID_RADIOBUTTON_TRANSMIT_INTERNAL_BUFFER))->SetValue(numVal == 0);
+    ((wxRadioButton *)FindWindow(ID_RADIOBUTTON_TRANSMIT_USER_FILE))->SetValue(numVal == 1);
+    cfg->Read(wxT("UsedUartBaud"), &numVal);
+    ((wxChoice *)FindWindow(ID_CHOICE_BAUD))->SetSelection(numVal);
+    cfg->Read(wxT("UsedUartCharSize"), &numVal);
+    ((wxChoice *)FindWindow(ID_CHOICE_CHAR_SIZE))->SetSelection(numVal);
+    cfg->Read(wxT("UsedUartParity"), &numVal);
+    ((wxChoice *)FindWindow(ID_CHOICE_PARITY))->SetSelection(numVal);
+    cfg->Read(wxT("UsedUartStopBits"), &numVal);
+    ((wxChoice *)FindWindow(ID_CHOICE_STOP_BITS))->SetSelection(numVal);
+}
