@@ -152,6 +152,17 @@ SendUart::~SendUart()
         free(m_pBuffer);
     if (IsOpened())
         m_com.Close();
+    wxConfig *cfg = wxGetApp().m_appConfig;
+    cfg->SetPath(wxT("/App")); 
+    cfg->Write(wxT("ID0"), ((wxStaticText *)FindWindow(wxID_STATIC_ID0))->GetLabel());
+    cfg->Write(wxT("ID1"), ((wxStaticText *)FindWindow(wxID_STATIC_ID1))->GetLabel());
+    cfg->Write(wxT("GenDataDestination"), ((wxRadioButton *)FindWindow(ID_RADIOBUTTON_GEN_TO_INTERNAL_BUFFER))->GetValue() ? 0L : 1L);
+    cfg->Write(wxT("TransmitDataSource"), ((wxRadioButton *)FindWindow(ID_RADIOBUTTON_TRANSMIT_INTERNAL_BUFFER))->GetValue() ? 0L : 1L);
+    cfg->Write(wxT("UsedUartPort"), ((wxChoice *)FindWindow(ID_CHOICE_PORT))->GetStringSelection());
+    cfg->Write(wxT("UsedUartBaud"), ((wxChoice *)FindWindow(ID_CHOICE_BAUD))->GetCurrentSelection());
+    cfg->Write(wxT("UsedUartCharSize"), ((wxChoice *)FindWindow(ID_CHOICE_CHAR_SIZE))->GetCurrentSelection());
+    cfg->Write(wxT("UsedUartParity"), ((wxChoice *)FindWindow(ID_CHOICE_PARITY))->GetCurrentSelection());
+    cfg->Write(wxT("UsedUartStopBits"), ((wxChoice *)FindWindow(ID_CHOICE_STOP_BITS))->GetCurrentSelection());
 }
 
 

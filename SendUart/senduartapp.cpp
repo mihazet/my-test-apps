@@ -118,7 +118,9 @@ bool SendUartApp::OnInit()
  */
 
 int SendUartApp::OnExit()
-{    
+{
+    if (m_appConfig)
+        delete m_appConfig;
 ////@begin SendUartApp cleanup
 	return wxApp::OnExit();
 ////@end SendUartApp cleanup
