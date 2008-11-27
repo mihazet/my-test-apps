@@ -88,6 +88,9 @@ public:
 
 ////@begin SendUart event handler declarations
 
+    /// wxEVT_GRID_CMD_CELL_LEFT_CLICK event handler for ID_GRID_CMD_LIST
+    void OnGridCmdListCellLeftClick( wxGridEvent& event );
+
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ID_1
     void OnButtonIdClick( wxCommandEvent& event );
 
@@ -165,11 +168,7 @@ private:
         ID_PANEL_GENERATION = 10002,
         ID_GRID_CMD_LIST = 10006,
         ID_PANEL_CMD_INFO = 10027,
-        wxID_STATIC_CMD_SYNTAX = 10028,
-        wxID_STATIC_VALUE1_MAX = 10032,
-        wxID_STATIC_VALUE1_MIN = 10033,
-        wxID_STATIC_VALUE2_MAX = 10034,
-        wxID_STATIC_VALUE2_MIN = 10038,
+        wxID_STATIC_CMD_DESCRIPTION = 10028,
         ID_BUTTON_ID_1 = 10023,
         ID_BUTTON_ID_2 = 10024,
         ID_BUTTON_ID_3 = 10025,
@@ -190,6 +189,7 @@ private:
         ID_BUTTON2 = 10050,
         ID_TEXTCTRL = 10053,
         ID_BUTTON3 = 10052,
+        wxID_STATIC_RESULT = 10054,
         ID_GRID_GEN_DATA = 10007,
         ID_RADIOBUTTON_GEN_TO_INTERNAL_BUFFER = 10039,
         ID_RADIOBUTTON_GEN_TO_USER_FILE = 10040,
