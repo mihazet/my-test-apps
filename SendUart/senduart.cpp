@@ -75,6 +75,8 @@ BEGIN_EVENT_TABLE( SendUart, wxPropertySheetDialog )
 
     EVT_BUTTON( ID_BUTTON_ID_NEXT, SendUart::OnButtonIdNextClick )
 
+    EVT_BUTTON( ID_BUTTON_OP1, SendUart::OnButtonOp1Click )
+
     EVT_UPDATE_UI( ID_FILECTRL_USER_FILE_SAVE, SendUart::OnFilectrlUserFileSaveUpdate )
 
     EVT_FILEPICKER_CHANGED( ID_FILECTRL_FILE_LOCATION, SendUart::OnFileLocationChanged )
@@ -177,6 +179,9 @@ void SendUart::Init()
 ////@begin SendUart member initialisation
     m_pBuffer = NULL;
     m_bufferSize = 0;
+    logPanel = NULL;
+    logTextCtrl = NULL;
+    logClearBtn = NULL;
 ////@end SendUart member initialisation
 }
 
@@ -282,14 +287,14 @@ void SendUart::CreateControls()
     itemStaticText30->Wrap(300);
     itemBoxSizer9->Add(itemStaticText30, 0, wxGROW|wxLEFT|wxRIGHT|wxTOP, 10);
 
-    wxButton* itemButton31 = new wxButton( itemPanel2, ID_BUTTON, _(">> Same ID + Selected Command(s) >>"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton31 = new wxButton( itemPanel2, ID_BUTTON_OP1, _(">> Same ID + Selected Command(s) >>"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer9->Add(itemButton31, 0, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 10);
 
     wxStaticText* itemStaticText32 = new wxStaticText( itemPanel2, wxID_STATIC, _("Add one random command for above Cube ID."), wxDefaultPosition, wxDefaultSize, 0 );
     itemStaticText32->Wrap(300);
     itemBoxSizer9->Add(itemStaticText32, 0, wxGROW|wxLEFT|wxRIGHT, 10);
 
-    wxButton* itemButton33 = new wxButton( itemPanel2, ID_BUTTON1, _(">> Same ID + One Random Command >>"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton33 = new wxButton( itemPanel2, ID_BUTTON_OP2, _(">> Same ID + One Random Command >>"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer9->Add(itemButton33, 0, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 10);
 
     wxStaticText* itemStaticText34 = new wxStaticText( itemPanel2, wxID_STATIC, _("Add some random commands for above Cube ID."), wxDefaultPosition, wxDefaultSize, 0 );
@@ -301,11 +306,10 @@ void SendUart::CreateControls()
     wxStaticText* itemStaticText36 = new wxStaticText( itemPanel2, wxID_STATIC, _("number of commands (max 99):"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer35->Add(itemStaticText36, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15);
 
-    wxTextCtrl* itemTextCtrl37 = new wxTextCtrl( itemPanel2, ID_TEXTCTRL_CMD_COUNT, _T(""), wxDefaultPosition, wxSize(40, -1), 0 );
-    itemTextCtrl37->SetMaxLength(2);
-    itemBoxSizer35->Add(itemTextCtrl37, 0, wxALIGN_CENTER_VERTICAL, 10);
+    wxSpinCtrl* itemSpinCtrl37 = new wxSpinCtrl( itemPanel2, ID_SPINCTRL_CMD_CNT1, _T("0"), wxDefaultPosition, wxSize(60, -1), wxSP_ARROW_KEYS|wxSP_WRAP, 0, 99, 0 );
+    itemBoxSizer35->Add(itemSpinCtrl37, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* itemButton38 = new wxButton( itemPanel2, ID_BUTTON2, _(">> Same ID + Above Random Commands >>"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton38 = new wxButton( itemPanel2, ID_BUTTON_OP3, _(">> Same ID + Above Random Commands >>"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer9->Add(itemButton38, 0, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 10);
 
     wxStaticText* itemStaticText39 = new wxStaticText( itemPanel2, wxID_STATIC, _("Add some random commands for other Cube."), wxDefaultPosition, wxDefaultSize, 0 );
@@ -317,11 +321,10 @@ void SendUart::CreateControls()
     wxStaticText* itemStaticText41 = new wxStaticText( itemPanel2, wxID_STATIC, _("number of commands (max 99):"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer40->Add(itemStaticText41, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15);
 
-    wxTextCtrl* itemTextCtrl42 = new wxTextCtrl( itemPanel2, ID_TEXTCTRL, _T(""), wxDefaultPosition, wxSize(40, -1), 0 );
-    itemTextCtrl42->SetMaxLength(2);
-    itemBoxSizer40->Add(itemTextCtrl42, 0, wxALIGN_CENTER_VERTICAL, 10);
+    wxSpinCtrl* itemSpinCtrl42 = new wxSpinCtrl( itemPanel2, ID_SPINCTRL_CMD_CNT2, _T("0"), wxDefaultPosition, wxSize(60, -1), wxSP_ARROW_KEYS, 0, 100, 0 );
+    itemBoxSizer40->Add(itemSpinCtrl42, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* itemButton43 = new wxButton( itemPanel2, ID_BUTTON3, _(">> Other ID + Above Random Commnds >>"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton43 = new wxButton( itemPanel2, ID_BUTTON_OP4, _(">> Other ID + Above Random Commnds >>"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer9->Add(itemButton43, 0, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 10);
 
     wxStaticLine* itemStaticLine44 = new wxStaticLine( itemPanel2, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
@@ -534,6 +537,7 @@ void SendUart::CreateControls()
     GetBookCtrl()->AddPage(itemPanel54, _("Transmission"));
 
 ////@end SendUart content construction
+    SetupLogWindow();
     ReplaceRowColLabel();
     LoadCommand();
     LoadAppConfig();
@@ -1062,3 +1066,52 @@ void SendUart::OnGridCmdListCellLeftClick( wxGridEvent& event )
     event.Skip();
 }
 
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_OP1
+ */
+
+void SendUart::OnButtonOp1Click( wxCommandEvent& event )
+{
+////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_OP1 in SendUart.
+    // Before editing this code, remove the block markers.
+    event.Skip();
+////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_OP1 in SendUart. 
+}
+
+
+/*!
+ * setup app log window
+ */
+
+void SendUart::SetupLogWindow(void)
+{
+    wxConfig *cfg = wxGetApp().m_appConfig;
+    long logWinEnable;
+
+    logPanel = new wxPanel(GetBookCtrl(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL);
+    wxBoxSizer *itemBoxSizer = new wxBoxSizer(wxVERTICAL);
+    logPanel->SetSizer(itemBoxSizer);
+
+    logTextCtrl = new wxTextCtrl(logPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH|wxTE_RICH2|wxTE_DONTWRAP);
+    itemBoxSizer->Add(logTextCtrl, 1, wxEXPAND|wxALL, 5);
+
+    wxBoxSizer *itemBoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer->Add(itemBoxSizer2, 0, wxALIGN_LEFT|wxALL, 5);
+    logClearBtn = new wxButton(logPanel, wxID_ANY, _("Clear Log"), wxDefaultPosition, wxDefaultSize, 0);
+    itemBoxSizer2->Add(logClearBtn, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    if (logTextCtrl && logPanel)
+    {
+        cfg->SetPath(wxT("/"));
+        cfg->Read(wxT("EnableLogWindow"), &logWinEnable, 0L);
+        if (logWinEnable != 0)
+            GetBookCtrl()->AddPage(logPanel, _("Log Window"));
+        else
+            logPanel->Hide();
+        
+        wxLog *logger = new wxLogTextCtrl(logTextCtrl);
+        delete wxLog::SetActiveTarget(logger);
+        wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S] "));
+    }
+}

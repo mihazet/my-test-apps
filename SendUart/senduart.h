@@ -21,6 +21,7 @@
 #include "wx/propdlg.h"
 #include "wx/grid.h"
 #include "wx/statline.h"
+#include "wx/spinctrl.h"
 #include "wx/filepicker.h"
 ////@end includes
 #include "serport.h"
@@ -86,6 +87,9 @@ public:
     /// Read application configuration
     void LoadAppConfig(void);
 
+    /// setup app log window
+    void SetupLogWindow(void);
+
 ////@begin SendUart event handler declarations
 
     /// wxEVT_GRID_CMD_CELL_LEFT_CLICK event handler for ID_GRID_CMD_LIST
@@ -96,6 +100,9 @@ public:
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ID_NEXT
     void OnButtonIdNextClick( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_OP1
+    void OnButtonOp1Click( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_FILECTRL_USER_FILE_SAVE
     void OnFilectrlUserFileSaveUpdate( wxUpdateUIEvent& event );
@@ -162,6 +169,9 @@ private:
     size_t m_bufferSize;
     wxSerialPort m_com;
     wxSerialPort_DCS m_serialDCS;
+    wxPanel * logPanel;
+    wxTextCtrl * logTextCtrl;
+    wxButton * logClearBtn;
     /// Control identifiers
     enum {
         ID_SENDUART = 10022,
@@ -183,12 +193,12 @@ private:
         ID_BUTTON_ID_NEXT = 10026,
         wxID_STATIC_ID0 = 10043,
         wxID_STATIC_ID1 = 10046,
-        ID_BUTTON = 10048,
-        ID_BUTTON1 = 10049,
-        ID_TEXTCTRL_CMD_COUNT = 10051,
-        ID_BUTTON2 = 10050,
-        ID_TEXTCTRL = 10053,
-        ID_BUTTON3 = 10052,
+        ID_BUTTON_OP1 = 10048,
+        ID_BUTTON_OP2 = 10049,
+        ID_SPINCTRL_CMD_CNT1 = 10032,
+        ID_BUTTON_OP3 = 10050,
+        ID_SPINCTRL_CMD_CNT2 = 10033,
+        ID_BUTTON_OP4 = 10052,
         wxID_STATIC_RESULT = 10054,
         ID_GRID_GEN_DATA = 10007,
         ID_RADIOBUTTON_GEN_TO_INTERNAL_BUFFER = 10039,
