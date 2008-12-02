@@ -49,7 +49,7 @@ IMPLEMENT_DYNAMIC_CLASS( SendUart, wxPropertySheetDialog )
 BEGIN_EVENT_TABLE( SendUart, wxPropertySheetDialog )
 
 ////@begin SendUart event table entries
-    EVT_GRID_CMD_CELL_LEFT_CLICK( ID_GRID_CMD_LIST, SendUart::OnGridCmdListCellLeftClick )
+    EVT_GRID_CMD_SELECT_CELL( ID_GRID_CMD_LIST, SendUart::OnGridCmdListSelectCell )
 
     EVT_BUTTON( ID_BUTTON_ID_1, SendUart::OnButtonIdClick )
 
@@ -1028,43 +1028,6 @@ void SendUart::LoadAppConfig(void)
 }
 
 
-/*!
- * wxEVT_GRID_CMD_CELL_LEFT_CLICK event handler for ID_GRID_CMD_LIST
- */
-
-void SendUart::OnGridCmdListCellLeftClick( wxGridEvent& event )
-{
-    wxString actGrp, type;
-    long max1, min1, max2, min2;
-    wxConfig *cfg = wxGetApp().m_appConfig;
-    int rowClicked = event.GetRow();
-    
-    cfg->SetPath(wxT("/CommandGroup"));
-    if (cfg->Read(wxT("ActiveGroup"), &actGrp) && cfg->HasGroup(actGrp))
-    {
-        cfg->SetPath(actGrp);
-        cfg->Read(wxString::Format(wxT("%03d/Type"), rowClicked + 1), &type);
-        if (!type.Cmp(wxT("Numeric")) || !type.Cmp(wxT("Numeric2Byte")) || !type.Cmp(wxT("NumericHex")))
-        {
-            cfg->Read(wxString::Format(wxT("%03d/Max"), rowClicked + 1), &max1);
-            cfg->Read(wxString::Format(wxT("%03d/Min"), rowClicked + 1), &min1);
-            if (!type.Cmp(wxT("NumericHex")))
-                ((wxStaticText *)FindWindow(wxID_STATIC_CMD_DESCRIPTION))->SetLabel(wxString::Format(wxT("This command needs one parameter value, which ranges from [%lX, %lX]. You can input number directly in the value field."), min1, max1));
-            else
-                ((wxStaticText *)FindWindow(wxID_STATIC_CMD_DESCRIPTION))->SetLabel(wxString::Format(wxT("This command needs one parameter value, which ranges from [%ld, %ld]. You can input number directly in the value field."), min1, max1));
-        }
-        else if (!type.Cmp(wxT("Pair")))
-        {
-            cfg->Read(wxString::Format(wxT("%03d/Max1"), rowClicked + 1), &max1);
-            cfg->Read(wxString::Format(wxT("%03d/Min1"), rowClicked + 1), &min1);
-            cfg->Read(wxString::Format(wxT("%03d/Max2"), rowClicked + 1), &max2);
-            cfg->Read(wxString::Format(wxT("%03d/Min2"), rowClicked + 1), &min2);
-            ((wxStaticText *)FindWindow(wxID_STATIC_CMD_DESCRIPTION))->SetLabel(wxString::Format(wxT("This command needs two parameter values. The first value ranges from [%ld, %ld]; the second value ranges from [%ld, %ld]. In the value field, you can input these two numbers like this => 8, -5"), min1, max1, min2, max2));
-        }
-        ((wxStaticText *)FindWindow(wxID_STATIC_CMD_DESCRIPTION))->Wrap(220);
-    }
-    event.Skip();
-}
 
 
 /*!
@@ -1115,3 +1078,48 @@ void SendUart::SetupLogWindow(void)
         wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S] "));
     }
 }
+
+
+/*!
+ * wxEVT_GRID_CMD_SELECT_CELL event handler for ID_GRID_CMD_LIST
+ */
+
+void SendUart::OnGridCmdListSelectCell( wxGridEvent& event )
+{
+    wxString actGrp, type;
+    long max1, min1, max2, min2;
+    wxConfig *cfg = wxGetApp().m_appConfig;
+    int rowClicked = event.GetRow();
+    
+    wxLogVerbose(wxT("Cell %s event: Row %d, Col %d (AltDown:%s CtrlDown:%s ShiftDown:%s MetaDown:%s)"),
+        event.Selecting() ? wxT("Select") : wxT("Deselect"), event.GetRow(), event.GetCol(),
+        event.AltDown() ? wxT("T") : wxT("F"), event.ControlDown() ? wxT("T") : wxT("F"),
+        event.ShiftDown() ? wxT("T") : wxT("F"), event.MetaDown() ? wxT("T") : wxT("F"));
+    
+    cfg->SetPath(wxT("/CommandGroup"));
+    if (event.Selecting() && cfg->Read(wxT("ActiveGroup"), &actGrp) && cfg->HasGroup(actGrp))
+    {
+        cfg->SetPath(actGrp);
+        cfg->Read(wxString::Format(wxT("%03d/Type"), rowClicked + 1), &type);
+        if (!type.Cmp(wxT("Numeric")) || !type.Cmp(wxT("Numeric2Byte")) || !type.Cmp(wxT("NumericHex")))
+        {
+            cfg->Read(wxString::Format(wxT("%03d/Max"), rowClicked + 1), &max1);
+            cfg->Read(wxString::Format(wxT("%03d/Min"), rowClicked + 1), &min1);
+            if (!type.Cmp(wxT("NumericHex")))
+                ((wxStaticText *)FindWindow(wxID_STATIC_CMD_DESCRIPTION))->SetLabel(wxString::Format(wxT("This command needs one parameter value, which ranges from [%lX, %lX]. You can input number directly in the value field."), min1, max1));
+            else
+                ((wxStaticText *)FindWindow(wxID_STATIC_CMD_DESCRIPTION))->SetLabel(wxString::Format(wxT("This command needs one parameter value, which ranges from [%ld, %ld]. You can input number directly in the value field."), min1, max1));
+        }
+        else if (!type.Cmp(wxT("Pair")))
+        {
+            cfg->Read(wxString::Format(wxT("%03d/Max1"), rowClicked + 1), &max1);
+            cfg->Read(wxString::Format(wxT("%03d/Min1"), rowClicked + 1), &min1);
+            cfg->Read(wxString::Format(wxT("%03d/Max2"), rowClicked + 1), &max2);
+            cfg->Read(wxString::Format(wxT("%03d/Min2"), rowClicked + 1), &min2);
+            ((wxStaticText *)FindWindow(wxID_STATIC_CMD_DESCRIPTION))->SetLabel(wxString::Format(wxT("This command needs two parameter values. The first value ranges from [%ld, %ld]; the second value ranges from [%ld, %ld]. In the value field, you can input these two numbers like this => 8, -5"), min1, max1, min2, max2));
+        }
+        ((wxStaticText *)FindWindow(wxID_STATIC_CMD_DESCRIPTION))->Wrap(220);
+    }
+    event.Skip();
+}
+

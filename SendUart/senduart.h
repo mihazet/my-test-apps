@@ -92,8 +92,8 @@ public:
 
 ////@begin SendUart event handler declarations
 
-    /// wxEVT_GRID_CMD_CELL_LEFT_CLICK event handler for ID_GRID_CMD_LIST
-    void OnGridCmdListCellLeftClick( wxGridEvent& event );
+    /// wxEVT_GRID_CMD_SELECT_CELL event handler for ID_GRID_CMD_LIST
+    void OnGridCmdListSelectCell( wxGridEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_ID_1
     void OnButtonIdClick( wxCommandEvent& event );

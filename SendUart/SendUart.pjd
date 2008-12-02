@@ -697,7 +697,7 @@
                   <long name="locked">0</long>
                   <string name="created">"26/11/2008"</string>
                   <string name="proxy-type">"wbGridProxy"</string>
-                  <string name="event-handler-0">"wxEVT_GRID_CMD_CELL_LEFT_CLICK|OnGridCmdListCellLeftClick|NONE||"</string>
+                  <string name="event-handler-0">"wxEVT_GRID_CMD_SELECT_CELL|OnGridCmdListSelectCell|NONE||SendUart"</string>
                   <string name="proxy-Id name">"ID_GRID_CMD_LIST"</string>
                   <long name="proxy-Id value">10006</long>
                   <string name="proxy-Name">""</string>
