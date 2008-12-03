@@ -113,8 +113,17 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_OP1
     void OnButtonOp1Click( wxCommandEvent& event );
 
-    /// wxEVT_UPDATE_UI event handler for ID_FILECTRL_USER_FILE_SAVE
-    void OnFilectrlUserFileSaveUpdate( wxUpdateUIEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_GEN_DATA_CLEAR
+    void OnButtonGenDataClearClick( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_BUTTON_GEN_DATA_CLEAR
+    void OnButtonGenDataClearUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_GEN_DATA_SAVE
+    void OnButtonGenDataSaveClick( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_BUTTON_GEN_DATA_SAVE
+    void OnButtonGenDataSaveUpdate( wxUpdateUIEvent& event );
 
     /// wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION
     void OnFileLocationChanged( wxFileDirPickerEvent& event );
@@ -210,9 +219,9 @@ private:
         ID_BUTTON_OP4 = 10052,
         wxID_STATIC_RESULT = 10054,
         ID_GRID_GEN_DATA = 10007,
-        ID_RADIOBUTTON_GEN_TO_INTERNAL_BUFFER = 10039,
-        ID_RADIOBUTTON_GEN_TO_USER_FILE = 10040,
-        ID_FILECTRL_USER_FILE_SAVE = 10044,
+        ID_RADIOBOX_GEN_DATA_TO = 10034,
+        ID_BUTTON_GEN_DATA_CLEAR = 10038,
+        ID_BUTTON_GEN_DATA_SAVE = 10051,
         ID_PANEL_TRANSMISSION = 10003,
         ID_RADIOBUTTON_TRANSMIT_INTERNAL_BUFFER = 10045,
         ID_RADIOBUTTON_TRANSMIT_USER_FILE = 10047,
