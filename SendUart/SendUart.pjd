@@ -3193,7 +3193,7 @@
                   <string name="proxy-Implementation filename">""</string>
                   <string name="proxy-Header filename">""</string>
                   <string name="proxy-Member variable name">""</string>
-                  <string name="proxy-Label">"Execute result:"</string>
+                  <string name="proxy-Label">"Last Error:"</string>
                   <long name="proxy-Wrapping width">-1</long>
                   <string name="proxy-Help text">""</string>
                   <string name="proxy-Tooltip text">""</string>
@@ -3243,7 +3243,7 @@
                   <string name="proxy-Custom ctor arguments">""</string>
                 </document>
                 <document>
-                  <string name="title">"wxStaticText: wxID_STATIC_RESULT"</string>
+                  <string name="title">"wxStaticText: wxID_STATIC_LAST_ERROR"</string>
                   <string name="type">"dialog-control-document"</string>
                   <string name="filename">""</string>
                   <string name="icon-name">"statictext"</string>
@@ -3253,7 +3253,7 @@
                   <long name="locked">0</long>
                   <string name="created">"27/11/2008"</string>
                   <string name="proxy-type">"wbStaticTextProxy"</string>
-                  <string name="proxy-Id name">"wxID_STATIC_RESULT"</string>
+                  <string name="proxy-Id name">"wxID_STATIC_LAST_ERROR"</string>
                   <long name="proxy-Id value">10054</long>
                   <string name="proxy-Name">""</string>
                   <string name="proxy-Class">"wxStaticText"</string>

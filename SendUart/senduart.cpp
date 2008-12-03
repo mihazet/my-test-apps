@@ -337,11 +337,11 @@ void SendUart::CreateControls()
     wxStaticLine* itemStaticLine44 = new wxStaticLine( itemPanel2, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
     itemBoxSizer9->Add(itemStaticLine44, 0, wxGROW|wxALL, 5);
 
-    wxStaticText* itemStaticText45 = new wxStaticText( itemPanel2, wxID_STATIC, _("Execute result:"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* itemStaticText45 = new wxStaticText( itemPanel2, wxID_STATIC, _("Last Error:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemStaticText45->SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, false, wxT("Times New Roman")));
     itemBoxSizer9->Add(itemStaticText45, 0, wxGROW|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    wxStaticText* itemStaticText46 = new wxStaticText( itemPanel2, wxID_STATIC_RESULT, _("Everything is fine."), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* itemStaticText46 = new wxStaticText( itemPanel2, wxID_STATIC_LAST_ERROR, _("Everything is fine."), wxDefaultPosition, wxDefaultSize, 0 );
     itemStaticText46->Wrap(300);
     itemBoxSizer9->Add(itemStaticText46, 1, wxGROW|wxALL, 5);
 
