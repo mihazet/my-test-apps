@@ -84,8 +84,11 @@ BEGIN_EVENT_TABLE( SendUart, wxPropertySheetDialog )
     EVT_BUTTON( ID_BUTTON_GEN_DATA_SAVE, SendUart::OnButtonGenDataSaveClick )
     EVT_UPDATE_UI( ID_BUTTON_GEN_DATA_SAVE, SendUart::OnButtonGenDataSaveUpdate )
 
-    EVT_FILEPICKER_CHANGED( ID_FILECTRL_FILE_LOCATION, SendUart::OnFileLocationChanged )
-    EVT_UPDATE_UI( ID_FILECTRL_FILE_LOCATION, SendUart::OnFilectrlFileLocationUpdate )
+    EVT_BUTTON( ID_BUTTON_TRANSMIT_DATA_CLEAR, SendUart::OnButtonTransmitDataClearClick )
+    EVT_UPDATE_UI( ID_BUTTON_TRANSMIT_DATA_CLEAR, SendUart::OnButtonTransmitDataClearUpdate )
+
+    EVT_BUTTON( ID_BUTTON_TRANSMIT_DATA_LOAD, SendUart::OnButtonTransmitDataLoadClick )
+    EVT_UPDATE_UI( ID_BUTTON_TRANSMIT_DATA_LOAD, SendUart::OnButtonTransmitDataLoadUpdate )
 
     EVT_BUTTON( ID_BUTTON_CONNECT, SendUart::OnButtonConnectClick )
     EVT_UPDATE_UI( ID_BUTTON_CONNECT, SendUart::OnButtonConnectUpdate )
@@ -166,7 +169,7 @@ SendUart::~SendUart()
     cfg->Write(wxT("ID0"), ((wxStaticText *)FindWindow(wxID_STATIC_ID0))->GetLabel());
     cfg->Write(wxT("ID1"), ((wxStaticText *)FindWindow(wxID_STATIC_ID1))->GetLabel());
     cfg->Write(wxT("GenDataDestination"), ((wxRadioBox *)FindWindow(ID_RADIOBOX_GEN_DATA_TO))->GetSelection());
-    cfg->Write(wxT("TransmitDataSource"), ((wxRadioButton *)FindWindow(ID_RADIOBUTTON_TRANSMIT_INTERNAL_BUFFER))->GetValue() ? 0L : 1L);
+    cfg->Write(wxT("TransmitDataSource"), ((wxRadioBox *)FindWindow(ID_RADIOBOX_TRANSMIT_DATA_FROM))->GetSelection());
     cfg->Write(wxT("UsedUartPort"), ((wxChoice *)FindWindow(ID_CHOICE_PORT))->GetStringSelection());
     cfg->Write(wxT("UsedUartBaud"), ((wxChoice *)FindWindow(ID_CHOICE_BAUD))->GetCurrentSelection());
     cfg->Write(wxT("UsedUartCharSize"), ((wxChoice *)FindWindow(ID_CHOICE_CHAR_SIZE))->GetCurrentSelection());
@@ -379,21 +382,22 @@ void SendUart::CreateControls()
     wxStaticBox* itemStaticBoxSizer56Static = new wxStaticBox(itemPanel54, wxID_ANY, _("Data Setting"));
     wxStaticBoxSizer* itemStaticBoxSizer56 = new wxStaticBoxSizer(itemStaticBoxSizer56Static, wxVERTICAL);
     itemBoxSizer55->Add(itemStaticBoxSizer56, 1, wxGROW|wxALL, 5);
-    wxStaticBox* itemStaticBoxSizer57Static = new wxStaticBox(itemPanel54, wxID_ANY, _("Load data from..."));
-    wxStaticBoxSizer* itemStaticBoxSizer57 = new wxStaticBoxSizer(itemStaticBoxSizer57Static, wxVERTICAL);
-    itemStaticBoxSizer56->Add(itemStaticBoxSizer57, 0, wxGROW|wxALL, 5);
-    wxRadioButton* itemRadioButton58 = new wxRadioButton( itemPanel54, ID_RADIOBUTTON_TRANSMIT_INTERNAL_BUFFER, _("Internale buffer"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemRadioButton58->SetValue(true);
-    itemStaticBoxSizer57->Add(itemRadioButton58, 0, wxGROW|wxLEFT|wxRIGHT|wxTOP, 5);
+    wxBoxSizer* itemBoxSizer57 = new wxBoxSizer(wxHORIZONTAL);
+    itemStaticBoxSizer56->Add(itemBoxSizer57, 0, wxGROW|wxALL, 5);
+    wxArrayString itemRadioBox58Strings;
+    itemRadioBox58Strings.Add(_("&Internal Buffer"));
+    itemRadioBox58Strings.Add(_("&User File"));
+    wxRadioBox* itemRadioBox58 = new wxRadioBox( itemPanel54, ID_RADIOBOX_TRANSMIT_DATA_FROM, _("Load data from..."), wxDefaultPosition, wxDefaultSize, itemRadioBox58Strings, 1, wxRA_SPECIFY_ROWS );
+    itemRadioBox58->SetSelection(0);
+    itemBoxSizer57->Add(itemRadioBox58, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer59 = new wxBoxSizer(wxHORIZONTAL);
-    itemStaticBoxSizer57->Add(itemBoxSizer59, 0, wxGROW, 0);
-    wxRadioButton* itemRadioButton60 = new wxRadioButton( itemPanel54, ID_RADIOBUTTON_TRANSMIT_USER_FILE, _("User File"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemRadioButton60->SetValue(false);
-    itemBoxSizer59->Add(itemRadioButton60, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    itemBoxSizer57->Add(5, 5, 1, wxGROW|wxALL, 5);
 
-    wxFilePickerCtrl* itemFilePickerCtrl61 = new wxFilePickerCtrl( itemPanel54, ID_FILECTRL_FILE_LOCATION, _T(""), _T(""), _T(""), wxDefaultPosition, wxDefaultSize, wxFLP_USE_TEXTCTRL|wxFLP_OPEN|wxFLP_FILE_MUST_EXIST );
-    itemBoxSizer59->Add(itemFilePickerCtrl61, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    wxButton* itemButton60 = new wxButton( itemPanel54, ID_BUTTON_TRANSMIT_DATA_CLEAR, _("Clear"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer57->Add(itemButton60, 0, wxGROW|wxALL, 5);
+
+    wxButton* itemButton61 = new wxButton( itemPanel54, ID_BUTTON_TRANSMIT_DATA_LOAD, _("Load"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer57->Add(itemButton61, 0, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer62 = new wxBoxSizer(wxHORIZONTAL);
     itemStaticBoxSizer56->Add(itemBoxSizer62, 1, wxGROW|wxALL, 0);
@@ -590,7 +594,7 @@ wxIcon SendUart::GetIconResource( const wxString& name )
 /*!
  * wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION
  */
-
+#if 0
 void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
 {
     wxFile file;
@@ -656,6 +660,7 @@ void SendUart::OnFileLocationChanged( wxFileDirPickerEvent& event )
         file.Close();
     }
 }
+#endif
 
 
 /*!
@@ -980,19 +985,6 @@ void SendUart::OnButtonIdNextClick( wxCommandEvent& event )
     }
 }
 
-
-/*!
- * wxEVT_UPDATE_UI event handler for ID_FILECTRL_FILE_LOCATION
- */
-
-void SendUart::OnFilectrlFileLocationUpdate( wxUpdateUIEvent& event )
-{
-    wxRadioButton *rb = (wxRadioButton *)FindWindow(ID_RADIOBUTTON_TRANSMIT_USER_FILE);
-    if (rb)
-        event.Enable(rb->GetValue());
-}
-
-
 /*!
  * Read application configuration
  */
@@ -1012,8 +1004,7 @@ void SendUart::LoadAppConfig(void)
     cfg->Read(wxT("GenDataDestination"), &numVal);
     ((wxRadioBox *)FindWindow(ID_RADIOBOX_GEN_DATA_TO))->SetSelection(numVal);
     cfg->Read(wxT("TransmitDataSource"), &numVal);
-    ((wxRadioButton *)FindWindow(ID_RADIOBUTTON_TRANSMIT_INTERNAL_BUFFER))->SetValue(numVal == 0);
-    ((wxRadioButton *)FindWindow(ID_RADIOBUTTON_TRANSMIT_USER_FILE))->SetValue(numVal == 1);
+    ((wxRadioBox *)FindWindow(ID_RADIOBOX_TRANSMIT_DATA_FROM))->SetSelection(numVal);
     cfg->Read(wxT("UsedUartBaud"), &numVal);
     ((wxChoice *)FindWindow(ID_CHOICE_BAUD))->SetSelection(numVal);
     cfg->Read(wxT("UsedUartCharSize"), &numVal);
@@ -1288,5 +1279,57 @@ void SendUart::OnButtonGenDataSaveClick( wxCommandEvent& event )
 void SendUart::OnButtonGenDataSaveUpdate( wxUpdateUIEvent& event )
 {
     event.Enable(m_genDataCount != 0);
+}
+
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_TRANSMIT_DATA_CLEAR
+ */
+
+void SendUart::OnButtonTransmitDataClearClick( wxCommandEvent& event )
+{
+////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_TRANSMIT_DATA_CLEAR in SendUart.
+    // Before editing this code, remove the block markers.
+    event.Skip();
+////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_TRANSMIT_DATA_CLEAR in SendUart. 
+}
+
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_BUTTON_TRANSMIT_DATA_CLEAR
+ */
+
+void SendUart::OnButtonTransmitDataClearUpdate( wxUpdateUIEvent& event )
+{
+////@begin wxEVT_UPDATE_UI event handler for ID_BUTTON_TRANSMIT_DATA_CLEAR in SendUart.
+    // Before editing this code, remove the block markers.
+    event.Skip();
+////@end wxEVT_UPDATE_UI event handler for ID_BUTTON_TRANSMIT_DATA_CLEAR in SendUart. 
+}
+
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_TRANSMIT_DATA_LOAD
+ */
+
+void SendUart::OnButtonTransmitDataLoadClick( wxCommandEvent& event )
+{
+////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_TRANSMIT_DATA_LOAD in SendUart.
+    // Before editing this code, remove the block markers.
+    event.Skip();
+////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_TRANSMIT_DATA_LOAD in SendUart. 
+}
+
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_BUTTON_TRANSMIT_DATA_LOAD
+ */
+
+void SendUart::OnButtonTransmitDataLoadUpdate( wxUpdateUIEvent& event )
+{
+////@begin wxEVT_UPDATE_UI event handler for ID_BUTTON_TRANSMIT_DATA_LOAD in SendUart.
+    // Before editing this code, remove the block markers.
+    event.Skip();
+////@end wxEVT_UPDATE_UI event handler for ID_BUTTON_TRANSMIT_DATA_LOAD in SendUart. 
 }
 

@@ -22,7 +22,6 @@
 #include "wx/grid.h"
 #include "wx/statline.h"
 #include "wx/spinctrl.h"
-#include "wx/filepicker.h"
 ////@end includes
 #include "serport.h"
 
@@ -125,11 +124,17 @@ public:
     /// wxEVT_UPDATE_UI event handler for ID_BUTTON_GEN_DATA_SAVE
     void OnButtonGenDataSaveUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_FILEPICKER_CHANGED event handler for ID_FILECTRL_FILE_LOCATION
-    void OnFileLocationChanged( wxFileDirPickerEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_TRANSMIT_DATA_CLEAR
+    void OnButtonTransmitDataClearClick( wxCommandEvent& event );
 
-    /// wxEVT_UPDATE_UI event handler for ID_FILECTRL_FILE_LOCATION
-    void OnFilectrlFileLocationUpdate( wxUpdateUIEvent& event );
+    /// wxEVT_UPDATE_UI event handler for ID_BUTTON_TRANSMIT_DATA_CLEAR
+    void OnButtonTransmitDataClearUpdate( wxUpdateUIEvent& event );
+
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_TRANSMIT_DATA_LOAD
+    void OnButtonTransmitDataLoadClick( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for ID_BUTTON_TRANSMIT_DATA_LOAD
+    void OnButtonTransmitDataLoadUpdate( wxUpdateUIEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_CONNECT
     void OnButtonConnectClick( wxCommandEvent& event );
@@ -223,9 +228,9 @@ private:
         ID_BUTTON_GEN_DATA_CLEAR = 10038,
         ID_BUTTON_GEN_DATA_SAVE = 10051,
         ID_PANEL_TRANSMISSION = 10003,
-        ID_RADIOBUTTON_TRANSMIT_INTERNAL_BUFFER = 10045,
-        ID_RADIOBUTTON_TRANSMIT_USER_FILE = 10047,
-        ID_FILECTRL_FILE_LOCATION = 10000,
+        ID_RADIOBOX_TRANSMIT_DATA_FROM = 10039,
+        ID_BUTTON_TRANSMIT_DATA_CLEAR = 10040,
+        ID_BUTTON_TRANSMIT_DATA_LOAD = 10044,
         ID_GRID_BYTE_COUNTER = 10004,
         wxID_STATIC_FILE_SIZE = 10015,
         wxID_STATIC_MU_BYTE = 10016,
