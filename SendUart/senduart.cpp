@@ -27,6 +27,7 @@
 #include "wx/datetime.h"
 #include "wx/longlong.h"
 #include "wx/config.h"
+#include "wx/radiobox.h"
 
 #include "senduart.h"
 #include "senduartapp.h"
@@ -179,9 +180,7 @@ void SendUart::Init()
 ////@begin SendUart member initialisation
     m_pBuffer = NULL;
     m_bufferSize = 0;
-    logPanel = NULL;
-    logTextCtrl = NULL;
-    logClearBtn = NULL;
+    logTextCtrl_ = NULL;
 ////@end SendUart member initialisation
 }
 
@@ -936,6 +935,8 @@ void SendUart::OnButtonIdClick( wxCommandEvent& event )
     wxStaticText *id[2];
     wxButton *btn = (wxButton *)FindWindow(event.GetId());
     long style;
+    
+    wxLogVerbose(wxT("Button#") + btn->GetLabel() + wxT(" is pressed."));
 
     id[0] = (wxStaticText *)FindWindow(wxID_STATIC_ID0);
     id[1] = (wxStaticText *)FindWindow(wxID_STATIC_ID1);
@@ -959,6 +960,8 @@ void SendUart::OnButtonIdClick( wxCommandEvent& event )
 void SendUart::OnButtonIdNextClick( wxCommandEvent& event )
 {
     wxStaticText *id[2];
+    
+    wxLogVerbose(wxT("Button#N is pressed."));
 
     id[0] = (wxStaticText *)FindWindow(wxID_STATIC_ID0);
     id[1] = (wxStaticText *)FindWindow(wxID_STATIC_ID1);
@@ -1036,6 +1039,7 @@ void SendUart::LoadAppConfig(void)
 
 void SendUart::OnButtonOp1Click( wxCommandEvent& event )
 {
+    wxLogVerbose(wxT("Operation #1 button pressed"));
 ////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_OP1 in SendUart.
     // Before editing this code, remove the block markers.
     event.Skip();
@@ -1050,21 +1054,22 @@ void SendUart::OnButtonOp1Click( wxCommandEvent& event )
 void SendUart::SetupLogWindow(void)
 {
     wxConfig *cfg = wxGetApp().m_appConfig;
-    long logWinEnable;
+    long logWinEnable, level;
 
-    logPanel = new wxPanel(GetBookCtrl(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL);
+    wxPanel *logPanel = new wxPanel(GetBookCtrl(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL);
     wxBoxSizer *itemBoxSizer = new wxBoxSizer(wxVERTICAL);
     logPanel->SetSizer(itemBoxSizer);
 
-    logTextCtrl = new wxTextCtrl(logPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH|wxTE_RICH2|wxTE_DONTWRAP);
-    itemBoxSizer->Add(logTextCtrl, 1, wxEXPAND|wxALL, 5);
+    logTextCtrl_ = new wxTextCtrl(logPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH|wxTE_RICH2|wxTE_DONTWRAP);
+    itemBoxSizer->Add(logTextCtrl_, 1, wxEXPAND|wxALL, 5);
 
     wxBoxSizer *itemBoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer->Add(itemBoxSizer2, 0, wxALIGN_LEFT|wxALL, 5);
-    logClearBtn = new wxButton(logPanel, wxID_ANY, _("Clear Log"), wxDefaultPosition, wxDefaultSize, 0);
+    wxButton *logClearBtn = new wxButton(logPanel, wxID_ANY, _("Clear Log"), wxDefaultPosition, wxDefaultSize, 0);
+    logClearBtn->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(SendUart::OnClearLog), NULL, this);
     itemBoxSizer2->Add(logClearBtn, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    if (logTextCtrl && logPanel)
+    if (logTextCtrl_ && logPanel)
     {
         cfg->SetPath(wxT("/"));
         cfg->Read(wxT("EnableLogWindow"), &logWinEnable, 0L);
@@ -1073,9 +1078,22 @@ void SendUart::SetupLogWindow(void)
         else
             logPanel->Hide();
         
-        wxLog *logger = new wxLogTextCtrl(logTextCtrl);
+        wxLog *logger = new wxLogTextCtrl(logTextCtrl_);
         delete wxLog::SetActiveTarget(logger);
         wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S] "));
+        
+        wxArrayString levels;
+        levels.Add(wxT("Verbose"));
+        levels.Add(wxT("Info"));
+        levels.Add(wxT("Message"));
+        levels.Add(wxT("Warning"));
+        levels.Add(wxT("Error"));
+        wxRadioBox *logLevel = new wxRadioBox(logPanel, wxID_ANY, wxString("Log Level"), wxDefaultPosition, wxDefaultSize, levels, 1, wxRA_SPECIFY_ROWS);
+        logLevel->Connect(wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler(SendUart::OnLogLevelChange), NULL, this);
+        cfg->Read(wxT("PreferredLogLevel"), &level, 2L);
+        logLevel->SetSelection(level);
+        ChangeLogLevel(level);
+        itemBoxSizer2->Add(logLevel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
     }
 }
 
@@ -1092,7 +1110,7 @@ void SendUart::OnGridCmdListSelectCell( wxGridEvent& event )
     int rowClicked = event.GetRow();
     
     wxLogVerbose(wxT("Cell %s event: Row %d, Col %d (AltDown:%s CtrlDown:%s ShiftDown:%s MetaDown:%s)"),
-        event.Selecting() ? wxT("Select") : wxT("Deselect"), event.GetRow(), event.GetCol(),
+        event.Selecting() ? wxT("Select") : wxT("Deselect"), rowClicked, event.GetCol(),
         event.AltDown() ? wxT("T") : wxT("F"), event.ControlDown() ? wxT("T") : wxT("F"),
         event.ShiftDown() ? wxT("T") : wxT("F"), event.MetaDown() ? wxT("T") : wxT("F"));
     
@@ -1123,3 +1141,46 @@ void SendUart::OnGridCmdListSelectCell( wxGridEvent& event )
     event.Skip();
 }
 
+
+/*!
+ * Clear log window
+ */
+
+void SendUart::OnClearLog(wxCommandEvent& WXUNUSED(event))
+{
+    logTextCtrl_->Clear();
+}
+
+/*!
+ * Change the log level
+ */
+
+void SendUart::OnLogLevelChange(wxCommandEvent& event)
+{
+    wxRadioBox *src = (wxRadioBox *)FindWindow(event.GetId());
+
+    if (src)
+        ChangeLogLevel(src->GetSelection());
+}
+
+/*!
+ * Change the log level
+ */
+
+void SendUart::ChangeLogLevel(long level)
+{
+    wxLogLevel logLevel;
+    
+    switch (level)
+    {
+        case 0:
+        case 1: logLevel = wxLOG_Info; break;
+        case 2:
+        default: logLevel = wxLOG_Message; break;
+        case 3: logLevel = wxLOG_Warning; break;
+        case 4: logLevel = wxLOG_Error; break;
+    }
+    
+    wxLog::SetVerbose(level == 0);
+    wxLog::SetLogLevel(logLevel);
+}

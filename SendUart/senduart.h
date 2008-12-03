@@ -90,6 +90,15 @@ public:
     /// setup app log window
     void SetupLogWindow(void);
 
+    /// Clear log window
+    void OnClearLog(wxCommandEvent& event);
+
+    /// Change the log level
+    void OnLogLevelChange(wxCommandEvent& event);
+
+    /// Change the log level
+    void ChangeLogLevel(long level);
+
 ////@begin SendUart event handler declarations
 
     /// wxEVT_GRID_CMD_SELECT_CELL event handler for ID_GRID_CMD_LIST
@@ -169,9 +178,7 @@ private:
     size_t m_bufferSize;
     wxSerialPort m_com;
     wxSerialPort_DCS m_serialDCS;
-    wxPanel * logPanel;
-    wxTextCtrl * logTextCtrl;
-    wxButton * logClearBtn;
+    wxTextCtrl * logTextCtrl_;
     /// Control identifiers
     enum {
         ID_SENDUART = 10022,
