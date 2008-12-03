@@ -181,6 +181,7 @@ void SendUart::Init()
     m_pBuffer = NULL;
     m_bufferSize = 0;
     logTextCtrl_ = NULL;
+    m_genDataCount = 0;
 ////@end SendUart member initialisation
 }
 
@@ -340,7 +341,7 @@ void SendUart::CreateControls()
     wxStaticBox* itemStaticBoxSizer47Static = new wxStaticBox(itemPanel2, wxID_ANY, _("Generated raw data"));
     wxStaticBoxSizer* itemStaticBoxSizer47 = new wxStaticBoxSizer(itemStaticBoxSizer47Static, wxVERTICAL);
     itemBoxSizer3->Add(itemStaticBoxSizer47, 0, wxGROW|wxALL, 5);
-    wxGrid* itemGrid48 = new wxGrid( itemPanel2, ID_GRID_GEN_DATA, wxDefaultPosition, wxSize(-1, 400), wxNO_BORDER|wxVSCROLL );
+    wxGrid* itemGrid48 = new wxGrid( itemPanel2, ID_GRID_GEN_DATA, wxDefaultPosition, wxSize(-1, 400), wxNO_BORDER );
     itemGrid48->SetDefaultColSize(20);
     itemGrid48->SetDefaultRowSize(18);
     itemGrid48->SetColLabelSize(18);
@@ -1040,11 +1041,67 @@ void SendUart::LoadAppConfig(void)
 
 void SendUart::OnButtonOp1Click( wxCommandEvent& event )
 {
+    wxGrid *grid = (wxGrid *)FindWindow(ID_GRID_CMD_LIST);
+    wxGrid *grid2 = (wxGrid *)FindWindow(ID_GRID_GEN_DATA);
+    size_t index, count;
+    wxString val, actGrp, cmdGrp, cmdType;
+    wxConfig *cfg = wxGetApp().m_appConfig;
+    long code, max[2], min[2];
+    char id[4];
+    int oldRowCount;
+
     wxLogVerbose(wxT("Operation #1 button pressed"));
-////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_OP1 in SendUart.
-    // Before editing this code, remove the block markers.
-    event.Skip();
-////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_OP1 in SendUart. 
+
+    cfg->SetPath(wxT("/CommandGroup"));
+    if (grid && grid->IsSelection() && cfg->Read(wxT("ActiveGroup"), &actGrp) && cfg->HasGroup(actGrp))
+    {
+        // according to doc, wxString::char_str() will the return an object with string data that is implicitly
+        // convertible to char* pointer; while the return type of wxString::c_str() is depended on how wx lib
+        // is built. (char* in ANSI build, wchar_t* in UNICODe build)
+        sprintf(id, "%c%c", (*(char *)((wxStaticText *)FindWindow(wxID_STATIC_ID0))->GetLabel().char_str()),
+            (*(char *)((wxStaticText *)FindWindow(wxID_STATIC_ID1))->GetLabel().char_str()));
+
+        cfg->SetPath(actGrp);
+        count = grid->GetNumberRows();
+        for (index = 0; (index < count); index++)
+        {
+            if (grid->IsInSelection(index, 0))
+            {
+                val = grid->GetCellValue(index, 1);
+                cmdGrp = wxString::Format(wxT("%03d"), index + 1);
+                if (!val.IsEmpty() && cfg->HasGroup(cmdGrp))
+                {
+                    cfg->SetPath(cmdGrp);
+                    if (cfg->Read(wxT("Code"), &code) && cfg->Read(wxT("Type"), &cmdType))
+                    {
+                        oldRowCount = grid2->GetNumberRows();
+                        if (oldRowCount * 16 - m_genDataCount < 16)
+                        {
+                            grid2->AppendRows();
+                            grid2->SetRowLabelValue(oldRowCount, wxString::Format(wxT("%X"), oldRowCount));
+                        }
+                        grid2->SetCellValue(m_genDataCount/16, m_genDataCount%16, wxString::Format(wxT("02")));
+                        m_genDataCount++;
+                        grid2->SetCellValue(m_genDataCount/16, m_genDataCount%16, wxString::Format(wxT("04")));
+                        m_genDataCount++;
+                        grid2->SetCellValue(m_genDataCount/16, m_genDataCount%16, wxString::Format(wxT("%02X"), id[0]));
+                        m_genDataCount++;
+                        grid2->SetCellValue(m_genDataCount/16, m_genDataCount%16, wxString::Format(wxT("%02X"), id[1]));
+                        m_genDataCount++;
+                        grid2->SetCellValue(m_genDataCount/16, m_genDataCount%16, wxString::Format(wxT("%02lX"), (code >> 24)));
+                        m_genDataCount++;
+                        grid2->SetCellValue(m_genDataCount/16, m_genDataCount%16, wxString::Format(wxT("%02lX"), (code & 0xFF0000) >> 16));
+                        m_genDataCount++;
+                        grid2->SetCellValue(m_genDataCount/16, m_genDataCount%16, wxString::Format(wxT("%02lX"), (code & 0xFF00) >> 8));
+                        m_genDataCount++;
+                        grid2->SetCellValue(m_genDataCount/16, m_genDataCount%16, wxString::Format(wxT("03")));
+                        m_genDataCount++;
+                    }
+                    cfg->SetPath(wxT(".."));
+                }
+            }
+        }
+    }
 }
 
 

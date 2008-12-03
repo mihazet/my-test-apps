@@ -486,6 +486,7 @@
           <string name="variable-3">"m_serialDCS|wxSerialPort_DCS|||2|0|"</string>
           <string name="variable-4">"logTextCtrl_|wxTextCtrl *||NULL|2|0|"</string>
           <string name="variable-5">"dummy_|int|||2|0|// remove compile warning"</string>
+          <string name="variable-6">"m_genDataCount|long||0|2|0|"</string>
           <string name="proxy-Id name">"ID_SENDUART"</string>
           <long name="proxy-Id value">10022</long>
           <string name="proxy-Class">"SendUart"</string>
@@ -3400,7 +3401,7 @@
                   <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
                   <bool name="proxy-wxCLIP_CHILDREN">0</bool>
                   <bool name="proxy-wxHSCROLL">0</bool>
-                  <bool name="proxy-wxVSCROLL">1</bool>
+                  <bool name="proxy-wxVSCROLL">0</bool>
                   <bool name="proxy-wxALWAYS_SHOW_SB">0</bool>
                   <bool name="proxy-wxWS_EX_VALIDATE_RECURSIVELY">0</bool>
                   <string name="proxy-Custom styles">""</string>
