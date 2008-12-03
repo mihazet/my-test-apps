@@ -541,6 +541,7 @@ void SendUart::CreateControls()
     LoadCommand();
     LoadAppConfig();
     ScanPort();
+    itemPropertySheetDialog1->dummy_ = 0;
 }
 
 

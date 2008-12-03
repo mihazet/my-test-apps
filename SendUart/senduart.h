@@ -179,6 +179,7 @@ private:
     wxSerialPort m_com;
     wxSerialPort_DCS m_serialDCS;
     wxTextCtrl * logTextCtrl_;
+    int dummy_; // // remove compile warning
     /// Control identifiers
     enum {
         ID_SENDUART = 10022,
