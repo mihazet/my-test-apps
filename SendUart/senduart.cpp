@@ -139,7 +139,7 @@ SendUart::SendUart( wxWindow* parent, wxWindowID id, const wxString& caption, co
 bool SendUart::Create( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
 {
 ////@begin SendUart creation
-    SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY|wxWS_EX_BLOCK_EVENTS);
+    SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
     SetSheetStyle(wxPROPSHEET_DEFAULT);
     wxPropertySheetDialog::Create( parent, id, caption, pos, size, style );
 
@@ -209,7 +209,7 @@ void SendUart::CreateControls()
     wxStaticBox* itemStaticBoxSizer4Static = new wxStaticBox(itemPanel2, wxID_ANY, _("Available commands"));
     wxStaticBoxSizer* itemStaticBoxSizer4 = new wxStaticBoxSizer(itemStaticBoxSizer4Static, wxVERTICAL);
     itemBoxSizer3->Add(itemStaticBoxSizer4, 0, wxGROW|wxALL, 5);
-    wxGrid* itemGrid5 = new wxGrid( itemPanel2, ID_GRID_CMD_LIST, wxDefaultPosition, wxSize(230, 400), wxNO_BORDER|wxFULL_REPAINT_ON_RESIZE|wxVSCROLL );
+    wxGrid* itemGrid5 = new wxGrid( itemPanel2, ID_GRID_CMD_LIST, wxDefaultPosition, wxSize(230, 400), wxDOUBLE_BORDER );
     itemGrid5->SetDefaultColSize(60);
     itemGrid5->SetDefaultRowSize(18);
     itemGrid5->SetColLabelSize(18);
@@ -348,7 +348,7 @@ void SendUart::CreateControls()
     wxStaticBox* itemStaticBoxSizer47Static = new wxStaticBox(itemPanel2, wxID_ANY, _("Generated raw data"));
     wxStaticBoxSizer* itemStaticBoxSizer47 = new wxStaticBoxSizer(itemStaticBoxSizer47Static, wxVERTICAL);
     itemBoxSizer3->Add(itemStaticBoxSizer47, 0, wxGROW|wxALL, 5);
-    wxGrid* itemGrid48 = new wxGrid( itemPanel2, ID_GRID_GEN_DATA, wxDefaultPosition, wxSize(-1, 400), wxNO_BORDER );
+    wxGrid* itemGrid48 = new wxGrid( itemPanel2, ID_GRID_GEN_DATA, wxDefaultPosition, wxSize(-1, 400), wxDOUBLE_BORDER );
     itemGrid48->SetDefaultColSize(20);
     itemGrid48->SetDefaultRowSize(18);
     itemGrid48->SetColLabelSize(18);
@@ -375,7 +375,7 @@ void SendUart::CreateControls()
 
     GetBookCtrl()->AddPage(itemPanel2, _("Generation"));
 
-    wxPanel* itemPanel54 = new wxPanel( GetBookCtrl(), ID_PANEL_TRANSMISSION, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
+    wxPanel* itemPanel54 = new wxPanel( GetBookCtrl(), ID_PANEL_TRANSMISSION, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL|wxALWAYS_SHOW_SB );
     wxBoxSizer* itemBoxSizer55 = new wxBoxSizer(wxVERTICAL);
     itemPanel54->SetSizer(itemBoxSizer55);
 
@@ -902,11 +902,10 @@ void SendUart::OnChoiceBaudSelected( wxCommandEvent& event )
 
 void SendUart::LoadCommand(void)
 {
-    wxString actGrp, propIdx, propStr;
+    wxString actGrp, propIdx, propStr, propType;
     bool cont;
-    long dummy;
+    long dummy, max, min;
     int row = 0;
-    wxGridCellAttr *cellAttr = NULL;
     wxGrid *grid = (wxGrid *)FindWindow(ID_GRID_CMD_LIST);
     wxConfig *cfg = wxGetApp().m_appConfig;
     
@@ -918,19 +917,27 @@ void SendUart::LoadCommand(void)
         cont = cfg->GetFirstGroup(propIdx, dummy);
         while (cont)
         {
+            /* setup displayed property name */
             cfg->Read(propIdx + wxT("/Property"), &propStr);
-            grid->SetCellValue(row++, 0, propStr);
-            cont = cfg->GetNextGroup(propIdx, dummy);
-            if (cont)
+            grid->SetCellValue(row, 0, propStr);
+            grid->SetReadOnly(row, 0);
+            
+            /* setup property value range limiter */
+            cfg->Read(propIdx + wxT("/Type"), &propType);
+            if (!propType.Cmp(wxT("Numeric")) || !propType.Cmp(wxT("Numeric2Byte")))
+            {
+                cfg->Read(propIdx + wxT("/Max"), &max);
+                cfg->Read(propIdx + wxT("/Min"), &min);
+                grid->SetCellEditor(row, 1, new wxGridCellNumberEditor(min, max));
+            }
+
+            /* has next? */
+            if ((cont = cfg->GetNextGroup(propIdx, dummy)) == true)
                 grid->AppendRows();
+                
+            row++;
         }
-        
-        // set read only on property column
-        cellAttr = grid->GetOrCreateCellAttr(0, 0);
-        if (cellAttr)
-            cellAttr->SetReadOnly();
-        grid->SetColAttr(0, cellAttr);
-        
+
         // autosize
         grid->AutoSize();
     }

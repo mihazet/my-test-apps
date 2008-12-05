@@ -102,11 +102,7 @@ bool SendUartApp::OnInit()
 	wxImage::AddHandler(new wxGIFHandler);
 #endif
 	SendUart* mainWindow = new SendUart(NULL);
-	/* int returnValue = */ mainWindow->ShowModal();
-
-	mainWindow->Destroy();
-	// A modal dialog application should return false to terminate the app.
-	return false;
+	mainWindow->Show(true);
 ////@end SendUartApp initialisation
 
     return true;
