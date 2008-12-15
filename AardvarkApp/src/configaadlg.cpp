@@ -133,11 +133,11 @@ void ConfigAADlg::CreateControls()
     itemStaticText6->SetFont(wxFont(12, wxSWISS, wxNORMAL, wxNORMAL, false, wxT("Verdana")));
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxALL, 5);
 
-    wxListCtrl* itemListCtrl7 = new wxListCtrl( itemDialog1, ID_LISTCTRL, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_USER_TEXT|wxLC_SINGLE_SEL );
+    wxListCtrl* itemListCtrl7 = new wxListCtrl( itemDialog1, ID_LISTCTRL_ADAPTER_LIST, wxDefaultPosition, wxSize(350, -1), wxLC_REPORT|wxLC_USER_TEXT|wxLC_SINGLE_SEL|wxLC_HRULES|wxLC_VRULES );
     itemBoxSizer5->Add(itemListCtrl7, 3, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer4->Add(itemBoxSizer8, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer4->Add(itemBoxSizer8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString itemRadioBox9Strings;
     itemRadioBox9Strings.Add(_("I2C - SPI"));
@@ -150,7 +150,31 @@ void ConfigAADlg::CreateControls()
     itemRadioBox9->SetSelection(0);
     itemBoxSizer8->Add(itemRadioBox9, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
+    wxBoxSizer* itemBoxSizer10 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer2->Add(itemBoxSizer10, 0, wxALIGN_LEFT|wxALL, 5);
+
+    wxButton* itemButton11 = new wxButton( itemDialog1, ID_BUTTON_REFRESH_ADAPTERLIST, _("Refresh list"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer10->Add(itemButton11, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxStdDialogButtonSizer* itemStdDialogButtonSizer12 = new wxStdDialogButtonSizer;
+
+    itemBoxSizer2->Add(itemStdDialogButtonSizer12, 0, wxALIGN_RIGHT|wxALL, 5);
+    wxButton* itemButton13 = new wxButton( itemDialog1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStdDialogButtonSizer12->AddButton(itemButton13);
+
+    wxButton* itemButton14 = new wxButton( itemDialog1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStdDialogButtonSizer12->AddButton(itemButton14);
+
+    itemStdDialogButtonSizer12->Realize();
+
 ////@end ConfigAADlg content construction
+    wxListCtrl *pAdapterList = (wxListCtrl *)FindWindow(ID_LISTCTRL_ADAPTER_LIST);
+    pAdapterList->InsertColumn(0, wxT("Port"), wxLIST_FORMAT_LEFT, 45);
+    pAdapterList->InsertColumn(1, wxT("HW Ver"), wxLIST_FORMAT_LEFT, 60);
+    pAdapterList->InsertColumn(2, wxT("FW Ver"), wxLIST_FORMAT_LEFT, 60);
+    pAdapterList->InsertColumn(3, wxT("I2C"), wxLIST_FORMAT_LEFT, 40);
+    pAdapterList->InsertColumn(4, wxT("SPI"), wxLIST_FORMAT_LEFT, 40);
+    pAdapterList->InsertColumn(5, wxT("GPIO"), wxLIST_FORMAT_LEFT, 45);
 }
 
 

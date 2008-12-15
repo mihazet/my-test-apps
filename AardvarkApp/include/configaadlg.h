@@ -87,8 +87,9 @@ public:
     /// Control identifiers
     enum {
         ID_CONFIGAADLG = 10000,
-        ID_LISTCTRL = 10001,
-        ID_RADIOBOX = 10002
+        ID_LISTCTRL_ADAPTER_LIST = 10001,
+        ID_RADIOBOX = 10002,
+        ID_BUTTON_REFRESH_ADAPTERLIST = 10003
     };
 ////@end ConfigAADlg member variables
 };
