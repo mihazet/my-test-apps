@@ -224,7 +224,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%"</string>
+          <string name="Include path">"%AUTO%,../include"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
@@ -283,7 +283,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%"</string>
+          <string name="Include path">"%AUTO%,../include"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
@@ -693,11 +693,11 @@
                   <string name="proxy-Custom styles">""</string>
                   <long name="proxy-X">-1</long>
                   <long name="proxy-Y">-1</long>
-                  <long name="proxy-Width">350</long>
+                  <long name="proxy-Width">600</long>
                   <long name="proxy-Height">-1</long>
                   <string name="proxy-AlignH">"Expand"</string>
                   <string name="proxy-AlignV">"Centre"</string>
-                  <long name="proxy-Stretch factor">3</long>
+                  <long name="proxy-Stretch factor">1</long>
                   <long name="proxy-Border">5</long>
                   <bool name="proxy-wxLEFT">1</bool>
                   <bool name="proxy-wxRIGHT">1</bool>
@@ -1081,6 +1081,30 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"15/12/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"aardvark.c"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../src/aardvark.c"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"16/12/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"aardvark.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"../include/aardvark.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"16/12/2008"</string>
           <string name="language">""</string>
         </document>
         <document>

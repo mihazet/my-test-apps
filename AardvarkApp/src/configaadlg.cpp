@@ -23,7 +23,8 @@
 ////@begin includes
 ////@end includes
 
-#include "../include/configaadlg.h"
+#include "configaadlg.h"
+#include "aardvark.h"
 
 ////@begin XPM images
 ////@end XPM images
@@ -81,6 +82,7 @@ bool ConfigAADlg::Create( wxWindow* parent, wxWindowID id, const wxString& capti
     }
     Centre();
 ////@end ConfigAADlg creation
+    FindDevices();
     return true;
 }
 
@@ -133,8 +135,8 @@ void ConfigAADlg::CreateControls()
     itemStaticText6->SetFont(wxFont(12, wxSWISS, wxNORMAL, wxNORMAL, false, wxT("Verdana")));
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxALL, 5);
 
-    wxListCtrl* itemListCtrl7 = new wxListCtrl( itemDialog1, ID_LISTCTRL_ADAPTER_LIST, wxDefaultPosition, wxSize(350, -1), wxLC_REPORT|wxLC_USER_TEXT|wxLC_SINGLE_SEL|wxLC_HRULES|wxLC_VRULES );
-    itemBoxSizer5->Add(itemListCtrl7, 3, wxGROW|wxALL, 5);
+    wxListCtrl* itemListCtrl7 = new wxListCtrl( itemDialog1, ID_LISTCTRL_ADAPTER_LIST, wxDefaultPosition, wxSize(600, -1), wxLC_REPORT|wxLC_USER_TEXT|wxLC_SINGLE_SEL|wxLC_HRULES|wxLC_VRULES );
+    itemBoxSizer5->Add(itemListCtrl7, 1, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer4->Add(itemBoxSizer8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
@@ -215,9 +217,77 @@ void ConfigAADlg::ModifyControls(void)
 {
     wxListCtrl *pAdapterList = wxDynamicCast(FindWindow(ID_LISTCTRL_ADAPTER_LIST), wxListCtrl);
     pAdapterList->InsertColumn(0, wxT("Port"), wxLIST_FORMAT_LEFT, 45);
-    pAdapterList->InsertColumn(1, wxT("HW Ver"), wxLIST_FORMAT_LEFT, 60);
-    pAdapterList->InsertColumn(2, wxT("FW Ver"), wxLIST_FORMAT_LEFT, 60);
-    pAdapterList->InsertColumn(3, wxT("I2C"), wxLIST_FORMAT_LEFT, 40);
-    pAdapterList->InsertColumn(4, wxT("SPI"), wxLIST_FORMAT_LEFT, 40);
-    pAdapterList->InsertColumn(5, wxT("GPIO"), wxLIST_FORMAT_LEFT, 45);
+    pAdapterList->InsertColumn(1, wxT("State"), wxLIST_FORMAT_LEFT, 60);
+    pAdapterList->InsertColumn(2, wxT("UniqueID"), wxLIST_FORMAT_LEFT, 100);
+    pAdapterList->InsertColumn(3, wxT("HW Ver"), wxLIST_FORMAT_LEFT, 60);
+    pAdapterList->InsertColumn(4, wxT("FW Ver"), wxLIST_FORMAT_LEFT, 60);
+    pAdapterList->InsertColumn(5, wxT("I2C"), wxLIST_FORMAT_LEFT, 40);
+    pAdapterList->InsertColumn(6, wxT("I2C Monitor"), wxLIST_FORMAT_LEFT, 100);
+    pAdapterList->InsertColumn(6, wxT("SPI"), wxLIST_FORMAT_LEFT, 40);
+    pAdapterList->InsertColumn(7, wxT("GPIO"), wxLIST_FORMAT_LEFT, 45);
+}
+
+/*!
+ * Find Devices
+ */
+
+void ConfigAADlg::FindDevices(void)
+{
+    int nDevices;
+    aa_u16 *pDevPortList = NULL;
+    aa_u32 *pDevUidList = NULL;
+    Aardvark aa;
+    AardvarkExt aa_ext;
+    wxListCtrl *pAdapterList = wxDynamicCast(FindWindow(ID_LISTCTRL_ADAPTER_LIST), wxListCtrl);
+    
+    /* first call to retrieve device count in system. */
+    nDevices = aa_find_devices(0, NULL);
+    if (nDevices == AA_UNABLE_TO_LOAD_LIBRARY)
+    {
+        wxLogError(wxT("Unable to load library, please make sure aardvark.dll is shipped with the executable file."));
+        return;
+    }
+    else if (nDevices == AA_UNABLE_TO_LOAD_DRIVER)
+    {
+        wxLogError(wxT("Unable to load driver, please make sure you have installed the aardvark adapter driver first."));
+        return;
+    }
+    else if ((nDevices == AA_INCOMPATIBLE_LIBRARY) || (nDevices == AA_INCOMPATIBLE_DEVICE))
+    {
+        wxLogError(wxT("Version of library and firmware are in-compatible"));
+        return;
+    }
+    else if (nDevices < 0)
+    {
+        wxLogError(wxT("aa_find_devices() return error = %d"), nDevices);
+        return;
+    }
+    
+    /* second call to retrieve all device port info. */
+    pDevPortList = (aa_u16 *)malloc(sizeof(aa_u16) * nDevices);
+    pDevUidList = (aa_u32 *)malloc(sizeof(aa_u32) * nDevices);
+    nDevices = aa_find_devices_ext(nDevices, pDevPortList, nDevices, pDevUidList);
+    
+    /* iterate all devices */
+    for (long idx = 0, item = 0; idx < nDevices; idx++)
+    {
+        if (!(pDevPortList[idx] & AA_PORT_NOT_FREE)) // only open the freed devices.
+        {
+            aa = aa_open_ext(pDevPortList[idx], &aa_ext);
+            if (aa == AA_UNABLE_TO_OPEN)
+                wxLogError(wxT("Unable to open specific Aardvark adapter@Port%d."), pDevPortList[idx]);
+            else if (aa == AA_INCOMPATIBLE_DEVICE)
+                wxLogError(wxT("Incompatible device@Port%d."), pDevPortList[idx]);
+            else // OK
+            {
+                pAdapterList->InsertItem(item, wxString::Format(wxT("P%d"), pDevPortList[idx] & ~AA_PORT_NOT_FREE));
+                
+                item++;
+                aa_close(aa);
+            }
+        }
+    }
+    
+    free(pDevPortList);
+    free(pDevUidList);
 }

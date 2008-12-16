@@ -70,6 +70,9 @@ public:
     /// Modify the GUI controls
     void ModifyControls(void);
 
+    /// Find Devices
+    void FindDevices(void);
+
 ////@begin ConfigAADlg event handler declarations
 
 ////@end ConfigAADlg event handler declarations
