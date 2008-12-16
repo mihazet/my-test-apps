@@ -168,13 +168,7 @@ void ConfigAADlg::CreateControls()
     itemStdDialogButtonSizer12->Realize();
 
 ////@end ConfigAADlg content construction
-    wxListCtrl *pAdapterList = (wxListCtrl *)FindWindow(ID_LISTCTRL_ADAPTER_LIST);
-    pAdapterList->InsertColumn(0, wxT("Port"), wxLIST_FORMAT_LEFT, 45);
-    pAdapterList->InsertColumn(1, wxT("HW Ver"), wxLIST_FORMAT_LEFT, 60);
-    pAdapterList->InsertColumn(2, wxT("FW Ver"), wxLIST_FORMAT_LEFT, 60);
-    pAdapterList->InsertColumn(3, wxT("I2C"), wxLIST_FORMAT_LEFT, 40);
-    pAdapterList->InsertColumn(4, wxT("SPI"), wxLIST_FORMAT_LEFT, 40);
-    pAdapterList->InsertColumn(5, wxT("GPIO"), wxLIST_FORMAT_LEFT, 45);
+    ModifyControls();
 }
 
 
@@ -211,4 +205,19 @@ wxIcon ConfigAADlg::GetIconResource( const wxString& name )
     wxUnusedVar(name);
     return wxNullIcon;
 ////@end ConfigAADlg icon retrieval
+}
+
+/*!
+ * Modify the GUI controls
+ */
+
+void ConfigAADlg::ModifyControls(void)
+{
+    wxListCtrl *pAdapterList = wxDynamicCast(FindWindow(ID_LISTCTRL_ADAPTER_LIST), wxListCtrl);
+    pAdapterList->InsertColumn(0, wxT("Port"), wxLIST_FORMAT_LEFT, 45);
+    pAdapterList->InsertColumn(1, wxT("HW Ver"), wxLIST_FORMAT_LEFT, 60);
+    pAdapterList->InsertColumn(2, wxT("FW Ver"), wxLIST_FORMAT_LEFT, 60);
+    pAdapterList->InsertColumn(3, wxT("I2C"), wxLIST_FORMAT_LEFT, 40);
+    pAdapterList->InsertColumn(4, wxT("SPI"), wxLIST_FORMAT_LEFT, 40);
+    pAdapterList->InsertColumn(5, wxT("GPIO"), wxLIST_FORMAT_LEFT, 45);
 }

@@ -67,6 +67,9 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
+    /// Modify the GUI controls
+    void ModifyControls(void);
+
 ////@begin ConfigAADlg event handler declarations
 
 ////@end ConfigAADlg event handler declarations
