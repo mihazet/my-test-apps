@@ -1085,8 +1085,8 @@
           <long name="proxy-Id value">10004</long>
           <string name="proxy-Class">"TPAAFrame"</string>
           <string name="proxy-Base class">"wxFrame"</string>
-          <string name="proxy-Implementation filename">"tpaaframe.cpp"</string>
-          <string name="proxy-Header filename">"tpaaframe.h"</string>
+          <string name="proxy-Implementation filename">"../src/tpaaframe.cpp"</string>
+          <string name="proxy-Header filename">"../include/tpaaframe.h"</string>
           <string name="proxy-XRC filename">""</string>
           <string name="proxy-Title">"Total Phase Aardvark I2C/SPI Control Center fork"</string>
           <bool name="proxy-Centre">1</bool>

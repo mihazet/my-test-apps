@@ -19,7 +19,7 @@
 
 ////@begin includes
 #include "wx/image.h"
-#include "../build/tpaaframe.h"
+#include "tpaaframe.h"
 ////@end includes
 
 /*!
