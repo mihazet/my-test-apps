@@ -70,6 +70,9 @@ public:
 
 ////@begin TPAAFrame event handler declarations
 
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_CONFIG_AA_DLG
+    void OnButtonConfigAaDlgClick( wxCommandEvent& event );
+
 ////@end TPAAFrame event handler declarations
 
 ////@begin TPAAFrame member function declarations

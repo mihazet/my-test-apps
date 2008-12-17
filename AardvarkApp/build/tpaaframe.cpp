@@ -24,6 +24,7 @@
 ////@end includes
 
 #include "tpaaframe.h"
+#include "configaadlg.h"
 
 ////@begin XPM images
 ////@end XPM images
@@ -43,6 +44,8 @@ IMPLEMENT_CLASS( TPAAFrame, wxFrame )
 BEGIN_EVENT_TABLE( TPAAFrame, wxFrame )
 
 ////@begin TPAAFrame event table entries
+    EVT_BUTTON( ID_BUTTON_CONFIG_AA_DLG, TPAAFrame::OnButtonConfigAaDlgClick )
+
 ////@end TPAAFrame event table entries
 
 END_EVENT_TABLE()
@@ -71,6 +74,7 @@ TPAAFrame::TPAAFrame( wxWindow* parent, wxWindowID id, const wxString& caption, 
 bool TPAAFrame::Create( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
 {
 ////@begin TPAAFrame creation
+    SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
     wxFrame::Create( parent, id, caption, pos, size, style );
 
     CreateControls();
@@ -207,3 +211,17 @@ wxIcon TPAAFrame::GetIconResource( const wxString& name )
     return wxNullIcon;
 ////@end TPAAFrame icon retrieval
 }
+
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_CONFIG_AA_DLG
+ */
+
+void TPAAFrame::OnButtonConfigAaDlgClick( wxCommandEvent& event )
+{
+    ConfigAADlg dlg(this);
+    if (wxID_OK == dlg.ShowModal())
+    {
+    }
+}
+

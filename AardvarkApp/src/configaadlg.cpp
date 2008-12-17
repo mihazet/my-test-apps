@@ -46,6 +46,8 @@ BEGIN_EVENT_TABLE( ConfigAADlg, wxDialog )
 ////@begin ConfigAADlg event table entries
     EVT_BUTTON( ID_BUTTON_REFRESH_ADAPTERLIST, ConfigAADlg::OnButtonRefreshAdapterlistClick )
 
+    EVT_UPDATE_UI( wxID_OK, ConfigAADlg::OnOkUpdate )
+
 ////@end ConfigAADlg event table entries
 
 END_EVENT_TABLE()
@@ -334,5 +336,16 @@ void ConfigAADlg::FindDevices(void)
 void ConfigAADlg::OnButtonRefreshAdapterlistClick( wxCommandEvent& WXUNUSED(event) )
 {
     FindDevices();
+}
+
+
+/*!
+ * wxEVT_UPDATE_UI event handler for wxID_OK
+ */
+
+void ConfigAADlg::OnOkUpdate( wxUpdateUIEvent& event )
+{
+    wxListCtrl *pAdapterList = wxDynamicCast(FindWindow(ID_LISTCTRL_ADAPTER_LIST), wxListCtrl);
+    event.Enable(pAdapterList && (pAdapterList->GetSelectedItemCount() == 1));
 }
 

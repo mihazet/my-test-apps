@@ -938,6 +938,7 @@
                 <long name="locked">1</long>
                 <string name="created">"15/12/2008"</string>
                 <string name="proxy-type">"wbButtonProxy"</string>
+                <string name="event-handler-0">"wxEVT_UPDATE_UI|OnOkUpdate|NONE||ConfigAADlg"</string>
                 <string name="proxy-Id name">"wxID_OK"</string>
                 <long name="proxy-Id value">5100</long>
                 <string name="proxy-Name">""</string>
@@ -1129,7 +1130,7 @@
           <bool name="proxy-wxCLIP_CHILDREN">0</bool>
           <bool name="proxy-wxTAB_TRAVERSAL">0</bool>
           <bool name="proxy-wxWS_EX_VALIDATE_RECURSIVELY">0</bool>
-          <bool name="proxy-wxWS_EX_BLOCK_EVENTS">0</bool>
+          <bool name="proxy-wxWS_EX_BLOCK_EVENTS">1</bool>
           <bool name="proxy-wxWS_EX_TRANSIENT">0</bool>
           <string name="proxy-Custom styles">""</string>
           <bool name="proxy-wxFRAME_EX_CONTEXTHELP">0</bool>
@@ -1519,6 +1520,7 @@
                     <long name="locked">0</long>
                     <string name="created">"17/12/2008"</string>
                     <string name="proxy-type">"wbButtonProxy"</string>
+                    <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonConfigAaDlgClick|NONE||TPAAFrame"</string>
                     <string name="proxy-Id name">"ID_BUTTON_CONFIG_AA_DLG"</string>
                     <long name="proxy-Id value">10012</long>
                     <string name="proxy-Name">""</string>
