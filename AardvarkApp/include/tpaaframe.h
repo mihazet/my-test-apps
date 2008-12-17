@@ -68,6 +68,8 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
+    void ModifyControls(void);
+
 ////@begin TPAAFrame event handler declarations
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_CONFIG_AA_DLG

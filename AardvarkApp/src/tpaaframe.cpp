@@ -169,6 +169,7 @@ void TPAAFrame::CreateControls()
     itemBoxSizer8->Add(itemSplitterWindow9, 1, wxGROW, 0);
 
 ////@end TPAAFrame content construction
+    ModifyControls();
 }
 
 
@@ -222,6 +223,13 @@ void TPAAFrame::OnButtonConfigAaDlgClick( wxCommandEvent& event )
     ConfigAADlg dlg(this);
     if (wxID_OK == dlg.ShowModal())
     {
+        wxLogMessage(wxT("OK"));
     }
 }
 
+void TPAAFrame::ModifyControls(void)
+{
+    /* redirect log message to our textctrl window. */
+    delete wxLog::SetActiveTarget(new wxLogTextCtrl(wxDynamicCast(FindWindow(ID_LOGWIN), wxTextCtrl)));
+    wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S] "));
+}
