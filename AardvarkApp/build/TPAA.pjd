@@ -838,6 +838,7 @@
                 <long name="locked">0</long>
                 <string name="created">"15/12/2008"</string>
                 <string name="proxy-type">"wbButtonProxy"</string>
+                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonRefreshAdapterlistClick|NONE||ConfigAADlg"</string>
                 <string name="proxy-Id name">"ID_BUTTON_REFRESH_ADAPTERLIST"</string>
                 <long name="proxy-Id value">10003</long>
                 <string name="proxy-Name">""</string>

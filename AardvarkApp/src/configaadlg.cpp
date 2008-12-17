@@ -44,6 +44,8 @@ IMPLEMENT_DYNAMIC_CLASS( ConfigAADlg, wxDialog )
 BEGIN_EVENT_TABLE( ConfigAADlg, wxDialog )
 
 ////@begin ConfigAADlg event table entries
+    EVT_BUTTON( ID_BUTTON_REFRESH_ADAPTERLIST, ConfigAADlg::OnButtonRefreshAdapterlistClick )
+
 ////@end ConfigAADlg event table entries
 
 END_EVENT_TABLE()
@@ -240,6 +242,12 @@ void ConfigAADlg::FindDevices(void)
     AardvarkExt aa_ext;
     wxListCtrl *pAdapterList = wxDynamicCast(FindWindow(ID_LISTCTRL_ADAPTER_LIST), wxListCtrl);
     wxListItem item;
+
+    /* clear list first */
+    if (pAdapterList)
+        pAdapterList->DeleteAllItems();
+    else
+        return;
     
     /* first call to retrieve device count in system. */
     nDevices = aa_find_devices(0, NULL);
@@ -317,3 +325,14 @@ void ConfigAADlg::FindDevices(void)
     free(pDevPortList);
     free(pDevUidList);
 }
+
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_REFRESH_ADAPTERLIST
+ */
+
+void ConfigAADlg::OnButtonRefreshAdapterlistClick( wxCommandEvent& WXUNUSED(event) )
+{
+    FindDevices();
+}
+

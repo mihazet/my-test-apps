@@ -75,6 +75,9 @@ public:
 
 ////@begin ConfigAADlg event handler declarations
 
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_REFRESH_ADAPTERLIST
+    void OnButtonRefreshAdapterlistClick( wxCommandEvent& event );
+
 ////@end ConfigAADlg event handler declarations
 
 ////@begin ConfigAADlg member function declarations
