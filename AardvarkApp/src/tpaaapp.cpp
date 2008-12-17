@@ -99,12 +99,8 @@ bool TPAAApp::OnInit()
 #if wxUSE_GIF
 	wxImage::AddHandler(new wxGIFHandler);
 #endif
-	ConfigAADlg* mainWindow = new ConfigAADlg(NULL);
-	/* int returnValue = */ mainWindow->ShowModal();
-
-	mainWindow->Destroy();
-	// A modal dialog application should return false to terminate the app.
-	return false;
+	TPAAFrame* mainWindow = new TPAAFrame( NULL );
+	mainWindow->Show(true);
 ////@end TPAAApp initialisation
 
     return true;
