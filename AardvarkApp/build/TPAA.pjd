@@ -672,7 +672,7 @@
                   <bool name="proxy-wxLC_ALIGN_TOP">0</bool>
                   <bool name="proxy-wxLC_ALIGN_LEFT">0</bool>
                   <bool name="proxy-wxLC_AUTOARRANGE">0</bool>
-                  <bool name="proxy-wxLC_USER_TEXT">1</bool>
+                  <bool name="proxy-wxLC_USER_TEXT">0</bool>
                   <bool name="proxy-wxLC_EDIT_LABELS">0</bool>
                   <bool name="proxy-wxLC_NO_HEADER">0</bool>
                   <bool name="proxy-wxLC_SINGLE_SEL">1</bool>
@@ -693,7 +693,7 @@
                   <string name="proxy-Custom styles">""</string>
                   <long name="proxy-X">-1</long>
                   <long name="proxy-Y">-1</long>
-                  <long name="proxy-Width">600</long>
+                  <long name="proxy-Width">520</long>
                   <long name="proxy-Height">-1</long>
                   <string name="proxy-AlignH">"Expand"</string>
                   <string name="proxy-AlignV">"Centre"</string>

@@ -135,7 +135,7 @@ void ConfigAADlg::CreateControls()
     itemStaticText6->SetFont(wxFont(12, wxSWISS, wxNORMAL, wxNORMAL, false, wxT("Verdana")));
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxALL, 5);
 
-    wxListCtrl* itemListCtrl7 = new wxListCtrl( itemDialog1, ID_LISTCTRL_ADAPTER_LIST, wxDefaultPosition, wxSize(600, -1), wxLC_REPORT|wxLC_USER_TEXT|wxLC_SINGLE_SEL|wxLC_HRULES|wxLC_VRULES );
+    wxListCtrl* itemListCtrl7 = new wxListCtrl( itemDialog1, ID_LISTCTRL_ADAPTER_LIST, wxDefaultPosition, wxSize(520, -1), wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_HRULES|wxLC_VRULES );
     itemBoxSizer5->Add(itemListCtrl7, 1, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxVERTICAL);
@@ -216,15 +216,15 @@ wxIcon ConfigAADlg::GetIconResource( const wxString& name )
 void ConfigAADlg::ModifyControls(void)
 {
     wxListCtrl *pAdapterList = wxDynamicCast(FindWindow(ID_LISTCTRL_ADAPTER_LIST), wxListCtrl);
-    pAdapterList->InsertColumn(0, wxT("Port"), wxLIST_FORMAT_LEFT, 45);
-    pAdapterList->InsertColumn(1, wxT("State"), wxLIST_FORMAT_LEFT, 60);
-    pAdapterList->InsertColumn(2, wxT("UniqueID"), wxLIST_FORMAT_LEFT, 100);
-    pAdapterList->InsertColumn(3, wxT("HW Ver"), wxLIST_FORMAT_LEFT, 60);
-    pAdapterList->InsertColumn(4, wxT("FW Ver"), wxLIST_FORMAT_LEFT, 60);
-    pAdapterList->InsertColumn(5, wxT("I2C"), wxLIST_FORMAT_LEFT, 40);
-    pAdapterList->InsertColumn(6, wxT("I2C Monitor"), wxLIST_FORMAT_LEFT, 100);
-    pAdapterList->InsertColumn(6, wxT("SPI"), wxLIST_FORMAT_LEFT, 40);
-    pAdapterList->InsertColumn(7, wxT("GPIO"), wxLIST_FORMAT_LEFT, 45);
+    pAdapterList->InsertColumn(0, wxT("Port"), wxLIST_FORMAT_CENTER, 40);
+    pAdapterList->InsertColumn(1, wxT("UniqueID"), wxLIST_FORMAT_CENTER, 90);
+    pAdapterList->InsertColumn(2, wxT("HW Ver"), wxLIST_FORMAT_CENTER, 60);
+    pAdapterList->InsertColumn(3, wxT("FW Ver"), wxLIST_FORMAT_CENTER, 60);
+    pAdapterList->InsertColumn(4, wxT("SW Ver"), wxLIST_FORMAT_CENTER, 60);
+    pAdapterList->InsertColumn(5, wxT("I2C"), wxLIST_FORMAT_CENTER, 35);
+    pAdapterList->InsertColumn(6, wxT("I2C Monitor"), wxLIST_FORMAT_CENTER, 80);
+    pAdapterList->InsertColumn(7, wxT("SPI"), wxLIST_FORMAT_CENTER, 35);
+    pAdapterList->InsertColumn(8, wxT("GPIO"), wxLIST_FORMAT_CENTER, 45);
 }
 
 /*!
@@ -239,6 +239,7 @@ void ConfigAADlg::FindDevices(void)
     Aardvark aa;
     AardvarkExt aa_ext;
     wxListCtrl *pAdapterList = wxDynamicCast(FindWindow(ID_LISTCTRL_ADAPTER_LIST), wxListCtrl);
+    wxListItem item;
     
     /* first call to retrieve device count in system. */
     nDevices = aa_find_devices(0, NULL);
@@ -269,7 +270,7 @@ void ConfigAADlg::FindDevices(void)
     nDevices = aa_find_devices_ext(nDevices, pDevPortList, nDevices, pDevUidList);
     
     /* iterate all devices */
-    for (long idx = 0, item = 0; idx < nDevices; idx++)
+    for (long idx = 0, listId = 0; idx < nDevices; idx++)
     {
         if (!(pDevPortList[idx] & AA_PORT_NOT_FREE)) // only open the freed devices.
         {
@@ -280,9 +281,34 @@ void ConfigAADlg::FindDevices(void)
                 wxLogError(wxT("Incompatible device@Port%d."), pDevPortList[idx]);
             else // OK
             {
-                pAdapterList->InsertItem(item, wxString::Format(wxT("P%d"), pDevPortList[idx] & ~AA_PORT_NOT_FREE));
+                /* port id */
+                item.SetId(listId);
+                item.SetColumn(0);
+                item.SetMask(wxLIST_MASK_TEXT);
+                item.SetText(wxString::Format(wxT("%d"), pDevPortList[idx] & ~AA_PORT_NOT_FREE));
+                long temp = pAdapterList->InsertItem(item);
                 
-                item++;
+                if (temp == -1)
+                {
+                    aa_close(aa);
+                    continue;
+                }
+
+                /* unique id */
+                pAdapterList->SetItem(temp, 1, wxString::Format(wxT("%u-%d"), pDevUidList[idx]/1000000, pDevUidList[idx]%1000000));
+                
+                /* ver: hw, fw, sw */
+                pAdapterList->SetItem(temp, 2, wxString::Format(wxT("v%u.%d"), aa_ext.version.hardware >> 8, aa_ext.version.hardware & 0xFF));
+                pAdapterList->SetItem(temp, 3, wxString::Format(wxT("v%u.%d"), aa_ext.version.firmware >> 8, aa_ext.version.firmware & 0xFF));
+                pAdapterList->SetItem(temp, 4, wxString::Format(wxT("v%u.%d"), aa_ext.version.software >> 8, aa_ext.version.software & 0xFF));
+
+                /* feature: i2c, monitor, spi, gpio */
+                pAdapterList->SetItem(temp, 5, wxString::Format(aa_ext.features & AA_FEATURE_I2C ? wxT("Yes") : wxT("No")));
+                pAdapterList->SetItem(temp, 6, wxString::Format(aa_ext.features & AA_FEATURE_I2C_MONITOR ? wxT("Yes") : wxT("No")));
+                pAdapterList->SetItem(temp, 7, wxString::Format(aa_ext.features & AA_FEATURE_SPI ? wxT("Yes") : wxT("No")));
+                pAdapterList->SetItem(temp, 8, wxString::Format(aa_ext.features & AA_FEATURE_GPIO ? wxT("Yes") : wxT("No")));
+
+                listId++;
                 aa_close(aa);
             }
         }
