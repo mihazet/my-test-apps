@@ -20,6 +20,7 @@
 ////@begin includes
 #include "wx/frame.h"
 #include "wx/statusbr.h"
+#include "wx/grid.h"
 #include "wx/splitter.h"
 ////@end includes
 
@@ -96,6 +97,14 @@ public:
         ID_MENUITEM_FILE_CLOSE = 10006,
         ID_MENUITEM_HELP_ABOUT = 10008,
         ID_STATUSBAR = 10007,
+        ID_PANEL_I2C = 10016,
+        ID_BUTTON = 10017,
+        ID_CHOICE = 10018,
+        ID_TEXTCTRL = 10019,
+        ID_BUTTON1 = 10020,
+        ID_CHECKBOX = 10021,
+        ID_CHECKBOX1 = 10022,
+        ID_GRID_RWDATA = 10023,
         ID_SPLITTERWINDOW = 10009,
         ID_PANEL_CONFIG = 10010,
         ID_BUTTON_CONFIG_AA_DLG = 10012,

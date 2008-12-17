@@ -132,41 +132,122 @@ void TPAAFrame::CreateControls()
     wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxVERTICAL);
     itemFrame1->SetSizer(itemBoxSizer8);
 
-    wxSplitterWindow* itemSplitterWindow9 = new wxSplitterWindow( itemFrame1, ID_SPLITTERWINDOW, wxDefaultPosition, wxDefaultSize, wxSP_BORDER|wxSP_3DSASH|wxNO_BORDER );
-    itemSplitterWindow9->SetMinimumPaneSize(200);
+    wxPanel* itemPanel9 = new wxPanel( itemFrame1, ID_PANEL_I2C, wxDefaultPosition, wxDefaultSize, wxDOUBLE_BORDER|wxTAB_TRAVERSAL );
+    itemPanel9->Show(false);
+    itemBoxSizer8->Add(itemPanel9, 1, wxGROW, 0);
 
-    wxPanel* itemPanel10 = new wxPanel( itemSplitterWindow9, ID_PANEL_CONFIG, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+    wxBoxSizer* itemBoxSizer10 = new wxBoxSizer(wxVERTICAL);
+    itemPanel9->SetSizer(itemBoxSizer10);
+
     wxBoxSizer* itemBoxSizer11 = new wxBoxSizer(wxHORIZONTAL);
-    itemPanel10->SetSizer(itemBoxSizer11);
+    itemBoxSizer10->Add(itemBoxSizer11, 0, wxGROW|wxLEFT|wxRIGHT|wxTOP, 5);
+
+    wxStaticText* itemStaticText12 = new wxStaticText( itemPanel9, wxID_STATIC, _("I2C Control"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticText12->SetFont(wxFont(14, wxSWISS, wxNORMAL, wxBOLD, false, wxT("Verdana")));
+    itemBoxSizer11->Add(itemStaticText12, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     itemBoxSizer11->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* itemButton13 = new wxButton( itemPanel10, ID_BUTTON_CONFIG_AA_DLG, _("Configure Aardvark Adapter"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton13->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD, false, wxT("Courier New")));
-    itemBoxSizer11->Add(itemButton13, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText14 = new wxStaticText( itemPanel9, wxID_STATIC, _("Bitrate"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer11->Add(itemStaticText14, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    itemBoxSizer11->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxButton* itemButton15 = new wxButton( itemPanel9, ID_BUTTON, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+    itemBoxSizer11->Add(itemButton15, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxPanel* itemPanel15 = new wxPanel( itemSplitterWindow9, ID_PANEL_LOG, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
-    wxBoxSizer* itemBoxSizer16 = new wxBoxSizer(wxVERTICAL);
-    itemPanel15->SetSizer(itemBoxSizer16);
+    wxArrayString itemChoice16Strings;
+    itemChoice16Strings.Add(_("400"));
+    itemChoice16Strings.Add(_("200"));
+    itemChoice16Strings.Add(_("100"));
+    wxChoice* itemChoice16 = new wxChoice( itemPanel9, ID_CHOICE, wxDefaultPosition, wxDefaultSize, itemChoice16Strings, 0 );
+    itemBoxSizer11->Add(itemChoice16, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText17 = new wxStaticText( itemPanel15, wxID_STATIC, _("Transaction Log:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer16->Add(itemStaticText17, 0, wxALIGN_LEFT|wxALL, 5);
+    wxStaticText* itemStaticText17 = new wxStaticText( itemPanel9, wxID_STATIC, _("kHz"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer11->Add(itemStaticText17, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxTextCtrl* itemTextCtrl18 = new wxTextCtrl( itemPanel15, ID_LOGWIN, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH2|wxDOUBLE_BORDER );
-    itemBoxSizer16->Add(itemTextCtrl18, 1, wxGROW|wxLEFT|wxRIGHT|wxTOP, 5);
+    wxBoxSizer* itemBoxSizer18 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer10->Add(itemBoxSizer18, 0, wxGROW|wxLEFT|wxRIGHT, 5);
 
-    wxBoxSizer* itemBoxSizer19 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer16->Add(itemBoxSizer19, 0, wxALIGN_RIGHT|wxLEFT|wxTOP|wxBOTTOM, 5);
-    wxButton* itemButton20 = new wxButton( itemPanel15, ID_BUTTON_LOG_CLEAR, _("Clear Log"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer19->Add(itemButton20, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
+    wxStaticText* itemStaticText19 = new wxStaticText( itemPanel9, wxID_STATIC, _("Device Addr:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer18->Add(itemStaticText19, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
 
-    wxButton* itemButton21 = new wxButton( itemPanel15, ID_BUTTON_LOG_SAVE, _("Save to File"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer19->Add(itemButton21, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
+    wxTextCtrl* itemTextCtrl20 = new wxTextCtrl( itemPanel9, ID_TEXTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer18->Add(itemTextCtrl20, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
 
-    itemSplitterWindow9->SplitHorizontally(itemPanel10, itemPanel15, -200);
-    itemBoxSizer8->Add(itemSplitterWindow9, 1, wxGROW, 0);
+    wxStaticText* itemStaticText21 = new wxStaticText( itemPanel9, wxID_STATIC, _("(For Hex, enter 0x...)"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer18->Add(itemStaticText21, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
+
+    itemBoxSizer18->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
+
+    wxButton* itemButton23 = new wxButton( itemPanel9, ID_BUTTON1, _("Free Bus"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer18->Add(itemButton23, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
+
+    wxBoxSizer* itemBoxSizer24 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer10->Add(itemBoxSizer24, 0, wxGROW|wxLEFT|wxRIGHT, 5);
+
+    wxStaticText* itemStaticText25 = new wxStaticText( itemPanel9, wxID_STATIC, _("Features:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer24->Add(itemStaticText25, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
+
+    wxCheckBox* itemCheckBox26 = new wxCheckBox( itemPanel9, ID_CHECKBOX, _("10-Bit Addr"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemCheckBox26->SetValue(false);
+    itemBoxSizer24->Add(itemCheckBox26, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
+
+    wxCheckBox* itemCheckBox27 = new wxCheckBox( itemPanel9, ID_CHECKBOX1, _("No Stop"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemCheckBox27->SetValue(false);
+    itemBoxSizer24->Add(itemCheckBox27, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
+
+    wxBoxSizer* itemBoxSizer28 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer10->Add(itemBoxSizer28, 0, wxGROW|wxLEFT|wxRIGHT, 5);
+
+    wxStaticText* itemStaticText29 = new wxStaticText( itemPanel9, wxID_STATIC, _("Master transmit/receive data"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticText29->SetFont(wxFont(12, wxSWISS, wxNORMAL, wxBOLD, false, wxT("Verdana")));
+    itemBoxSizer28->Add(itemStaticText29, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5);
+
+    wxBoxSizer* itemBoxSizer30 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer10->Add(itemBoxSizer30, 0, wxGROW|wxLEFT|wxRIGHT, 5);
+
+    wxGrid* itemGrid31 = new wxGrid( itemPanel9, ID_GRID_RWDATA, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxHSCROLL|wxVSCROLL );
+    itemGrid31->SetDefaultColSize(24);
+    itemGrid31->SetDefaultRowSize(18);
+    itemGrid31->SetColLabelSize(18);
+    itemGrid31->SetRowLabelSize(24);
+    itemGrid31->CreateGrid(16, 16, wxGrid::wxGridSelectCells);
+    itemBoxSizer30->Add(itemGrid31, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxSplitterWindow* itemSplitterWindow32 = new wxSplitterWindow( itemFrame1, ID_SPLITTERWINDOW, wxDefaultPosition, wxDefaultSize, wxSP_BORDER|wxSP_3DSASH|wxNO_BORDER );
+    itemSplitterWindow32->SetMinimumPaneSize(200);
+
+    wxPanel* itemPanel33 = new wxPanel( itemSplitterWindow32, ID_PANEL_CONFIG, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+    wxBoxSizer* itemBoxSizer34 = new wxBoxSizer(wxHORIZONTAL);
+    itemPanel33->SetSizer(itemBoxSizer34);
+
+    itemBoxSizer34->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxButton* itemButton36 = new wxButton( itemPanel33, ID_BUTTON_CONFIG_AA_DLG, _("Configure Aardvark Adapter"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton36->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD, false, wxT("Courier New")));
+    itemBoxSizer34->Add(itemButton36, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    itemBoxSizer34->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxPanel* itemPanel38 = new wxPanel( itemSplitterWindow32, ID_PANEL_LOG, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+    wxBoxSizer* itemBoxSizer39 = new wxBoxSizer(wxVERTICAL);
+    itemPanel38->SetSizer(itemBoxSizer39);
+
+    wxStaticText* itemStaticText40 = new wxStaticText( itemPanel38, wxID_STATIC, _("Transaction Log:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer39->Add(itemStaticText40, 0, wxALIGN_LEFT|wxALL, 5);
+
+    wxTextCtrl* itemTextCtrl41 = new wxTextCtrl( itemPanel38, ID_LOGWIN, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH2|wxDOUBLE_BORDER );
+    itemBoxSizer39->Add(itemTextCtrl41, 1, wxGROW|wxLEFT|wxRIGHT|wxTOP, 5);
+
+    wxBoxSizer* itemBoxSizer42 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer39->Add(itemBoxSizer42, 0, wxALIGN_RIGHT|wxLEFT|wxTOP|wxBOTTOM, 5);
+    wxButton* itemButton43 = new wxButton( itemPanel38, ID_BUTTON_LOG_CLEAR, _("Clear Log"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer42->Add(itemButton43, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
+
+    wxButton* itemButton44 = new wxButton( itemPanel38, ID_BUTTON_LOG_SAVE, _("Save to File"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer42->Add(itemButton44, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5);
+
+    itemSplitterWindow32->SplitHorizontally(itemPanel33, itemPanel38, -200);
+    itemBoxSizer8->Add(itemSplitterWindow32, 1, wxGROW, 0);
 
 ////@end TPAAFrame content construction
     ModifyControls();
@@ -220,10 +301,15 @@ wxIcon TPAAFrame::GetIconResource( const wxString& name )
 
 void TPAAFrame::OnButtonConfigAaDlgClick( wxCommandEvent& event )
 {
+    wxSplitterWindow *sw = wxDynamicCast(FindWindow(ID_SPLITTERWINDOW), wxSplitterWindow);
+    wxPanel *cfgPanel = wxDynamicCast(FindWindow(ID_PANEL_CONFIG), wxPanel);
+    wxPanel *i2cPanel = wxDynamicCast(FindWindow(ID_PANEL_I2C), wxPanel);
     ConfigAADlg dlg(this);
     if (wxID_OK == dlg.ShowModal())
     {
-        wxLogMessage(wxT("OK"));
+        cfgPanel->Hide();
+        i2cPanel->Show();
+        sw->ReplaceWindow(cfgPanel, i2cPanel);
     }
 }
 
