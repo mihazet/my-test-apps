@@ -33,6 +33,10 @@
  */
 
 ////@begin control identifiers
+#define ID_CONFIGAADLG 10000
+#define ID_LISTCTRL_ADAPTER_LIST 10001
+#define ID_RADIOBOX 10002
+#define ID_BUTTON_REFRESH_ADAPTERLIST 10003
 #define SYMBOL_CONFIGAADLG_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxTAB_TRAVERSAL
 #define SYMBOL_CONFIGAADLG_TITLE _("Configure Aardvark Adapter")
 #define SYMBOL_CONFIGAADLG_IDNAME ID_CONFIGAADLG
@@ -96,13 +100,6 @@ public:
     static bool ShowToolTips();
 
 ////@begin ConfigAADlg member variables
-    /// Control identifiers
-    enum {
-        ID_CONFIGAADLG = 10000,
-        ID_LISTCTRL_ADAPTER_LIST = 10001,
-        ID_RADIOBOX = 10002,
-        ID_BUTTON_REFRESH_ADAPTERLIST = 10003
-    };
 ////@end ConfigAADlg member variables
 };
 

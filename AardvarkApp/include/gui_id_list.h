@@ -1,0 +1,1 @@
+#define ID_PANEL_I2C 15000

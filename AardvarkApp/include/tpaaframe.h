@@ -21,7 +21,6 @@
 #include "wx/frame.h"
 #include "wx/statusbr.h"
 #include "wx/splitter.h"
-#include "wx/grid.h"
 ////@end includes
 
 /*!
@@ -36,6 +35,17 @@
  */
 
 ////@begin control identifiers
+#define ID_TPAAFRAME 10004
+#define ID_MENUITEM_FILE_CLOSE 10006
+#define ID_MENUITEM_HELP_ABOUT 10008
+#define ID_STATUSBAR 10007
+#define ID_SPLITTERWINDOW 10009
+#define ID_PANEL_CONFIG 10010
+#define ID_BUTTON_CONFIG_AA_DLG 10012
+#define ID_PANEL_LOG 10011
+#define ID_LOGWIN 10013
+#define ID_BUTTON_LOG_CLEAR 10014
+#define ID_BUTTON_LOG_SAVE 10015
 #define SYMBOL_TPAAFRAME_STYLE wxDEFAULT_FRAME_STYLE|wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
 #define SYMBOL_TPAAFRAME_TITLE _("Total Phase Aardvark I2C/SPI Control Center fork")
 #define SYMBOL_TPAAFRAME_IDNAME ID_TPAAFRAME
@@ -91,28 +101,6 @@ public:
     static bool ShowToolTips();
 
 ////@begin TPAAFrame member variables
-    /// Control identifiers
-    enum {
-        ID_TPAAFRAME = 10004,
-        ID_MENUITEM_FILE_CLOSE = 10006,
-        ID_MENUITEM_HELP_ABOUT = 10008,
-        ID_STATUSBAR = 10007,
-        ID_SPLITTERWINDOW = 10009,
-        ID_PANEL_CONFIG = 10010,
-        ID_BUTTON_CONFIG_AA_DLG = 10012,
-        ID_PANEL_LOG = 10011,
-        ID_LOGWIN = 10013,
-        ID_BUTTON_LOG_CLEAR = 10014,
-        ID_BUTTON_LOG_SAVE = 10015,
-        ID_PANEL_I2C = 10016,
-        ID_BUTTON = 10017,
-        ID_CHOICE = 10018,
-        ID_TEXTCTRL = 10019,
-        ID_BUTTON1 = 10020,
-        ID_CHECKBOX = 10021,
-        ID_CHECKBOX1 = 10022,
-        ID_GRID_RWDATA = 10023
-    };
 ////@end TPAAFrame member variables
 };
 
