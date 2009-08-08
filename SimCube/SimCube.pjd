@@ -232,7 +232,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,include"</string>
+          <string name="Include path">"%AUTO%,include,resource"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
@@ -294,7 +294,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,include"</string>
+          <string name="Include path">"%AUTO%,include,resource"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
@@ -357,7 +357,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,include"</string>
+          <string name="Include path">"%AUTO%,include,resource"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
@@ -429,7 +429,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,include"</string>
+          <string name="Include path">"%AUTO%,include,resource"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>

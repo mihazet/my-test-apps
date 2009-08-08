@@ -1,4 +1,8 @@
 #include <wx/wx.h>
+#include <wx/iconbndl.h>
+#include "img/SimCube-32.xpm"
+#include "img/SimCube-48.xpm"
+#include "img/SimCube-64.xpm"
 #include "SimCubeFrame.h"
 
 BEGIN_EVENT_TABLE(SimCubeFrame, wxFrame)
@@ -38,6 +42,13 @@ void SimCubeFrame::Init()
 
 void SimCubeFrame::CreateControls()
 {
+    // icons
+    wxIconBundle icons;
+    icons.AddIcon(wxIcon(SimCube_32_xpm));
+    icons.AddIcon(wxIcon(SimCube_48_xpm));
+    icons.AddIcon(wxIcon(SimCube_64_xpm));
+    SetIcons(icons);
+    
     _auiManager.SetManagedWindow(this);
     
     wxStatusBar *statusBar = new wxStatusBar(this, wxID_ANY, wxST_SIZEGRIP|wxNO_BORDER);
