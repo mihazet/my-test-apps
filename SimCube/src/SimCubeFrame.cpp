@@ -1,5 +1,6 @@
 #include <wx/wx.h>
 #include <wx/iconbndl.h>
+#include <wx/wxsqlite3.h>
 #include "img/SimCube-32.xpm"
 #include "img/SimCube-48.xpm"
 #include "img/SimCube-64.xpm"
@@ -51,6 +52,10 @@ void SimCubeFrame::CreateControls()
     
     _auiManager.SetManagedWindow(this);
     
+    wxSQLite3Database *db = new wxSQLite3Database;
+    wxString memDatabase = wxT(":memory:");
+    db->Open(memDatabase);
+    db->Close();
     wxStatusBar *statusBar = new wxStatusBar(this, wxID_ANY, wxST_SIZEGRIP|wxNO_BORDER);
     statusBar->SetFieldsCount(3);
     SetStatusBar(statusBar);
