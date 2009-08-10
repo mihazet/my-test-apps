@@ -24,8 +24,14 @@ public:
         const wxPoint &pos = wxDefaultPosition,
         const wxSize &size = wxDefaultSize,
         long style = wxDEFAULT_FRAME_STYLE);
+
+private:
     void Init();
     void CreateControls();
+
+    // event handlers
+    void OnEraseBackground(wxEraseEvent &event);
+    void OnSize(wxSizeEvent &event);
     
 private:
     wxAuiManager _auiManager;

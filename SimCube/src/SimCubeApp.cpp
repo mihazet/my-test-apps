@@ -41,3 +41,4 @@ int SimCubeApp::OnExit()
 
     return wxApp::OnExit();
 }
+

@@ -11,8 +11,8 @@ public:
     void Init();
     virtual bool OnInit();
     virtual int OnExit();
-    
-    wxSQLite3Database *GetMainDatabase() { return  _mainDB; }
+
+    wxSQLite3Database *GetMainDatabase() { return _mainDB; }
     wxSQLite3Database *GetMemDatabase() { return _memDB; }
 
 private:
@@ -23,3 +23,4 @@ private:
 DECLARE_APP(SimCubeApp)
 
 #endif /* _SIM_CUBE_APP_H_ */
+

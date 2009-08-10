@@ -229,7 +229,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% -lsqlite3"</string>
+          <string name="Libraries">"%AUTO% -lwxmsw29ud_propgrid -lsqlite3"</string>
           <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource"</string>
@@ -291,7 +291,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% -lsqlite3"</string>
+          <string name="Libraries">"%AUTO% -lwxmsw29u_propgrid -lsqlite3"</string>
           <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource"</string>
@@ -354,7 +354,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% sqlite3.lib"</string>
+          <string name="Libraries">"%AUTO% wxmsw29ud_propgrid.lib sqlite3.lib"</string>
           <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource"</string>
@@ -426,7 +426,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% sqlite3.lib"</string>
+          <string name="Libraries">"%AUTO% wxmsw29u_propgrid.lib sqlite3.lib"</string>
           <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource"</string>
@@ -552,6 +552,54 @@
             <string name="created">"9/8/2009"</string>
             <string name="language">""</string>
           </document>
+        </document>
+        <document>
+          <string name="title">"DebugPane.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/DebugPane.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"10/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"DebugPane.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/DebugPane.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"10/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"PropertyPane.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/PropertyPane.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"10/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"PropertyPane.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/PropertyPane.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"10/8/2009"</string>
+          <string name="language">""</string>
         </document>
         <document>
           <string name="title">"SimCube.rc"</string>
