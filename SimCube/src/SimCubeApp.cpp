@@ -11,7 +11,10 @@ SimCubeApp::SimCubeApp()
 
 void SimCubeApp::Init()
 {
-
+    if (NULL != (_mainDB = new wxSQLite3Database))
+        _mainDB->Open(wxT("SimCube.db"));
+    if (NULL != (_memDB = new wxSQLite3Database))
+        _memDB->Open(wxT(":memory:"));
 }
 
 bool SimCubeApp::OnInit()
@@ -24,6 +27,10 @@ bool SimCubeApp::OnInit()
 
 int SimCubeApp::OnExit()
 {
+    if (_mainDB)
+        _mainDB->Close();
+    if (_memDB)
+        _memDB->Close();
+
     return wxApp::OnExit();
 }
-
