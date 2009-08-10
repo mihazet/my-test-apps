@@ -1,4 +1,6 @@
 #include <wx/wx.h>
+#include <wx/stdpaths.h>
+#include <wx/filename.h>
 #include "SimCubeApp.h"
 #include "SimCubeFrame.h"
 
@@ -11,8 +13,13 @@ SimCubeApp::SimCubeApp()
 
 void SimCubeApp::Init()
 {
+    wxStandardPaths &stdPaths = wxStandardPaths::Get();
+    wxString dbName;
+
+    dbName = wxFileName(stdPaths.GetExecutablePath()).GetPathWithSep();
+    dbName += wxT("SimCube.db");
     if (NULL != (_mainDB = new wxSQLite3Database))
-        _mainDB->Open(wxT("SimCube.db"));
+        _mainDB->Open(dbName);
     if (NULL != (_memDB = new wxSQLite3Database))
         _memDB->Open(wxT(":memory:"));
 }

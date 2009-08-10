@@ -20,4 +20,6 @@ private:
     wxSQLite3Database *_memDB;
 };
 
+DECLARE_APP(SimCubeApp)
+
 #endif /* _SIM_CUBE_APP_H_ */
