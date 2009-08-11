@@ -16,8 +16,17 @@ public:
     wxSQLite3Database *GetMemDatabase() { return _memDB; }
 
 private:
+    // event handlers
+    void OnAppIdle(wxIdleEvent &event);
+
+    // internal member functions
+    bool CheckRockey();
+
+private:
     wxSQLite3Database *_mainDB;
     wxSQLite3Database *_memDB;
+
+    DECLARE_EVENT_TABLE()
 };
 
 DECLARE_APP(SimCubeApp)

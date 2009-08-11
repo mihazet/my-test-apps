@@ -19,6 +19,7 @@ enum
 BEGIN_EVENT_TABLE(SimCubeFrame, wxFrame)
     EVT_ERASE_BACKGROUND(SimCubeFrame::OnEraseBackground)
     EVT_SIZE(SimCubeFrame::OnSize)
+    EVT_CLOSE(SimCubeFrame::OnClose)
 END_EVENT_TABLE()
 
 SimCubeFrame::SimCubeFrame()
@@ -105,5 +106,10 @@ void SimCubeFrame::OnEraseBackground(wxEraseEvent &event)
 void SimCubeFrame::OnSize(wxSizeEvent &event)
 {
     event.Skip();
+}
+
+void SimCubeFrame::OnClose(wxCloseEvent &event)
+{
+    Destroy();
 }
 

@@ -3,8 +3,13 @@
 #include <wx/filename.h>
 #include "SimCubeApp.h"
 #include "SimCubeFrame.h"
+#include "Rockey4_ND_32.h"
 
 IMPLEMENT_APP(SimCubeApp)
+
+BEGIN_EVENT_TABLE(SimCubeApp, wxApp)
+    EVT_IDLE(SimCubeApp::OnAppIdle)
+END_EVENT_TABLE()
 
 SimCubeApp::SimCubeApp()
 {
@@ -16,6 +21,7 @@ void SimCubeApp::Init()
     wxStandardPaths &stdPaths = wxStandardPaths::Get();
     wxString dbName;
 
+    /* database initialization */
     dbName = wxFileName(stdPaths.GetExecutablePath()).GetPathWithSep();
     dbName += wxT("SimCube.db");
     if (NULL != (_mainDB = new wxSQLite3Database))
@@ -26,7 +32,15 @@ void SimCubeApp::Init()
 
 bool SimCubeApp::OnInit()
 {
-    SimCubeFrame *frame = new SimCubeFrame(NULL);
+    /* check for USB dongle */
+    if (!CheckRockey())
+    {
+        wxLogError(_("Please insert USB dongle and restart application!"));
+        return false;
+    }
+
+    /* init the main frame */
+    SimCubeFrame *frame = new SimCubeFrame(NULL, wxID_HIGHEST + 100);
     SetTopWindow(frame);
     frame->Show();
     return true;
@@ -40,5 +54,32 @@ int SimCubeApp::OnExit()
         _memDB->Close();
 
     return wxApp::OnExit();
+}
+
+void SimCubeApp::OnAppIdle(wxIdleEvent &event)
+{
+    if (!CheckRockey())
+    {
+        wxMessageBox(_("USB dongle is removed, application will be terminated now!"), _("Error"));
+        ExitMainLoop();
+    }
+}
+
+bool SimCubeApp::CheckRockey()
+{
+    WORD handle[16], p1, p2, p3, p4, retcode;
+    DWORD lp1, lp2;
+    BYTE buffer[1024];
+
+    p1 = 0xC44C;
+    p2 = 0xC8F8;
+    p3 = 0x0799;
+    p4 = 0xC43B;
+
+    retcode = Rockey(RY_FIND, &handle[0], &lp1, &lp2, &p1, &p2, &p3, &p4, buffer);
+    if (retcode)
+        return false;
+
+    return true;
 }
 

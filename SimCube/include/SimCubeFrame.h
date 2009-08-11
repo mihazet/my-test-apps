@@ -32,6 +32,7 @@ private:
     // event handlers
     void OnEraseBackground(wxEraseEvent &event);
     void OnSize(wxSizeEvent &event);
+    void OnClose(wxCloseEvent &event);
     
 private:
     wxAuiManager _auiManager;
