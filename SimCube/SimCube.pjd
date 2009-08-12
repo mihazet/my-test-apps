@@ -554,6 +554,30 @@
           </document>
         </document>
         <document>
+          <string name="title">"ConfigPane.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/ConfigPane.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"12/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"ConfigPane.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/ConfigPane.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"12/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"DebugPane.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/DebugPane.cpp"</string>
@@ -575,6 +599,54 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"10/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"HistoryPane.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/HistoryPane.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"12/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"HistoryPane.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/HistoryPane.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"12/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"PeerPane.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/PeerPane.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"12/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"PeerPane.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/PeerPane.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"12/8/2009"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -683,6 +755,30 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"8/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"TrapPane.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/TrapPane.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"12/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"TrapPane.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/TrapPane.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"12/8/2009"</string>
           <string name="language">""</string>
         </document>
         <document>
