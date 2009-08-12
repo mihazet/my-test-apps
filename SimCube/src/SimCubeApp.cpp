@@ -40,7 +40,7 @@ bool SimCubeApp::OnInit()
     }
 
     /* init the main frame */
-    SimCubeFrame *frame = new SimCubeFrame(NULL, wxID_HIGHEST + 100);
+    SimCubeFrame *frame = new SimCubeFrame(NULL);
     SetTopWindow(frame);
     frame->Show();
     return true;
