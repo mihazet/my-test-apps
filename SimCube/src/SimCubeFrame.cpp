@@ -84,18 +84,19 @@ void SimCubeFrame::CreateControls()
     /* tool bar */
 
     /* panes */
-    _auiManager.AddPane(new PropertyPane(this), wxAuiPaneInfo().
-        Name(wxT("PropertyPane")).Caption(_("Property List")).Center().
-        CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
-        PaneBorder(false));
     DebugPane *dbgWin = new DebugPane(this);
     wxLog *logger = new wxLogTextCtrl(dbgWin->GetLogTextCtrl());
     delete wxLog::SetActiveTarget(logger);
     wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S]"));
     _auiManager.AddPane(dbgWin, wxAuiPaneInfo().Name(wxT("DebugPane")).
-        Caption(_("Log Output")).Center(). CloseButton(true).
+        Caption(_("Log Output")).Bottom(). CloseButton(true).
         DestroyOnClose(false).MaximizeButton(true).PaneBorder(false));
 
+    _auiManager.AddPane(new PropertyPane(this), wxAuiPaneInfo().
+        Name(wxT("PropertyPane")).Caption(_("Supported Property")).Center().
+        CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
+        PaneBorder(false));
+    
     /* status bar */
     SetStatusBar(CreateStatusBar(3));
 
