@@ -1,6 +1,8 @@
 #include <wx/wx.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/props.h>
+#include <wx/wxsqlite3.h>
+#include "SimCubeApp.h"
 #include "PropertyPane.h"
 
 PropertyPane::PropertyPane()
@@ -36,12 +38,35 @@ void PropertyPane::Init()
 
 void PropertyPane::CreateControls()
 {
+    wxString name, type, format, value;
     wxBoxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
     wxPropertyGrid *pg = new wxPropertyGrid(this, wxID_ANY, wxDefaultPosition,
         wxSize(400, 400), wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED);
-    pg->Append(new wxStringProperty("String Property", wxPG_LABEL));
-    pg->Append(new wxIntProperty("Int Property", wxPG_LABEL));
-    pg->Append(new wxBoolProperty("Bool Property", wxPG_LABEL));
+    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    if (db->IsOpen())
+    {
+        wxSQLite3ResultSet set = db->ExecuteQuery(wxT("SELECT * FROM property"));
+        while (set.NextRow())
+        {
+            name = set.GetAsString(wxT("DisplayedName"));
+            type = set.GetAsString(wxT("PropertyType"));
+            if (type == wxT("Numeric"))
+            {
+                value = set.GetAsString(wxT("PropertyValue"));
+                long propVal;
+                pg->Append(new wxIntProperty(name, wxPG_LABEL,
+                    value.ToLong(&propVal) ? propVal : 0));
+            }
+            else if (type == wxT("List"))
+            {
+                format = set.GetAsString(wxT("PropertyFormat"));
+                wxArrayString aryStr;
+                aryStr.Add(format);
+                pg->Append(new wxEnumProperty(name, wxPG_LABEL, aryStr));
+            }
+        }
+        set.Finalize();
+    }
     allSizer->Add(pg, 1, wxALL | wxEXPAND, 5);
     SetSizer(allSizer);
 }
