@@ -2,7 +2,10 @@
 #include <wx/wx.h>
 #include <wx/iconbndl.h>
 // our headers
+#include "ConfigPane.h"
 #include "DebugPane.h"
+#include "HistoryPane.h"
+#include "PeerPane.h"
 #include "PropertyPane.h"
 #include "SimCubeFrame.h"
 // resource headers
@@ -41,6 +44,7 @@ bool SimCubeFrame::Create(wxWindow *parent, wxWindowID id,
 {
     wxFrame::Create(parent, id, caption, pos, size, style);
     CreateControls();
+    SetSize(1000, 650);
     return true;
 }
 
@@ -90,13 +94,29 @@ void SimCubeFrame::CreateControls()
     wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S]"));
     _auiManager.AddPane(dbgWin, wxAuiPaneInfo().Name(wxT("DebugPane")).
         Caption(_("Log Output")).Bottom(). CloseButton(true).
-        DestroyOnClose(false).MaximizeButton(true).PaneBorder(false));
+        DestroyOnClose(false).MaximizeButton(true).MinSize(-1, 150).
+        PaneBorder(false));
 
     _auiManager.AddPane(new PropertyPane(this), wxAuiPaneInfo().
         Name(wxT("PropertyPane")).Caption(_("Supported Property")).Center().
         CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
         PaneBorder(false));
-    
+
+    _auiManager.AddPane(new HistoryPane(this), wxAuiPaneInfo().
+        Name(wxT("HistoryPane")).Caption(_("Transaction History")).Right().
+        CloseButton(true).DestroyOnClose(false).MinSize(200, -1).
+        PaneBorder(false));
+
+    _auiManager.AddPane(new ConfigPane(this), wxAuiPaneInfo().
+        Name(wxT("ConfigPane")).Caption(_("SimCube Configuration")).Right().
+        CloseButton(true).DestroyOnClose(false).MinSize(50, 50).
+        PaneBorder(false));
+
+    _auiManager.AddPane(new PeerPane(this), wxAuiPaneInfo().
+        Name(wxT("PeerPane")).Caption(_("Send Trap Message")).Right().
+        CloseButton(true).DestroyOnClose(false).MinSize(100, 100).
+        PaneBorder(false));
+
     /* status bar */
     SetStatusBar(CreateStatusBar(3));
 
