@@ -70,5 +70,8 @@ INSERT INTO property VALUES ("Reset All Setting", "RESET_ALL", "List", "OFF;ON",
 CREATE TABLE configuration (ConfigName TEXT, ConfigValue TEXT);
 
 -- configuration list
-INSERT INTO configuration VALUES ("BoardName", "SimCube");
+INSERT INTO configuration VALUES ("BoardNameAssignedByUser", "false");
+INSERT INTO configuration VALUES ("UserBoardName", "SimCube");
+INSERT INTO configuration VALUES ("DetectedBoardName", "SimCube");
 INSERT INTO configuration VALUES ("ListenPort", "40000");
+INSERT INTO configuration VALUES ("Language", "System");

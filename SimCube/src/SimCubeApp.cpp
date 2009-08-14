@@ -1,6 +1,7 @@
 #include <wx/wx.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
+#include <wx/wxsqlite3.h>
 #include "SimCubeApp.h"
 #include "SimCubeFrame.h"
 #include "Rockey4_ND_32.h"
@@ -30,10 +31,60 @@ void SimCubeApp::Init()
         _mainDB->Open(dbName);
     if (NULL != (_memDB = new wxSQLite3Database))
         _memDB->Open(wxT(":memory:"));
+
+    /* other data members */
+    _locale = NULL;
+    _onlyMe = NULL;
 }
 
 bool SimCubeApp::OnInit()
 {
+    /* init locale */
+    wxStandardPaths &stdPaths = wxStandardPaths::Get();
+    int lang = wxLANGUAGE_DEFAULT;
+    if (_mainDB->IsOpen())
+    {
+        wxSQLite3ResultSet set = _mainDB->ExecuteQuery(wxT("SELECT ConfigValue FROM configuration WHERE ConfigName = 'Language'"));
+        if (set.NextRow())
+        {
+            wxString langSetting = set.GetAsString(0);
+            if (langSetting == wxT("English"))
+                lang = wxLANGUAGE_ENGLISH;
+            else if (langSetting == wxT("TraditionalChinese"))
+                lang = wxLANGUAGE_CHINESE_TRADITIONAL;
+            else if (langSetting == wxT("SimplifiedChinese"))
+                lang = wxLANGUAGE_CHINESE_SIMPLIFIED;
+        }
+        set.Finalize();
+        _locale = new wxLocale();
+        if (_locale && _locale->Init(lang, wxLOCALE_CONV_ENCODING))
+        {
+            wxString localePath = wxFileName(stdPaths.GetExecutablePath()).GetPathWithSep();
+            localePath += wxT("locale");
+            _locale->AddCatalogLookupPathPrefix(localePath);
+            _locale->AddCatalog(GetAppName());
+        }
+        else
+        {
+            wxLogError(wxT("Requested language is not supported by current operation system"));
+            // TODO: reset to default
+            return false;
+        }
+    }
+    else
+    {
+        wxLogError(wxT("Database corruption! Re-install the application may help!"));
+        return false;
+    }
+
+    /* check single instance only */
+    _onlyMe = new wxSingleInstanceChecker(GetAppName());
+    if (_onlyMe->IsAnotherRunning())
+    {
+        wxLogWarning(_("SimCube is already running, this instance will be terminated!"));
+        return false;
+    }
+
 #ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     /* check for USB dongle */
     if (!CheckRockey())

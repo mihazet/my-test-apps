@@ -3,6 +3,7 @@
 
 #include <wx/wx.h>
 #include <wx/wxsqlite3.h>
+#include <wx/snglinst.h>
 
 /* enable or disable software protection by using rockey4nd usb dongle */
 #undef PROTECTED_BY_ROCKEY4_USB_DONGLE
@@ -32,6 +33,8 @@ private:
 private:
     wxSQLite3Database *_mainDB;
     wxSQLite3Database *_memDB;
+    wxLocale *_locale;
+    wxSingleInstanceChecker *_onlyMe;
 
     DECLARE_EVENT_TABLE()
 };
