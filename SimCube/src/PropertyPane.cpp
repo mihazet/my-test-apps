@@ -50,9 +50,9 @@ void PropertyPane::CreateControls()
         {
             name = set.GetAsString(wxT("DisplayedName"));
             type = set.GetAsString(wxT("PropertyType"));
+            value = set.GetAsString(wxT("PropertyValue"));
             if (type == wxT("Numeric"))
             {
-                value = set.GetAsString(wxT("PropertyValue"));
                 long propVal;
                 pg->Append(new wxIntProperty(name, wxPG_LABEL,
                     value.ToLong(&propVal) ? propVal : 0));
@@ -61,8 +61,13 @@ void PropertyPane::CreateControls()
             {
                 format = set.GetAsString(wxT("PropertyFormat"));
                 wxArrayString aryStr;
-                aryStr.Add(format);
-                pg->Append(new wxEnumProperty(name, wxPG_LABEL, aryStr));
+                wxStringTokenizer tokenizer(format, wxT(";"));
+                while (tokenizer.HasMoreTokens())
+                    aryStr.Add(tokenizer.GetNextToken());
+                wxEnumProperty *list = new wxEnumProperty(name, wxPG_LABEL, aryStr);
+                list->SetValue(value);
+                pg->Append(list);
+
             }
         }
         set.Finalize();
