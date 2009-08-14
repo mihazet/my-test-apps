@@ -20,12 +20,14 @@ public:
 
 private:
     // event handlers
-#ifdef USING_ROCKEY
+#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     void OnAppIdle(wxIdleEvent &event);
 #endif
 
     // internal member functions
+#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     bool CheckRockey();
+#endif
 
 private:
     wxSQLite3Database *_mainDB;
