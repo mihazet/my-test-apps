@@ -8,7 +8,9 @@
 IMPLEMENT_APP(SimCubeApp)
 
 BEGIN_EVENT_TABLE(SimCubeApp, wxApp)
+#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     EVT_IDLE(SimCubeApp::OnAppIdle)
+#endif
 END_EVENT_TABLE()
 
 SimCubeApp::SimCubeApp()
@@ -32,12 +34,14 @@ void SimCubeApp::Init()
 
 bool SimCubeApp::OnInit()
 {
+#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     /* check for USB dongle */
     if (!CheckRockey())
     {
         wxLogError(_("Please insert USB dongle and restart application!"));
         return false;
     }
+#endif
 
     /* init the main frame */
     SimCubeFrame *frame = new SimCubeFrame(NULL);
@@ -56,7 +60,8 @@ int SimCubeApp::OnExit()
     return wxApp::OnExit();
 }
 
-void SimCubeApp::OnAppIdle(wxIdleEvent &event)
+#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
+void SimCubeApp::OnAppIdle(wxIdleEvent &WXUNUSED(event))
 {
     if (!CheckRockey())
     {
@@ -82,4 +87,5 @@ bool SimCubeApp::CheckRockey()
 
     return true;
 }
+#endif
 

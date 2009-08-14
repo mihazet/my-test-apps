@@ -4,6 +4,9 @@
 #include <wx/wx.h>
 #include <wx/wxsqlite3.h>
 
+/* enable or disable software protection by using rockey4nd usb dongle */
+#undef PROTECTED_BY_ROCKEY4_USB_DONGLE
+
 class SimCubeApp : public wxApp
 {
 public:
@@ -17,7 +20,9 @@ public:
 
 private:
     // event handlers
+#ifdef USING_ROCKEY
     void OnAppIdle(wxIdleEvent &event);
+#endif
 
     // internal member functions
     bool CheckRockey();
