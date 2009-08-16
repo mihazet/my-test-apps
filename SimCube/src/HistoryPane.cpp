@@ -1,4 +1,5 @@
 #include <wx/wx.h>
+#include "SimCubeApp.h"
 #include "HistoryPane.h"
 
 HistoryPane::HistoryPane()
@@ -33,5 +34,29 @@ void HistoryPane::Init()
 
 void HistoryPane::CreateControls()
 {
+}
+
+////////////////////////////////////////////////////////////////////////////
+HistoryDataModel::HistoryDataModel() : wxDataViewVirtualListModel(2)
+{
+    _db = wxGetApp().GetMemDatabase();
+}
+
+void HistoryDataModel::GetValueByRow(wxVariant &variant, unsigned int row,
+                                     unsigned int col) const
+{
+    variant = "xxx";
+}
+
+bool HistoryDataModel::GetAttrByRow(unsigned int row, unsigned int col,
+                                    wxDataViewItemAttr &attr)
+{
+    return false;
+}
+
+bool HistoryDataModel::SetValueByRow(wxVariant &variant,
+                                     unsigned int row, unsigned int col)
+{
+    return false;
 }
 

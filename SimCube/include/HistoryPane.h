@@ -2,6 +2,8 @@
 #define _HISTORY_PANE_H_
 
 #include <wx/wx.h>
+#include <wx/wxsqlite3.h>
+#include <wx/dataview.h>
 
 class HistoryPane : public wxPanel
 {
@@ -26,6 +28,37 @@ private:
     void CreateControls();
 
 
+};
+
+class HistoryDataModel : public wxDataViewVirtualListModel
+{
+public:
+    HistoryDataModel();
+
+    virtual unsigned int GetColumnCount() const
+    {
+        return 5;
+    }
+
+    virtual wxString GetColumnType(unsigned int col) const
+    {
+        return wxT("string");
+    }
+
+    virtual unsigned int GetRowCount()
+    {
+        return 2;
+    }
+
+    virtual void GetValueByRow(wxVariant &variant, unsigned int row,
+        unsigned int col) const;
+    virtual bool GetAttrByRow(unsigned int row, unsigned int col,
+        wxDataViewItemAttr &attr);
+    virtual bool SetValueByRow(wxVariant &variant, unsigned int row,
+        unsigned int col);
+
+private:
+    wxSQLite3Database *_db;
 };
 
 #endif /* _HISTORY_PANE_H_ */
