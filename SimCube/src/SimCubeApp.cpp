@@ -44,7 +44,7 @@ bool SimCubeApp::OnInit()
     int lang = wxLANGUAGE_DEFAULT;
     if (_mainDB->IsOpen())
     {
-        wxSQLite3ResultSet set = _mainDB->ExecuteQuery(wxT("SELECT ConfigValue FROM configuration WHERE ConfigName = 'Language'"));
+        wxSQLite3ResultSet set = _mainDB->ExecuteQuery(wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'Language'"));
         if (set.NextRow())
         {
             wxString langSetting = set.GetAsString(0);

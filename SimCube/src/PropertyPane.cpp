@@ -45,7 +45,7 @@ void PropertyPane::CreateControls()
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     if (db->IsOpen())
     {
-        wxSQLite3ResultSet set = db->ExecuteQuery(wxT("SELECT * FROM property"));
+        wxSQLite3ResultSet set = db->ExecuteQuery(wxT("SELECT * FROM PropTbl"));
         while (set.NextRow())
         {
             name = set.GetAsString(wxT("DisplayedName"));
