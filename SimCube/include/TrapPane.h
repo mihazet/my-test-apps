@@ -24,8 +24,6 @@ public:
 private:
     void Init();
     void CreateControls();
-
-
 };
 
 #endif /* _TRAP_PANE_H_ */
