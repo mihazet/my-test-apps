@@ -5,6 +5,8 @@
 #include <wx/wxsqlite3.h>
 #include <wx/dataview.h>
 
+class HistoryDataModel;
+
 class HistoryPane : public wxPanel
 {
 public:
@@ -27,7 +29,8 @@ private:
     void Init();
     void CreateControls();
 
-
+    wxDataViewCtrl *_historyView;
+    class HistoryDataModel *_historyData;
 };
 
 class HistoryDataModel : public wxDataViewVirtualListModel
@@ -52,9 +55,7 @@ public:
 
     virtual void GetValueByRow(wxVariant &variant, unsigned int row,
         unsigned int col) const;
-    virtual bool GetAttrByRow(unsigned int row, unsigned int col,
-        wxDataViewItemAttr &attr);
-    virtual bool SetValueByRow(wxVariant &variant, unsigned int row,
+    virtual bool SetValueByRow(const wxVariant &variant, unsigned int row,
         unsigned int col);
 
 private:

@@ -34,6 +34,17 @@ void HistoryPane::Init()
 
 void HistoryPane::CreateControls()
 {
+    wxSizer *paneSizer = new wxBoxSizer(wxVERTICAL);
+    _historyView = new wxDataViewCtrl(this, wxID_ANY);
+    paneSizer->Add(_historyView, 1, wxALL | wxEXPAND, 5);
+    _historyData = new HistoryDataModel();
+    _historyView->AssociateModel(_historyData);
+    _historyView->AppendTextColumn(wxT("#"), 0, wxDATAVIEW_CELL_INERT, 40);
+    _historyView->AppendTextColumn(_("Remote IP Addr"), 1, wxDATAVIEW_CELL_INERT, 120);
+    _historyView->AppendTextColumn(_("Port"), 2, wxDATAVIEW_CELL_INERT, 80);
+    _historyView->AppendTextColumn(_("Content"), 3, wxDATAVIEW_CELL_INERT, 360);
+    _historyView->AppendTextColumn(_("Length"), 4, wxDATAVIEW_CELL_INERT, 80);
+    SetSizerAndFit(paneSizer);
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -48,13 +59,7 @@ void HistoryDataModel::GetValueByRow(wxVariant &variant, unsigned int row,
     variant = "xxx";
 }
 
-bool HistoryDataModel::GetAttrByRow(unsigned int row, unsigned int col,
-                                    wxDataViewItemAttr &attr)
-{
-    return false;
-}
-
-bool HistoryDataModel::SetValueByRow(wxVariant &variant,
+bool HistoryDataModel::SetValueByRow(const wxVariant &variant,
                                      unsigned int row, unsigned int col)
 {
     return false;
