@@ -8,6 +8,7 @@
 #include "PeerPane.h"
 #include "PropertyPane.h"
 #include "SimCubeFrame.h"
+#include "TrapPane.h"
 // resource headers
 #include "img/SimCube-32.xpm"
 #include "img/SimCube-48.xpm"
@@ -108,9 +109,13 @@ void SimCubeFrame::CreateControls()
         Name(wxT("ConfigPane")).Caption(_("SimCube Configuration")).Right().
         CloseButton(true).DestroyOnClose(false).MinSize(50, 50));
 
-    _auiManager.AddPane(new PeerPane(this), wxAuiPaneInfo().
-        Name(wxT("PeerPane")).Caption(_("Send Trap Message")).Right().
+    _auiManager.AddPane(new TrapPane(this), wxAuiPaneInfo().
+        Name(wxT("TrapPane")).Caption(_("Send Trap Message")).Right().
         CloseButton(true).DestroyOnClose(false).MinSize(100, 100));
+
+    _auiManager.AddPane(new PeerPane(this), wxAuiPaneInfo().
+        Name(wxT("PeerPane")).Caption(_("Remote Status")).Bottom().
+        CloseButton(true).DestroyOnClose(false).MinSize(200, 100));
 
     /* status bar */
     SetStatusBar(CreateStatusBar(3));

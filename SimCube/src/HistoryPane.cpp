@@ -56,7 +56,10 @@ HistoryDataModel::HistoryDataModel() : wxDataViewVirtualListModel(2)
 void HistoryDataModel::GetValueByRow(wxVariant &variant, unsigned int row,
                                      unsigned int col) const
 {
-    variant = "xxx";
+    if (row)
+        variant = "xxx";
+    else
+        variant = "x";
 }
 
 bool HistoryDataModel::SetValueByRow(const wxVariant &variant,
