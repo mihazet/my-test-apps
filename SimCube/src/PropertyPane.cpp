@@ -41,7 +41,7 @@ void PropertyPane::CreateControls()
     wxString name, type, format, value;
     wxBoxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
     wxPropertyGrid *pg = new wxPropertyGrid(this, wxID_ANY, wxDefaultPosition,
-        wxSize(400, 400), wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED);
+        wxSize(250, 400), wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED);
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     if (db->IsOpen())
     {

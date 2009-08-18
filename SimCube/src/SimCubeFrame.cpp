@@ -94,20 +94,23 @@ void SimCubeFrame::CreateControls()
     delete wxLog::SetActiveTarget(logger);
     wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S]"));
     _auiManager.AddPane(dbgWin, wxAuiPaneInfo().Name(wxT("DebugPane")).
-        Caption(_("Log Output")).Bottom(). CloseButton(true).
+        Caption(_("Log Output")).Bottom().CloseButton(true).
         DestroyOnClose(false).MaximizeButton(true).MinSize(-1, 150));
 
     _auiManager.AddPane(new PropertyPane(this), wxAuiPaneInfo().
-        Name(wxT("PropertyPane")).Caption(_("Supported Property")).Center().
-        CloseButton(true).DestroyOnClose(false).MaximizeButton(true));
+        Name(wxT("PropertyPane")).Caption(_("Supported Property")).Left().
+        CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
+        MinSize(250, -1));
 
     _auiManager.AddPane(new HistoryPane(this), wxAuiPaneInfo().
-        Name(wxT("HistoryPane")).Caption(_("Transaction History")).Right().
-        CloseButton(true).DestroyOnClose(false).MinSize(200, -1));
+        Name(wxT("HistoryPane")).Caption(_("Transaction History")).Center().
+        CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
+        MinSize(450, -1));
 
     _auiManager.AddPane(new ConfigPane(this), wxAuiPaneInfo().
-        Name(wxT("ConfigPane")).Caption(_("SimCube Configuration")).Right().
-        CloseButton(true).DestroyOnClose(false).MinSize(50, 50));
+        Name(wxT("ConfigPane")).Caption(_("SimCube Configuration")).Bottom().
+        CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
+        MinSize(150, 50));
 
     _auiManager.AddPane(new TrapPane(this), wxAuiPaneInfo().
         Name(wxT("TrapPane")).Caption(_("Send Trap Message")).Right().
