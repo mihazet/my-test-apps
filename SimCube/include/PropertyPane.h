@@ -2,6 +2,7 @@
 #define _PROPERTY_PANE_H_
 
 #include <wx/wx.h>
+#include <wx/propgrid/propgrid.h>
 
 class PropertyPane : public wxPanel
 {
@@ -25,7 +26,16 @@ private:
     void Init();
     void CreateControls();
 
+    // event handlers
+    void OnPropertySelected(wxPropertyGridEvent &event);
+    void OnPropertyChanging(wxPropertyGridEvent &event);
+    void OnPropertyHighlighted(wxPropertyGridEvent &event);
+    void OnPropertyRightClick(wxPropertyGridEvent &event);
+    void OnPropertyDoubleClick(wxPropertyGridEvent &event);
+    void OnPropertyItemCollapsed(wxPropertyGridEvent &event);
+    void OnPropertyItemExpanded(wxPropertyGridEvent &event);
 
+    DECLARE_EVENT_TABLE()
 };
 
 #endif /* _PROPERTY_PANE_H_ */

@@ -5,6 +5,21 @@
 #include "SimCubeApp.h"
 #include "PropertyPane.h"
 
+enum
+{
+    myID_PROPERTY_GRID = wxID_HIGHEST + 1,
+};
+
+BEGIN_EVENT_TABLE(PropertyPane, wxPanel)
+    EVT_PG_SELECTED(myID_PROPERTY_GRID, PropertyPane::OnPropertySelected)
+    EVT_PG_CHANGING(myID_PROPERTY_GRID, PropertyPane::OnPropertyChanging)
+    EVT_PG_HIGHLIGHTED(myID_PROPERTY_GRID, PropertyPane::OnPropertyHighlighted)
+    EVT_PG_RIGHT_CLICK(myID_PROPERTY_GRID, PropertyPane::OnPropertyRightClick)
+    EVT_PG_DOUBLE_CLICK(myID_PROPERTY_GRID, PropertyPane::OnPropertyDoubleClick)
+    EVT_PG_ITEM_COLLAPSED(myID_PROPERTY_GRID, PropertyPane::OnPropertyItemCollapsed)
+    EVT_PG_ITEM_EXPANDED(myID_PROPERTY_GRID, PropertyPane::OnPropertyItemExpanded)
+END_EVENT_TABLE()
+
 PropertyPane::PropertyPane()
 {
     Init();
@@ -40,8 +55,9 @@ void PropertyPane::CreateControls()
 {
     wxString name, type, format, value;
     wxBoxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
-    wxPropertyGrid *pg = new wxPropertyGrid(this, wxID_ANY, wxDefaultPosition,
-        wxSize(250, 400), wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED);
+    wxPropertyGrid *pg = new wxPropertyGrid(this, myID_PROPERTY_GRID,
+        wxDefaultPosition, wxSize(250, 400),
+        wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED);
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     if (db->IsOpen())
     {
@@ -74,5 +90,47 @@ void PropertyPane::CreateControls()
     }
     allSizer->Add(pg, 1, wxALL | wxEXPAND, 5);
     SetSizer(allSizer);
+}
+
+void PropertyPane::OnPropertySelected(wxPropertyGridEvent &event)
+{
+    wxLogMessage(wxT("OnPropertySelected"));
+    event.Skip();
+}
+
+void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
+{
+    wxLogMessage(wxT("OnPropertyChanging"));
+    event.Skip();
+}
+
+void PropertyPane::OnPropertyHighlighted(wxPropertyGridEvent &event)
+{
+    wxLogVerbose(wxT("OnPropertyHighlighted"));
+    event.Skip();
+}
+
+void PropertyPane::OnPropertyRightClick(wxPropertyGridEvent &event)
+{
+    wxLogMessage(wxT("OnPropertyRightClick"));
+    event.Skip();
+}
+
+void PropertyPane::OnPropertyDoubleClick(wxPropertyGridEvent &event)
+{
+    wxLogMessage(wxT("OnPropertyDoubleClick"));
+    event.Skip();
+}
+
+void PropertyPane::OnPropertyItemCollapsed(wxPropertyGridEvent &event)
+{
+    wxLogMessage(wxT("OnPropertyItemCollapsed"));
+    event.Skip();
+}
+
+void PropertyPane::OnPropertyItemExpanded(wxPropertyGridEvent &event)
+{
+    wxLogMessage(wxT("OnPropertyItemExpanded"));
+    event.Skip();
 }
 
