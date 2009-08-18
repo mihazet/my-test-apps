@@ -626,6 +626,30 @@
           <string name="language">""</string>
         </document>
         <document>
+          <string name="title">"NetAdapter.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/NetAdapter.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"18/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"NetAdapter.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/NetAdapter.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"18/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"PeerPane.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/PeerPane.cpp"</string>
@@ -758,6 +782,30 @@
           <string name="language">""</string>
         </document>
         <document>
+          <string name="title">"TCPProtocol.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/TCPProtocol.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"18/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"TCPProtocol.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/TCPProtocol.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"18/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"TrapPane.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/TrapPane.cpp"</string>
@@ -779,6 +827,30 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"12/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"UDPProtocol.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/UDPProtocol.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"18/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"UDPProtocol.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/UDPProtocol.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"18/8/2009"</string>
           <string name="language">""</string>
         </document>
         <document>
