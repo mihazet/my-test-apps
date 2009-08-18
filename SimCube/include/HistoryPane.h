@@ -40,7 +40,7 @@ public:
 
     virtual unsigned int GetColumnCount() const
     {
-        return 5;
+        return 6;
     }
 
     virtual wxString GetColumnType(unsigned int col) const

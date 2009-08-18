@@ -39,11 +39,12 @@ void HistoryPane::CreateControls()
     paneSizer->Add(_historyView, 1, wxALL | wxEXPAND, 5);
     _historyData = new HistoryDataModel();
     _historyView->AssociateModel(_historyData);
-    _historyView->AppendTextColumn(wxT("#"), 0, wxDATAVIEW_CELL_INERT, 40);
-    _historyView->AppendTextColumn(_("Remote IP Addr"), 1, wxDATAVIEW_CELL_INERT, 120);
-    _historyView->AppendTextColumn(_("Port"), 2, wxDATAVIEW_CELL_INERT, 80);
-    _historyView->AppendTextColumn(_("Content"), 3, wxDATAVIEW_CELL_INERT, 360);
+    _historyView->AppendTextColumn(wxT("#"), 0, wxDATAVIEW_CELL_INERT, 30);
+    _historyView->AppendTextColumn(_("Timestamp"), 1, wxDATAVIEW_CELL_INERT, 80);
+    _historyView->AppendTextColumn(_("IP Addr"), 2, wxDATAVIEW_CELL_INERT, 100);
+    _historyView->AppendTextColumn(_("Port"), 3, wxDATAVIEW_CELL_INERT, 60);
     _historyView->AppendTextColumn(_("Length"), 4, wxDATAVIEW_CELL_INERT, 80);
+    _historyView->AppendTextColumn(_("Message"), 5, wxDATAVIEW_CELL_INERT, 360);
     SetSizerAndFit(paneSizer);
 }
 
