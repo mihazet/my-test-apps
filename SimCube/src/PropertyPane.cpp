@@ -11,13 +11,13 @@ enum
 };
 
 BEGIN_EVENT_TABLE(PropertyPane, wxPanel)
-    EVT_PG_SELECTED(myID_PROPERTY_GRID, PropertyPane::OnPropertySelected)
+    //EVT_PG_SELECTED(myID_PROPERTY_GRID, PropertyPane::OnPropertySelected)
     EVT_PG_CHANGING(myID_PROPERTY_GRID, PropertyPane::OnPropertyChanging)
-    EVT_PG_HIGHLIGHTED(myID_PROPERTY_GRID, PropertyPane::OnPropertyHighlighted)
-    EVT_PG_RIGHT_CLICK(myID_PROPERTY_GRID, PropertyPane::OnPropertyRightClick)
-    EVT_PG_DOUBLE_CLICK(myID_PROPERTY_GRID, PropertyPane::OnPropertyDoubleClick)
-    EVT_PG_ITEM_COLLAPSED(myID_PROPERTY_GRID, PropertyPane::OnPropertyItemCollapsed)
-    EVT_PG_ITEM_EXPANDED(myID_PROPERTY_GRID, PropertyPane::OnPropertyItemExpanded)
+    //EVT_PG_HIGHLIGHTED(myID_PROPERTY_GRID, PropertyPane::OnPropertyHighlighted)
+    //EVT_PG_RIGHT_CLICK(myID_PROPERTY_GRID, PropertyPane::OnPropertyRightClick)
+    //EVT_PG_DOUBLE_CLICK(myID_PROPERTY_GRID, PropertyPane::OnPropertyDoubleClick)
+    //EVT_PG_ITEM_COLLAPSED(myID_PROPERTY_GRID, PropertyPane::OnPropertyItemCollapsed)
+    //EVT_PG_ITEM_EXPANDED(myID_PROPERTY_GRID, PropertyPane::OnPropertyItemExpanded)
 END_EVENT_TABLE()
 
 PropertyPane::PropertyPane()
@@ -48,7 +48,7 @@ bool PropertyPane::Create(wxWindow *parent, wxWindowID id,
 
 void PropertyPane::Init()
 {
-
+    _db = wxGetApp().GetMainDatabase();
 }
 
 void PropertyPane::CreateControls()
@@ -58,10 +58,9 @@ void PropertyPane::CreateControls()
     wxPropertyGrid *pg = new wxPropertyGrid(this, myID_PROPERTY_GRID,
         wxDefaultPosition, wxSize(250, 400),
         wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED|wxPG_TOOLTIPS);
-    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
-    if (db->IsOpen())
+    if (_db && _db->IsOpen())
     {
-        wxSQLite3ResultSet set = db->ExecuteQuery(wxT("SELECT * FROM PropTbl"));
+        wxSQLite3ResultSet set = _db->ExecuteQuery(wxT("SELECT * FROM PropTbl"));
         while (set.NextRow())
         {
             name = set.GetAsString(wxT("DisplayedName"));
@@ -83,7 +82,6 @@ void PropertyPane::CreateControls()
                 wxEnumProperty *list = new wxEnumProperty(name, wxPG_LABEL, aryStr);
                 list->SetValue(value);
                 pg->Append(list);
-
             }
         }
         set.Finalize();
@@ -106,13 +104,60 @@ void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
 {
     wxPGProperty *prop = event.GetProperty();
     wxVariant value = event.GetValue();
+    wxString sqlQuery, sqlUpdate, type, format, minStr, maxStr;
+    long min, max, requestedValue;
 
     // event.GetValue() is always numeric base wxVariant.
     // Use wxPGProperty::ValueToString(wxVariant& value, int argFlags = 0) to
     // retrieve the string based property value for any kind of wxYYYProperty.
-    if (prop)
+    if (prop && _db)
     {
-        wxLogMessage(wxT("OnPropertyChanging %s"), prop->ValueToString(value));
+        wxLogVerbose(wxT("OnPropertyChanging %s"), prop->ValueToString(value));
+        sqlQuery << wxT("SELECT PropertyType, PropertyFormat FROM PropTbl WHERE DisplayedName = '")
+            << prop->GetLabel()
+            << wxT("'");
+        wxSQLite3ResultSet set = _db->ExecuteQuery(sqlQuery);
+        if (set.NextRow())
+        {
+            type = set.GetAsString(wxT("PropertyType"));
+            format = set.GetAsString(wxT("PropertyFormat"));
+        }
+        set.Finalize();
+
+        /* property format checker */
+        if (type == wxT("Numeric"))
+        {
+            wxStringTokenizer tokenizer(format, wxT(";"));
+            minStr = tokenizer.GetNextToken();
+            maxStr = tokenizer.GetNextToken();
+            if (minStr.ToLong(&min) && maxStr.ToLong(&max))
+            {
+                requestedValue = value.GetLong();
+                if ((requestedValue < min) || (requestedValue > max))
+                {
+                    event.Veto();
+                    wxLogError(_("Input number out of range! Max = %s, Min = %s"),
+                        maxStr, minStr);
+                    return;
+                }                    
+            }
+        }
+        else if (type == wxT("List"))
+        {
+            /* no check item now. */
+        }
+
+        /* update database record */
+        sqlUpdate << wxT("UPDATE PropTbl SET PropertyValue = '")
+            << prop->ValueToString(value)
+            << wxT("' WHERE DisplayedName = '")
+            << prop->GetLabel()
+            << wxT("'");
+        if (_db->ExecuteUpdate(sqlUpdate) != 1)
+        {
+            wxLogError(_("Failed to update property %s"), prop->GetLabel());
+            event.Veto();
+        }
     }
 }
 

@@ -3,6 +3,7 @@
 
 #include <wx/wx.h>
 #include <wx/propgrid/propgrid.h>
+#include <wx/wxsqlite3.h>
 
 class PropertyPane : public wxPanel
 {
@@ -34,6 +35,8 @@ private:
     void OnPropertyDoubleClick(wxPropertyGridEvent &event);
     void OnPropertyItemCollapsed(wxPropertyGridEvent &event);
     void OnPropertyItemExpanded(wxPropertyGridEvent &event);
+
+    wxSQLite3Database *_db;
 
     DECLARE_EVENT_TABLE()
 };
