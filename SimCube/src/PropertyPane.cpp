@@ -57,7 +57,7 @@ void PropertyPane::CreateControls()
     wxBoxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
     wxPropertyGrid *pg = new wxPropertyGrid(this, myID_PROPERTY_GRID,
         wxDefaultPosition, wxSize(250, 400),
-        wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED);
+        wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED|wxPG_TOOLTIPS);
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     if (db->IsOpen())
     {
@@ -94,14 +94,26 @@ void PropertyPane::CreateControls()
 
 void PropertyPane::OnPropertySelected(wxPropertyGridEvent &event)
 {
-    wxLogMessage(wxT("OnPropertySelected"));
-    event.Skip();
+    wxPGProperty *prop = event.GetProperty();
+
+    if (prop) // when TLW close, PG will send wxEVT_PG_SELECTED with NULL prop.
+    {
+        wxLogMessage(wxT("OnPropertySelected %s"), prop->GetLabel());
+    }
 }
 
 void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
 {
-    wxLogMessage(wxT("OnPropertyChanging"));
-    event.Skip();
+    wxPGProperty *prop = event.GetProperty();
+    wxVariant value = event.GetValue();
+
+    // event.GetValue() is always numeric base wxVariant.
+    // Use wxPGProperty::ValueToString(wxVariant& value, int argFlags = 0) to
+    // retrieve the string based property value for any kind of wxYYYProperty.
+    if (prop)
+    {
+        wxLogMessage(wxT("OnPropertyChanging %s"), prop->ValueToString(value));
+    }
 }
 
 void PropertyPane::OnPropertyHighlighted(wxPropertyGridEvent &event)
