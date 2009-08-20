@@ -354,7 +354,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% wxmsw29ud_propgrid.lib sqlite3.lib Rockey4ND.lib"</string>
+          <string name="Libraries">"%AUTO% wxmsw29ud_propgrid.lib sqlite3.lib Rockey4ND.lib iphlpapi.lib"</string>
           <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource"</string>
@@ -426,7 +426,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% wxmsw29u_propgrid.lib sqlite3.lib Rockey4ND.lib"</string>
+          <string name="Libraries">"%AUTO% wxmsw29u_propgrid.lib sqlite3.lib Rockey4ND.lib iphlpapi.lib"</string>
           <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource"</string>
