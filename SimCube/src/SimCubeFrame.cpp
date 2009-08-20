@@ -1,6 +1,7 @@
 // wx headers
 #include <wx/wx.h>
 #include <wx/iconbndl.h>
+#include <wx/wxsqlite3.h>
 // our headers
 #include "ConfigPane.h"
 #include "DebugPane.h"
@@ -9,6 +10,7 @@
 #include "PropertyPane.h"
 #include "SimCubeFrame.h"
 #include "TrapPane.h"
+#include "SimCubeApp.h"
 // resource headers
 #include "img/SimCube-32.xpm"
 #include "img/SimCube-48.xpm"
@@ -43,9 +45,13 @@ bool SimCubeFrame::Create(wxWindow *parent, wxWindowID id,
     const wxString &caption, const wxPoint &pos,
     const wxSize &size, long style)
 {
+    int x, y, w, h;
     wxFrame::Create(parent, id, caption, pos, size, style);
     CreateControls();
-    SetSize(1000, 650);
+
+    /* update frame size and position */
+    RetrieveFrameSizeAndPosition(&x, &y, &w, &h);
+    SetSize(x, y, w, h);
     return true;
 }
 
@@ -125,6 +131,60 @@ void SimCubeFrame::CreateControls()
 
     /* commit all change */
     _auiManager.Update();
+}
+
+void SimCubeFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
+{
+    int _x = -1, _y = -1, _w = -1, _h = -1;
+    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3ResultSet set;
+
+    wxASSERT_MSG(db, wxT("db is null pointer"));
+    wxASSERT_MSG(x, wxT("x is null pointer"));
+    wxASSERT_MSG(y, wxT("y is null pointer"));
+    wxASSERT_MSG(w, wxT("w is null pointer"));
+    wxASSERT_MSG(h, wxT("h is null pointer"));
+
+    if (db->IsOpen())
+    {
+        set = db->ExecuteQuery(wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'FrameX'"));
+        if (set.NextRow())
+            _x = set.GetInt(0);
+        set.Finalize();
+        set = db->ExecuteQuery(wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'FrameY'"));
+        if (set.NextRow())
+            _y = set.GetInt(0);
+        set.Finalize();
+        set = db->ExecuteQuery(wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'FrameW'"));
+        if (set.NextRow())
+            _w = set.GetInt(0);
+        set.Finalize();
+        set = db->ExecuteQuery(wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'FrameH'"));
+        if (set.NextRow())
+            _h = set.GetInt(0);
+        set.Finalize();
+    }
+
+    if ((_x == -1) || (_y == -1) || (_w == -1) || (_h == -1))
+    {
+        wxSize screen = wxGetDisplaySize();
+        float hRatio = 0.85, vRatio = 0.85;
+
+        if (screen.x <= 1024)
+            hRatio = 0.95;
+        if (screen.y <= 768)
+            vRatio = 0.90;
+
+        _w = screen.x * hRatio;
+        _h = screen.y * vRatio;
+        _x = (screen.x - _w) * 0.5;
+        _y = (screen.y - _h) * 0.5;
+    }
+
+    *x = _x;
+    *y = _y;
+    *w = _w;
+    *h = _h;
 }
 
 void SimCubeFrame::OnEraseBackground(wxEraseEvent &event)

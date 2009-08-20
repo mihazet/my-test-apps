@@ -1,6 +1,6 @@
 -- property table definition
-CREATE TABLE PropTbl (DisplayedName TEXT, -- property displayed name
-                    ProtocolName TEXT, -- real protocol command string
+CREATE TABLE PropTbl (DisplayedName TEXT UNIQUE, -- property displayed name
+                    ProtocolName TEXT UNIQUE, -- real protocol command string
                     PropertyType TEXT, -- property type
                     PropertyFormat TEXT, -- property format
                     PropertyValue TEXT -- current property value
@@ -67,11 +67,12 @@ INSERT INTO PropTbl VALUES ("Menu V Position", "MENU_V_POSITION", "Numeric", "0;
 INSERT INTO PropTbl VALUES ("Reset All Setting", "RESET_ALL", "List", "OFF;ON", "OFF");
 
 -- configuration table definition
-CREATE TABLE CfgTbl (ConfigName TEXT, ConfigValue TEXT);
+CREATE TABLE CfgTbl (ConfigName TEXT UNIQUE, ConfigValue TEXT);
 
 -- configuration list
-INSERT INTO CfgTbl VALUES ("BoardNameAssignedByUser", "false");
-INSERT INTO CfgTbl VALUES ("UserBoardName", "SimCube");
-INSERT INTO CfgTbl VALUES ("DetectedBoardName", "SimCube");
-INSERT INTO CfgTbl VALUES ("ListenPort", "40000");
 INSERT INTO CfgTbl VALUES ("Language", "System");
+INSERT INTO CfgTbl VALUES ("ListenPort", "40000");
+INSERT INTO CfgTbl VALUES ("FrameX", "-1");
+INSERT INTO CfgTbl VALUES ("FrameY", "-1");
+INSERT INTO CfgTbl VALUES ("FrameW", "-1");
+INSERT INTO CfgTbl VALUES ("FrameH", "-1");

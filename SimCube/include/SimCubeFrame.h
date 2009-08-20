@@ -28,6 +28,7 @@ public:
 private:
     void Init();
     void CreateControls();
+    void RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h);
 
     // event handlers
     void OnEraseBackground(wxEraseEvent &event);
