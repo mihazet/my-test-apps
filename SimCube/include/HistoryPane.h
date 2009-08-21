@@ -43,7 +43,7 @@ public:
         return 6;
     }
 
-    virtual wxString GetColumnType(unsigned int col) const
+    virtual wxString GetColumnType(unsigned int WXUNUSED(col)) const
     {
         return wxT("string");
     }

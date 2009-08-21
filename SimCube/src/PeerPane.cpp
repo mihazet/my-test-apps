@@ -67,8 +67,9 @@ void PeerDataModel::GetValueByRow(wxVariant &variant, unsigned int row,
     }
 }
 
-bool PeerDataModel::SetValueByRow(const wxVariant &variant,
-                                     unsigned int row, unsigned int col)
+bool PeerDataModel::SetValueByRow(const wxVariant &WXUNUSED(variant),
+                                  unsigned int WXUNUSED(row),
+                                  unsigned int WXUNUSED(col))
 {
     return false;
 }

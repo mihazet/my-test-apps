@@ -1,4 +1,5 @@
 #include <wx/wx.h>
+#include "SimCubeApp.h"
 #include "ConfigPane.h"
 
 ConfigPane::ConfigPane()
@@ -33,5 +34,8 @@ void ConfigPane::Init()
 
 void ConfigPane::CreateControls()
 {
+    wxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
+
+    SetSizerAndFit(allSizer);
 }
 

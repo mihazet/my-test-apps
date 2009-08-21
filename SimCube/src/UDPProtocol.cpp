@@ -16,8 +16,7 @@ UDPProtocol::~UDPProtocol()
 
 }
 
-void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
+void UDPProtocol::OnSocketEvent(wxSocketEvent& WXUNUSED(event))
 {
-
 }
 

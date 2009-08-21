@@ -168,12 +168,12 @@ void SimCubeFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
     if ((_x == -1) || (_y == -1) || (_w == -1) || (_h == -1))
     {
         wxSize screen = wxGetDisplaySize();
-        float hRatio = 0.85, vRatio = 0.85;
+        float hRatio = 0.85f, vRatio = 0.85f;
 
         if (screen.x <= 1024)
-            hRatio = 0.95;
+            hRatio = 0.95f;
         if (screen.y <= 768)
-            vRatio = 0.90;
+            vRatio = 0.90f;
 
         _w = screen.x * hRatio;
         _h = screen.y * vRatio;
@@ -197,7 +197,7 @@ void SimCubeFrame::OnSize(wxSizeEvent &event)
     event.Skip();
 }
 
-void SimCubeFrame::OnClose(wxCloseEvent &event)
+void SimCubeFrame::OnClose(wxCloseEvent &WXUNUSED(event))
 {
     Destroy();
 }

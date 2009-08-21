@@ -54,8 +54,9 @@ HistoryDataModel::HistoryDataModel() : wxDataViewVirtualListModel(2)
     _db = wxGetApp().GetMemDatabase();
 }
 
-void HistoryDataModel::GetValueByRow(wxVariant &variant, unsigned int row,
-                                     unsigned int col) const
+void HistoryDataModel::GetValueByRow(wxVariant &variant,
+                                     unsigned int row,
+                                     unsigned int WXUNUSED(col)) const
 {
     if (row)
         variant = "xxx";
@@ -63,8 +64,9 @@ void HistoryDataModel::GetValueByRow(wxVariant &variant, unsigned int row,
         variant = "x";
 }
 
-bool HistoryDataModel::SetValueByRow(const wxVariant &variant,
-                                     unsigned int row, unsigned int col)
+bool HistoryDataModel::SetValueByRow(const wxVariant &WXUNUSED(variant),
+                                     unsigned int WXUNUSED(row),
+                                     unsigned int WXUNUSED(col))
 {
     return false;
 }
