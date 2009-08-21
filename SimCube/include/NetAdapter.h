@@ -14,6 +14,7 @@ public:
         _ip = ip;
         _netmask = netmask;
         _broadcast = broadcast;
+        udp = NULL;
     }
     wxString& GetName(void) { return _name; }
     wxString& GetIp(void) { return _ip; }

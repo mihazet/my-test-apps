@@ -104,7 +104,8 @@ bool SimCubeApp::OnInit()
         return false;
     }
 
-    /* generate protocol object and socket per network adapter */
+    /* generate protocol objects.
+       Each protocol object will init its related sockets per network adapter. */
     _udpProtocol = new UDPProtocol();
 
 #ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
@@ -226,7 +227,7 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
     {
         if (pAdapter->Type == MIB_IF_TYPE_ETHERNET)
         {
-            name = wxString(pAdapter->AdapterName, *wxConvCurrent);
+            name = wxString(pAdapter->Description, *wxConvCurrent);
             for (pIpAddrString = &pAdapter->IpAddressList;
                 pIpAddrString != NULL;
                 pIpAddrString = pIpAddrString->Next)
