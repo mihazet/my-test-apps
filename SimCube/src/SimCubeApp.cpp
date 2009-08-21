@@ -38,6 +38,7 @@ void SimCubeApp::Init()
     _onlyMe = NULL;
     m_Adapters.clear();
     _adapterInfo = NULL;
+    _udpProtocol = NULL;
 }
 
 bool SimCubeApp::OnInit()
@@ -103,6 +104,9 @@ bool SimCubeApp::OnInit()
         return false;
     }
 
+    /* generate protocol object and socket per network adapter */
+    _udpProtocol = new UDPProtocol();
+
 #ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     /* check for USB dongle */
     if (!CheckRockey())
@@ -126,6 +130,16 @@ int SimCubeApp::OnExit()
     if (_memDB)
         _memDB->Close();
 
+    if (_adapterInfo)
+    {
+        free(_adapterInfo);
+        _adapterInfo = NULL;
+    }
+    if (_udpProtocol)
+    {
+        delete _udpProtocol;
+        _udpProtocol = NULL;
+    }
     return wxApp::OnExit();
 }
 
@@ -205,13 +219,14 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
 
     /* iterate list to retrieve info */
     IP_ADDR_STRING *pIpAddrString = NULL;
-    wxString ip, netmask, broadcast;
+    wxString name, ip, netmask, broadcast;
     for (IP_ADAPTER_INFO *pAdapter = _adapterInfo;
         pAdapter != NULL;
         pAdapter = pAdapter->Next)
     {
         if (pAdapter->Type == MIB_IF_TYPE_ETHERNET)
         {
+            name = wxString(pAdapter->AdapterName, *wxConvCurrent);
             for (pIpAddrString = &pAdapter->IpAddressList;
                 pIpAddrString != NULL;
                 pIpAddrString = pIpAddrString->Next)
@@ -222,7 +237,7 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
                     && netmask.Cmp(wxEmptyString) && netmask.Cmp(wxT("0.0.0.0")))
                 {
                     broadcast = CalculateSubnetBroadcastAddress(ip, netmask);
-                    NetAdapter *temp = new NetAdapter(ip, netmask, broadcast);
+                    NetAdapter *temp = new NetAdapter(name, ip, netmask, broadcast);
                     m_Adapters.push_back(*temp);
                 }
             }

@@ -8,6 +8,7 @@
 #include <iphlpapi.h>
 #endif
 #include "NetAdapter.h"
+#include "UDPProtocol.h"
 
 /* enable or disable software protection by using rockey4nd usb dongle */
 #undef PROTECTED_BY_ROCKEY4_USB_DONGLE
@@ -45,6 +46,7 @@ private:
 #ifdef __WXMSW__
     IP_ADAPTER_INFO *_adapterInfo;
 #endif
+    UDPProtocol *_udpProtocol;
 
     DECLARE_EVENT_TABLE()
 };
