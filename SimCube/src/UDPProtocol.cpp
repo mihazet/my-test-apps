@@ -1,8 +1,13 @@
 #include <wx/wx.h>
+#include <wx/tokenzr.h>
 #include <wx/socket.h>
 #include "SimCubeApp.h"
 #include "NetAdapter.h"
 #include "UDPProtocol.h"
+
+#define MSG_KEYWORD_SET     '='
+#define MSG_KEYWORD_GET     '?'
+#define MSG_KEYWORD_INVALID ' '
 
 BEGIN_EVENT_TABLE(UDPProtocol, wxEvtHandler)
     EVT_SOCKET(wxID_ANY, UDPProtocol::OnSocketEvent)
@@ -13,8 +18,17 @@ UDPProtocol::UDPProtocol(bool downloadMode) :
 {
     size_t socketId = 0;
     wxIPV4address local;
-    /* create socket per app network adapter detect result. */
 
+    /* init function pointer */
+    _normalHandler = new NormalHandler[3];
+    _normalHandler[0].handler = &UDPProtocol::set_request_handler;
+    _normalHandler[0].keyword = MSG_KEYWORD_SET;
+    _normalHandler[1].handler = &UDPProtocol::get_request_handler;
+    _normalHandler[1].keyword = MSG_KEYWORD_GET;
+    _normalHandler[2].handler = &UDPProtocol::null_handler;
+    _normalHandler[2].keyword = MSG_KEYWORD_INVALID;
+
+    /* create socket per app network adapter detect result. */
     // wxVector& operator=(const wxVector& vb)
     wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
     for (wxVector<NetAdapter>::iterator it = netAdapter.begin();
@@ -46,6 +60,8 @@ UDPProtocol::~UDPProtocol()
             it->udp->Destroy();
         }
     }
+
+    delete [] _normalHandler;
 }
 
 void UDPProtocol::SetDownloadMode(bool downloadMode)
@@ -78,9 +94,45 @@ void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
             numByte = udpSocket->LastCount();
             wxLogVerbose(_("NetAdapter[%d]: Received %d byte(s) from %s:%d."),
                 id, numByte, remote.IPAddress(), remote.Service());
+            if (_downloadMode)
+                ProcessDownloadModeProtocol(&localBuf[0], numByte, remote);
+            else
+                ProcessNormalModeProtocol(&localBuf[0], numByte, remote);
         }
     default:
         break;
     }
+}
+
+void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
+                                              wxSockAddress &addr)
+{
+
+}
+
+void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
+                                            wxSockAddress &addr)
+{
+    wxStringTokenizer tkz(wxString::FromAscii(buf), wxT(";"));
+}
+
+bool UDPProtocol::set_request_handler(const char *buf, size_t len,
+                                      wxSockAddress &addr)
+{
+    bool handled = false;
+    return handled;
+}
+
+bool UDPProtocol::get_request_handler(const char *buf, size_t len,
+                                      wxSockAddress &addr)
+{
+    bool handled = false;
+    return handled;
+}
+
+bool UDPProtocol::null_handler(const char *buf, size_t len, wxSockAddress &addr)
+{
+    bool handled = false;
+    return handled;
 }
 
