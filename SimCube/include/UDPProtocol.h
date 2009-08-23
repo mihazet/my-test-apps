@@ -6,11 +6,15 @@
 class UDPProtocol : public wxEvtHandler
 {
 public:
-    UDPProtocol();
+    UDPProtocol(bool downloadMode = false);
     ~UDPProtocol();
+    void SetDownloadMode(bool downloadMode);
+    bool IsDownloadMode(void) { return _downloadMode; }
 
 private:
     void OnSocketEvent(wxSocketEvent &event);
+
+    bool _downloadMode;
 
     DECLARE_EVENT_TABLE()
 };

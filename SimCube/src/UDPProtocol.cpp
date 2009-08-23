@@ -8,7 +8,8 @@ BEGIN_EVENT_TABLE(UDPProtocol, wxEvtHandler)
     EVT_SOCKET(wxID_ANY, UDPProtocol::OnSocketEvent)
 END_EVENT_TABLE()
 
-UDPProtocol::UDPProtocol()
+UDPProtocol::UDPProtocol(bool downloadMode) :
+    _downloadMode(downloadMode)
 {
     size_t socketId = 0;
     wxIPV4address local;
@@ -45,6 +46,13 @@ UDPProtocol::~UDPProtocol()
             it->udp->Destroy();
         }
     }
+}
+
+void UDPProtocol::SetDownloadMode(bool downloadMode)
+{
+    _downloadMode = downloadMode;
+
+    /* TODO: flush socket and change internal protocol */
 }
 
 void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
