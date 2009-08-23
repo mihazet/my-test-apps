@@ -24,6 +24,7 @@ void SimCubeApp::Init()
 {
     wxStandardPaths &stdPaths = wxStandardPaths::Get();
     wxString dbName;
+    wxSQLite3ResultSet set;
 
     /* database initialization */
     dbName = wxFileName(stdPaths.GetExecutablePath()).GetPathWithSep();
@@ -32,6 +33,24 @@ void SimCubeApp::Init()
         _mainDB->Open(dbName);
     if (NULL != (_memDB = new wxSQLite3Database))
         _memDB->Open(wxT(":memory:"));
+
+    /* initialization based on database */
+    set = _mainDB->ExecuteQuery(wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'Language'"));
+    if (set.NextRow())
+    {
+        wxString langSetting = set.GetAsString(0);
+        if (langSetting == wxT("English"))
+            _lang = wxLANGUAGE_ENGLISH;
+        else if (langSetting == wxT("TraditionalChinese"))
+            _lang = wxLANGUAGE_CHINESE_TRADITIONAL;
+        else if (langSetting == wxT("SimplifiedChinese"))
+            _lang = wxLANGUAGE_CHINESE_SIMPLIFIED;
+        else
+            _lang = wxLANGUAGE_DEFAULT;
+    }
+    else
+        _lang = wxLANGUAGE_DEFAULT;
+    set.Finalize();
 
     /* other data members */
     _locale = NULL;
@@ -45,39 +64,19 @@ bool SimCubeApp::OnInit()
 {
     /* init locale */
     wxStandardPaths &stdPaths = wxStandardPaths::Get();
-    int lang = wxLANGUAGE_DEFAULT;
-    if (_mainDB->IsOpen())
+
+    _locale = new wxLocale();
+    if (_locale && _locale->Init(_lang, wxLOCALE_CONV_ENCODING))
     {
-        wxSQLite3ResultSet set = _mainDB->ExecuteQuery(wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'Language'"));
-        if (set.NextRow())
-        {
-            wxString langSetting = set.GetAsString(0);
-            if (langSetting == wxT("English"))
-                lang = wxLANGUAGE_ENGLISH;
-            else if (langSetting == wxT("TraditionalChinese"))
-                lang = wxLANGUAGE_CHINESE_TRADITIONAL;
-            else if (langSetting == wxT("SimplifiedChinese"))
-                lang = wxLANGUAGE_CHINESE_SIMPLIFIED;
-        }
-        set.Finalize();
-        _locale = new wxLocale();
-        if (_locale && _locale->Init(lang, wxLOCALE_CONV_ENCODING))
-        {
-            wxString localePath = wxFileName(stdPaths.GetExecutablePath()).GetPathWithSep();
-            localePath += wxT("locale");
-            _locale->AddCatalogLookupPathPrefix(localePath);
-            _locale->AddCatalog(GetAppName());
-        }
-        else
-        {
-            wxLogError(wxT("Requested language is not supported by current operation system"));
-            // TODO: reset to default
-            return false;
-        }
+        wxString localePath = wxFileName(stdPaths.GetExecutablePath()).GetPathWithSep();
+        localePath += wxT("locale");
+        _locale->AddCatalogLookupPathPrefix(localePath);
+        _locale->AddCatalog(GetAppName());
     }
     else
     {
-        wxLogError(wxT("Database corruption! Re-install the application may help!"));
+        wxLogError(wxT("Requested language is not supported by current operation system"));
+        // TODO: reset to default
         return false;
     }
 

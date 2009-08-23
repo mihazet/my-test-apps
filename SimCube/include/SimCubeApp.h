@@ -41,6 +41,7 @@ private:
 private:
     wxSQLite3Database *_mainDB;
     wxSQLite3Database *_memDB;
+    wxLanguage _lang;
     wxLocale *_locale;
     wxSingleInstanceChecker *_onlyMe;
 #ifdef __WXMSW__
