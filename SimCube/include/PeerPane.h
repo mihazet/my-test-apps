@@ -51,7 +51,7 @@ private:
 class PeerDataModel : public wxDataViewVirtualListModel
 {
 public:
-    PeerDataModel();
+    PeerDataModel(wxVector<PeerData> &container);
 
     virtual unsigned int GetColumnCount() const
     {
@@ -65,7 +65,7 @@ public:
 
     virtual unsigned int GetRowCount()
     {
-        return (unsigned int)_peers.size();
+        return (unsigned int)_container.size();
     }
 
     virtual void GetValueByRow(wxVariant &variant, unsigned int row,
@@ -73,8 +73,10 @@ public:
     virtual bool SetValueByRow(const wxVariant &variant, unsigned int row,
         unsigned int col);
 
+    bool IsContain(wxIPV4address &peer);
+    void AddData(PeerData &data);
 private:
-    wxVector<PeerData> &_peers;
+    wxVector<PeerData> &_container;
 };
 
 #endif /* _PEER_PANE_H_ */

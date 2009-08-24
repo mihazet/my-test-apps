@@ -228,30 +228,17 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
             }
             else
             {
-                bool exist = false;
-                wxVector<PeerData> &peers = wxGetApp().m_Peers;
+                PeerDataModel *data = wxGetApp().m_PeerData;
 
-                /* search vector to check if connection had existed. */
-                for (wxVector<PeerData>::iterator it = peers.begin();
-                    it != peers.end();
-                    it++)
+                /* if this is new data, add it, and update ui. */
+                if (!data->IsContain(peer))
                 {
-                    if ((it->m_Peer.IPAddress() == peer.IPAddress())
-                        && (it->m_Peer.Service() == peer.Service()))
-                    {
-                        exist = true;
-                        break;
-                    }
+                    PeerData item(peer, wxDateTime::Now());
+                    data->AddData(item);
                 }
-
-                /* add remote into vector is not existed */
-                if (!exist)
-                    peers.push_back(PeerData(peer, wxDateTime::Now()));
                 response << name << MSG_KEYWORD_GET_RESPONSE << wxT("ACCEPT");
                 local->SendTo(peer, response.ToAscii(), response.length() + 1);
                 handled = true;
-
-                /* TODO: update ui? */
             }
         }
     }

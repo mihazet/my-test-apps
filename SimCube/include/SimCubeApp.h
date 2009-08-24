@@ -25,7 +25,7 @@ public:
     wxSQLite3Database *GetMainDatabase() { return _mainDB; }
     wxSQLite3Database *GetMemDatabase() { return _memDB; }
     wxVector<NetAdapter> m_Adapters;
-    wxVector<PeerData> m_Peers;
+    PeerDataModel *m_PeerData;
 
 private:
     // event handlers
@@ -41,6 +41,7 @@ private:
     wxString CalculateSubnetBroadcastAddress(wxString, wxString);
 
 private:
+    // internal data members
     wxSQLite3Database *_mainDB;
     wxSQLite3Database *_memDB;
     wxLanguage _lang;
@@ -51,6 +52,7 @@ private:
 #endif
     bool _downloadMode;
     UDPProtocol *_udpProtocol;
+    wxVector<PeerData> _peers;
 
     DECLARE_EVENT_TABLE()
 };
