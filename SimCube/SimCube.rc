@@ -1,1 +1,21 @@
+#ifndef RC_INVOKED
+
+#else
+// note that the icon used by the Explorer (i.e. the programs icon) is the
+// first icon is the executable adn the icon are sorted both by their order
+// (Win9x) and by alphabetically (!) (NT). so put this icon first and give it
+// a name starting with "a"
+aaaaaaaa ICON "SimCube.ico"
+
+// this icon is used with wxFrame::SetIcon()
+SimCube ICON "SimCube.ico"
+
+// set this to 1 if you don't want to use manifest resource (manifest resource
+// is needed to enable visual styles on Window XP - see wx docs/msw/winxp.txt
+// for more information)
+#define wxUSE_NO_MINIFEST 0
+
+// this is not always needed but doesn't hurt (except making the executable
+// very slightly larger): this file contains the standard icons, cursors...
 #include "wx/msw/wx.rc"
+#endif
