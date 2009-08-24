@@ -1,13 +1,16 @@
 #include <wx/wx.h>
 #include <wx/tokenzr.h>
 #include <wx/socket.h>
+#include <wx/wxsqlite3.h>
 #include "SimCubeApp.h"
 #include "NetAdapter.h"
 #include "UDPProtocol.h"
 
-#define MSG_KEYWORD_SET     wxT("=")
-#define MSG_KEYWORD_GET     wxT("?")
-#define MSG_KEYWORD_INVALID wxT(" ")
+#define MSG_KEYWORD_SET_REQUEST     wxT("=")
+#define MSG_KEYWORD_GET_REQUEST     wxT("?")
+#define MSG_KEYWORD_GET_RESPONSE    wxT("!")
+#define MSG_KEYWORD_TRAP            wxT("#")
+#define MSG_KEYWORD_INVALID         wxT(" ")
 
 BEGIN_EVENT_TABLE(UDPProtocol, wxEvtHandler)
     EVT_SOCKET(wxID_ANY, UDPProtocol::OnSocketEvent)
@@ -22,9 +25,9 @@ UDPProtocol::UDPProtocol(bool downloadMode) :
     /* init function pointer */
     _normalHandler = new NormalHandler[3];
     _normalHandler[0].handler = &UDPProtocol::set_request_handler;
-    _normalHandler[0].keyword = MSG_KEYWORD_SET;
+    _normalHandler[0].keyword = MSG_KEYWORD_SET_REQUEST;
     _normalHandler[1].handler = &UDPProtocol::get_request_handler;
-    _normalHandler[1].keyword = MSG_KEYWORD_GET;
+    _normalHandler[1].keyword = MSG_KEYWORD_GET_REQUEST;
     _normalHandler[2].handler = &UDPProtocol::null_handler;
     _normalHandler[2].keyword = MSG_KEYWORD_INVALID;
 
@@ -95,9 +98,9 @@ void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
             wxLogVerbose(_("NetAdapter[%d]: Received %d byte(s) from %s:%d."),
                 id, numByte, remote.IPAddress(), remote.Service());
             if (_downloadMode)
-                ProcessDownloadModeProtocol(&localBuf[0], numByte, remote);
+                ProcessDownloadModeProtocol(&localBuf[0], numByte, remote, udpSocket);
             else
-                ProcessNormalModeProtocol(&localBuf[0], numByte, remote);
+                ProcessNormalModeProtocol(&localBuf[0], numByte, remote, udpSocket);
         }
     default:
         break;
@@ -105,13 +108,15 @@ void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
 }
 
 void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
-                                              wxSockAddress &addr)
+                                              wxSockAddress &peer,
+                                              wxDatagramSocket *local)
 {
 
 }
 
 void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
-                                            wxSockAddress &addr)
+                                            wxSockAddress &peer,
+                                            wxDatagramSocket *local)
 {
     bool handled = false;
     int msg_keyword_checker, handler, rIdx, lIdx;
@@ -159,7 +164,7 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
             /* find handler type */
             for (handler = 0; msg_keyword_checker != 0x01; msg_keyword_checker >>= 2);
             /* process token by handler type */
-            handled = (this->*_normalHandler[handler].handler)(buf, len, addr);
+            handled = (this->*_normalHandler[handler].handler)(buf, len, peer, local);
 
             if (!handled)
                 wxLogVerbose(_("Token (%s) didn't handle by handler"), token);
@@ -168,25 +173,88 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
 }
 
 bool UDPProtocol::set_request_handler(const char *buf, size_t len,
-                                      wxSockAddress &addr)
+                                      wxSockAddress &peer,
+                                      wxDatagramSocket *local)
 {
     bool handled = false;
     return handled;
 }
 
 bool UDPProtocol::get_request_handler(const char *buf, size_t len,
-                                      wxSockAddress &addr)
+                                      wxSockAddress &peer,
+                                      wxDatagramSocket *local)
 {
     bool handled = false;
-    wxStringTokenizer request(wxString::FromAscii(buf, len), MSG_KEYWORD_GET);
+    wxStringTokenizer request(wxString::FromAscii(buf, len), MSG_KEYWORD_GET_REQUEST);
+    wxString name, value;
+
+    /* property name */
+    if (request.HasMoreTokens())
+        name = request.GetNextToken();
+
+    /* property value - optional */
+    if (request.HasMoreTokens())
+        value = request.GetNextToken();
+
+    if (name.IsSameAs(wxT("CHECK_CONNECTION"), false))
+    {
+
+    }
+    else if (name.IsSameAs(wxT("CONECT"), false))
+    {
+
+    }
+    else if (name.IsSameAs(wxT("DISCONNECT"), false))
+    {
+
+    }
+    else if (name.IsSameAs(wxT("DISCOVER"), false))
+    {
+
+    }
+    else if (name.IsSameAs(wxT("MONITOR"), false))
+    {
+
+    }
+    else if (name.IsSameAs(wxT("RESET_ALL"), false))
+    {
+
+    }
+    else if (name.IsSameAs(wxT("SVN_REV"), false))
+    {
+
+    }
+    else /* directly retrieve from database and send back */
+    {
+        wxString sqlQuery, response;
+        wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+        if (db && db->IsOpen())
+        {
+            sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE ProtocolName = '")
+                << name << wxT("'");
+            wxSQLite3ResultSet set = db->ExecuteQuery(sqlQuery);
+            if (set.NextRow())
+            {
+                response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
+                local->SendTo(peer, response.ToAscii(), response.length() + 1);
+                if (local->Error())
+                    wxLogError(wxT("Fail to send response (%s) back to peer. (error = %d)"),
+                        response, local->LastError());
+                else
+                    handled = true;
+            }
+            set.Finalize();
+        }
+    }
+
     return handled;
 }
 
 bool UDPProtocol::null_handler(const char *WXUNUSED(buf),
                                size_t WXUNUSED(len),
-                               wxSockAddress &WXUNUSED(addr))
+                               wxSockAddress &WXUNUSED(addr),
+                               wxDatagramSocket *WXUNUSED(local))
 {
-    bool handled = false;
-    return handled;
+    return false;
 }
 

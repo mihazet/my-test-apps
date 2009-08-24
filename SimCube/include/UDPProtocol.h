@@ -8,7 +8,8 @@ class UDPProtocol;
 class NormalHandler
 {
     friend class UDPProtocol;
-    bool (UDPProtocol::*handler)(const char *buf, size_t len, wxSockAddress &addr);
+    bool (UDPProtocol::*handler)(const char *buf, size_t len,
+        wxSockAddress &peer, wxDatagramSocket *local);
     wxString keyword;
 };
 
@@ -27,13 +28,16 @@ private:
 
     /* internal functions */
     void ProcessDownloadModeProtocol(const char *buf, size_t len,
-        wxSockAddress &addr);
+        wxSockAddress &peer, wxDatagramSocket *local);
     void ProcessNormalModeProtocol(const char *buf, size_t len,
-        wxSockAddress &addr);
+        wxSockAddress &peer, wxDatagramSocket *local);
     NormalHandler *_normalHandler;
-    bool set_request_handler(const char *buf, size_t len, wxSockAddress &addr);
-    bool get_request_handler(const char *buf, size_t len, wxSockAddress &addr);
-    bool null_handler(const char *buf, size_t len, wxSockAddress &addr);
+    bool set_request_handler(const char *buf, size_t len,
+        wxSockAddress &peer, wxDatagramSocket *local);
+    bool get_request_handler(const char *buf, size_t len,
+        wxSockAddress &peer, wxDatagramSocket *local);
+    bool null_handler(const char *buf, size_t len,
+        wxSockAddress &peer, wxDatagramSocket *local);
     bool _downloadMode;
 
     DECLARE_EVENT_TABLE()
