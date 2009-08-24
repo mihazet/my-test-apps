@@ -5,9 +5,9 @@
 #include "NetAdapter.h"
 #include "UDPProtocol.h"
 
-#define MSG_KEYWORD_SET     '='
-#define MSG_KEYWORD_GET     '?'
-#define MSG_KEYWORD_INVALID ' '
+#define MSG_KEYWORD_SET     wxT("=")
+#define MSG_KEYWORD_GET     wxT("?")
+#define MSG_KEYWORD_INVALID wxT(" ")
 
 BEGIN_EVENT_TABLE(UDPProtocol, wxEvtHandler)
     EVT_SOCKET(wxID_ANY, UDPProtocol::OnSocketEvent)
@@ -127,12 +127,12 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
             _normalHandler[handler].keyword != MSG_KEYWORD_INVALID;
             handler++)
         {
-            lIdx = token.Find(_normalHandler[handler].keyword);
+            lIdx = token.find(_normalHandler[handler].keyword);
             if (lIdx != wxNOT_FOUND)
             {
                 /* found keyword for current handler */
                 msg_keyword_checker |= 0x01 << (2 * handler);
-                rIdx = token.Find(_normalHandler[handler].keyword, true);
+                rIdx = token.rfind(_normalHandler[handler].keyword);
                 if (lIdx != rIdx)
                 {
                     /* found multiple keywords for handler in current token */
@@ -143,10 +143,18 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
 
         /* skip if no keyword */
         if (msg_keyword_checker == 0)
+        {
+            wxLogVerbose(_("No keyword in token (%s)"), token);
             continue;
+        }
 
         /* process token if only single keyword */
-        if (!(msg_keyword_checker & (msg_keyword_checker - 1)))
+        if (msg_keyword_checker & (msg_keyword_checker - 1))
+        {
+            wxLogVerbose(_("Multiple keywords in token (%s)"), token);
+            continue;
+        }
+        else
         {
             /* find handler type */
             for (handler = 0; msg_keyword_checker != 0x01; msg_keyword_checker >>= 2);
@@ -170,10 +178,13 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
                                       wxSockAddress &addr)
 {
     bool handled = false;
+    wxStringTokenizer request(wxString::FromAscii(buf, len), MSG_KEYWORD_GET);
     return handled;
 }
 
-bool UDPProtocol::null_handler(const char *buf, size_t len, wxSockAddress &addr)
+bool UDPProtocol::null_handler(const char *WXUNUSED(buf),
+                               size_t WXUNUSED(len),
+                               wxSockAddress &WXUNUSED(addr))
 {
     bool handled = false;
     return handled;

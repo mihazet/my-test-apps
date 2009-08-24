@@ -9,7 +9,7 @@ class NormalHandler
 {
     friend class UDPProtocol;
     bool (UDPProtocol::*handler)(const char *buf, size_t len, wxSockAddress &addr);
-    wxChar keyword;
+    wxString keyword;
 };
 
 class UDPProtocol : public wxEvtHandler
