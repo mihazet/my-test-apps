@@ -48,21 +48,41 @@ void PeerPane::CreateControls()
 }
 
 ////////////////////////////////////////////////////////////////////////////
-PeerDataModel::PeerDataModel() : wxDataViewVirtualListModel(2)
+PeerDataModel::PeerDataModel() : _peers(wxGetApp().m_Peers), wxDataViewVirtualListModel()
 {
-    _db = wxGetApp().GetMemDatabase();
 }
 
 void PeerDataModel::GetValueByRow(wxVariant &variant, unsigned int row,
                                      unsigned int col) const
 {
+    size_t numPeer = _peers.size();
+
+    if (row >= numPeer)
+    {
+        variant = "OutOfRange";
+        return;
+    }
+
+    PeerData &peer = _peers.at(row);
     switch (col)
     {
-        case 0:
+        case 0: /* row # */
             variant = wxString::Format(wxT("%lu"), row + 1);
             break;
+        case 1: /* peer ip */
+            variant = peer.m_Peer.IPAddress();
+            break;
+        case 2: /* peer port */
+            variant = wxString::Format(wxT("%lu"), peer.m_Peer.Service());
+            break;
+        case 3: /* timestamp */
+            variant = peer.m_Timestamp;
+            break;
+        case 4: /* monitor */
+            variant = peer.m_Monitor ? wxT("Yes") : wxT("No");
+            break;
         default:
-            variant = "xx";
+            variant = "NonExistCol";
             break;
     }
 }
@@ -73,6 +93,4 @@ bool PeerDataModel::SetValueByRow(const wxVariant &WXUNUSED(variant),
 {
     return false;
 }
-
-
 

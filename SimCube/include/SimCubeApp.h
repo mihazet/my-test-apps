@@ -8,6 +8,7 @@
 #include <iphlpapi.h>
 #endif
 #include "NetAdapter.h"
+#include "PeerPane.h"
 #include "UDPProtocol.h"
 
 /* enable or disable software protection by using rockey4nd usb dongle */
@@ -24,6 +25,7 @@ public:
     wxSQLite3Database *GetMainDatabase() { return _mainDB; }
     wxSQLite3Database *GetMemDatabase() { return _memDB; }
     wxVector<NetAdapter> m_Adapters;
+    wxVector<PeerData> m_Peers;
 
 private:
     // event handlers

@@ -3,7 +3,22 @@
 
 #include <wx/wx.h>
 #include <wx/dataview.h>
-#include <wx/wxsqlite3.h>
+#include <wx/socket.h>
+#include <wx/datetime.h>
+
+class PeerData
+{
+public:
+    PeerData(wxIPV4address &peer, wxDateTime timestamp, bool monitor = false)
+        : m_Peer(peer) // reference obj must be in ctor initializer list
+    {
+        m_Timestamp = timestamp;
+        m_Monitor = monitor;
+    }
+    wxIPV4address &m_Peer;
+    wxDateTime m_Timestamp;
+    bool m_Monitor;
+};
 
 class PeerDataModel;
 
@@ -50,7 +65,7 @@ public:
 
     virtual unsigned int GetRowCount()
     {
-        return 4;
+        return (unsigned int)_peers.size();
     }
 
     virtual void GetValueByRow(wxVariant &variant, unsigned int row,
@@ -59,7 +74,7 @@ public:
         unsigned int col);
 
 private:
-    wxSQLite3Database *_db;
+    wxVector<PeerData> &_peers;
 };
 
 #endif /* _PEER_PANE_H_ */

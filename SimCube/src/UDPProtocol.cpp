@@ -2,8 +2,10 @@
 #include <wx/tokenzr.h>
 #include <wx/socket.h>
 #include <wx/wxsqlite3.h>
+#include <wx/datetime.h>
 #include "SimCubeApp.h"
 #include "NetAdapter.h"
+#include "PeerPane.h"
 #include "UDPProtocol.h"
 
 #define MSG_KEYWORD_SET_REQUEST     wxT("=")
@@ -108,14 +110,14 @@ void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
 }
 
 void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
-                                              wxSockAddress &peer,
+                                              wxIPV4address &peer,
                                               wxDatagramSocket *local)
 {
 
 }
 
 void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
-                                            wxSockAddress &peer,
+                                            wxIPV4address &peer,
                                             wxDatagramSocket *local)
 {
     bool handled = false;
@@ -164,7 +166,7 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
             /* find handler type */
             for (handler = 0; msg_keyword_checker != 0x01; handler++, msg_keyword_checker >>= 2);
             /* process token by handler type */
-            handled = (this->*_normalHandler[handler].handler)(buf, len, peer, local);
+            handled = (this->*_normalHandler[handler].handler)(token.ToAscii(), token.length(), peer, local);
 
             if (!handled)
                 wxLogVerbose(_("Token (%s) didn't handle by handler"), token);
@@ -173,7 +175,7 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
 }
 
 bool UDPProtocol::set_request_handler(const char *buf, size_t len,
-                                      wxSockAddress &peer,
+                                      wxIPV4address &peer,
                                       wxDatagramSocket *local)
 {
     bool handled = false;
@@ -181,12 +183,14 @@ bool UDPProtocol::set_request_handler(const char *buf, size_t len,
 }
 
 bool UDPProtocol::get_request_handler(const char *buf, size_t len,
-                                      wxSockAddress &peer,
+                                      wxIPV4address &peer,
                                       wxDatagramSocket *local)
 {
     bool handled = false;
     wxStringTokenizer request(wxString::FromAscii(buf, len), MSG_KEYWORD_GET_REQUEST);
     wxString name, value, sqlQuery, response;
+    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3ResultSet set;
 
     /* property name */
     if (request.HasMoreTokens())
@@ -200,9 +204,56 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     {
 
     }
-    else if (name.IsSameAs(wxT("CONECT"), false))
+    else if (name.IsSameAs(wxT("CONNECT"), false))
     {
+        if (!value.empty())
+        {
+            /* check request board name is matched or not */
+            bool match = false;
+            if (db && db->IsOpen())
+            {
+                sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
+                set = db->ExecuteQuery(sqlQuery);
+                if (set.NextRow())
+                    if (value == set.GetAsString(0))
+                        match = true;
+                set.Finalize();
+            }
 
+            if (!match)
+            {
+                response << name << MSG_KEYWORD_GET_RESPONSE << wxT("REJECT");
+                local->SendTo(peer, response.ToAscii(), response.length() + 1);
+                handled = true;
+            }
+            else
+            {
+                bool exist = false;
+                wxVector<PeerData> &peers = wxGetApp().m_Peers;
+
+                /* search vector to check if connection had existed. */
+                for (wxVector<PeerData>::iterator it = peers.begin();
+                    it != peers.end();
+                    it++)
+                {
+                    if ((it->m_Peer.IPAddress() == peer.IPAddress())
+                        && (it->m_Peer.Service() == peer.Service()))
+                    {
+                        exist = true;
+                        break;
+                    }
+                }
+
+                /* add remote into vector is not existed */
+                if (!exist)
+                    peers.push_back(PeerData(peer, wxDateTime::Now()));
+                response << name << MSG_KEYWORD_GET_RESPONSE << wxT("ACCEPT");
+                local->SendTo(peer, response.ToAscii(), response.length() + 1);
+                handled = true;
+
+                /* TODO: update ui? */
+            }
+        }
     }
     else if (name.IsSameAs(wxT("DISCONNECT"), false))
     {
@@ -210,11 +261,10 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     }
     else if (name.IsSameAs(wxT("DISCOVER"), false))
     {
-        wxSQLite3Database *db = wxGetApp().GetMainDatabase();
         if (db && db->IsOpen())
         {
             sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
-            wxSQLite3ResultSet set = db->ExecuteQuery(sqlQuery);
+            set = db->ExecuteQuery(sqlQuery);
             if (set.NextRow())
             {
                 response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
@@ -242,12 +292,11 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     }
     else /* directly retrieve from database and send back */
     {
-        wxSQLite3Database *db = wxGetApp().GetMainDatabase();
         if (db && db->IsOpen())
         {
             sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE ProtocolName = '")
                 << name << wxT("'");
-            wxSQLite3ResultSet set = db->ExecuteQuery(sqlQuery);
+            set = db->ExecuteQuery(sqlQuery);
             if (set.NextRow())
             {
                 response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
@@ -267,7 +316,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
 
 bool UDPProtocol::null_handler(const char *WXUNUSED(buf),
                                size_t WXUNUSED(len),
-                               wxSockAddress &WXUNUSED(addr),
+                               wxIPV4address &WXUNUSED(peer),
                                wxDatagramSocket *WXUNUSED(local))
 {
     return false;
