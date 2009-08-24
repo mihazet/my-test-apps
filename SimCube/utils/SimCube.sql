@@ -7,6 +7,7 @@ CREATE TABLE PropTbl (DisplayedName TEXT UNIQUE, -- property displayed name
 );
 
 -- property list
+INSERT INTO PropTbl VALUES ("BoardName", "BOARD_NAME", "String", "19", "SimCube");
 INSERT INTO PropTbl VALUES ("Brightness", "BRIGHTNESS", "Numeric", "0;255", "127");
 INSERT INTO PropTbl VALUES ("Contrast", "CONTRAST", "Numeric", "0;255", "127");
 INSERT INTO PropTbl VALUES ("Color Temp", "DLP_COLOR_TEMPERATURE", "List", "6500K;9300K;USER1;USER2;USER3", "USER1");

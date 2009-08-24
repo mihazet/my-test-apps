@@ -86,6 +86,13 @@ void PropertyPane::CreateControls()
                 list->SetValue(value);
                 pg->Append(list);
             }
+            else if (type == wxT("String"))
+            {
+                //int length = set.GetInt(wxT("PropertyFormat"));
+                wxStringProperty *str = new wxStringProperty(name, wxPG_LABEL, value);
+                //str->SetMaxLength(length);
+                pg->Append(str);
+            }
         }
         set.Finalize();
     }
@@ -158,6 +165,10 @@ void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
         else if (type == wxT("List"))
         {
             /* no check item now. */
+        }
+        else if (type == wxT("String"))
+        {
+            // TODO: check for max length
         }
 
         /* update database record */
