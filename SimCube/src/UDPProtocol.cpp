@@ -162,7 +162,7 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
         else
         {
             /* find handler type */
-            for (handler = 0; msg_keyword_checker != 0x01; msg_keyword_checker >>= 2);
+            for (handler = 0; msg_keyword_checker != 0x01; handler++, msg_keyword_checker >>= 2);
             /* process token by handler type */
             handled = (this->*_normalHandler[handler].handler)(buf, len, peer, local);
 
@@ -186,7 +186,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
 {
     bool handled = false;
     wxStringTokenizer request(wxString::FromAscii(buf, len), MSG_KEYWORD_GET_REQUEST);
-    wxString name, value;
+    wxString name, value, sqlQuery, response;
 
     /* property name */
     if (request.HasMoreTokens())
@@ -210,7 +210,23 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     }
     else if (name.IsSameAs(wxT("DISCOVER"), false))
     {
-
+        wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+        if (db && db->IsOpen())
+        {
+            sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
+            wxSQLite3ResultSet set = db->ExecuteQuery(sqlQuery);
+            if (set.NextRow())
+            {
+                response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
+                local->SendTo(peer, response.ToAscii(), response.length() + 1);
+                if (local->Error())
+                    wxLogError(wxT("Fail to send discover response back to peer. (error = %d)"),
+                        local->LastError());
+                else
+                    handled = true;
+            }
+            set.Finalize();
+        }
     }
     else if (name.IsSameAs(wxT("MONITOR"), false))
     {
@@ -226,7 +242,6 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     }
     else /* directly retrieve from database and send back */
     {
-        wxString sqlQuery, response;
         wxSQLite3Database *db = wxGetApp().GetMainDatabase();
         if (db && db->IsOpen())
         {
