@@ -68,7 +68,7 @@ void PropertyPane::CreateControls()
         {
             name = set.GetAsString(wxT("DisplayedName"));
             type = set.GetAsString(wxT("PropertyType"));
-            value = set.GetAsString(wxT("PropertyValue"));
+            value = set.GetAsString(wxT("CurrentValue"));
             if (type == wxT("Numeric"))
             {
                 long propVal;
@@ -97,7 +97,7 @@ void PropertyPane::CreateControls()
         set.Finalize();
     }
     allSizer->Add(pg, 1, wxALL | wxEXPAND, 5);
-    
+
     wxButton *imp = new wxButton(this, myID_IMPORT_BTN, _("Import"));
     wxButton *exp = new wxButton(this, myID_EXPORT_BTN, _("Export"));
     wxButton *rst = new wxButton(this, myID_EXPORT_BTN, _("Reset"));
@@ -159,7 +159,7 @@ void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
                     wxLogError(_("Input number out of range! Max = %s, Min = %s"),
                         maxStr, minStr);
                     return;
-                }                    
+                }
             }
         }
         else if (type == wxT("List"))
@@ -172,7 +172,7 @@ void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
         }
 
         /* update database record */
-        sqlUpdate << wxT("UPDATE PropTbl SET PropertyValue = '")
+        sqlUpdate << wxT("UPDATE PropTbl SET CurrentValue = '")
             << prop->ValueToString(value)
             << wxT("' WHERE DisplayedName = '")
             << prop->GetLabel()

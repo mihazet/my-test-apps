@@ -130,7 +130,7 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
         if (token.IsEmpty())
             continue;
         msg_keyword_checker = 0;
-        for (handler = 0; 
+        for (handler = 0;
             _normalHandler[handler].keyword != MSG_KEYWORD_INVALID;
             handler++)
         {
@@ -220,14 +220,14 @@ bool UDPProtocol::set_request_handler(const char *buf, size_t len,
     {
         /* check request board name is matched or not */
         bool match = false;
-        sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
+        sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
         set = db->ExecuteQuery(sqlQuery);
         if (set.NextRow())
         {
             if (value == set.GetAsString(0))
                 match = true;
         }
-        else 
+        else
             handled = false;
         set.Finalize();
 
@@ -266,7 +266,7 @@ bool UDPProtocol::set_request_handler(const char *buf, size_t len,
         PeerDataModel *data = wxGetApp().m_PeerData;
         if (data->IsContain(peer))
         {
-            sqlUpdate << wxT("UPDATE PropTbl SET PropertyValue = '")
+            sqlUpdate << wxT("UPDATE PropTbl SET CurrentValue = '")
                 << value.Upper()
                 << wxT("' WHERE ProtocolName = '")
                 << name
@@ -357,14 +357,14 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
         {
             /* check request board name is matched or not */
             bool match = false;
-            sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
+            sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
             set = db->ExecuteQuery(sqlQuery);
             if (set.NextRow())
             {
                 if (value == set.GetAsString(0))
                     match = true;
             }
-            else 
+            else
                 handled = false;
             set.Finalize();
 
@@ -403,7 +403,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     }
     else if (name.IsSameAs(wxT("DISCOVER")))
     {
-        sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
+        sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
         set = db->ExecuteQuery(sqlQuery);
         if (set.NextRow())
         {
@@ -455,7 +455,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
         PeerDataModel *data = wxGetApp().m_PeerData;
         if (data->IsContain(peer))
         {
-            sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE ProtocolName = '")
+            sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = '")
                 << name << wxT("'");
             set = db->ExecuteQuery(sqlQuery);
             if (set.NextRow())
