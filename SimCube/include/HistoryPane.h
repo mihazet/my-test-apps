@@ -57,6 +57,8 @@ public:
     virtual bool SetValueByRow(const wxVariant &variant, unsigned int row,
         unsigned int col);
 
+    bool AddData(const wxString &ip, unsigned short port, const wxString &data, size_t len);
+
 private:
     wxSQLite3Database *_db;
 };

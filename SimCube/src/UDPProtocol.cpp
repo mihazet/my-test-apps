@@ -6,6 +6,7 @@
 #include "SimCubeApp.h"
 #include "NetAdapter.h"
 #include "PeerPane.h"
+#include "HistoryPane.h"
 #include "UDPProtocol.h"
 
 #define MSG_KEYWORD_SET_REQUEST     wxT("=")
@@ -102,7 +103,12 @@ void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
             if (_downloadMode)
                 ProcessDownloadModeProtocol(&localBuf[0], numByte, remote, udpSocket);
             else
+            {
+                HistoryDataModel *data = wxGetApp().m_HistoryData;
+                data->AddData(remote.IPAddress(), remote.Service(),
+                    wxString::FromAscii(localBuf, numByte), numByte);
                 ProcessNormalModeProtocol(&localBuf[0], numByte, remote, udpSocket);
+            }
         }
     default:
         break;

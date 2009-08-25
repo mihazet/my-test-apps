@@ -39,11 +39,11 @@ void HistoryPane::CreateControls()
     _historyView = new wxDataViewCtrl(this, wxID_ANY);
     paneSizer->Add(_historyView, 1, wxALL | wxEXPAND, 5);
     _historyView->AssociateModel(wxGetApp().m_HistoryData);
-    _historyView->AppendTextColumn(wxT("#"), 0, wxDATAVIEW_CELL_INERT, 30);
-    _historyView->AppendTextColumn(_("Timestamp"), 1, wxDATAVIEW_CELL_INERT, 160);
-    _historyView->AppendTextColumn(_("IP Address"), 2, wxDATAVIEW_CELL_INERT, 120);
-    _historyView->AppendTextColumn(_("Port"), 3, wxDATAVIEW_CELL_INERT, 60);
-    _historyView->AppendTextColumn(_("Length"), 4, wxDATAVIEW_CELL_INERT, 80);
+    _historyView->AppendTextColumn(wxT("#"), 0, wxDATAVIEW_CELL_INERT, 30, wxALIGN_CENTER);
+    _historyView->AppendTextColumn(_("Timestamp"), 1, wxDATAVIEW_CELL_INERT, 125);
+    _historyView->AppendTextColumn(_("IP Address"), 2, wxDATAVIEW_CELL_INERT, 75);
+    _historyView->AppendTextColumn(_("Port"), 3, wxDATAVIEW_CELL_INERT, 45, wxALIGN_CENTER);
+    _historyView->AppendTextColumn(_("Length"), 4, wxDATAVIEW_CELL_INERT, 55, wxALIGN_CENTER);
     _historyView->AppendTextColumn(_("Message"), 5, wxDATAVIEW_CELL_INERT, 360);
     SetSizerAndFit(paneSizer);
 }
@@ -105,5 +105,26 @@ bool HistoryDataModel::SetValueByRow(const wxVariant &WXUNUSED(variant),
                                      unsigned int WXUNUSED(col))
 {
     return false;
+}
+
+bool HistoryDataModel::AddData(const wxString &ip, unsigned short port, 
+                               const wxString &data, size_t len)
+{
+    wxString sqlUpdate;
+    bool result = true;
+
+    sqlUpdate << wxT("INSERT INTO HistoryTbl (Ip, Port, Data, Length) VALUES ('")
+        << ip << wxString::Format(wxT("', '%u', '"), port) << data
+        << wxString::Format(wxT("', '%ld')"), len);
+
+    if (1 != _db->ExecuteUpdate(sqlUpdate))
+    {
+        result = false;
+        wxLogError(_("Fail to insert new value into history table."));
+    }
+    else
+        RowAppended();
+
+    return result;
 }
 
