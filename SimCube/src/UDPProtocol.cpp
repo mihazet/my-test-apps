@@ -186,11 +186,14 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
                                       wxIPV4address &peer,
                                       wxDatagramSocket *local)
 {
-    bool handled = false;
+    bool handled = true;
     wxStringTokenizer request(wxString::FromAscii(buf, len), MSG_KEYWORD_GET_REQUEST);
     wxString name, value, sqlQuery, response;
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     wxSQLite3ResultSet set;
+
+    wxASSERT_MSG(db, wxT("Null Database"));
+    wxASSERT_MSG(db->IsOpen(), wxT("Database closed"));
 
     /* property name */
     if (request.HasMoreTokens())
@@ -202,68 +205,76 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
 
     if (name.IsSameAs(wxT("CHECK_CONNECTION")))
     {
-
+        response << name << MSG_KEYWORD_GET_RESPONSE;
+        PeerDataModel *data = wxGetApp().m_PeerData;
+        if (data->IsContain(peer))
+            response << wxT("CONNECTED");
+        else
+            response << wxT("NOT_CONNECTED");
+        local->SendTo(peer, response.ToAscii(), response.length() + 1);
+        if (local->Error())
+        {
+            wxLogError(_("Fail to send check connection response back to peer. (error = %d)"),
+                local->LastError());
+            handled = false;
+        }
     }
     else if (name.IsSameAs(wxT("CONNECT")))
     {
-        if (!value.empty())
+        wxASSERT_MSG(!value.empty(), wxT("Empty BoardName in CONNECT get request"));
+
+        /* check request board name is matched or not */
+        bool match = false;
+        sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
+        set = db->ExecuteQuery(sqlQuery);
+        if (set.NextRow())
         {
-            /* check request board name is matched or not */
-            bool match = false;
-            if (db && db->IsOpen())
-            {
-                sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
-                set = db->ExecuteQuery(sqlQuery);
-                if (set.NextRow())
-                    if (value == set.GetAsString(0))
-                        match = true;
-                set.Finalize();
-            }
+            if (value == set.GetAsString(0))
+                match = true;
+        }
+        else // missing BoardName in database table.
+            handled = false;
+        set.Finalize();
 
-            if (!match)
-            {
-                response << name << MSG_KEYWORD_GET_RESPONSE << wxT("REJECT");
-                local->SendTo(peer, response.ToAscii(), response.length() + 1);
-                handled = true;
-            }
-            else
-            {
-                PeerDataModel *data = wxGetApp().m_PeerData;
+        response << name << MSG_KEYWORD_GET_RESPONSE;
+        if (!match)
+            response << wxT("REJECT");
+        else
+        {
+            response << wxT("ACCEPT");
 
-                /* if this is new data, add it, and update ui. */
-                if (!data->IsContain(peer))
-                {
-                    PeerData item(peer, wxDateTime::Now());
-                    data->AddData(item);
-                }
-                response << name << MSG_KEYWORD_GET_RESPONSE << wxT("ACCEPT");
-                local->SendTo(peer, response.ToAscii(), response.length() + 1);
-                handled = true;
+            PeerDataModel *data = wxGetApp().m_PeerData;
+            /* if this is new data, add it, and update ui. */
+            if (!data->IsContain(peer))
+            {
+                PeerData item(peer, wxDateTime::Now());
+                data->AddData(item);
             }
         }
-    }
-    else if (name.IsSameAs(wxT("DISCONNECT")))
-    {
-
+        local->SendTo(peer, response.ToAscii(), response.length() + 1);
+        if (local->Error())
+        {
+            wxLogError(_("Fail to send connect response back to peer. (error = %d)"),
+                local->LastError());
+            handled = false;
+        }
     }
     else if (name.IsSameAs(wxT("DISCOVER")))
     {
-        if (db && db->IsOpen())
+        sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
+        set = db->ExecuteQuery(sqlQuery);
+        if (set.NextRow())
         {
-            sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
-            set = db->ExecuteQuery(sqlQuery);
-            if (set.NextRow())
+            response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
+            local->SendTo(peer, response.ToAscii(), response.length() + 1);
+            if (local->Error())
             {
-                response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
-                local->SendTo(peer, response.ToAscii(), response.length() + 1);
-                if (local->Error())
-                    wxLogError(wxT("Fail to send discover response back to peer. (error = %d)"),
-                        local->LastError());
-                else
-                    handled = true;
+                wxLogError(_("Fail to send discover response back to peer. (error = %d)"),
+                    local->LastError());
+                handled = false;
             }
-            set.Finalize();
         }
+        set.Finalize();
     }
     else if (name.IsSameAs(wxT("MONITOR")))
     {
@@ -271,7 +282,8 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     }
     else if (name.IsSameAs(wxT("RESET_ALL")))
     {
-
+        // do nothing like firmware
+        handled = false;
     }
     else if (name.IsSameAs(wxT("SVN_REV")))
     {
@@ -279,23 +291,21 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     }
     else /* directly retrieve from database and send back */
     {
-        if (db && db->IsOpen())
+        sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE ProtocolName = '")
+            << name << wxT("'");
+        set = db->ExecuteQuery(sqlQuery);
+        if (set.NextRow())
         {
-            sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE ProtocolName = '")
-                << name << wxT("'");
-            set = db->ExecuteQuery(sqlQuery);
-            if (set.NextRow())
+            response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
+            local->SendTo(peer, response.ToAscii(), response.length() + 1);
+            if (local->Error())
             {
-                response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
-                local->SendTo(peer, response.ToAscii(), response.length() + 1);
-                if (local->Error())
-                    wxLogError(wxT("Fail to send response (%s) back to peer. (error = %d)"),
-                        response, local->LastError());
-                else
-                    handled = true;
+                wxLogError(_("Fail to send response (%s) back to peer. (error = %d)"),
+                    response, local->LastError());
+                handled = false;
             }
-            set.Finalize();
         }
+        set.Finalize();
     }
 
     return handled;
