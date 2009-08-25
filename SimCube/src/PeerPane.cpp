@@ -38,11 +38,11 @@ void PeerPane::CreateControls()
     _peerView = new wxDataViewCtrl(this, wxID_ANY);
     paneSizer->Add(_peerView, 1, wxALL | wxEXPAND, 5);
     _peerView->AssociateModel(wxGetApp().m_PeerData);
-    _peerView->AppendTextColumn(wxT("#"), 0, wxDATAVIEW_CELL_INERT, 40);
-    _peerView->AppendTextColumn(_("Remote IP Addr"), 1, wxDATAVIEW_CELL_INERT, 120);
-    _peerView->AppendTextColumn(_("Port"), 2, wxDATAVIEW_CELL_INERT, 80);
-    _peerView->AppendTextColumn(_("Established Time"), 3, wxDATAVIEW_CELL_INERT, 120);
-    _peerView->AppendTextColumn(_("Monitored"), 4, wxDATAVIEW_CELL_INERT, 80);
+    _peerView->AppendTextColumn(wxT("#"), 0, wxDATAVIEW_CELL_INERT, 25, wxALIGN_CENTER);
+    _peerView->AppendTextColumn(_("IP Address"), 1, wxDATAVIEW_CELL_INERT, 120);
+    _peerView->AppendTextColumn(_("Port"), 2, wxDATAVIEW_CELL_INERT, 60, wxALIGN_CENTER);
+    _peerView->AppendTextColumn(_("Established Time"), 3, wxDATAVIEW_CELL_INERT, 160);
+    _peerView->AppendTextColumn(_("Monitored"), 4, wxDATAVIEW_CELL_INERT, 80, wxALIGN_CENTER);
     SetSizerAndFit(paneSizer);
 }
 
