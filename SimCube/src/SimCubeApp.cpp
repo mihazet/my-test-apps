@@ -73,6 +73,7 @@ void SimCubeApp::Init()
     _adapterInfo = NULL;
     _udpProtocol = NULL;
     m_PeerData = new PeerDataModel();
+    m_HistoryData = new HistoryDataModel(_memDB);
 }
 
 bool SimCubeApp::OnInit()
@@ -159,6 +160,11 @@ int SimCubeApp::OnExit()
     {
         delete m_PeerData;
         m_PeerData = NULL;
+    }
+    if (m_HistoryData)
+    {
+        delete m_HistoryData;
+        m_HistoryData = NULL;
     }
     return wxApp::OnExit();
 }

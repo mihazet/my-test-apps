@@ -9,6 +9,7 @@
 #endif
 #include "NetAdapter.h"
 #include "PeerPane.h"
+#include "HistoryPane.h"
 #include "UDPProtocol.h"
 
 /* enable or disable software protection by using rockey4nd usb dongle */
@@ -26,6 +27,7 @@ public:
     wxSQLite3Database *GetMemDatabase() { return _memDB; }
     wxVector<NetAdapter> m_Adapters;
     PeerDataModel *m_PeerData;
+    HistoryDataModel *m_HistoryData;
 
 private:
     // event handlers

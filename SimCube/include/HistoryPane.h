@@ -30,13 +30,12 @@ private:
     void CreateControls();
 
     wxDataViewCtrl *_historyView;
-    class HistoryDataModel *_historyData;
 };
 
 class HistoryDataModel : public wxDataViewVirtualListModel
 {
 public:
-    HistoryDataModel();
+    HistoryDataModel(wxSQLite3Database *db);
 
     virtual unsigned int GetColumnCount() const
     {
@@ -50,7 +49,7 @@ public:
 
     virtual unsigned int GetRowCount()
     {
-        return 2;
+        return (unsigned int)_db->GetLastRowId().ToLong();
     }
 
     virtual void GetValueByRow(wxVariant &variant, unsigned int row,

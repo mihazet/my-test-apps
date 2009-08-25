@@ -37,11 +37,10 @@ void HistoryPane::CreateControls()
     wxSizer *paneSizer = new wxBoxSizer(wxVERTICAL);
     _historyView = new wxDataViewCtrl(this, wxID_ANY);
     paneSizer->Add(_historyView, 1, wxALL | wxEXPAND, 5);
-    _historyData = new HistoryDataModel();
-    _historyView->AssociateModel(_historyData);
+    _historyView->AssociateModel(wxGetApp().m_HistoryData);
     _historyView->AppendTextColumn(wxT("#"), 0, wxDATAVIEW_CELL_INERT, 30);
-    _historyView->AppendTextColumn(_("Timestamp"), 1, wxDATAVIEW_CELL_INERT, 80);
-    _historyView->AppendTextColumn(_("IP Addr"), 2, wxDATAVIEW_CELL_INERT, 100);
+    _historyView->AppendTextColumn(_("Timestamp"), 1, wxDATAVIEW_CELL_INERT, 160);
+    _historyView->AppendTextColumn(_("IP Address"), 2, wxDATAVIEW_CELL_INERT, 120);
     _historyView->AppendTextColumn(_("Port"), 3, wxDATAVIEW_CELL_INERT, 60);
     _historyView->AppendTextColumn(_("Length"), 4, wxDATAVIEW_CELL_INERT, 80);
     _historyView->AppendTextColumn(_("Message"), 5, wxDATAVIEW_CELL_INERT, 360);
@@ -49,9 +48,12 @@ void HistoryPane::CreateControls()
 }
 
 ////////////////////////////////////////////////////////////////////////////
-HistoryDataModel::HistoryDataModel() : wxDataViewVirtualListModel(2)
+HistoryDataModel::HistoryDataModel(wxSQLite3Database *db)
+    : wxDataViewVirtualListModel()
 {
-    _db = wxGetApp().GetMemDatabase();
+    _db = db;
+
+    /* create table */
 }
 
 void HistoryDataModel::GetValueByRow(wxVariant &variant,
