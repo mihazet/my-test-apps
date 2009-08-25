@@ -72,7 +72,7 @@ void SimCubeApp::Init()
     m_Adapters.clear();
     _adapterInfo = NULL;
     _udpProtocol = NULL;
-    m_PeerData = new PeerDataModel(_peers);
+    m_PeerData = new PeerDataModel();
 }
 
 bool SimCubeApp::OnInit()

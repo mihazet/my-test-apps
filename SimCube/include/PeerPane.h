@@ -10,12 +10,12 @@ class PeerData
 {
 public:
     PeerData(wxIPV4address &peer, wxDateTime timestamp, bool monitor = false)
-        : m_Peer(peer) // reference obj must be in ctor initializer list
     {
+        m_Peer = peer;
         m_Timestamp = timestamp;
         m_Monitor = monitor;
     }
-    wxIPV4address &m_Peer;
+    wxIPV4address m_Peer;
     wxDateTime m_Timestamp;
     bool m_Monitor;
 };
@@ -45,13 +45,12 @@ private:
     void CreateControls();
 
     wxDataViewCtrl *_peerView;
-    class PeerDataModel *_peerData;
 };
 
 class PeerDataModel : public wxDataViewVirtualListModel
 {
 public:
-    PeerDataModel(wxVector<PeerData> &container);
+    PeerDataModel();
 
     virtual unsigned int GetColumnCount() const
     {
@@ -76,7 +75,7 @@ public:
     bool IsContain(wxIPV4address &peer);
     void AddData(PeerData &data);
 private:
-    wxVector<PeerData> &_container;
+    wxVector<PeerData> _container;
 };
 
 #endif /* _PEER_PANE_H_ */

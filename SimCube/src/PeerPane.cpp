@@ -47,8 +47,7 @@ void PeerPane::CreateControls()
 }
 
 ////////////////////////////////////////////////////////////////////////////
-PeerDataModel::PeerDataModel(wxVector<PeerData> &container)
-    : _container(container), wxDataViewVirtualListModel(0)
+PeerDataModel::PeerDataModel() : wxDataViewVirtualListModel(0)
 {
 }
 
@@ -63,7 +62,7 @@ void PeerDataModel::GetValueByRow(wxVariant &variant, unsigned int row,
         return;
     }
 
-    PeerData &data = _container.at(row);
+    const PeerData &data = _container.at(row);
     switch (col)
     {
         case 0: /* row # */
@@ -116,6 +115,6 @@ bool PeerDataModel::IsContain(wxIPV4address &peer)
 void PeerDataModel::AddData(PeerData &data)
 {
     _container.push_back(data);
-    //Reset((unsigned int)_container.size());
+    Reset((unsigned int)_container.size());
 }
 

@@ -52,7 +52,6 @@ private:
 #endif
     bool _downloadMode;
     UDPProtocol *_udpProtocol;
-    wxVector<PeerData> _peers;
 
     DECLARE_EVENT_TABLE()
 };
