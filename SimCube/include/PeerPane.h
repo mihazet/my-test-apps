@@ -74,6 +74,9 @@ public:
 
     bool IsContain(wxIPV4address &peer);
     void AddData(PeerData &data);
+    bool RemoveData(wxIPV4address &peer);
+    bool SetMonitor(wxIPV4address &peer, bool monitor = true);
+    bool GetMonitor(wxIPV4address &peer);
 private:
     wxVector<PeerData> _container;
 };

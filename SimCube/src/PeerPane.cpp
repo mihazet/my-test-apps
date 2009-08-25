@@ -118,3 +118,69 @@ void PeerDataModel::AddData(PeerData &data)
     Reset((unsigned int)_container.size());
 }
 
+bool PeerDataModel::RemoveData(wxIPV4address &peer)
+{
+    bool remove_done = false;
+
+    for (wxVector<PeerData>::iterator it = _container.begin();
+        it != _container.end();
+        ++it)
+    {
+        if ((it->m_Peer.IPAddress() == peer.IPAddress())
+            && (it->m_Peer.Service() == peer.Service()))
+        {
+            _container.erase(it);
+            remove_done = true;
+            break;
+        }
+    }
+
+    if (remove_done)
+        Reset((unsigned int)_container.size());
+
+    return remove_done;
+}
+
+bool PeerDataModel::SetMonitor(wxIPV4address &peer, bool monitor)
+{
+    bool exist = false, update = false;
+    wxVector<PeerData>::iterator it;
+    unsigned int row = 0;
+
+    for (it = _container.begin(); it != _container.end(); ++it, ++row)
+    {
+        if ((it->m_Peer.IPAddress() == peer.IPAddress())
+            && (it->m_Peer.Service() == peer.Service()))
+        {
+            exist = true;
+            break;
+        }
+    }
+
+    if (exist)
+    {
+        if (it->m_Monitor != monitor)
+            update = true;
+        it->m_Monitor = monitor;
+    }
+
+    if (update)
+        RowChanged(row);
+
+    return exist;
+}
+
+bool PeerDataModel::GetMonitor(wxIPV4address &peer)
+{
+    wxVector<PeerData>::iterator it;
+
+    for (it = _container.begin(); it != _container.end(); ++it)
+    {
+        if ((it->m_Peer.IPAddress() == peer.IPAddress())
+            && (it->m_Peer.Service() == peer.Service()))
+            return it->m_Monitor;
+    }
+
+    return false;
+}
+
