@@ -194,17 +194,17 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
 
     /* property name */
     if (request.HasMoreTokens())
-        name = request.GetNextToken();
+        name = request.GetNextToken().Upper();
 
     /* property value - optional */
     if (request.HasMoreTokens())
         value = request.GetNextToken();
 
-    if (name.IsSameAs(wxT("CHECK_CONNECTION"), false))
+    if (name.IsSameAs(wxT("CHECK_CONNECTION")))
     {
 
     }
-    else if (name.IsSameAs(wxT("CONNECT"), false))
+    else if (name.IsSameAs(wxT("CONNECT")))
     {
         if (!value.empty())
         {
@@ -242,11 +242,11 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
             }
         }
     }
-    else if (name.IsSameAs(wxT("DISCONNECT"), false))
+    else if (name.IsSameAs(wxT("DISCONNECT")))
     {
 
     }
-    else if (name.IsSameAs(wxT("DISCOVER"), false))
+    else if (name.IsSameAs(wxT("DISCOVER")))
     {
         if (db && db->IsOpen())
         {
@@ -265,15 +265,15 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
             set.Finalize();
         }
     }
-    else if (name.IsSameAs(wxT("MONITOR"), false))
+    else if (name.IsSameAs(wxT("MONITOR")))
     {
 
     }
-    else if (name.IsSameAs(wxT("RESET_ALL"), false))
+    else if (name.IsSameAs(wxT("RESET_ALL")))
     {
 
     }
-    else if (name.IsSameAs(wxT("SVN_REV"), false))
+    else if (name.IsSameAs(wxT("SVN_REV")))
     {
 
     }
