@@ -123,7 +123,7 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
     bool handled = false;
     int msg_keyword_checker, handler, rIdx, lIdx;
     wxString token;
-    wxStringTokenizer tkz(wxString::FromAscii(buf), wxT(";"));
+    wxStringTokenizer tkz(wxString::FromAscii(buf, len), wxT(";"));
     while (tkz.HasMoreTokens())
     {
         token = tkz.GetNextToken();
