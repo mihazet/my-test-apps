@@ -176,11 +176,11 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
 
 bool UDPProtocol::set_request_handler(const char *buf, size_t len,
                                       wxIPV4address &peer,
-                                      wxDatagramSocket *local)
+                                      wxDatagramSocket *WXUNUSED(local))
 {
     bool handled = true;
     wxStringTokenizer request(wxString::FromAscii(buf, len), MSG_KEYWORD_SET_REQUEST);
-    wxString name, value, sqlQuery;
+    wxString name, value, sqlQuery, sqlUpdate;
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     wxSQLite3ResultSet set;
 
@@ -252,12 +252,33 @@ bool UDPProtocol::set_request_handler(const char *buf, size_t len,
     }
     else if (name.IsSameAs(wxT("RESET_ALL")))
     {
+        PeerDataModel *data = wxGetApp().m_PeerData;
+        if (data->IsContain(peer))
+        {
 
+        }
+        else
+            handled = false;
     }
     /* general set request messages - handled by database update */
     else
     {
-
+        PeerDataModel *data = wxGetApp().m_PeerData;
+        if (data->IsContain(peer))
+        {
+            sqlUpdate << wxT("UPDATE PropTbl SET PropertyValue = '")
+                << value.Upper()
+                << wxT("' WHERE ProtocolName = '")
+                << name
+                << wxT("'");
+            if (db->ExecuteUpdate(sqlUpdate) != 1)
+            {
+                wxLogError(_("This may not be an error. Set Request (%s) is not handled by database update."), name);
+                handled = false;
+            }
+        }
+        else
+            handled = false;
     }
 
     return handled;
@@ -299,14 +320,20 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     /* list all get request messages need to be secial handled */
     else if (name.IsSameAs(wxT("CHECK_BOARD_CONFIG")))
     {
-        response << name << MSG_KEYWORD_GET_RESPONSE << wxT("SUCCESS");
-        local->SendTo(peer, response.ToAscii(), response.length() + 1);
-        if (local->Error())
+        PeerDataModel *data = wxGetApp().m_PeerData;
+        if (data->IsContain(peer))
         {
-            wxLogError(_("Fail to send check board config response back to peer. (error = %d)"),
-                local->LastError());
-            handled = false;
+            response << name << MSG_KEYWORD_GET_RESPONSE << wxT("SUCCESS");
+            local->SendTo(peer, response.ToAscii(), response.length() + 1);
+            if (local->Error())
+            {
+                wxLogError(_("Fail to send check board config response back to peer. (error = %d)"),
+                    local->LastError());
+                handled = false;
+            }
         }
+        else
+            handled = false;
     }
     else if (name.IsSameAs(wxT("CHECK_CONNECTION")))
     {
@@ -414,26 +441,38 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     }
     else if (name.IsSameAs(wxT("SVN_REV")))
     {
+        PeerDataModel *data = wxGetApp().m_PeerData;
+        if (data->IsContain(peer))
+        {
 
+        }
+        else
+            handled = false;
     }
     /* general get request messages - handled by database query */
     else
     {
-        sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE ProtocolName = '")
-            << name << wxT("'");
-        set = db->ExecuteQuery(sqlQuery);
-        if (set.NextRow())
+        PeerDataModel *data = wxGetApp().m_PeerData;
+        if (data->IsContain(peer))
         {
-            response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
-            local->SendTo(peer, response.ToAscii(), response.length() + 1);
-            if (local->Error())
+            sqlQuery << wxT("SELECT PropertyValue FROM PropTbl WHERE ProtocolName = '")
+                << name << wxT("'");
+            set = db->ExecuteQuery(sqlQuery);
+            if (set.NextRow())
             {
-                wxLogError(_("Fail to send response (%s) back to peer. (error = %d)"),
-                    response, local->LastError());
-                handled = false;
+                response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
+                local->SendTo(peer, response.ToAscii(), response.length() + 1);
+                if (local->Error())
+                {
+                    wxLogError(_("Fail to send response (%s) back to peer. (error = %d)"),
+                        response, local->LastError());
+                    handled = false;
+                }
             }
+            set.Finalize();
         }
-        set.Finalize();
+        else
+            handled = false;
     }
 
     return handled;
