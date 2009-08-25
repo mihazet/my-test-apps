@@ -1,4 +1,5 @@
 #include <wx/wx.h>
+#include <wx/wxsqlite3.h>
 #include "SimCubeApp.h"
 #include "HistoryPane.h"
 
@@ -49,21 +50,54 @@ void HistoryPane::CreateControls()
 
 ////////////////////////////////////////////////////////////////////////////
 HistoryDataModel::HistoryDataModel(wxSQLite3Database *db)
-    : wxDataViewVirtualListModel()
+    : wxDataViewVirtualListModel(), _db(db)
 {
-    _db = db;
+    wxString sqlUpdate;
+    int modified_rows;
 
     /* create table */
+    sqlUpdate << wxT("CREATE TABLE HistoryTbl (Id INTEGER PRIMARY KEY, ")
+                                        << wxT("Timestamp TEXT, ")
+                                        << wxT("Ip TEXT, ")
+                                        << wxT("Port TEXT, ")
+                                        << wxT("Length TEXT, ")
+                                        << wxT("Data TEXT)");
+    modified_rows = _db->ExecuteUpdate(sqlUpdate);
+
+    /* create trigger */
+    sqlUpdate.clear();
+    sqlUpdate << wxT("CREATE TRIGGER insert_timestamp AFTER INSERT ON HistoryTbl ")
+              << wxT("BEGIN ")
+              << wxT("UPDATE HistoryTbl SET Timestamp = DATETIME('NOW') WHERE rowid = new.rowid;")
+              << wxT("END");
+    modified_rows = _db->ExecuteUpdate(sqlUpdate);
 }
 
 void HistoryDataModel::GetValueByRow(wxVariant &variant,
                                      unsigned int row,
-                                     unsigned int WXUNUSED(col)) const
+                                     unsigned int col) const
 {
-    if (row)
-        variant = "xxx";
-    else
-        variant = "x";
+    wxString sqlQuery;
+    wxSQLite3ResultSet set;
+
+    sqlQuery << wxT("SELECT ");
+    switch (col)
+    {
+        case 0: sqlQuery << wxT("Id"); break;
+        case 1: sqlQuery << wxT("Timestamp"); break;
+        case 2: sqlQuery << wxT("Ip"); break;
+        case 3: sqlQuery << wxT("Port"); break;
+        case 4: sqlQuery << wxT("Length"); break;
+        case 5: sqlQuery << wxT("Data"); break;
+    }
+    sqlQuery << wxT(" FROM HistoryTbl WHERE Id = ") << row + 1;
+
+    set = _db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+    {
+        variant = set.GetAsString(0);
+    }
+    set.Finalize();
 }
 
 bool HistoryDataModel::SetValueByRow(const wxVariant &WXUNUSED(variant),
