@@ -51,20 +51,6 @@ void SimCubeApp::Init()
     else
         _lang = wxLANGUAGE_DEFAULT;
     set.Finalize();
-    set = _mainDB->ExecuteQuery(wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'Mode'"));
-    if (set.NextRow())
-    {
-        wxString modeSetting = set.GetAsString(0);
-        if (modeSetting == wxT("Download"))
-            _downloadMode = true;
-        else if (modeSetting == wxT("Normal"))
-            _downloadMode = false;
-        else
-            _downloadMode = false;
-    }
-    else
-        _downloadMode = false;
-    set.Finalize();
 
     /* other data members */
     _locale = NULL;
@@ -121,7 +107,7 @@ bool SimCubeApp::OnInit()
 
     /* generate protocol objects.
        Each protocol object will init its related sockets per network adapter. */
-    _udpProtocol = new UDPProtocol(_downloadMode);
+    _udpProtocol = new UDPProtocol();
 
 #ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     /* check for USB dongle */

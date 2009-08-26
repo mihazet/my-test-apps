@@ -19,8 +19,7 @@ BEGIN_EVENT_TABLE(UDPProtocol, wxEvtHandler)
     EVT_SOCKET(wxID_ANY, UDPProtocol::OnSocketEvent)
 END_EVENT_TABLE()
 
-UDPProtocol::UDPProtocol(bool downloadMode) :
-    _downloadMode(downloadMode),
+UDPProtocol::UDPProtocol() :
     _needDeallocateSafeBuf(false)
 {
     size_t socketId = 0;
@@ -71,13 +70,6 @@ UDPProtocol::~UDPProtocol()
     delete [] _normalHandler;
 }
 
-void UDPProtocol::SetDownloadMode(bool downloadMode)
-{
-    _downloadMode = downloadMode;
-
-    /* TODO: flush socket and change internal protocol */
-}
-
 void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
 {
     wxIPV4address remote;
@@ -103,24 +95,22 @@ void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
             wxLogVerbose(_("NetAdapter[%d]: Received %d byte(s) from %s:%d."),
                 id, numByte, remote.IPAddress(), remote.Service());
 
-            if (_downloadMode)
+            /* make sure buffer is safe for later process */
+            AllocateSafeBuf(&safeBuf, &numByteInSafeBuf, unsafeBuf, numByte);
+
+            /* add buffer content into history */
+            HistoryDataModel *data = wxGetApp().m_HistoryData;
+            data->AddData(remote.IPAddress(), remote.Service(),
+                wxString::FromAscii(safeBuf, numByteInSafeBuf), numByteInSafeBuf);
+
+            /* process message */
+            if (IsBufferUnsafe(unsafeBuf, numByte))
                 ProcessDownloadModeProtocol(unsafeBuf, numByte, remote, udpSocket);
             else
-            {
-                /* make sure buffer is safe for later process */
-                AllocateSafeBuf(&safeBuf, &numByteInSafeBuf, unsafeBuf, numByte);
-
-                /* add buffer content into history */
-                HistoryDataModel *data = wxGetApp().m_HistoryData;
-                data->AddData(remote.IPAddress(), remote.Service(),
-                    wxString::FromAscii(safeBuf, numByteInSafeBuf), numByteInSafeBuf);
-
-                /* process messaga */
                 ProcessNormalModeProtocol(safeBuf, numByteInSafeBuf, remote, udpSocket);
 
-                /* clean up safe buf */
-                DeallocateSafeBuf(safeBuf);
-            }
+            /* clean up safe buf */
+            DeallocateSafeBuf(safeBuf);
         }
     default:
         break;

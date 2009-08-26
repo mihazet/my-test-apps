@@ -17,10 +17,8 @@ class UDPProtocol : public wxEvtHandler
 {
     friend class NormalHandler;
 public:
-    UDPProtocol(bool downloadMode = false);
+    UDPProtocol();
     ~UDPProtocol();
-    void SetDownloadMode(bool downloadMode);
-    bool IsDownloadMode(void) { return _downloadMode; }
 
 private:
     /* event handlers */
@@ -44,7 +42,6 @@ private:
         wxIPV4address &peer, wxDatagramSocket *local);
     bool null_handler(const char *buf, size_t len,
         wxIPV4address &peer, wxDatagramSocket *local);
-    bool _downloadMode;
     bool _needDeallocateSafeBuf;
 
     DECLARE_EVENT_TABLE()
