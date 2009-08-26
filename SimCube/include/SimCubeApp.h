@@ -52,7 +52,6 @@ private:
 #ifdef __WXMSW__
     IP_ADAPTER_INFO *_adapterInfo;
 #endif
-    bool _downloadMode;
     UDPProtocol *_udpProtocol;
 
     DECLARE_EVENT_TABLE()
