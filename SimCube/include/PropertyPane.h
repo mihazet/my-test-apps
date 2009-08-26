@@ -28,13 +28,7 @@ private:
     void CreateControls();
 
     // event handlers
-    void OnPropertySelected(wxPropertyGridEvent &event);
     void OnPropertyChanging(wxPropertyGridEvent &event);
-    void OnPropertyHighlighted(wxPropertyGridEvent &event);
-    void OnPropertyRightClick(wxPropertyGridEvent &event);
-    void OnPropertyDoubleClick(wxPropertyGridEvent &event);
-    void OnPropertyItemCollapsed(wxPropertyGridEvent &event);
-    void OnPropertyItemExpanded(wxPropertyGridEvent &event);
 
     wxSQLite3Database *_db;
 

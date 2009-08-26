@@ -14,13 +14,7 @@ enum
 };
 
 BEGIN_EVENT_TABLE(PropertyPane, wxPanel)
-    //EVT_PG_SELECTED(myID_PROPERTY_GRID, PropertyPane::OnPropertySelected)
     EVT_PG_CHANGING(myID_PROPERTY_GRID, PropertyPane::OnPropertyChanging)
-    //EVT_PG_HIGHLIGHTED(myID_PROPERTY_GRID, PropertyPane::OnPropertyHighlighted)
-    //EVT_PG_RIGHT_CLICK(myID_PROPERTY_GRID, PropertyPane::OnPropertyRightClick)
-    //EVT_PG_DOUBLE_CLICK(myID_PROPERTY_GRID, PropertyPane::OnPropertyDoubleClick)
-    //EVT_PG_ITEM_COLLAPSED(myID_PROPERTY_GRID, PropertyPane::OnPropertyItemCollapsed)
-    //EVT_PG_ITEM_EXPANDED(myID_PROPERTY_GRID, PropertyPane::OnPropertyItemExpanded)
 END_EVENT_TABLE()
 
 PropertyPane::PropertyPane()
@@ -110,16 +104,6 @@ void PropertyPane::CreateControls()
     SetSizer(allSizer);
 }
 
-void PropertyPane::OnPropertySelected(wxPropertyGridEvent &event)
-{
-    wxPGProperty *prop = event.GetProperty();
-
-    if (prop) // when TLW close, PG will send wxEVT_PG_SELECTED with NULL prop.
-    {
-        wxLogMessage(wxT("OnPropertySelected %s"), prop->GetLabel());
-    }
-}
-
 void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
 {
     wxPGProperty *prop = event.GetProperty();
@@ -183,35 +167,5 @@ void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
             event.Veto();
         }
     }
-}
-
-void PropertyPane::OnPropertyHighlighted(wxPropertyGridEvent &event)
-{
-    wxLogVerbose(wxT("OnPropertyHighlighted"));
-    event.Skip();
-}
-
-void PropertyPane::OnPropertyRightClick(wxPropertyGridEvent &event)
-{
-    wxLogMessage(wxT("OnPropertyRightClick"));
-    event.Skip();
-}
-
-void PropertyPane::OnPropertyDoubleClick(wxPropertyGridEvent &event)
-{
-    wxLogMessage(wxT("OnPropertyDoubleClick"));
-    event.Skip();
-}
-
-void PropertyPane::OnPropertyItemCollapsed(wxPropertyGridEvent &event)
-{
-    wxLogMessage(wxT("OnPropertyItemCollapsed"));
-    event.Skip();
-}
-
-void PropertyPane::OnPropertyItemExpanded(wxPropertyGridEvent &event)
-{
-    wxLogMessage(wxT("OnPropertyItemExpanded"));
-    event.Skip();
 }
 
