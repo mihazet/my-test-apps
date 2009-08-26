@@ -20,7 +20,8 @@ BEGIN_EVENT_TABLE(UDPProtocol, wxEvtHandler)
 END_EVENT_TABLE()
 
 UDPProtocol::UDPProtocol(bool downloadMode) :
-    _downloadMode(downloadMode)
+    _downloadMode(downloadMode),
+    _needDeallocateSafeBuf(false)
 {
     size_t socketId = 0;
     wxIPV4address local;
@@ -80,16 +81,17 @@ void UDPProtocol::SetDownloadMode(bool downloadMode)
 void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
 {
     wxIPV4address remote;
-    char localBuf[1500];
-    size_t id = event.GetId(), numByte;
+    char unsafeBuf[1500];
+    char *safeBuf;
+    size_t id = event.GetId(), numByte, numByteInSafeBuf;
     wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
     wxDatagramSocket *udpSocket = netAdapter.at(id).udp;
 
     switch (event.GetSocketEvent())
     {
     case wxSOCKET_INPUT:
-        memset(localBuf, 0, sizeof(localBuf));
-        udpSocket->RecvFrom(remote, localBuf, sizeof(localBuf));
+        memset(unsafeBuf, 0, sizeof(unsafeBuf));
+        udpSocket->RecvFrom(remote, unsafeBuf, sizeof(unsafeBuf));
         if (udpSocket->Error())
         {
             wxLogError(_("NetAdapter[%d]: Fail to receive something from UDP socket. Error = %d"),
@@ -100,14 +102,24 @@ void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
             numByte = udpSocket->LastCount();
             wxLogVerbose(_("NetAdapter[%d]: Received %d byte(s) from %s:%d."),
                 id, numByte, remote.IPAddress(), remote.Service());
+
             if (_downloadMode)
-                ProcessDownloadModeProtocol(&localBuf[0], numByte, remote, udpSocket);
+                ProcessDownloadModeProtocol(unsafeBuf, numByte, remote, udpSocket);
             else
             {
+                /* make sure buffer is safe for later process */
+                AllocateSafeBuf(&safeBuf, &numByteInSafeBuf, unsafeBuf, numByte);
+
+                /* add buffer content into history */
                 HistoryDataModel *data = wxGetApp().m_HistoryData;
                 data->AddData(remote.IPAddress(), remote.Service(),
-                    wxString::FromAscii(localBuf, numByte), numByte);
-                ProcessNormalModeProtocol(&localBuf[0], numByte, remote, udpSocket);
+                    wxString::FromAscii(safeBuf, numByteInSafeBuf), numByteInSafeBuf);
+
+                /* process messaga */
+                ProcessNormalModeProtocol(safeBuf, numByteInSafeBuf, remote, udpSocket);
+
+                /* clean up safe buf */
+                DeallocateSafeBuf(safeBuf);
             }
         }
     default:
@@ -178,6 +190,51 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
                 wxLogVerbose(_("Token (%s) didn't handle by handler"), token);
         }
     }
+}
+
+void UDPProtocol::AllocateSafeBuf(char **safe, size_t *safeLen,
+                                  const char *unsafe, size_t unsafeLen)
+{
+    if (IsBufferUnsafe(unsafe, unsafeLen))
+        MakeBufferSafe(safe, safeLen, unsafe, unsafeLen);
+    else
+    {
+        *safe = (char *)unsafe;
+        *safeLen = unsafeLen;
+    }
+}
+
+void UDPProtocol::DeallocateSafeBuf(char *safe)
+{
+    if (_needDeallocateSafeBuf)
+    {
+        delete [] safe;
+        _needDeallocateSafeBuf = false;
+    }
+}
+
+bool UDPProtocol::IsBufferUnsafe(const char *buf, size_t len)
+{
+    for (size_t idx = 0; idx < len; ++idx)
+    {
+        if (((buf[idx] != 0) && (buf[idx] < 0x20)) || (buf[idx] > 0x7F))
+            return true;
+    }
+
+    return false;
+}
+
+void UDPProtocol::MakeBufferSafe(char **safe, size_t *safeLen,
+                                 const char *unsafe, size_t unsafeLen)
+{
+    char *_safe = new char [unsafeLen * 3 + 9];
+    memset(_safe, 0, unsafeLen * 3 + 9);
+    sprintf(_safe, "SafeBuf:");
+    for (size_t idx = 0; idx < unsafeLen; ++idx)
+        sprintf(&_safe[strlen(_safe)], " %02X", (unsafe[idx] & 0xFF));
+    *safe = _safe;
+    *safeLen = unsafeLen * 3 + 9;
+    _needDeallocateSafeBuf = true;
 }
 
 bool UDPProtocol::set_request_handler(const char *buf, size_t len,

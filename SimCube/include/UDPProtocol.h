@@ -31,6 +31,12 @@ private:
         wxIPV4address &peer, wxDatagramSocket *local);
     void ProcessNormalModeProtocol(const char *buf, size_t len,
         wxIPV4address &peer, wxDatagramSocket *local);
+    void AllocateSafeBuf(char **safe, size_t *safeLen,
+        const char *unsafe, size_t unsafeLen);
+    void DeallocateSafeBuf(char *safe);
+    bool IsBufferUnsafe(const char *buf, size_t len);
+    void MakeBufferSafe(char **safe, size_t *safeLen,
+        const char *unsafe, size_t unsafeLen);
     NormalHandler *_normalHandler;
     bool set_request_handler(const char *buf, size_t len,
         wxIPV4address &peer, wxDatagramSocket *local);
@@ -39,6 +45,7 @@ private:
     bool null_handler(const char *buf, size_t len,
         wxIPV4address &peer, wxDatagramSocket *local);
     bool _downloadMode;
+    bool _needDeallocateSafeBuf;
 
     DECLARE_EVENT_TABLE()
 };
