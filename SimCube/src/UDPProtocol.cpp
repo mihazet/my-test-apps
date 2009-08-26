@@ -121,7 +121,51 @@ void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
                                               wxIPV4address &peer,
                                               wxDatagramSocket *local)
 {
+    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3ResultSet set;
+    wxString sqlQuery, name;
+    size_t nameLen;
+    char updaterMessage[36] = 
+    {
+        0x53, 0x51, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00
+    };
 
+    wxASSERT_MSG(db, wxT("Null Database"));
+    wxASSERT_MSG(db->IsOpen(), wxT("Database closed"));
+
+    /* load our board name into */
+    sqlQuery = wxT("SELECT CurrentValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
+    set = db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+    {
+        name = set.GetAsString(0);
+        nameLen = name.length();
+        strcpy(&updaterMessage[16], name.ToAscii());
+    }
+    set.Finalize();
+
+    /* check if match updater unname search */
+    if (!memcmp(updaterMessage, buf, len > 36 ? 36 : len))
+    {
+        updaterMessage[0] += 0x20;
+        updaterMessage[1] += 0x20;
+        local->SendTo(peer, updaterMessage, 16 + nameLen + 1);
+        return;
+    }
+
+    /* check if match updater name search */
+    updaterMessage[11] = nameLen + 1;
+    if (!memcmp(updaterMessage, buf, len > 36 ? 36 : len))
+    {
+        updaterMessage[0] += 0x20;
+        updaterMessage[1] += 0x20;
+        local->SendTo(peer, updaterMessage, 16 + nameLen + 1);
+        return;
+    }
 }
 
 void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
