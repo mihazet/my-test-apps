@@ -8,8 +8,6 @@
 enum
 {
     myID_PROPERTY_GRID = wxID_HIGHEST + 1,
-    myID_IMPORT_BTN,
-    myID_EXPORT_BTN,
     myID_RESET_BTN,
 };
 
@@ -92,13 +90,9 @@ void PropertyPane::CreateControls()
     }
     allSizer->Add(pg, 1, wxALL | wxEXPAND, 5);
 
-    wxButton *imp = new wxButton(this, myID_IMPORT_BTN, _("Import"));
-    wxButton *exp = new wxButton(this, myID_EXPORT_BTN, _("Export"));
-    wxButton *rst = new wxButton(this, myID_EXPORT_BTN, _("Reset"));
+    wxButton *rst = new wxButton(this, myID_RESET_BTN, _("Reset To Default"));
     wxBoxSizer *btnSizer = new wxBoxSizer(wxHORIZONTAL);
-    btnSizer->Add(imp, 0, wxLEFT, 5);
-    btnSizer->Add(exp, 0, wxALL, 0);
-    btnSizer->Add(rst, 0, wxRIGHT, 5);
+    btnSizer->Add(rst, 0, wxALL, 5);
     allSizer->Add(btnSizer);
 
     SetSizer(allSizer);
