@@ -85,7 +85,7 @@ void HistoryPane::CreateControls()
     scroll->SetToolTip(_historyAutoScroll ? _("Autoscroll is enabled") : _("Autoscroll is disabled"));
     ctrlSizer->Add(save, 0, wxALL|wxALIGN_CENTER, 0);
     ctrlSizer->Add(del, 0, wxALL|wxALIGN_CENTER, 0);
-    ctrlSizer->Add(scroll, 0, wxLEFT|wxALIGN_CENTER, 5);
+    ctrlSizer->Add(scroll, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER, 5);
     
     SetSizerAndFit(paneSizer);
 }
