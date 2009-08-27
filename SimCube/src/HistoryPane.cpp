@@ -1,23 +1,26 @@
 #include <wx/wx.h>
 #include <wx/srchctrl.h>
-#include <wx/artprov.h>
 #include <wx/wxsqlite3.h>
 #include "SimCubeApp.h"
 #include "HistoryPane.h"
+
+#include "img/save_16.xpm"
+#include "img/delete_16.xpm"
+#include "img/flag_16.xpm"
 
 enum
 {
     myID_HISTORY_VIEW = wxID_HIGHEST + 1,
     myID_SEARCH_HISTORY,
     myID_BTN_SAVE_HISTORY,
-    myID_BTN_CLEAR_HISTORY,
-    myID_CHKBOX_AUTOSCROLL,
+    myID_BTN_DELETE_HISTORY,
+    myID_BTN_AUTOSCROLL,
 };
 
 BEGIN_EVENT_TABLE(HistoryPane, wxPanel)
     EVT_BUTTON(myID_BTN_SAVE_HISTORY, HistoryPane::OnSaveHistory)
-    EVT_BUTTON(myID_BTN_CLEAR_HISTORY, HistoryPane::OnClearHistory)
-    EVT_CHECKBOX(myID_CHKBOX_AUTOSCROLL, HistoryPane::OnAutoscroll)
+    EVT_BUTTON(myID_BTN_DELETE_HISTORY, HistoryPane::OnDeleteHistory)
+    EVT_BUTTON(myID_BTN_AUTOSCROLL, HistoryPane::OnAutoscroll)
 END_EVENT_TABLE()
 
 HistoryPane::HistoryPane()
@@ -48,6 +51,7 @@ bool HistoryPane::Create(wxWindow *parent, wxWindowID id, const wxPoint &pos,
 void HistoryPane::Init()
 {
     _historyAutoScroll = false;
+    _autoScrollBtnImg = new wxImage(flag_16_xpm);
     /* install an update hook for memory database */
     wxGetApp().GetMemDatabase()->SetUpdateHook(this);
 }
@@ -72,16 +76,16 @@ void HistoryPane::CreateControls()
     search->ShowCancelButton(true);
     ctrlSizer->Add(search, 1, wxALL|wxALIGN_CENTER, 5);
     ctrlSizer->AddStretchSpacer();
-    wxBitmapButton *save = new wxBitmapButton(this,
-        myID_BTN_SAVE_HISTORY,  wxArtProvider::GetBitmap(wxART_FILE_SAVE));
+    wxBitmapButton *save = new wxBitmapButton(this, myID_BTN_SAVE_HISTORY, wxBitmap(save_16_xpm));
     save->SetToolTip(_("Save history"));
-    wxBitmapButton *clear = new wxBitmapButton(this,
-        myID_BTN_CLEAR_HISTORY, wxArtProvider::GetBitmap(wxART_DELETE));
-    clear->SetToolTip(_("Clear history"));
+    wxBitmapButton *del = new wxBitmapButton(this, myID_BTN_DELETE_HISTORY, wxBitmap(delete_16_xpm));
+    del->SetToolTip(_("Delete history"));
+    wxBitmapButton *scroll = new wxBitmapButton(this, myID_BTN_AUTOSCROLL,
+        _historyAutoScroll ? wxBitmap(*_autoScrollBtnImg) : wxBitmap(_autoScrollBtnImg->ConvertToGreyscale()));
+    scroll->SetToolTip(_historyAutoScroll ? _("Autoscroll is enabled") : _("Autoscroll is disabled"));
     ctrlSizer->Add(save, 0, wxALL|wxALIGN_CENTER, 0);
-    ctrlSizer->Add(clear, 0, wxALL|wxALIGN_CENTER, 0);
-    wxCheckBox *scroll = new wxCheckBox(this, myID_CHKBOX_AUTOSCROLL, _("Auto scroll?"));
-    ctrlSizer->Add(scroll, 0, wxALL|wxALIGN_CENTER, 0);
+    ctrlSizer->Add(del, 0, wxALL|wxALIGN_CENTER, 0);
+    ctrlSizer->Add(scroll, 0, wxLEFT|wxALIGN_CENTER, 5);
     
     SetSizerAndFit(paneSizer);
 }
@@ -103,7 +107,7 @@ void HistoryPane::OnSaveHistory(wxCommandEvent &WXUNUSED(event))
 
 }
 
-void HistoryPane::OnClearHistory(wxCommandEvent &WXUNUSED(event))
+void HistoryPane::OnDeleteHistory(wxCommandEvent &WXUNUSED(event))
 {
     wxSQLite3Database *db = wxGetApp().GetMemDatabase();
 
@@ -119,7 +123,10 @@ void HistoryPane::OnClearHistory(wxCommandEvent &WXUNUSED(event))
 
 void HistoryPane::OnAutoscroll(wxCommandEvent &event)
 {
-    _historyAutoScroll = event.IsChecked();
+    wxBitmapButton *btn = wxDynamicCast(event.GetEventObject(), wxBitmapButton);
+    btn->SetToolTip(_historyAutoScroll ? _("Autoscroll is disabled") : _("Autoscroll is enabled"));
+    btn->SetBitmap(_historyAutoScroll ? _autoScrollBtnImg->ConvertToGreyscale() : *_autoScrollBtnImg);
+    _historyAutoScroll = _historyAutoScroll ? false : true;
 }
 
 ////////////////////////////////////////////////////////////////////////////

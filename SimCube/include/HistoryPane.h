@@ -33,11 +33,12 @@ private:
 
     // event handlers
     void OnSaveHistory(wxCommandEvent &event);
-    void OnClearHistory(wxCommandEvent &event);
+    void OnDeleteHistory(wxCommandEvent &event);
     void OnAutoscroll(wxCommandEvent &event);
 
     wxDataViewCtrl *_historyView;
     bool _historyAutoScroll;
+    wxImage *_autoScrollBtnImg;
 
     DECLARE_EVENT_TABLE()
 };
