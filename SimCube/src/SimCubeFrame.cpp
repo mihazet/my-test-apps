@@ -210,10 +210,10 @@ void SimCubeFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
         if (screen.y <= 768)
             vRatio = 0.90f;
 
-        _w = screen.x * hRatio;
-        _h = screen.y * vRatio;
-        _x = (screen.x - _w) * 0.5;
-        _y = (screen.y - _h) * 0.5;
+        _w = (int)(screen.x * hRatio);
+        _h = (int)(screen.y * vRatio);
+        _x = (int)((screen.x - _w) * 0.5);
+        _y = (int)((screen.y - _h) * 0.5);
     }
 
     *x = _x;
