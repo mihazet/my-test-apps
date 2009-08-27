@@ -253,7 +253,7 @@ bool UDPProtocol::IsBufferUnsafe(const char *buf, size_t len)
 {
     for (size_t idx = 0; idx < len; ++idx)
     {
-        if (((buf[idx] != 0) && (buf[idx] < 0x20)) || (buf[idx] > 0x7F))
+        if (((buf[idx] > 0) && (buf[idx] < 0x20)) || (buf[idx] < 0))
             return true;
     }
 
