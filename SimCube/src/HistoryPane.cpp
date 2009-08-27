@@ -74,8 +74,10 @@ void HistoryPane::CreateControls()
     ctrlSizer->AddStretchSpacer();
     wxBitmapButton *save = new wxBitmapButton(this,
         myID_BTN_SAVE_HISTORY,  wxArtProvider::GetBitmap(wxART_FILE_SAVE));
+    save->SetToolTip(_("Save history"));
     wxBitmapButton *clear = new wxBitmapButton(this,
         myID_BTN_CLEAR_HISTORY, wxArtProvider::GetBitmap(wxART_DELETE));
+    clear->SetToolTip(_("Clear history"));
     ctrlSizer->Add(save, 0, wxALL|wxALIGN_CENTER, 0);
     ctrlSizer->Add(clear, 0, wxALL|wxALIGN_CENTER, 0);
     wxCheckBox *scroll = new wxCheckBox(this, myID_CHKBOX_AUTOSCROLL, _("Auto scroll?"));
