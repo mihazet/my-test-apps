@@ -103,7 +103,16 @@ void HistoryPane::OnSaveHistory(wxCommandEvent &WXUNUSED(event))
 
 void HistoryPane::OnClearHistory(wxCommandEvent &WXUNUSED(event))
 {
+    wxSQLite3Database *db = wxGetApp().GetMemDatabase();
 
+    if (db && db->IsOpen())
+    {
+        if (0 != db->ExecuteUpdate(wxT("DELETE FROM HistoryTbl")))
+        {
+            HistoryDataModel *data = wxGetApp().m_HistoryData;
+            data->Reset(0);
+        }
+    }
 }
 
 void HistoryPane::OnAutoscroll(wxCommandEvent &event)
