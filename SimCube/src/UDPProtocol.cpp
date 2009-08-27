@@ -125,7 +125,7 @@ void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
     wxSQLite3ResultSet set;
     wxString sqlQuery, name;
     size_t nameLen;
-    char updaterMessage[36] = 
+    unsigned char updaterMessage[36] = 
     {
         0x53, 0x51, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -144,7 +144,7 @@ void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
     {
         name = set.GetAsString(0);
         nameLen = name.length();
-        strcpy(&updaterMessage[16], name.ToAscii());
+        strcpy((char *)&updaterMessage[16], name.ToAscii());
     }
     set.Finalize();
 
