@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SimCube\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 19:08+0800\n"
+"POT-Creation-Date: 2009-08-27 20:12+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: YH.YANG <yh.yang@delta.com.tw>\n"
 "Language-Team:  <yhuiyang@gmail.com>\n"
@@ -14,271 +14,272 @@ msgstr ""
 "X-Poedit-SourceCharset: iso-8859-1\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ../../src\n"
+"X-Poedit-SearchPath-1: ../../include\n"
 
 #: ../../src/HistoryPane.cpp:63
 msgid "Timestamp"
-msgstr ""
+msgstr "時間戳記"
 
 #: ../../src/HistoryPane.cpp:64
 #: ../../src/PeerPane.cpp:42
 msgid "IP Address"
-msgstr ""
+msgstr "IP 位址"
 
 #: ../../src/HistoryPane.cpp:65
 #: ../../src/PeerPane.cpp:43
 msgid "Port"
-msgstr ""
+msgstr "埠口"
 
 #: ../../src/HistoryPane.cpp:66
 msgid "Length"
-msgstr ""
+msgstr "長度"
 
 #: ../../src/HistoryPane.cpp:67
 msgid "Message"
-msgstr ""
+msgstr "訊息內容"
 
 #: ../../src/HistoryPane.cpp:81
 msgid "Auto scroll?"
-msgstr ""
+msgstr "自動捲動?"
 
 #: ../../src/HistoryPane.cpp:186
 msgid "Fail to insert new value into history table."
-msgstr ""
+msgstr "無法將新的資料插入歷史紀錄表格中！"
 
 #: ../../src/PeerPane.cpp:44
 msgid "Established Time"
-msgstr ""
+msgstr "連結建立時間"
 
 #: ../../src/PeerPane.cpp:45
 msgid "Monitored"
-msgstr ""
+msgstr "啟用監控"
 
 #: ../../src/PropertyPane.cpp:96
 msgid "Reset To Default"
-msgstr ""
+msgstr "回復到預設值"
 
 #: ../../src/PropertyPane.cpp:166
 #, c-format
 msgid "Input number out of range! Max = %s, Min = %s"
-msgstr ""
+msgstr "輸入數值的值域不正確！最大值 = %s, 最小值 = %s。"
 
 #: ../../src/PropertyPane.cpp:190
 #, c-format
 msgid "Failed to update property %s"
-msgstr ""
+msgstr "無法更新屬性 %s"
 
 #: ../../src/SimCubeApp.cpp:89
 msgid "SimCube is already running, this instance will be terminated!"
-msgstr ""
+msgstr "已經有另外一個 SimCube 正在執行中，目前的這個 SimCube 將會中止執行！"
 
 #: ../../src/SimCubeApp.cpp:98
 msgid "No network adapter is availabled, this application will be terminated!"
-msgstr ""
+msgstr "無可用的網路配接卡，本程式即將關閉！"
 
 #: ../../src/SimCubeApp.cpp:104
 msgid "Failed to detect network adapters information, this application will be terminated!"
-msgstr ""
+msgstr "偵測網路配接卡資訊時發生錯誤，本程式即將關閉！"
 
 #: ../../src/SimCubeApp.cpp:116
 msgid "Please insert USB dongle and restart application!"
-msgstr ""
+msgstr "請插入 USB 鎖並重新啟動本程式！"
 
 #: ../../src/SimCubeApp.cpp:163
 msgid "USB dongle is removed, application will be terminated now!"
-msgstr ""
+msgstr "USB 鎖已移除，本程式即將關閉！"
 
 #: ../../src/SimCubeApp.cpp:163
 msgid "Error"
-msgstr ""
+msgstr "錯誤"
 
 #: ../../src/SimCubeApp.cpp:210
 #: ../../src/SimCubeApp.cpp:221
 msgid "Fail to allocate memory space for GetAdaptersInfo."
-msgstr ""
+msgstr "無法為 API GetAdaptersInfo() 配置所需記憶體。"
 
 #: ../../src/SimCubeApp.cpp:227
 #, c-format
 msgid "GetAdaptersInfo failed with error code = %d"
-msgstr ""
+msgstr "API GetAdaptersInfo() 失敗，錯誤碼 = %d"
 
 #: ../../src/SimCubeFrame.cpp:91
 msgid "Property Pane"
-msgstr ""
+msgstr "屬性值面版"
 
 #: ../../src/SimCubeFrame.cpp:92
 msgid "Show or hide the property pane."
-msgstr ""
+msgstr "顯示或隱藏屬性質面版。"
 
 #: ../../src/SimCubeFrame.cpp:93
 msgid "Trap Pane"
-msgstr ""
+msgstr "主動回應面版"
 
 #: ../../src/SimCubeFrame.cpp:94
 msgid "Show or hid the trap pane."
-msgstr ""
+msgstr "顯示或隱藏主動回應面版。"
 
 #: ../../src/SimCubeFrame.cpp:95
 msgid "History Pane"
-msgstr ""
+msgstr "歷史記錄面版"
 
 #: ../../src/SimCubeFrame.cpp:96
 msgid "Show or hide the history pane."
-msgstr ""
+msgstr "顯示或隱藏歷史記錄面版。"
 
 #: ../../src/SimCubeFrame.cpp:97
 msgid "Remote Pane"
-msgstr ""
+msgstr "遠端面版"
 
 #: ../../src/SimCubeFrame.cpp:98
 msgid "Show or hide the remote peer pane."
-msgstr ""
+msgstr "顯示或隱藏遠端面版。"
 
 #: ../../src/SimCubeFrame.cpp:99
 msgid "Configuration Pane"
-msgstr ""
+msgstr "軟體設定面版"
 
 #: ../../src/SimCubeFrame.cpp:100
 msgid "Show or hide the configuration pane."
-msgstr ""
+msgstr "顯示或隱藏軟體設定面版。"
 
 #: ../../src/SimCubeFrame.cpp:101
 msgid "Download Pane"
-msgstr ""
+msgstr "下載區面版"
 
 #: ../../src/SimCubeFrame.cpp:102
 msgid "Show or hide the download pane."
-msgstr ""
+msgstr "顯示或隱藏下載區面版。"
 
 #: ../../src/SimCubeFrame.cpp:103
 msgid "Log Widnow"
-msgstr ""
+msgstr "紀錄視窗"
 
 #: ../../src/SimCubeFrame.cpp:104
 msgid "Show or hide the logging window."
-msgstr ""
+msgstr "顯示或隱藏紀錄視窗。"
 
 #: ../../src/SimCubeFrame.cpp:106
 msgid "Reset all panes"
-msgstr ""
+msgstr "重置所有面版"
 
 #: ../../src/SimCubeFrame.cpp:107
 msgid "Reset all panes to its default position and size."
-msgstr ""
+msgstr "重置所有面版至預設位置與尺寸。"
 
 #: ../../src/SimCubeFrame.cpp:109
 msgid "Help file"
-msgstr ""
+msgstr "幫助檔案"
 
 #: ../../src/SimCubeFrame.cpp:110
 msgid "Show help file."
-msgstr ""
+msgstr "顯示幫助檔案。"
 
 #: ../../src/SimCubeFrame.cpp:114
 msgid "File"
-msgstr ""
+msgstr "檔案"
 
 #: ../../src/SimCubeFrame.cpp:115
 msgid "View"
-msgstr ""
+msgstr "檢視"
 
 #: ../../src/SimCubeFrame.cpp:116
 msgid "Help"
-msgstr ""
+msgstr "幫助"
 
 #: ../../src/SimCubeFrame.cpp:127
 msgid "Log Output"
-msgstr ""
+msgstr "紀錄視窗"
 
 #: ../../src/SimCubeFrame.cpp:131
 msgid "Supported Property"
-msgstr ""
+msgstr "支援的屬性值"
 
 #: ../../src/SimCubeFrame.cpp:136
 msgid "Transaction History"
-msgstr ""
+msgstr "交易歷史紀錄"
 
 #: ../../src/SimCubeFrame.cpp:141
 msgid "SimCube Configuration"
-msgstr ""
+msgstr "SimCube 軟體設定"
 
 #: ../../src/SimCubeFrame.cpp:146
 msgid "Send Trap Message"
-msgstr ""
+msgstr "傳送主動回應訊息"
 
 #: ../../src/SimCubeFrame.cpp:151
 msgid "Remote Status"
-msgstr ""
+msgstr "遠端連線狀態"
 
 #: ../../src/UDPProtocol.cpp:89
 #, c-format
 msgid "NetAdapter[%d]: Fail to receive something from UDP socket. Error = %d"
-msgstr ""
+msgstr "網路配接卡[%d]：由 UDP socket 接收時發生錯誤。錯誤碼 = %d"
 
 #: ../../src/UDPProtocol.cpp:95
 #, c-format
 msgid "NetAdapter[%d]: Received %d byte(s) from %s:%d."
-msgstr ""
+msgstr "網路配接卡[%d]: %d 位元組資料來自 %s:%d。"
 
 #: ../../src/UDPProtocol.cpp:208
 #, c-format
 msgid "No keyword in token (%s)"
-msgstr ""
+msgstr "訊息(%s)中缺少網路協定關鍵字元"
 
 #: ../../src/UDPProtocol.cpp:215
 #, c-format
 msgid "Multiple keywords in token (%s)"
-msgstr ""
+msgstr "訊息(%s)中存在過多的網路協定關鍵字元"
 
 #: ../../src/UDPProtocol.cpp:226
 #, c-format
 msgid "Token (%s) didn't handle by handler"
-msgstr ""
+msgstr "訊息(%s)未被處理函式處理"
 
 #: ../../src/UDPProtocol.cpp:375
 #, c-format
 msgid "This may not be an error. Set Request (%s) is not handled by database update."
-msgstr ""
+msgstr "這未必是個錯誤。設定要求(%s)並未更新資料庫。"
 
 #: ../../src/UDPProtocol.cpp:429
 #, c-format
 msgid "Fail to send check board config response back to peer. (error = %d)"
-msgstr ""
+msgstr "無法傳回確認單板設定回應至遠端。(錯誤碼 = %d)"
 
 #: ../../src/UDPProtocol.cpp:448
 #, c-format
 msgid "Fail to send check connection response back to peer. (error = %d)"
-msgstr ""
+msgstr "無法傳回確認連結狀態回應至遠端。(錯誤碼 = %d)"
 
 #: ../../src/UDPProtocol.cpp:488
 #, c-format
 msgid "Fail to send connect response back to peer. (error = %d)"
-msgstr ""
+msgstr "無法傳回連結狀態回應至遠端。(錯誤碼 = %d)"
 
 #: ../../src/UDPProtocol.cpp:495
 msgid "Empty BoardName in CONNECT get request message"
-msgstr ""
+msgstr "在建立連結的要求回應中，版名是空字元。"
 
 #: ../../src/UDPProtocol.cpp:513
 #, c-format
 msgid "Fail to send discover response back to peer. (error = %d)"
-msgstr ""
+msgstr "無法傳回偵測回應至遠端。(錯誤碼 = %d)"
 
 #: ../../src/UDPProtocol.cpp:536
 #, c-format
 msgid "Fail to send monitor response back to peer. (error = %d)"
-msgstr ""
+msgstr "無法傳回啟用監控回應至遠端。(錯誤碼 = %d)"
 
 #: ../../src/UDPProtocol.cpp:566
 #, c-format
 msgid "Fail to send response (%s) back to peer. (error = %d)"
-msgstr ""
+msgstr "無法回應訊息(%s)至遠端。(錯誤碼 = %d)"
 
 #: ../../src/wxsqlite3.cpp:3340
 msgid "Regular expression invalid: '"
-msgstr ""
+msgstr "Regular expression invalid: '"
 
 #: ../../src/wxsqlite3.cpp:3345
 #, c-format
 msgid "REGEXP called with wrong number of arguments: %d instead of 2."
-msgstr ""
+msgstr "REGEXP called with wrong number of arguments: %d instead of 2."
 
