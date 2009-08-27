@@ -146,6 +146,8 @@ void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
         nameLen = name.length();
         strcpy((char *)&updaterMessage[16], name.ToAscii());
     }
+    else
+        nameLen = (size_t)-1;
     set.Finalize();
 
     /* check if match updater unname search */
