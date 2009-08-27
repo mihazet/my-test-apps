@@ -6,8 +6,7 @@
 #include <wx/dataview.h>
 
 class HistoryDataModel;
-
-class HistoryPane : public wxPanel
+class HistoryPane : public wxPanel, public wxSQLite3Hook
 {
 public:
     // ctor
@@ -29,12 +28,16 @@ private:
     void Init();
     void CreateControls();
 
+    virtual void UpdateCallback(wxUpdateType type, const wxString &database,
+        const wxString &table, wxLongLong rowid);
+
     // event handlers
     void OnSaveHistory(wxCommandEvent &event);
     void OnClearHistory(wxCommandEvent &event);
     void OnAutoscroll(wxCommandEvent &event);
 
-    bool _autoScroll;
+    wxDataViewCtrl *_historyView;
+    bool _historyAutoScroll;
 
     DECLARE_EVENT_TABLE()
 };
