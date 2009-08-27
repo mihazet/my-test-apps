@@ -29,7 +29,14 @@ private:
     void Init();
     void CreateControls();
 
-    wxDataViewCtrl *_historyView;
+    // event handlers
+    void OnSaveHistory(wxCommandEvent &event);
+    void OnClearHistory(wxCommandEvent &event);
+    void OnAutoscroll(wxCommandEvent &event);
+
+    bool _autoScroll;
+
+    DECLARE_EVENT_TABLE()
 };
 
 class HistoryDataModel : public wxDataViewVirtualListModel

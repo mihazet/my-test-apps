@@ -1,7 +1,24 @@
 #include <wx/wx.h>
+#include <wx/srchctrl.h>
+#include <wx/artprov.h>
 #include <wx/wxsqlite3.h>
 #include "SimCubeApp.h"
 #include "HistoryPane.h"
+
+enum
+{
+    myID_HISTORY_VIEW = wxID_HIGHEST + 1,
+    myID_SEARCH_HISTORY,
+    myID_BTN_SAVE_HISTORY,
+    myID_BTN_CLEAR_HISTORY,
+    myID_CHKBOX_AUTOSCROLL,
+};
+
+BEGIN_EVENT_TABLE(HistoryPane, wxPanel)
+    EVT_BUTTON(myID_BTN_SAVE_HISTORY, HistoryPane::OnSaveHistory)
+    EVT_BUTTON(myID_BTN_CLEAR_HISTORY, HistoryPane::OnClearHistory)
+    EVT_CHECKBOX(myID_CHKBOX_AUTOSCROLL, HistoryPane::OnAutoscroll)
+END_EVENT_TABLE()
 
 HistoryPane::HistoryPane()
 {
@@ -31,21 +48,54 @@ bool HistoryPane::Create(wxWindow *parent, wxWindowID id, const wxPoint &pos,
 
 void HistoryPane::Init()
 {
+    _autoScroll = false;
 }
 
 void HistoryPane::CreateControls()
 {
     wxSizer *paneSizer = new wxBoxSizer(wxVERTICAL);
-    _historyView = new wxDataViewCtrl(this, wxID_ANY);
-    paneSizer->Add(_historyView, 1, wxALL | wxEXPAND, 5);
-    _historyView->AssociateModel(wxGetApp().m_HistoryData);
-    _historyView->AppendTextColumn(wxT("#"), 0, wxDATAVIEW_CELL_INERT, 30, wxALIGN_CENTER);
-    _historyView->AppendTextColumn(_("Timestamp"), 1, wxDATAVIEW_CELL_INERT, 125);
-    _historyView->AppendTextColumn(_("IP Address"), 2, wxDATAVIEW_CELL_INERT, 95);
-    _historyView->AppendTextColumn(_("Port"), 3, wxDATAVIEW_CELL_INERT, 45, wxALIGN_CENTER);
-    _historyView->AppendTextColumn(_("Length"), 4, wxDATAVIEW_CELL_INERT, 55, wxALIGN_CENTER);
-    _historyView->AppendTextColumn(_("Message"), 5, wxDATAVIEW_CELL_INERT, 360);
+    /* history data view */
+    wxDataViewCtrl *historyView = new wxDataViewCtrl(this, myID_HISTORY_VIEW);
+    paneSizer->Add(historyView, 1, wxALL | wxEXPAND, 5);
+    historyView->AssociateModel(wxGetApp().m_HistoryData);
+    historyView->AppendTextColumn(wxT("#"), 0, wxDATAVIEW_CELL_INERT, 30, wxALIGN_CENTER);
+    historyView->AppendTextColumn(_("Timestamp"), 1, wxDATAVIEW_CELL_INERT, 125);
+    historyView->AppendTextColumn(_("IP Address"), 2, wxDATAVIEW_CELL_INERT, 95);
+    historyView->AppendTextColumn(_("Port"), 3, wxDATAVIEW_CELL_INERT, 45, wxALIGN_CENTER);
+    historyView->AppendTextColumn(_("Length"), 4, wxDATAVIEW_CELL_INERT, 55, wxALIGN_CENTER);
+    historyView->AppendTextColumn(_("Message"), 5, wxDATAVIEW_CELL_INERT, 360);
+    /* history ctrl */
+    wxSizer *ctrlSizer = new wxBoxSizer(wxHORIZONTAL);
+    paneSizer->Add(ctrlSizer, 0, wxALL | wxEXPAND, 0);
+    wxSearchCtrl *search = new wxSearchCtrl(this, myID_SEARCH_HISTORY);
+    search->ShowCancelButton(true);
+    ctrlSizer->Add(search, 0, wxALL, 2);
+    ctrlSizer->AddStretchSpacer();
+    wxBitmapButton *save = new wxBitmapButton(this,
+        myID_BTN_SAVE_HISTORY,  wxArtProvider::GetBitmap(wxART_FILE_SAVE));
+    wxBitmapButton *clear = new wxBitmapButton(this,
+        myID_BTN_CLEAR_HISTORY, wxArtProvider::GetBitmap(wxART_DELETE));
+    ctrlSizer->Add(save, 0, wxALL, 0);
+    ctrlSizer->Add(clear, 0, wxALL, 0);
+    wxCheckBox *scroll = new wxCheckBox(this, myID_CHKBOX_AUTOSCROLL, _("Auto scroll?"));
+    ctrlSizer->Add(scroll, 0, wxALL|wxALIGN_CENTER, 0);
+    
     SetSizerAndFit(paneSizer);
+}
+
+void HistoryPane::OnSaveHistory(wxCommandEvent &WXUNUSED(event))
+{
+
+}
+
+void HistoryPane::OnClearHistory(wxCommandEvent &WXUNUSED(event))
+{
+
+}
+
+void HistoryPane::OnAutoscroll(wxCommandEvent &event)
+{
+    _autoScroll = event.IsChecked();
 }
 
 ////////////////////////////////////////////////////////////////////////////
