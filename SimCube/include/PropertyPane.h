@@ -32,9 +32,11 @@ private:
 
     // event handlers
     void OnPropertyChanging(wxPropertyGridEvent &event);
+    void OnPropertyChanged(wxPropertyGridEvent &event);
 
     wxSQLite3Database *_db;
     wxPropertyGrid *_pg;
+    bool _pgUpdatedFromUI;
 
     DECLARE_EVENT_TABLE()
 };

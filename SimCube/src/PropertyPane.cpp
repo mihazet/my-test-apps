@@ -13,6 +13,7 @@ enum
 
 BEGIN_EVENT_TABLE(PropertyPane, wxPanel)
     EVT_PG_CHANGING(myID_PROPERTY_GRID, PropertyPane::OnPropertyChanging)
+    EVT_PG_CHANGED(myID_PROPERTY_GRID, PropertyPane::OnPropertyChanged)
 END_EVENT_TABLE()
 
 PropertyPane::PropertyPane()
@@ -44,6 +45,7 @@ bool PropertyPane::Create(wxWindow *parent, wxWindowID id,
 void PropertyPane::Init()
 {
     _db = wxGetApp().GetMainDatabase();
+    _pgUpdatedFromUI = false;
     _db->SetUpdateHook(this);
 }
 
@@ -103,7 +105,7 @@ void PropertyPane::UpdateCallback(wxUpdateType type, const wxString &database,
                                   const wxString &table, wxLongLong rowid)
 {
     if ((type == SQLITE_UPDATE) && (database == wxT("main"))
-        && (table == wxT("PropTbl")))
+        && (table == wxT("PropTbl")) && (_pgUpdatedFromUI == false))
     {
         wxString sqlQuery, name, value;
         wxSQLite3ResultSet set;
@@ -177,6 +179,7 @@ void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
         }
 
         /* update database record */
+        _pgUpdatedFromUI = true;
         sqlUpdate << wxT("UPDATE PropTbl SET CurrentValue = '")
             << prop->ValueToString(value)
             << wxT("' WHERE DisplayedName = '")
@@ -188,5 +191,10 @@ void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
             event.Veto();
         }
     }
+}
+
+void PropertyPane::OnPropertyChanged(wxPropertyGridEvent &WXUNUSED(event))
+{
+    _pgUpdatedFromUI = false;
 }
 
