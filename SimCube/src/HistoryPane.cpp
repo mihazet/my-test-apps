@@ -70,14 +70,14 @@ void HistoryPane::CreateControls()
     paneSizer->Add(ctrlSizer, 0, wxALL | wxEXPAND, 0);
     wxSearchCtrl *search = new wxSearchCtrl(this, myID_SEARCH_HISTORY);
     search->ShowCancelButton(true);
-    ctrlSizer->Add(search, 0, wxALL, 2);
+    ctrlSizer->Add(search, 1, wxALL|wxALIGN_CENTER, 5);
     ctrlSizer->AddStretchSpacer();
     wxBitmapButton *save = new wxBitmapButton(this,
         myID_BTN_SAVE_HISTORY,  wxArtProvider::GetBitmap(wxART_FILE_SAVE));
     wxBitmapButton *clear = new wxBitmapButton(this,
         myID_BTN_CLEAR_HISTORY, wxArtProvider::GetBitmap(wxART_DELETE));
-    ctrlSizer->Add(save, 0, wxALL, 0);
-    ctrlSizer->Add(clear, 0, wxALL, 0);
+    ctrlSizer->Add(save, 0, wxALL|wxALIGN_CENTER, 0);
+    ctrlSizer->Add(clear, 0, wxALL|wxALIGN_CENTER, 0);
     wxCheckBox *scroll = new wxCheckBox(this, myID_CHKBOX_AUTOSCROLL, _("Auto scroll?"));
     ctrlSizer->Add(scroll, 0, wxALL|wxALIGN_CENTER, 0);
     
