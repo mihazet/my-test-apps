@@ -26,8 +26,7 @@ enum
     ID_VIEW_DOWNLOAD_PANE,
     ID_VIEW_LOG_PANE,
     ID_VIEW_RESET_LAYOUT,
-    ID_OPMODE_NORMAL,
-    ID_OPMODE_SERVICE,
+    ID_HELP_DOC,
 };
 
 BEGIN_EVENT_TABLE(SimCubeFrame, wxFrame)
@@ -88,41 +87,32 @@ void SimCubeFrame::CreateControls()
     /* menu bar */
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_EXIT);
-    wxMenu *normal_menu = new wxMenu;
-    normal_menu->AppendCheckItem(ID_VIEW_PROPERTY_PANE, _("Property Pane"),
-        _("Show or hide the property pane."));
-    normal_menu->AppendCheckItem(ID_VIEW_TRAP_PANE, _("Trap Pane"),
-        _("Show or hid the trap pane."));
-    normal_menu->AppendCheckItem(ID_VIEW_HISTORY_PANE, _("History Pane"),
-        _("Show or hide the history pane."));
-    normal_menu->AppendCheckItem(ID_VIEW_PEER_PANE, _("Remote Pane"),
-        _("Show or hide the remote peer pane."));
-    normal_menu->AppendCheckItem(ID_VIEW_CONFIG_PANE, _("Configuration Pane"),
-        _("Show or hide the configuration pane."));
-    wxMenu *service_menu = new wxMenu;
-    service_menu->AppendCheckItem(ID_VIEW_DOWNLOAD_PANE, _("Download Pane"),
-        _("Show or hide the download pane."));
     wxMenu *view_menu = new wxMenu;
-    view_menu->AppendSubMenu(normal_menu, _("Normal Panes"));
-    view_menu->AppendSubMenu(service_menu, _("Service Panes"));
-    view_menu->AppendSeparator();
+    view_menu->AppendCheckItem(ID_VIEW_PROPERTY_PANE, _("Property Pane"),
+        _("Show or hide the property pane."));
+    view_menu->AppendCheckItem(ID_VIEW_TRAP_PANE, _("Trap Pane"),
+        _("Show or hid the trap pane."));
+    view_menu->AppendCheckItem(ID_VIEW_HISTORY_PANE, _("History Pane"),
+        _("Show or hide the history pane."));
+    view_menu->AppendCheckItem(ID_VIEW_PEER_PANE, _("Remote Pane"),
+        _("Show or hide the remote peer pane."));
+    view_menu->AppendCheckItem(ID_VIEW_CONFIG_PANE, _("Configuration Pane"),
+        _("Show or hide the configuration pane."));
+    view_menu->AppendCheckItem(ID_VIEW_DOWNLOAD_PANE, _("Download Pane"),
+        _("Show or hide the download pane."));
     view_menu->AppendCheckItem(ID_VIEW_LOG_PANE, _("Log Widnow"),
         _("Show or hide the logging window."));
     view_menu->AppendSeparator();
     view_menu->Append(ID_VIEW_RESET_LAYOUT, _("Reset all panes"),
         _("Reset all panes to its default position and size."));
-    wxMenu *operation_menu = new wxMenu;
-    operation_menu->AppendRadioItem(ID_OPMODE_NORMAL, _("Normal Mode"),
-        _("Change the SimCube to work in normal mode."));
-    operation_menu->AppendRadioItem(ID_OPMODE_SERVICE, _("Service Mode"),
-        _("Change the SimCube to work in service mode."));
     wxMenu *help_menu = new wxMenu;
+    help_menu->Append(ID_HELP_DOC, _("Help file"),
+        _("Show help file."));
     help_menu->Append(wxID_ABOUT);
 
     wxMenuBar *mb = new wxMenuBar;
     mb->Append(file_menu, _("File"));
     mb->Append(view_menu, _("View"));
-    mb->Append(operation_menu, _("Operation"));
     mb->Append(help_menu, _("Help"));
     SetMenuBar(mb);
 
