@@ -5,7 +5,7 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/wxsqlite3.h>
 
-class PropertyPane : public wxPanel
+class PropertyPane : public wxPanel, public wxSQLite3Hook
 {
 public:
     // ctor
@@ -27,10 +27,14 @@ private:
     void Init();
     void CreateControls();
 
+    virtual void UpdateCallback(wxUpdateType, const wxString &,
+        const wxString &, wxLongLong);
+
     // event handlers
     void OnPropertyChanging(wxPropertyGridEvent &event);
 
     wxSQLite3Database *_db;
+    wxPropertyGrid *_pg;
 
     DECLARE_EVENT_TABLE()
 };

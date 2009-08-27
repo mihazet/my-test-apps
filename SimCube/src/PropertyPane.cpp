@@ -44,13 +44,14 @@ bool PropertyPane::Create(wxWindow *parent, wxWindowID id,
 void PropertyPane::Init()
 {
     _db = wxGetApp().GetMainDatabase();
+    _db->SetUpdateHook(this);
 }
 
 void PropertyPane::CreateControls()
 {
     wxString name, type, format, value;
     wxBoxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
-    wxPropertyGrid *pg = new wxPropertyGrid(this, myID_PROPERTY_GRID,
+    _pg = new wxPropertyGrid(this, myID_PROPERTY_GRID,
         wxDefaultPosition, wxSize(250, 400),
         wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED|wxPG_TOOLTIPS);
     if (_db && _db->IsOpen())
@@ -64,7 +65,7 @@ void PropertyPane::CreateControls()
             if (type == wxT("Numeric"))
             {
                 long propVal;
-                pg->Append(new wxIntProperty(name, wxPG_LABEL,
+                _pg->Append(new wxIntProperty(name, wxPG_LABEL,
                     value.ToLong(&propVal) ? propVal : 0));
             }
             else if (type == wxT("List"))
@@ -76,19 +77,19 @@ void PropertyPane::CreateControls()
                     aryStr.Add(tokenizer.GetNextToken());
                 wxEnumProperty *list = new wxEnumProperty(name, wxPG_LABEL, aryStr);
                 list->SetValue(value);
-                pg->Append(list);
+                _pg->Append(list);
             }
             else if (type == wxT("String"))
             {
                 //int length = set.GetInt(wxT("PropertyFormat"));
                 wxStringProperty *str = new wxStringProperty(name, wxPG_LABEL, value);
                 //str->SetMaxLength(length);
-                pg->Append(str);
+                _pg->Append(str);
             }
         }
         set.Finalize();
     }
-    allSizer->Add(pg, 1, wxALL | wxEXPAND, 5);
+    allSizer->Add(_pg, 1, wxALL | wxEXPAND, 5);
 
     wxButton *rst = new wxButton(this, myID_RESET_BTN, _("Reset To Default"));
     wxBoxSizer *btnSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -96,6 +97,32 @@ void PropertyPane::CreateControls()
     allSizer->Add(btnSizer);
 
     SetSizer(allSizer);
+}
+
+void PropertyPane::UpdateCallback(wxUpdateType type, const wxString &database,
+                                  const wxString &table, wxLongLong rowid)
+{
+    if ((type == SQLITE_UPDATE) && (database == wxT("main"))
+        && (table == wxT("PropTbl")))
+    {
+        wxString sqlQuery, name, value;
+        wxSQLite3ResultSet set;
+
+        /* check which property to be updated to what value */
+        sqlQuery << wxT("SELECT DisplayedName, CurrentValue FROM PropTbl LIMIT 1 OFFSET ")
+            << (rowid - 1).ToString();
+        set = _db->ExecuteQuery(sqlQuery);
+        if (set.NextRow())
+        {
+            name = set.GetAsString(0);
+            value = set.GetAsString(1);
+        }
+        set.Finalize();
+
+        /* update the property grid ui to reflect database update */
+        wxPGProperty *prop = _pg->GetProperty(name);
+        prop->SetValueFromString(value);
+    }
 }
 
 void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
