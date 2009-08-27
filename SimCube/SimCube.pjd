@@ -229,7 +229,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% -lwxmsw29ud_propgrid -lsqlite3"</string>
+          <string name="Libraries">"-lwxmsw29ud_propgrid %AUTO% -lsqlite3 -liphlpapi"</string>
           <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource"</string>
@@ -291,7 +291,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% -lwxmsw29u_propgrid -lsqlite3"</string>
+          <string name="Libraries">"-lwxmsw29u_propgrid %AUTO% -lsqlite3 -liphlpapi"</string>
           <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource"</string>
