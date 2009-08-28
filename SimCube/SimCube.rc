@@ -1,6 +1,12 @@
+//
+// To better understand how to edit windows resource script(.rc) by hand, see
+// http://msdn.microsoft.com/library/default.asp?url=/library/en-us/tools/tools/about_resource_files.asp
+//
+
 #ifndef RC_INVOKED
 
 #else
+#include <windows.h>
 // note that the icon used by the Explorer (i.e. the programs icon) is the
 // first icon is the executable adn the icon are sorted both by their order
 // (Win9x) and by alphabetically (!) (NT). so put this icon first and give it
@@ -9,6 +15,43 @@ aaaaaaaa ICON "SimCube.ico"
 
 // this icon is used with wxFrame::SetIcon()
 SimCube ICON "SimCube.ico"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     0,10,2,167
+PRODUCTVERSION  0,10,0,0
+FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
+FILEFLAGS       (VS_FF_PRERELEASE|VS_FF_DEBUG)
+FILEOS          VOS_NT_WINDOWS32
+FILETYPE        VFT_APP
+FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",      "YH Yang"
+            VALUE "FileDescription",  "Mimic VideoWall Cube to talk to DVSnet"
+            VALUE "FileVersion",      "0.10.2.167"
+            VALUE "InternalName",     "SimCube"
+            VALUE "LegalCopyright",   "yhuiyang@gmail.com"
+            //VALUE "LegalTrademarks",  "yhuiyang@gmail.com"
+            VALUE "OriginalFilename", "SimCube"
+            VALUE "ProductName",      "SimCube"
+            VALUE "ProductVersion",   "0.10.0.0"
+        END
+
+        BLOCK "VarFileInfo"
+        BEGIN
+            /* The following line should only be modified for localized versions.     */
+            /* It consists of any number of WORD,WORD pairs, with each pair           */
+            /* describing a language,codepage combination supported by the file.      */
+            /*                                                                        */
+            /* For example, a file might have values "0x409,1252" indicating that it  */
+            /* supports English language (0x409) in the Windows ANSI codepage (1252). */
+            VALUE "Translation", 0x409, 1252
+        END
+    END
+END
 
 // set this to 1 if you don't want to use manifest resource (manifest resource
 // is needed to enable visual styles on Window XP - see wx docs/msw/winxp.txt
