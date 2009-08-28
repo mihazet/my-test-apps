@@ -299,7 +299,6 @@ bool UDPProtocol::set_request_handler(const char *buf, size_t len,
         || name.IsSameAs(wxT("CHECK_CONNECTION"))
         || name.IsSameAs(wxT("CONNECT"))
         || name.IsSameAs(wxT("DISCOVER"))
-        || name.IsSameAs(wxT("KEY"))
         || name.IsSameAs(wxT("LAMP_A_STATUS"))
         || name.IsSameAs(wxT("LAMP_A_HOURS"))
         || name.IsSameAs(wxT("LAMP_A_LIT_COUNT"))
