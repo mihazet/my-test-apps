@@ -365,11 +365,12 @@ bool UDPProtocol::set_request_handler(const char *buf, size_t len,
         PeerDataModel *data = wxGetApp().m_PeerData;
         if (data->IsContain(peer))
         {
-            sqlUpdate << wxT("UPDATE PropTbl SET CurrentValue = '")
-                << value.Upper()
-                << wxT("' WHERE ProtocolName = '")
-                << name
-                << wxT("'");
+            sqlUpdate << wxT("UPDATE PropTbl SET CurrentValue = '");
+            if (name.IsSameAs(wxT("BOARD_NAME")))
+                sqlUpdate << value;
+            else
+                sqlUpdate << value.Upper();
+            sqlUpdate << wxT("' WHERE ProtocolName = '") << name << wxT("'");
             if (db->ExecuteUpdate(sqlUpdate) != 1)
             {
                 wxLogError(_("This may not be an error. Set Request (%s) is not handled by database update."), name);
