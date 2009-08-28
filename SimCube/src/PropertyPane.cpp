@@ -5,15 +5,18 @@
 #include "SimCubeApp.h"
 #include "PropertyPane.h"
 
+#include "img/nuclear.xpm"
+
 enum
 {
     myID_PROPERTY_GRID = wxID_HIGHEST + 1,
-    myID_RESET_BTN,
+    myID_BTN_RESET,
 };
 
 BEGIN_EVENT_TABLE(PropertyPane, wxPanel)
     EVT_PG_CHANGING(myID_PROPERTY_GRID, PropertyPane::OnPropertyChanging)
     EVT_PG_CHANGED(myID_PROPERTY_GRID, PropertyPane::OnPropertyChanged)
+    EVT_BUTTON(myID_BTN_RESET, PropertyPane::OnPropertyReset)
 END_EVENT_TABLE()
 
 PropertyPane::PropertyPane()
@@ -93,10 +96,11 @@ void PropertyPane::CreateControls()
     }
     allSizer->Add(_pg, 1, wxALL | wxEXPAND, 5);
 
-    wxButton *rst = new wxButton(this, myID_RESET_BTN, _("Reset To Default"));
+    wxBitmapButton *rst = new wxBitmapButton(this, myID_BTN_RESET, wxBitmap(nuclear_xpm));
+    rst->SetToolTip(_("Reset properties"));
     wxBoxSizer *btnSizer = new wxBoxSizer(wxHORIZONTAL);
-    btnSizer->Add(rst, 0, wxALL, 5);
-    allSizer->Add(btnSizer);
+    btnSizer->Add(rst, 0, wxALL, 0);
+    allSizer->Add(btnSizer, 0, wxALL | wxEXPAND, 5);
 
     SetSizer(allSizer);
 }
@@ -196,5 +200,22 @@ void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
 void PropertyPane::OnPropertyChanged(wxPropertyGridEvent &WXUNUSED(event))
 {
     _pgUpdatedFromUI = false;
+}
+
+void PropertyPane::OnPropertyReset(wxCommandEvent &WXUNUSED(event))
+{
+    if (_db && _db->IsOpen())
+    {
+        wxMessageDialog dlg(this, _("Would you like to reset all properties to their default value?"),
+            _("Need user confirm"), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+        int choice = dlg.ShowModal();
+        if (choice == wxID_YES)
+        {
+            wxString sqlUpdate;
+            sqlUpdate << wxT("UPDATE PropTbl SET CurrentValue = InitValue ")
+                << wxT("WHERE CurrentValue != InitValue");
+            _db->ExecuteUpdate(sqlUpdate);
+        }
+    }
 }
 

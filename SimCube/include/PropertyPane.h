@@ -33,6 +33,7 @@ private:
     // event handlers
     void OnPropertyChanging(wxPropertyGridEvent &event);
     void OnPropertyChanged(wxPropertyGridEvent &event);
+    void OnPropertyReset(wxCommandEvent &event);
 
     wxSQLite3Database *_db;
     wxPropertyGrid *_pg;
