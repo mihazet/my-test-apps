@@ -132,7 +132,6 @@ CREATE TABLE CfgTbl (ConfigName TEXT UNIQUE, ConfigValue TEXT);
 
 -- configuration list
 INSERT INTO CfgTbl VALUES ("Language", "System");
-INSERT INTO CfgTbl VALUES ("Mode", "Normal");
 INSERT INTO CfgTbl VALUES ("ListenPort", "40000");
 INSERT INTO CfgTbl VALUES ("FrameX", "-1");
 INSERT INTO CfgTbl VALUES ("FrameY", "-1");
