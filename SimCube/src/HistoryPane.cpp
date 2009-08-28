@@ -37,6 +37,7 @@ HistoryPane::HistoryPane(wxWindow *parent, wxWindowID id, const wxPoint &pos,
 
 HistoryPane::~HistoryPane()
 {
+    delete _autoScrollBtnImg;
 }
 
 bool HistoryPane::Create(wxWindow *parent, wxWindowID id, const wxPoint &pos,
