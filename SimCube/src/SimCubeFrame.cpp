@@ -125,7 +125,8 @@ void SimCubeFrame::CreateControls()
     wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S]"));
     _auiManager.AddPane(dbgWin, wxAuiPaneInfo().Name(wxT("DebugPane")).
         Caption(_("Log Output")).Bottom().CloseButton(true).
-        DestroyOnClose(false).MaximizeButton(true).MinSize(-1, 150));
+        DestroyOnClose(false).MaximizeButton(true).MinSize(-1, 150).
+        Hide());
 
     _auiManager.AddPane(new PropertyPane(this), wxAuiPaneInfo().
         Name(wxT("PropertyPane")).Caption(_("Supported Property")).Left().
@@ -149,7 +150,7 @@ void SimCubeFrame::CreateControls()
 
     _auiManager.AddPane(new PeerPane(this), wxAuiPaneInfo().
         Name(wxT("PeerPane")).Caption(_("Remote Status")).Bottom().
-        CloseButton(true).DestroyOnClose(false).MinSize(200, 100));
+        CloseButton(true).DestroyOnClose(false).MinSize(200, 150));
 
     /* status bar */
     SetStatusBar(CreateStatusBar(3));
