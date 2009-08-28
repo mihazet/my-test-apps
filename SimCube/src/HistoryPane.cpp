@@ -105,7 +105,27 @@ void HistoryPane::UpdateCallback(wxUpdateType type, const wxString &database,
 
 void HistoryPane::OnSaveHistory(wxCommandEvent &WXUNUSED(event))
 {
+    wxFileDialog dlg(this, _("Save history to"), wxT("."), wxEmptyString,
+        wxT("SQLite3 Database files(*.db;*.db3)|*.db;*.db3"),
+        wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 
+    dlg.CenterOnParent();
+    if (wxID_OK == dlg.ShowModal())
+    {
+        wxSQLite3Database *db = wxGetApp().GetMemDatabase();
+        if (db && db->IsOpen() && db->HasBackupSupport())
+            db->Backup(dlg.GetPath());
+        else
+        {
+            if (db)
+            {
+                if (!db->IsOpen())
+                    wxLogError(_("Sorry! History database is closed!"));
+                if (!db->HasBackupSupport())
+                    wxLogError(_("Sorry! History database doesn't support backup feature!"));
+            }
+        }
+    }
 }
 
 void HistoryPane::OnDeleteHistory(wxCommandEvent &WXUNUSED(event))
