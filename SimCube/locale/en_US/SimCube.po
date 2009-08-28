@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SimCube\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-27 20:11+0800\n"
+"POT-Creation-Date: 2009-08-28 14:07+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: YH.YANG <yh.yang@delta.com.tw>\n"
 "Language-Team:  <yhuiyang@gmail.com>\n"
@@ -16,33 +16,59 @@ msgstr ""
 "X-Poedit-SearchPath-0: ../../src\n"
 "X-Poedit-SearchPath-1: ../../include\n"
 
-#: ../../src/HistoryPane.cpp:63
+#: ../../src/HistoryPane.cpp:68
 msgid "Timestamp"
 msgstr "Timestamp"
 
-#: ../../src/HistoryPane.cpp:64
+#: ../../src/HistoryPane.cpp:69
 #: ../../src/PeerPane.cpp:42
 msgid "IP Address"
 msgstr "IP Address"
 
-#: ../../src/HistoryPane.cpp:65
+#: ../../src/HistoryPane.cpp:70
 #: ../../src/PeerPane.cpp:43
 msgid "Port"
 msgstr "Port"
 
-#: ../../src/HistoryPane.cpp:66
+#: ../../src/HistoryPane.cpp:71
 msgid "Length"
 msgstr "Length"
 
-#: ../../src/HistoryPane.cpp:67
+#: ../../src/HistoryPane.cpp:72
 msgid "Message"
 msgstr "Message"
 
 #: ../../src/HistoryPane.cpp:81
-msgid "Auto scroll?"
-msgstr "Auto scroll?"
+msgid "Save history"
+msgstr "Save history"
 
-#: ../../src/HistoryPane.cpp:186
+#: ../../src/HistoryPane.cpp:83
+msgid "Delete history"
+msgstr "Delete history"
+
+#: ../../src/HistoryPane.cpp:86
+#: ../../src/HistoryPane.cpp:148
+msgid "Autoscroll is enabled"
+msgstr "Autoscroll is enabled"
+
+#: ../../src/HistoryPane.cpp:86
+#: ../../src/HistoryPane.cpp:148
+msgid "Autoscroll is disabled"
+msgstr "Autoscroll is disabled"
+
+#: ../../src/HistoryPane.cpp:108
+msgid "Save history to"
+msgstr "Save history to"
+
+#: ../../src/HistoryPane.cpp:123
+msgid "Sorry! History database is closed!"
+msgstr "Sorry! History database is closed!"
+
+#: ../../src/HistoryPane.cpp:125
+msgid "Sorry! History database doesn't support backup feature!"
+msgstr "Sorry! History database doesn't support backup feature!"
+
+#: ../../src/HistoryPane.cpp:225
 msgid "Fail to insert new value into history table."
 msgstr "Fail to insert new value into history table."
 
@@ -54,19 +80,27 @@ msgstr "Established Time"
 msgid "Monitored"
 msgstr "Monitored"
 
-#: ../../src/PropertyPane.cpp:96
-msgid "Reset To Default"
-msgstr "Reset To Default"
+#: ../../src/PropertyPane.cpp:100
+msgid "Reset properties"
+msgstr "Reset properties"
 
-#: ../../src/PropertyPane.cpp:166
+#: ../../src/PropertyPane.cpp:170
 #, c-format
 msgid "Input number out of range! Max = %s, Min = %s"
 msgstr "Input number out of range! Max = %s, Min = %s"
 
-#: ../../src/PropertyPane.cpp:190
+#: ../../src/PropertyPane.cpp:194
 #, c-format
 msgid "Failed to update property %s"
 msgstr "Failed to update property %s"
+
+#: ../../src/PropertyPane.cpp:209
+msgid "Would you like to reset all properties to their default value?"
+msgstr "Would you like to reset all properties to their default value?"
+
+#: ../../src/PropertyPane.cpp:210
+msgid "Need user confirm"
+msgstr "Need user confirm"
 
 #: ../../src/SimCubeApp.cpp:89
 msgid "SimCube is already running, this instance will be terminated!"
@@ -282,4 +316,7 @@ msgstr "Regular expression invalid: '"
 #, c-format
 msgid "REGEXP called with wrong number of arguments: %d instead of 2."
 msgstr "REGEXP called with wrong number of arguments: %d instead of 2."
+
+#~ msgid "Reset To Default"
+#~ msgstr "Reset To Default"
 
