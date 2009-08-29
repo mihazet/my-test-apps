@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SimCube\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-28 14:07+0800\n"
+"POT-Creation-Date: 2009-08-29 21:29+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: YH.YANG <yh.yang@delta.com.tw>\n"
 "Language-Team:  <yhuiyang@gmail.com>\n"
@@ -224,23 +224,23 @@ msgstr "Help"
 msgid "Log Output"
 msgstr "Log Output"
 
-#: ../../src/SimCubeFrame.cpp:131
+#: ../../src/SimCubeFrame.cpp:132
 msgid "Supported Property"
 msgstr "Supported Property"
 
-#: ../../src/SimCubeFrame.cpp:136
+#: ../../src/SimCubeFrame.cpp:137
 msgid "Transaction History"
 msgstr "Transaction History"
 
-#: ../../src/SimCubeFrame.cpp:141
+#: ../../src/SimCubeFrame.cpp:142
 msgid "SimCube Configuration"
 msgstr "SimCube Configuration"
 
-#: ../../src/SimCubeFrame.cpp:146
+#: ../../src/SimCubeFrame.cpp:147
 msgid "Send Trap Message"
 msgstr "Send Trap Message"
 
-#: ../../src/SimCubeFrame.cpp:151
+#: ../../src/SimCubeFrame.cpp:152
 msgid "Remote Status"
 msgstr "Remote Status"
 
