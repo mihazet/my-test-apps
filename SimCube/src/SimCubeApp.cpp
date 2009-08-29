@@ -5,7 +5,9 @@
 #include <wx/tokenzr.h>
 #include "SimCubeApp.h"
 #include "SimCubeFrame.h"
+#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE // always put me after SimCubeApp.h
 #include "Rockey4_ND_32.h"
+#endif
 
 IMPLEMENT_APP(SimCubeApp)
 
