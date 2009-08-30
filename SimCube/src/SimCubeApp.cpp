@@ -262,6 +262,85 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
     if (changed)
         *changed = false;
     return true;
+#elif defined (__WXGTK__)
+    wxString name, ip, netmask, broadcast;
+#define MAX_INTERFACE   10
+    struct ifconf ifc;
+    struct ifreq *ifr;
+    int socketFd;
+    size_t numInterfaces, idx;
+    char ipBuf[INET_ADDRSTRLEN];
+    
+    socketFd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (socketFd == -1)
+    {
+        wxLogError(_("Fail to create UDP socket. errno = %d"), errno);
+        return false;
+    }
+    
+    /* get the active interface list */
+    _adapterInfo = (struct ifreq *)malloc(sizeof(struct ifreq) * MAX_INTERFACE);
+    ifc.ifc_buf = (char *)_adapterInfo;
+    ifc.ifc_len = sizeof(struct ifreq) * MAX_INTERFACE;
+    if (ioctl(socketFd, SIOCGIFCONF, &ifc) != 0)
+    {
+        wxLogError(_("Fail to retrieve interface configuration."));
+        free(ifc.ifc_buf);
+        return false;
+    }
+    
+    /* retrieve info from list */
+    numInterfaces = ifc.ifc_len / sizeof(struct ifreq);
+    for (idx = 0; idx < numInterfaces; idx++)
+    {
+        ifr = &ifc.ifc_req[idx];
+
+        /* name */
+        name = wxString(ifr->ifr_name, *wxConvCurrent);
+        
+        /* ip */
+        memset(ipBuf, 0, INET_ADDRSTRLEN);
+        struct sockaddr *addr = &(ifr->ifr_addr);
+        inet_ntop(AF_INET, &(((struct sockaddr_in *)addr)->sin_addr),
+            ipBuf, INET_ADDRSTRLEN);
+        ip = wxString(ipBuf, *wxConvCurrent);
+        
+        /* netmask */
+        if (ioctl(socketFd, SIOCGIFNETMASK, ifr) != 0)
+        {
+            wxLogError(_("Fail to get netmask address!"));
+            return false;
+        }
+        memset(ipBuf, 0, INET_ADDRSTRLEN);
+        addr = &(ifr->ifr_netmask);
+        inet_ntop(AF_INET, &(((struct sockaddr_in *)addr)->sin_addr),
+            ipBuf, INET_ADDRSTRLEN);
+        netmask = wxString(ipBuf, *wxConvCurrent);
+        
+        /* broadcast */
+        if (ioctl(socketFd, SIOCGIFBRDADDR, ifr) != 0)
+        {
+            wxLogError(_("Fail to get broadcast address!"));
+            return false;
+        }
+        memset(ipBuf, 0, INET_ADDRSTRLEN);
+        addr = &(ifr->ifr_broadaddr);
+        inet_ntop(AF_INET, &(((struct sockaddr_in *)addr)->sin_addr),
+            ipBuf, INET_ADDRSTRLEN);
+        broadcast = wxString(ipBuf, *wxConvCurrent);
+        
+        if (ip.Cmp(wxEmptyString) && ip.Cmp(wxT("0.0.0.0"))
+            && netmask.Cmp(wxEmptyString) && netmask.Cmp(wxT("0.0.0.0")))
+        {
+            NetAdapter *temp = new NetAdapter(name, ip, netmask, broadcast);
+            m_Adapters.push_back(*temp);
+        }
+    }
+    
+    /* TODO: judge if result change. */
+    if (changed)
+        *changed = false;
+    return true;
 #else
     return false;
 #endif

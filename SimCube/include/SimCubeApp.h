@@ -6,6 +6,16 @@
 #include <wx/snglinst.h>
 #ifdef __WXMSW__
 #include <iphlpapi.h>
+#elif defined (__WXGTK__)
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <arpa/inet.h>
+#include <net/if.h>
+#include <netinet/in.h>
 #endif
 #include "NetAdapter.h"
 #include "PeerPane.h"
@@ -51,6 +61,8 @@ private:
     wxSingleInstanceChecker *_onlyMe;
 #ifdef __WXMSW__
     IP_ADAPTER_INFO *_adapterInfo;
+#elif defined (__WXGTK__)
+    struct ifreq *_adapterInfo;
 #endif
     UDPProtocol *_udpProtocol;
 
