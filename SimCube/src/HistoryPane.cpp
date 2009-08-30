@@ -170,7 +170,7 @@ HistoryDataModel::HistoryDataModel(wxSQLite3Database *db)
     sqlUpdate.clear();
     sqlUpdate << wxT("CREATE TRIGGER insert_timestamp AFTER INSERT ON HistoryTbl ")
               << wxT("BEGIN ")
-              << wxT("UPDATE HistoryTbl SET Timestamp = DATETIME('NOW') WHERE rowid = new.rowid;")
+              << wxT("UPDATE HistoryTbl SET Timestamp = DATETIME('NOW', 'LOCALTIME') WHERE rowid = new.rowid;")
               << wxT("END");
     modified_rows = _db->ExecuteUpdate(sqlUpdate);
 }
