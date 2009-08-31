@@ -500,7 +500,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"-lwx_gtk2ud_propgrid-2.9 -lwx_gtk2ud_aui-2.9 %AUTO%"</string>
+          <string name="Libraries">"-lwx_gtk2ud_propgrid-2.9 -lwx_gtk2ud_aui-2.9 %AUTO% -lsqlite3"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO% -Iinclude -Iresource"</string>
