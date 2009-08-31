@@ -141,26 +141,11 @@ int SimCubeApp::OnExit()
         free(_adapterInfo);
         _adapterInfo = NULL;
     }
-    if (_udpProtocol)
-    {
-        delete _udpProtocol;
-        _udpProtocol = NULL;
-    }
-    if (_tcpProtocol)
-    {
-        delete _tcpProtocol;
-        _tcpProtocol = NULL;
-    }
-    if (m_PeerData)
-    {
-        delete m_PeerData;
-        m_PeerData = NULL;
-    }
-    if (m_HistoryData)
-    {
-        delete m_HistoryData;
-        m_HistoryData = NULL;
-    }
+    wxDELETE(_udpProtocol);
+    wxDELETE(_tcpProtocol);
+    wxDELETE(m_PeerData);
+    wxDELETE(m_HistoryData);
+
     return wxApp::OnExit();
 }
 
