@@ -15,12 +15,14 @@ public:
         _netmask = netmask;
         _broadcast = broadcast;
         udp = NULL;
+        tcp = NULL;
     }
     wxString& GetName(void) { return _name; }
     wxString& GetIp(void) { return _ip; }
     wxString& GetNetmask(void) { return _netmask; }
     wxString& GetBroadcast(void) { return _broadcast; }
     wxDatagramSocket *udp;
+    wxSocketServer *tcp;
 private:
     wxString _name;
     wxString _ip;

@@ -21,6 +21,7 @@
 #include "PeerPane.h"
 #include "HistoryPane.h"
 #include "UDPProtocol.h"
+#include "TCPProtocol.h"
 
 /* enable or disable software protection by using rockey4nd usb dongle */
 #undef PROTECTED_BY_ROCKEY4_USB_DONGLE
@@ -65,6 +66,7 @@ private:
     struct ifreq *_adapterInfo;
 #endif
     UDPProtocol *_udpProtocol;
+    TCPProtocol *_tcpProtocol;
 
     DECLARE_EVENT_TABLE()
 };

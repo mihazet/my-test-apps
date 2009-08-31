@@ -60,6 +60,7 @@ void SimCubeApp::Init()
     m_Adapters.clear();
     _adapterInfo = NULL;
     _udpProtocol = NULL;
+    _tcpProtocol = NULL;
     m_PeerData = new PeerDataModel();
     m_HistoryData = new HistoryDataModel(_memDB);
 }
@@ -110,6 +111,7 @@ bool SimCubeApp::OnInit()
     /* generate protocol objects.
        Each protocol object will init its related sockets per network adapter. */
     _udpProtocol = new UDPProtocol();
+    _tcpProtocol = new TCPProtocol();
 
 #ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     /* check for USB dongle */
@@ -143,6 +145,11 @@ int SimCubeApp::OnExit()
     {
         delete _udpProtocol;
         _udpProtocol = NULL;
+    }
+    if (_tcpProtocol)
+    {
+        delete _tcpProtocol;
+        _tcpProtocol = NULL;
     }
     if (m_PeerData)
     {
