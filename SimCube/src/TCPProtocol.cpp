@@ -3,11 +3,89 @@
 #include "NetAdapter.h"
 #include "TCPProtocol.h"
 
+/////////////////////////////////////////////////////////////////////////
+// Definition for SOI Boot protocol
+/////////////////////////////////////////////////////////////////////////
+#define SOI_BOOT_CTRL_REQUEST       'S'
+#define SOI_BOOT_CTRL_RESPONSE      's'
+#define SOI_BOOT_CTRL_CONNECT       'C'
+#define SOI_BOOT_CTRL_ACK_CONNECT   'c'
+#define SOI_BOOT_LOAD_REQUEST       'T'
+#define SOI_BOOT_LOAD_RESPONSE      't'
+#define SOI_BOOT_LOAD_APPTYPE       'B'
+
+#define SOI_BOOT_MAX_RX_SIZE        (1024 * 1024)
+
+enum
+{
+    MODE_DOWNLOAD_FW_TO_FLASH = 1,
+    MODE_RUN_FW_FROM_FLASH = 2,
+    MODE_DOWNLOAD_FW_TO_RAM = 3,
+    MODE_RUN_FW_FROM_RAM = 4,
+    MODE_DOWNLOAD_BOOTLOADER_TO_FLASH = 5,
+    MODE_RESET_RESERVED_FLASH = 6,
+};
+
+enum
+{
+    ERR_BL_SYNTAX = 2,
+    ERR_BL_RAM_CHECKSUM,
+    ERR_BL_BREC_CHECKSUM,
+    ERR_BL_LOAD_MODE,
+    ERR_BL_VER,
+    ERR_BL_MALLOC,
+    ERR_BL_ERASE_FLASH,
+    ERR_BL_READ_FLASH,
+    ERR_BL_WRITE_FLASH,
+    ERR_BL_FW_SIZE,
+    ERR_BL_BT_SIZE,
+};
+
+typedef struct st_ctrl_header
+{
+    unsigned char byProtocolId;
+    unsigned char byControlId;
+    unsigned char byAppType;
+    unsigned char byAppId;
+    unsigned int u32SeqNo;
+    unsigned int u32Payload;
+    unsigned int u32Reserved;
+} tst_CTRL_HEADER;
+
+typedef struct st_ctrl_packet
+{
+    tst_CTRL_HEADER *stp_ctrl_header;
+    unsigned char *byp_ctrl_payload;
+} tst_CTRL_PACKET;
+
+typedef struct st_load_header
+{
+    unsigned char byProtocolId;
+    unsigned char byAppType;
+    unsigned char byAppId;
+    unsigned char byModeId;
+    unsigned short u16Error;
+    unsigned short u16SeqNo;
+    unsigned int u32Payload;
+    unsigned int u32Chksum;
+} tst_LOAD_HEADER;
+
+typedef struct st_load_packet
+{
+    tst_LOAD_HEADER *stp_load_header;
+    unsigned char *byp_load_payload;
+} tst_LOAD_PACKET;
+
+/////////////////////////////////////////////////////////////////////////
+// End of SOI Boot protocol
+/////////////////////////////////////////////////////////////////////////
+
 BEGIN_EVENT_TABLE(TCPProtocol, wxEvtHandler)
     EVT_SOCKET(wxID_ANY, TCPProtocol::OnSocketEvent)
 END_EVENT_TABLE()
 
 TCPProtocol::TCPProtocol()
+    : numClients(0)
 {
     size_t socketId = 0;
     wxIPV4address local;
@@ -27,6 +105,9 @@ TCPProtocol::TCPProtocol()
         if (!it->tcp->Ok())
             wxLogError(_("Fail to bind %s:%d to tcp socket"), local.IPAddress(), local.Service());
     }
+
+    pst_buffer_load = new tst_BUFFER_LOAD;
+    pst_buffer_load->byp_load_buffer = new unsigned char[SOI_MAX_DOWNLOAD_SIZE];
 }
 
 TCPProtocol::~TCPProtocol()
@@ -42,6 +123,9 @@ TCPProtocol::~TCPProtocol()
             it->tcp->Destroy();
         }
     }
+
+    wxDELETEA(pst_buffer_load->byp_load_buffer);
+    wxDELETE(pst_buffer_load);
 }
 
 //
@@ -65,10 +149,7 @@ void TCPProtocol::OnSocketEvent(wxSocketEvent &event)
         switch (notify)
         {
         default:
-        case wxSOCKET_INPUT:
-        case wxSOCKET_OUTPUT:
-        case wxSOCKET_LOST:
-            wxLogError(_("Unexpect event (%d) received in server socket!"), notify);
+            wxLogError(_("Unexpect event (%d) received in server listening socket!"), notify);
             break;
         case wxSOCKET_CONNECTION:
             wxSocketBase *sock = tcpSocket->Accept(false);
@@ -90,26 +171,188 @@ void TCPProtocol::OnSocketEvent(wxSocketEvent &event)
             sock->SetEventHandler(*this, netAdapter.size());
             sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
             sock->Notify(true);
+            numClients++;
             break;
         }
     }
     else
     {
         wxSocketBase *tcpSocket = event.GetSocket();
-        unsigned char *rxBuf = new unsigned char[1024 * 1024];
+        unsigned char *rxBuf = new unsigned char[SOI_BOOT_MAX_RX_SIZE + sizeof(tst_LOAD_HEADER)];
+        unsigned char *txBuf = rxBuf + SOI_BOOT_MAX_RX_SIZE;
+        tst_LOAD_HEADER *stp_load_header;
 
         switch (notify)
         {
         case wxSOCKET_INPUT:
-            tcpSocket->Read(rxBuf, 16);
+            tcpSocket->Read(rxBuf, sizeof(tst_LOAD_HEADER));
+            stp_load_header = (tst_LOAD_HEADER *)rxBuf;
+            if (stp_load_header->u32Payload)
+                tcpSocket->Read(rxBuf + sizeof(tst_LOAD_HEADER), stp_load_header->u32Payload);
+
+            // Default response: same header as request
+            memcpy(txBuf, rxBuf, sizeof(tst_LOAD_HEADER));
+
+            // Process data
+            ProcessDownloadModeProtocol((void *)rxBuf, (void *)txBuf);
+
+            // Send response
+            tcpSocket->Write((void *)txBuf, sizeof(tst_LOAD_HEADER));
+            if (tcpSocket->Error())
+                wxLogError(_("Fail to write data via tcp socket, error = %d."), tcpSocket->LastError());
+            else
+                wxLogVerbose(_("Success write data (%d byte(s)) via tcp socket."), tcpSocket->LastCount());
             break;
+
         case wxSOCKET_LOST:
+            wxLogVerbose(_("Receive socket lost event."));
+            tcpSocket->Destroy();
+            numClients--;
             break;
+
         default:
+            wxLogError(_("Unexpect event (%d) received in server accepted socket!"), notify);
             break;
         }
 
         delete [] rxBuf;
     }
+}
+
+bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
+{
+    tst_LOAD_HEADER *stp_load_header = NULL;
+    tst_CTRL_HEADER *stp_ctrl_header = NULL;
+    tst_LOAD_PACKET st_response_load_packet;
+    tst_CTRL_PACKET st_response_ctrl_packet;
+    unsigned char byaInitParam[4] = 
+    {
+        5, // retry num
+        4, // receive timer
+        6, // response timer
+        0x10 // little endian
+    };
+    unsigned char byMode;
+    unsigned short u16Err = 2;
+    static unsigned short u16SeqNo = 0;
+    unsigned char *bypPayload = NULL;
+    unsigned int u32Chksum = 0, u32TotalLoad;
+
+    stp_load_header = (tst_LOAD_HEADER *)pIn;
+    switch (stp_load_header->byProtocolId)
+    {
+    case SOI_BOOT_CTRL_REQUEST:
+        st_response_ctrl_packet.stp_ctrl_header = (tst_CTRL_HEADER *)pOut;
+        st_response_ctrl_packet.byp_ctrl_payload = (unsigned char *)pOut
+            + sizeof(tst_CTRL_HEADER);
+        st_response_ctrl_packet.stp_ctrl_header->byProtocolId = SOI_BOOT_CTRL_RESPONSE;
+        st_response_ctrl_packet.stp_ctrl_header->byAppType = 0;
+        st_response_ctrl_packet.stp_ctrl_header->byAppId = 0;
+        st_response_ctrl_packet.stp_ctrl_header->u32Reserved = 0;
+
+        if (stp_load_header->byAppType == SOI_BOOT_CTRL_CONNECT)
+        {
+            st_response_ctrl_packet.stp_ctrl_header->byControlId
+                = SOI_BOOT_CTRL_ACK_CONNECT;
+            st_response_ctrl_packet.stp_ctrl_header->u32Payload
+                = SOI_BOOT_MAX_RX_SIZE;
+            memcpy(&(st_response_ctrl_packet.stp_ctrl_header->u32SeqNo),
+                &byaInitParam[0], 4);
+        }
+        break;
+
+    case SOI_BOOT_LOAD_REQUEST:
+        bypPayload = (unsigned char *)pIn + sizeof(tst_LOAD_HEADER);
+        st_response_load_packet.stp_load_header = (tst_LOAD_HEADER *)pOut;
+        st_response_load_packet.byp_load_payload = (unsigned char *)pOut
+            + sizeof(tst_LOAD_HEADER);
+
+        // Default response packet
+        memcpy((unsigned char *)st_response_load_packet.stp_load_header,
+            (unsigned char *)stp_load_header, sizeof(tst_LOAD_HEADER));
+        st_response_load_packet.stp_load_header->u32Chksum = 0;
+
+        if (stp_load_header->byAppType == SOI_BOOT_LOAD_APPTYPE)
+        {
+            byMode = stp_load_header->byModeId;
+            switch (byMode)
+            {
+            case MODE_RESET_RESERVED_FLASH:
+                wxLogMessage(_("Reset reserved flash"));
+                u16Err = 0;
+                break;
+
+            case MODE_RUN_FW_FROM_FLASH:
+                wxLogMessage(_("Run FW from flash"));
+                u16Err = 0;
+                break;
+
+            case MODE_RUN_FW_FROM_RAM:
+                wxLogMessage(_("Run FW from ram"));
+                u16Err = 0;
+                break;
+
+            case MODE_DOWNLOAD_FW_TO_FLASH:
+                if (u16SeqNo == 0)
+                {
+                    pst_buffer_load->u32_load_offset = 0;
+                    pst_buffer_load->u32_total_load = 0;
+                }
+                if (stp_load_header->u16SeqNo == 0xFFFF)
+                    u16SeqNo = 0;
+                else
+                    u16SeqNo++;
+
+                if ((stp_load_header->u16SeqNo != 0)
+                    && (stp_load_header->u16SeqNo != 0xFFFF))
+                    u16SeqNo *= 1;
+
+                // copy input to the load buffer
+                bypPayload = (unsigned char *)pIn + sizeof(tst_LOAD_HEADER);
+                memcpy(pst_buffer_load->byp_load_buffer + pst_buffer_load->u32_load_offset,
+                    bypPayload, stp_load_header->u32Payload);
+                pst_buffer_load->u32_total_load += stp_load_header->u32Payload;
+                if (stp_load_header->u16SeqNo != 0xFFFF)
+                    pst_buffer_load->u32_load_offset += stp_load_header->u32Payload;
+                else
+                {
+                    // Full load is received
+                    /* check sum */
+                    u32TotalLoad = pst_buffer_load->u32_total_load;
+                    while (u32TotalLoad--)
+                        u32Chksum += *(pst_buffer_load->byp_load_buffer + u32TotalLoad);
+
+                    if (u32Chksum != stp_load_header->u32Chksum)
+                    {
+                        wxLogError(_("Verify checksum in memory load buffer failed!"));
+                        u16Err = ERR_BL_RAM_CHECKSUM;
+                    }
+                    else
+                    {
+                        /* real cube will erase, write, read back flash */
+                        u32TotalLoad = pst_buffer_load->u32_total_load;
+                        while (u32TotalLoad--)
+                        {
+                            st_response_load_packet.stp_load_header->u32Chksum +=
+                                *(pst_buffer_load->byp_load_buffer + u32TotalLoad);
+                        }
+                        u16Err = 0;
+
+                    }
+                }
+                break;
+            default:
+            case MODE_DOWNLOAD_FW_TO_RAM:
+            case MODE_DOWNLOAD_BOOTLOADER_TO_FLASH:
+                u16Err = ERR_BL_LOAD_MODE;
+                break;
+            }
+        }
+        st_response_load_packet.stp_load_header->byProtocolId = SOI_BOOT_LOAD_RESPONSE;
+        st_response_load_packet.stp_load_header->u32Payload = 0;
+        st_response_load_packet.stp_load_header->u16Error = u16Err;
+        break;
+    }
+    return true;
 }
 
