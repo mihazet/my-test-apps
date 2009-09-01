@@ -275,11 +275,11 @@ void UDPProtocol::MakeBufferSafe(char **safe, size_t *safeLen,
 
 bool UDPProtocol::set_request_handler(const char *buf, size_t len,
                                       wxIPV4address &peer,
-                                      wxDatagramSocket *WXUNUSED(local))
+                                      wxDatagramSocket *local)
 {
     bool handled = true;
     wxStringTokenizer request(wxString::FromAscii(buf, len), MSG_KEYWORD_SET_REQUEST);
-    wxString name, value, sqlQuery, sqlUpdate;
+    wxString name, value, sqlQuery, sqlUpdate, trapMessage;
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     wxSQLite3ResultSet set;
 
@@ -343,10 +343,36 @@ bool UDPProtocol::set_request_handler(const char *buf, size_t len,
     else if (name.IsSameAs(wxT("MONITOR")))
     {
         PeerDataModel *data = wxGetApp().m_PeerData;
-        if (value.IsSameAs(wxT("ENABLE"), false))
-            data->SetMonitor(peer, true);
-        else if (value.IsSameAs(wxT("DISABLE"), false))
-            data->SetMonitor(peer, false);
+        if (data->IsContain(peer))
+        {
+            if (value.IsSameAs(wxT("ENABLE"), false))
+            {
+                data->SetMonitor(peer, true);
+
+                /* real cube will active notify source and lamp selection here. */
+                sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = 'MAIN_INPUT'");
+                set = db->ExecuteQuery(sqlQuery);
+                if (set.NextRow())
+                    trapMessage << wxT("MAIN_INPUT") << MSG_KEYWORD_TRAP << set.GetAsString(0);
+                set.Finalize();
+                sqlQuery.Replace(wxT("MAIN_INPUT"), wxT("LAMP_SELECTION"), false);
+                set = db->ExecuteQuery(sqlQuery);
+                if (set.NextRow())
+                    trapMessage << wxT(";LAMP_SELECTION") << MSG_KEYWORD_TRAP << set.GetAsString(0);
+                set.Finalize();
+                if (!trapMessage.empty())
+                {
+                    local->SendTo(peer, trapMessage.ToAscii(), trapMessage.length() + 1);
+                    if (local->Error())
+                    {
+                        wxLogError(_("Fail to send enable monitor trap message to peer. (error = %d)"),
+                            local->LastError());
+                    }
+                }
+            }
+            else if (value.IsSameAs(wxT("DISABLE"), false))
+                data->SetMonitor(peer, false);
+        }
     }
     else if (name.IsSameAs(wxT("RESET_ALL")))
     {
@@ -554,6 +580,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
         PeerDataModel *data = wxGetApp().m_PeerData;
         if (data->IsContain(peer))
         {
+            /* search property table */
             sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = '")
                 << name << wxT("'");
             set = db->ExecuteQuery(sqlQuery);
@@ -564,6 +591,25 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
                 if (local->Error())
                 {
                     wxLogError(_("Fail to send response (%s) back to peer. (error = %d)"),
+                        response, local->LastError());
+                    handled = false;
+                }
+            }
+            set.Finalize();
+
+            /* search trap table */
+            sqlQuery.clear();
+            sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE Protocolname = '")
+                << name << wxT("'");
+            set = db->ExecuteQuery(sqlQuery);
+            if (set.NextRow())
+            {
+                response.clear();
+                response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
+                local->SendTo(peer, response.ToAscii(), response.length() + 1);
+                if (local->Error())
+                {
+                    wxLogError(_("Failt to send response (%s) back to peer. (error = %d)"),
                         response, local->LastError());
                     handled = false;
                 }
