@@ -18,18 +18,22 @@
 
 enum
 {
-    ID_VIEW_PROPERTY_PANE = wxID_HIGHEST + 1,
+    ID_VIEW_PANE_START = wxID_HIGHEST + 1,
+    ID_VIEW_PROPERTY_PANE = ID_VIEW_PANE_START,
     ID_VIEW_TRAP_PANE,
     ID_VIEW_HISTORY_PANE,
     ID_VIEW_PEER_PANE,
     ID_VIEW_CONFIG_PANE,
     ID_VIEW_DOWNLOAD_PANE,
     ID_VIEW_LOG_PANE,
+    ID_VIEW_PANE_END = ID_VIEW_LOG_PANE,
     ID_VIEW_RESET_LAYOUT,
     ID_HELP_DOC,
 };
 
 BEGIN_EVENT_TABLE(SimCubeFrame, wxFrame)
+    EVT_MENU_RANGE(ID_VIEW_PANE_START, ID_VIEW_PANE_END, SimCubeFrame::OnViewPane)
+    EVT_UPDATE_UI_RANGE(ID_VIEW_PANE_START, ID_VIEW_PANE_END, SimCubeFrame::OnUpdatePane)
     EVT_MENU(ID_VIEW_RESET_LAYOUT, SimCubeFrame::OnResetLayout)
     EVT_ERASE_BACKGROUND(SimCubeFrame::OnEraseBackground)
     EVT_SIZE(SimCubeFrame::OnSize)
@@ -243,6 +247,64 @@ void SimCubeFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
     *y = _y;
     *w = _w;
     *h = _h;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Event handlers
+//////////////////////////////////////////////////////////////////////////////
+void SimCubeFrame::OnViewPane(wxCommandEvent &event)
+{
+    switch (event.GetId())
+    {
+    case ID_VIEW_PROPERTY_PANE:
+        _auiManager.GetPane(wxT("PropertyPane")).Show(event.IsChecked());
+        break;
+    case ID_VIEW_TRAP_PANE:
+        _auiManager.GetPane(wxT("TrapPane")).Show(event.IsChecked());
+        break;
+    case ID_VIEW_HISTORY_PANE:
+        _auiManager.GetPane(wxT("HistoryPane")).Show(event.IsChecked());
+        break;
+    case ID_VIEW_PEER_PANE:
+        _auiManager.GetPane(wxT("PeerPane")).Show(event.IsChecked());
+        break;
+    case ID_VIEW_CONFIG_PANE:
+        _auiManager.GetPane(wxT("ConfigPane")).Show(event.IsChecked());
+        break;
+    case ID_VIEW_DOWNLOAD_PANE:
+        break;
+    case ID_VIEW_LOG_PANE:
+        _auiManager.GetPane(wxT("DebugPane")).Show(event.IsChecked());
+        break;
+    }
+    _auiManager.Update();
+}
+
+void SimCubeFrame::OnUpdatePane(wxUpdateUIEvent &event)
+{
+    switch (event.GetId())
+    {
+    case ID_VIEW_PROPERTY_PANE:
+        event.Check(_auiManager.GetPane(wxT("PropertyPane")).IsShown());
+        break;
+    case ID_VIEW_TRAP_PANE:
+        event.Check(_auiManager.GetPane(wxT("TrapPane")).IsShown());
+        break;
+    case ID_VIEW_HISTORY_PANE:
+        event.Check(_auiManager.GetPane(wxT("HistoryPane")).IsShown());
+        break;
+    case ID_VIEW_PEER_PANE:
+        event.Check(_auiManager.GetPane(wxT("PeerPane")).IsShown());
+        break;
+    case ID_VIEW_CONFIG_PANE:
+        event.Check(_auiManager.GetPane(wxT("ConfigPane")).IsShown());
+        break;
+    case ID_VIEW_DOWNLOAD_PANE:
+        break;
+    case ID_VIEW_LOG_PANE:
+        event.Check(_auiManager.GetPane(wxT("DebugPane")).IsShown());
+        break;
+    }
 }
 
 void SimCubeFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
