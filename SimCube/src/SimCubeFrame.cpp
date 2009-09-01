@@ -155,7 +155,7 @@ void SimCubeFrame::CreateControls()
 
     _auiManager.AddPane(new ConfigPane(this), wxAuiPaneInfo().
         Name(wxT("ConfigPane")).Caption(_("SimCube Configuration")).
-        MinSize(400, 300).Dockable(false).Float().Hide());
+        Dockable(false).Float().Hide());
 
     _auiManager.AddPane(new TrapPane(this), wxAuiPaneInfo().
         Name(wxT("TrapPane")).Caption(_("Send Trap Message")).

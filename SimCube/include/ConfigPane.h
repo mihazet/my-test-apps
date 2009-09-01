@@ -2,6 +2,7 @@
 #define _CONFIG_PANE_H_
 
 #include <wx/wx.h>
+#include <wx/wxsqlite3.h>
 
 class ConfigPane : public wxPanel
 {
@@ -25,7 +26,25 @@ private:
     void Init();
     void CreateControls();
 
+    /* event handlers */
+    void OnLangDefault(wxCommandEvent &event);
+    void OnUpdateLangSelect(wxUpdateUIEvent &event);
+    void OnLangSelect(wxCommandEvent &event);
 
+    /* helper functions */
+    void TransferToDatabase(void);
+    void TransferFromDatabase(void);
+
+    wxSQLite3Database *_db;
+    enum
+    {
+        eLANG_DEFAULT,
+        eLANG_ENGLISH,
+        eLANG_CHINESE_TRADITIONAL,
+        eLANG_CHINESE_SIMPLIFIED,
+    } _language;
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif /* _CONFIG_PANE_H_ */
