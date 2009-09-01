@@ -64,12 +64,22 @@ bool SimCubeFrame::Create(wxWindow *parent, wxWindowID id,
 
 SimCubeFrame::~SimCubeFrame()
 {
+    wxString sql, perspective;
+    wxSQLite3ResultSet set;
+
+    perspective = _auiManager.SavePerspective();
+    sql << wxT("UPDATE CfgTbl SET ConfigValue = '")
+        << perspective
+        << wxT("' WHERE ConfigName = 'Perspective'");
+    if (1 != _db->ExecuteUpdate(sql))
+        wxLogError(_("Fail to save perspective!"));
+
     _auiManager.UnInit();
 }
 
 void SimCubeFrame::Init()
 {
-
+    _db = wxGetApp().GetMainDatabase();
 }
 
 void SimCubeFrame::CreateControls()
@@ -155,8 +165,29 @@ void SimCubeFrame::CreateControls()
     /* status bar */
     SetStatusBar(CreateStatusBar(3));
 
-    /* commit all change */
-    _auiManager.Update();
+    /* restore perspective */
+    wxString sql, perspective;
+    wxSQLite3ResultSet set;
+
+    sql << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'Perspective'");
+    set = _db->ExecuteQuery(sql);
+    if (set.NextRow())
+        perspective = set.GetAsString(0);
+    set.Finalize();
+
+    if (!perspective.empty())
+        _auiManager.LoadPerspective(perspective);
+    else
+    {
+        _auiManager.Update();
+        perspective = _auiManager.SavePerspective();
+        sql.clear();
+        sql << wxT("UPDATE CfgTbl SET ConfigValue = '")
+            << perspective
+            << wxT("' WHERE ConfigName = 'Perspective' or ConfigName ='DefaultPerspective'");
+        if (2 != _db->ExecuteUpdate(sql))
+            wxLogError(_("Fail to setup init perspective!"));
+    }
 }
 
 void SimCubeFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)

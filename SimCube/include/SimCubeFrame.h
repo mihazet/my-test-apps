@@ -4,6 +4,7 @@
 #include <wx/wx.h>
 #include <wx/frame.h>
 #include <wx/aui/framemanager.h>
+#include <wx/wxsqlite3.h>
 
 class SimCubeFrame : public wxFrame
 {
@@ -37,6 +38,7 @@ private:
     
 private:
     wxAuiManager _auiManager;
+    wxSQLite3Database *_db;
     
     DECLARE_EVENT_TABLE()
 };

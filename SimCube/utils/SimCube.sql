@@ -153,3 +153,6 @@ INSERT INTO CfgTbl VALUES ("FrameX", "-1");
 INSERT INTO CfgTbl VALUES ("FrameY", "-1");
 INSERT INTO CfgTbl VALUES ("FrameW", "-1");
 INSERT INTO CfgTbl VALUES ("FrameH", "-1");
+INSERT INTO CfgTbl VALUES ("Perspective", "");
+INSERT INTO CfgTbl VALUES ("DefaultPerspective", "");
+
