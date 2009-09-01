@@ -30,6 +30,7 @@ enum
 };
 
 BEGIN_EVENT_TABLE(SimCubeFrame, wxFrame)
+    EVT_MENU(ID_VIEW_RESET_LAYOUT, SimCubeFrame::OnResetLayout)
     EVT_ERASE_BACKGROUND(SimCubeFrame::OnEraseBackground)
     EVT_SIZE(SimCubeFrame::OnSize)
     EVT_CLOSE(SimCubeFrame::OnClose)
@@ -242,6 +243,26 @@ void SimCubeFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
     *y = _y;
     *w = _w;
     *h = _h;
+}
+
+void SimCubeFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
+{
+    wxString sql, defaultLayout;
+    wxSQLite3ResultSet set;
+
+    sql << wxT("UPDATE CfgTbl SET ConfigValue = '' WHERE ConfigName = 'Perspective'");
+    if (1 != _db->ExecuteUpdate(sql))
+        wxLogError(_("Fail to reset current perspective value"));
+
+    sql.clear();
+    sql << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'DefaultPerspective'");
+    set = _db->ExecuteQuery(sql);
+    if (set.NextRow())
+        defaultLayout = set.GetAsString(0);
+    set.Finalize();
+
+    if (!defaultLayout.empty())
+        _auiManager.LoadPerspective(defaultLayout);
 }
 
 void SimCubeFrame::OnEraseBackground(wxEraseEvent &event)

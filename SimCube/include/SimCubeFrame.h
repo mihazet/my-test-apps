@@ -32,6 +32,7 @@ private:
     void RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h);
 
     // event handlers
+    void OnResetLayout(wxCommandEvent &event);
     void OnEraseBackground(wxEraseEvent &event);
     void OnSize(wxSizeEvent &event);
     void OnClose(wxCloseEvent &event);
