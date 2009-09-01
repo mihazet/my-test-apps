@@ -154,14 +154,12 @@ void SimCubeFrame::CreateControls()
         MinSize(500, -1));
 
     _auiManager.AddPane(new ConfigPane(this), wxAuiPaneInfo().
-        Name(wxT("ConfigPane")).Caption(_("SimCube Configuration")).Bottom().
-        CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
-        MinSize(150, 50).Hide());
+        Name(wxT("ConfigPane")).Caption(_("SimCube Configuration")).
+        MinSize(400, 300).Dockable(false).Float().Hide());
 
     _auiManager.AddPane(new TrapPane(this), wxAuiPaneInfo().
-        Name(wxT("TrapPane")).Caption(_("Send Trap Message")).Right().
-        CloseButton(true).DestroyOnClose(false).MinSize(100, 100).
-        Hide());
+        Name(wxT("TrapPane")).Caption(_("Send Trap Message")).
+        MinSize(500, 400).Dockable(false).Float().Hide());
 
     _auiManager.AddPane(new PeerPane(this), wxAuiPaneInfo().
         Name(wxT("PeerPane")).Caption(_("Remote Status")).Bottom().
@@ -170,10 +168,18 @@ void SimCubeFrame::CreateControls()
     /* status bar */
     SetStatusBar(CreateStatusBar(3));
 
-    /* restore perspective */
+    /* update default perspective (use layout code above) */
     wxString sql, perspective;
     wxSQLite3ResultSet set;
 
+    sql << wxT("UPDATE CfgTbl SET ConfigValue = '")
+        << _auiManager.SavePerspective()
+        << wxT("' WHERE ConfigName = 'DefaultPerspective'");
+    if (1 != _db->ExecuteUpdate(sql))
+        wxLogError(_("Fail to save software default perspective!"));
+
+    /* restore previous perspective or just use current perspective */
+    sql.clear();
     sql << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'Perspective'");
     set = _db->ExecuteQuery(sql);
     if (set.NextRow())
@@ -183,16 +189,7 @@ void SimCubeFrame::CreateControls()
     if (!perspective.empty())
         _auiManager.LoadPerspective(perspective);
     else
-    {
         _auiManager.Update();
-        perspective = _auiManager.SavePerspective();
-        sql.clear();
-        sql << wxT("UPDATE CfgTbl SET ConfigValue = '")
-            << perspective
-            << wxT("' WHERE ConfigName = 'Perspective' or ConfigName ='DefaultPerspective'");
-        if (2 != _db->ExecuteUpdate(sql))
-            wxLogError(_("Fail to setup init perspective!"));
-    }
 }
 
 void SimCubeFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
