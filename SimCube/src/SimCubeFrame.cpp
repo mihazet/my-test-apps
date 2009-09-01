@@ -159,7 +159,7 @@ void SimCubeFrame::CreateControls()
 
     _auiManager.AddPane(new TrapPane(this), wxAuiPaneInfo().
         Name(wxT("TrapPane")).Caption(_("Send Trap Message")).
-        MinSize(500, 400).Dockable(false).Float().Hide());
+        Dockable(false).Float().Hide());
 
     _auiManager.AddPane(new PeerPane(this), wxAuiPaneInfo().
         Name(wxT("PeerPane")).Caption(_("Remote Status")).Bottom().

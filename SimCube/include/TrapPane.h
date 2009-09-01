@@ -2,6 +2,7 @@
 #define _TRAP_PANE_H_
 
 #include <wx/wx.h>
+#include <wx/wxsqlite3.h>
 
 class TrapPane : public wxPanel
 {
@@ -24,6 +25,8 @@ public:
 private:
     void Init();
     void CreateControls();
+
+    wxSQLite3Database *_db;
 };
 
 #endif /* _TRAP_PANE_H_ */
