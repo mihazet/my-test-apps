@@ -52,6 +52,7 @@ private:
 #endif
     bool DetectNetAdapter(bool *changed = NULL);
     wxString CalculateSubnetBroadcastAddress(wxString, wxString);
+    void InitMainDatabase();
 
 private:
     // internal data members
