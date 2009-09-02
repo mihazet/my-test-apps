@@ -59,6 +59,7 @@ void PropertyPane::CreateControls()
     _pg = new wxPropertyGrid(this, myID_PROPERTY_GRID,
         wxDefaultPosition, wxSize(250, 400),
         wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED|wxPG_TOOLTIPS);
+    size_t numProperty = 0;
     if (_db && _db->IsOpen())
     {
         wxSQLite3ResultSet set = _db->ExecuteQuery(wxT("SELECT * FROM PropTbl"));
@@ -91,6 +92,7 @@ void PropertyPane::CreateControls()
                 //str->SetMaxLength(length);
                 _pg->Append(str);
             }
+            numProperty++;
         }
         set.Finalize();
     }
@@ -100,6 +102,10 @@ void PropertyPane::CreateControls()
     rst->SetToolTip(_("Reset properties"));
     wxBoxSizer *btnSizer = new wxBoxSizer(wxHORIZONTAL);
     btnSizer->Add(rst, 0, wxALL, 0);
+    btnSizer->AddStretchSpacer();
+    wxStaticText *numProp = new wxStaticText(this, wxID_STATIC, 
+        wxString::Format(_("Total %d properties"), numProperty));
+    btnSizer->Add(numProp, 0, wxALL | wxALIGN_CENTER, 0);
     allSizer->Add(btnSizer, 0, wxALL | wxEXPAND, 5);
 
     SetSizer(allSizer);
