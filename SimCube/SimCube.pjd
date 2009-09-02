@@ -546,7 +546,7 @@
           <string name="Use OpenGL">"Yes"</string>
           <string name="Use wxMediaCtrl">"No"</string>
           <string name="Use wxRichTextCtrl">"Yes"</string>
-          <string name="Use wx-config">"No"</string>
+          <string name="Use wx-config">"Yes"</string>
           <string name="Use installed wxWidgets">"No"</string>
           <string name="Enable universal binaries">"No"</string>
           <string name="wxWidgets version">"%WXVERSION%"</string>
@@ -571,10 +571,10 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
+          <string name="Libraries">"-lwx_gtk2u_propgrid-2.9 -lwx_gtk2u_aui-2.9 %AUTO% -lsqlite3"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%"</string>
+          <string name="Include path">"%AUTO% -Iinclude -Iresource"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
