@@ -103,19 +103,19 @@ void SimCubeFrame::CreateControls()
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_EXIT);
     wxMenu *view_menu = new wxMenu;
-    view_menu->AppendCheckItem(ID_VIEW_PROPERTY_PANE, _("Property Pane"),
+    view_menu->AppendCheckItem(ID_VIEW_PROPERTY_PANE, _("Property Pane\tCTRL+F1"),
         _("Show or hide the property pane."));
-    view_menu->AppendCheckItem(ID_VIEW_TRAP_PANE, _("Trap Pane"),
+    view_menu->AppendCheckItem(ID_VIEW_TRAP_PANE, _("Trap Pane\tCTRL+F2"),
         _("Show or hid the trap pane."));
-    view_menu->AppendCheckItem(ID_VIEW_HISTORY_PANE, _("History Pane"),
+    view_menu->AppendCheckItem(ID_VIEW_HISTORY_PANE, _("History Pane\tCTRL+F3"),
         _("Show or hide the history pane."));
-    view_menu->AppendCheckItem(ID_VIEW_PEER_PANE, _("Remote Pane"),
+    view_menu->AppendCheckItem(ID_VIEW_PEER_PANE, _("Remote Pane\tCTRL+F4"),
         _("Show or hide the remote peer pane."));
-    view_menu->AppendCheckItem(ID_VIEW_CONFIG_PANE, _("Configuration Pane"),
+    view_menu->AppendCheckItem(ID_VIEW_CONFIG_PANE, _("Configuration Pane\tCTRL+F5"),
         _("Show or hide the configuration pane."));
-    view_menu->AppendCheckItem(ID_VIEW_DOWNLOAD_PANE, _("Download Pane"),
+    view_menu->AppendCheckItem(ID_VIEW_DOWNLOAD_PANE, _("Download Pane\tCTRL+F6"),
         _("Show or hide the download pane."));
-    view_menu->AppendCheckItem(ID_VIEW_LOG_PANE, _("Log Widnow"),
+    view_menu->AppendCheckItem(ID_VIEW_LOG_PANE, _("Log Widnow\tCTRL+F7"),
         _("Show or hide the logging window."));
     view_menu->AppendSeparator();
     view_menu->Append(ID_VIEW_RESET_LAYOUT, _("Reset all panes"),
