@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SimCube\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-02 19:47+0800\n"
+"POT-Creation-Date: 2009-09-03 22:14+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Yu Hui, Yang <yhuiyang@gmail.com>\n"
 "Language-Team:  <yhuiyang@gmail.com>\n"
@@ -16,41 +16,45 @@ msgstr ""
 "X-Poedit-SearchPath-0: ../../src\n"
 "X-Poedit-SearchPath-1: ../../include\n"
 
-#: ../../src/ConfigPane.cpp:56
+#: ../../src/ConfigPane.cpp:64
 msgid "Important! All changed parameters will take effect at next boot!"
 msgstr "Important! All changed parameters will take effect at next boot!"
 
-#: ../../src/ConfigPane.cpp:59
+#: ../../src/ConfigPane.cpp:68
 msgid "Language "
 msgstr "Language "
 
-#: ../../src/ConfigPane.cpp:62
+#: ../../src/ConfigPane.cpp:71
 msgid "Use system default language"
 msgstr "Use system default language"
 
-#: ../../src/ConfigPane.cpp:66
+#: ../../src/ConfigPane.cpp:75
 msgid "English"
 msgstr "English"
 
-#: ../../src/ConfigPane.cpp:67
+#: ../../src/ConfigPane.cpp:76
 msgid "Chinese (Traditional)"
 msgstr "正體中文"
 
-#: ../../src/ConfigPane.cpp:68
+#: ../../src/ConfigPane.cpp:77
 msgid "Chinese (Simplified)"
 msgstr "简体中文"
 
-#: ../../src/ConfigPane.cpp:79
-msgid "Port "
-msgstr "Port "
+#: ../../src/ConfigPane.cpp:89
+msgid "Options "
+msgstr "Options "
 
-#: ../../src/ConfigPane.cpp:82
-msgid "Which port will be used by UDP protocol? "
-msgstr "Which port will be used by UDP protocol? "
+#: ../../src/ConfigPane.cpp:92
+msgid "When application terminates, auto save the transaction history."
+msgstr "When application terminates, auto save the transaction history."
 
-#: ../../src/ConfigPane.cpp:147
+#: ../../src/ConfigPane.cpp:163
 msgid "Fail to update language setting!"
 msgstr "Fail to update language setting!"
+
+#: ../../src/ConfigPane.cpp:174
+msgid "Fail to update auto save history setting!"
+msgstr "Fail to update auto save history setting!"
 
 #: ../../src/HistoryPane.cpp:68
 msgid "Timestamp"
@@ -143,174 +147,171 @@ msgstr "Would you like to reset all properties to their default value?"
 msgid "Need user confirm"
 msgstr "Need user confirm"
 
-#: ../../src/SimCubeApp.cpp:94
+#: ../../src/SimCubeApp.cpp:45
+msgid "Welcome to Cube Simulator."
+msgstr "Welcome to Cube Simulator."
+
+#: ../../src/SimCubeApp.cpp:46
+msgid "Idle"
+msgstr "Idle"
+
+#: ../../src/SimCubeApp.cpp:47
+#, c-format
+msgid "Adapters: %d"
+msgstr "Adapters: %d"
+
+#: ../../src/SimCubeApp.cpp:146
 msgid "SimCube is already running, this instance will be terminated!"
 msgstr "SimCube is already running, this instance will be terminated!"
 
-#: ../../src/SimCubeApp.cpp:103
+#: ../../src/SimCubeApp.cpp:155
 msgid "No network adapter is availabled, this application will be terminated!"
 msgstr "No network adapter is availabled, this application will be terminated!"
 
-#: ../../src/SimCubeApp.cpp:109
+#: ../../src/SimCubeApp.cpp:161
 msgid "Failed to detect network adapters information, this application will be terminated!"
 msgstr "Failed to detect network adapters information, this application will be terminated!"
 
-#: ../../src/SimCubeApp.cpp:122
+#: ../../src/SimCubeApp.cpp:174
 msgid "Please insert USB dongle and restart application!"
 msgstr "Please insert USB dongle and restart application!"
 
-#: ../../src/SimCubeApp.cpp:159
+#: ../../src/SimCubeApp.cpp:211
 msgid "USB dongle is removed, application will be terminated now!"
 msgstr "USB dongle is removed, application will be terminated now!"
 
-#: ../../src/SimCubeApp.cpp:159
+#: ../../src/SimCubeApp.cpp:211
 msgid "Error"
 msgstr "Error"
 
-#: ../../src/SimCubeApp.cpp:206
-#: ../../src/SimCubeApp.cpp:217
+#: ../../src/SimCubeApp.cpp:258
+#: ../../src/SimCubeApp.cpp:269
 msgid "Fail to allocate memory space for GetAdaptersInfo."
 msgstr "Fail to allocate memory space for GetAdaptersInfo."
 
-#: ../../src/SimCubeApp.cpp:223
+#: ../../src/SimCubeApp.cpp:275
 #, c-format
 msgid "GetAdaptersInfo failed with error code = %d"
 msgstr "GetAdaptersInfo failed with error code = %d"
 
-#: ../../src/SimCubeApp.cpp:271
+#: ../../src/SimCubeApp.cpp:323
 #, c-format
 msgid "Fail to create UDP socket. errno = %d"
 msgstr "Fail to create UDP socket. errno = %d"
 
-#: ../../src/SimCubeApp.cpp:281
+#: ../../src/SimCubeApp.cpp:333
 msgid "Fail to retrieve interface configuration."
 msgstr "Fail to retrieve interface configuration."
 
-#: ../../src/SimCubeApp.cpp:305
+#: ../../src/SimCubeApp.cpp:357
 msgid "Fail to get netmask address!"
 msgstr "Fail to get netmask address!"
 
-#: ../../src/SimCubeApp.cpp:317
+#: ../../src/SimCubeApp.cpp:369
 msgid "Fail to get broadcast address!"
 msgstr "Fail to get broadcast address!"
 
-#: ../../src/SimCubeFrame.cpp:80
+#: ../../src/SimCubeFrame.cpp:78
 msgid "Fail to save perspective!"
 msgstr "Fail to save perspective!"
 
-#: ../../src/SimCubeFrame.cpp:106
+#: ../../src/SimCubeFrame.cpp:104
 msgid "Property Pane\tCTRL+F1"
 msgstr "Property Pane\tCTRL+F1"
 
-#: ../../src/SimCubeFrame.cpp:107
+#: ../../src/SimCubeFrame.cpp:105
 msgid "Show or hide the property pane."
 msgstr "Show or hide the property pane."
 
-#: ../../src/SimCubeFrame.cpp:108
+#: ../../src/SimCubeFrame.cpp:106
 msgid "Trap Pane\tCTRL+F2"
 msgstr "Trap Pane\tCTRL+F2"
 
-#: ../../src/SimCubeFrame.cpp:109
+#: ../../src/SimCubeFrame.cpp:107
 msgid "Show or hid the trap pane."
 msgstr "Show or hid the trap pane."
 
-#: ../../src/SimCubeFrame.cpp:110
-msgid "History Pane\tCTRL+F3"
-msgstr "History Pane\tCTRL+F3"
+#: ../../src/SimCubeFrame.cpp:108
+msgid "Remote Pane\tCTRL+F3"
+msgstr "Remote Pane\tCTRL+F3"
 
-#: ../../src/SimCubeFrame.cpp:111
-msgid "Show or hide the history pane."
-msgstr "Show or hide the history pane."
-
-#: ../../src/SimCubeFrame.cpp:112
-msgid "Remote Pane\tCTRL+F4"
-msgstr "Remote Pane\tCTRL+F4"
-
-#: ../../src/SimCubeFrame.cpp:113
+#: ../../src/SimCubeFrame.cpp:109
 msgid "Show or hide the remote peer pane."
 msgstr "Show or hide the remote peer pane."
 
-#: ../../src/SimCubeFrame.cpp:114
-msgid "Configuration Pane\tCTRL+F5"
-msgstr "Configuration Pane\tCTRL+F5"
+#: ../../src/SimCubeFrame.cpp:110
+msgid "Configuration Pane\tCTRL+F4"
+msgstr "Configuration Pane\tCTRL+F4"
 
-#: ../../src/SimCubeFrame.cpp:115
+#: ../../src/SimCubeFrame.cpp:111
 msgid "Show or hide the configuration pane."
 msgstr "Show or hide the configuration pane."
 
-#: ../../src/SimCubeFrame.cpp:116
-msgid "Download Pane\tCTRL+F6"
-msgstr "Download Pane\tCTRL+F6"
+#: ../../src/SimCubeFrame.cpp:112
+msgid "Log Widnow\tCTRL+F5"
+msgstr "Log Widnow\tCTRL+F5"
 
-#: ../../src/SimCubeFrame.cpp:117
-msgid "Show or hide the download pane."
-msgstr "Show or hide the download pane."
-
-#: ../../src/SimCubeFrame.cpp:118
-msgid "Log Widnow\tCTRL+F7"
-msgstr "Log Widnow\tCTRL+F7"
-
-#: ../../src/SimCubeFrame.cpp:119
+#: ../../src/SimCubeFrame.cpp:113
 msgid "Show or hide the logging window."
 msgstr "Show or hide the logging window."
 
-#: ../../src/SimCubeFrame.cpp:121
+#: ../../src/SimCubeFrame.cpp:115
 msgid "Reset all panes"
 msgstr "Reset all panes"
 
-#: ../../src/SimCubeFrame.cpp:122
+#: ../../src/SimCubeFrame.cpp:116
 msgid "Reset all panes to its default position and size."
 msgstr "Reset all panes to its default position and size."
 
-#: ../../src/SimCubeFrame.cpp:124
+#: ../../src/SimCubeFrame.cpp:118
 msgid "Help file"
 msgstr "Help file"
 
-#: ../../src/SimCubeFrame.cpp:125
+#: ../../src/SimCubeFrame.cpp:119
 msgid "Show help file."
 msgstr "Show help file."
 
-#: ../../src/SimCubeFrame.cpp:129
+#: ../../src/SimCubeFrame.cpp:123
 msgid "File"
 msgstr "File"
 
-#: ../../src/SimCubeFrame.cpp:130
+#: ../../src/SimCubeFrame.cpp:124
 msgid "View"
 msgstr "View"
 
-#: ../../src/SimCubeFrame.cpp:131
+#: ../../src/SimCubeFrame.cpp:125
 msgid "Help"
 msgstr "Help"
 
-#: ../../src/SimCubeFrame.cpp:142
+#: ../../src/SimCubeFrame.cpp:136
 msgid "Log Output"
 msgstr "Log Output"
 
-#: ../../src/SimCubeFrame.cpp:147
+#: ../../src/SimCubeFrame.cpp:141
 msgid "Supported Property"
 msgstr "Supported Property"
 
-#: ../../src/SimCubeFrame.cpp:152
+#: ../../src/SimCubeFrame.cpp:146
 msgid "Transaction History"
 msgstr "Transaction History"
 
-#: ../../src/SimCubeFrame.cpp:157
+#: ../../src/SimCubeFrame.cpp:151
 msgid "SimCube Configuration"
 msgstr "SimCube Configuration"
 
-#: ../../src/SimCubeFrame.cpp:161
+#: ../../src/SimCubeFrame.cpp:155
 msgid "Send Trap Message"
 msgstr "Send Trap Message"
 
-#: ../../src/SimCubeFrame.cpp:165
+#: ../../src/SimCubeFrame.cpp:159
 msgid "Remote Status"
 msgstr "Remote Status"
 
-#: ../../src/SimCubeFrame.cpp:179
+#: ../../src/SimCubeFrame.cpp:175
 msgid "Fail to save software default perspective!"
 msgstr "Fail to save software default perspective!"
 
-#: ../../src/SimCubeFrame.cpp:314
+#: ../../src/SimCubeFrame.cpp:300
 msgid "Fail to reset current perspective value"
 msgstr "Fail to reset current perspective value"
 
@@ -575,6 +576,18 @@ msgstr "Regular expression invalid: '"
 msgid "REGEXP called with wrong number of arguments: %d instead of 2."
 msgstr "REGEXP called with wrong number of arguments: %d instead of 2."
 
+#~ msgid "Port "
+#~ msgstr "Port "
+#~ msgid "Which port will be used by UDP protocol? "
+#~ msgstr "Which port will be used by UDP protocol? "
+#~ msgid "History Pane\tCTRL+F3"
+#~ msgstr "History Pane\tCTRL+F3"
+#~ msgid "Show or hide the history pane."
+#~ msgstr "Show or hide the history pane."
+#~ msgid "Download Pane\tCTRL+F6"
+#~ msgstr "Download Pane\tCTRL+F6"
+#~ msgid "Show or hide the download pane."
+#~ msgstr "Show or hide the download pane."
 #~ msgid "Reset To Default"
 #~ msgstr "Reset To Default"
 

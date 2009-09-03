@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SimCube\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-02 20:08+0800\n"
+"POT-Creation-Date: 2009-09-03 22:14+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Yu Hui, Yang <yhuiyang@gmail.com>\n"
 "Language-Team:  <yhuiyang@gmail.com>\n"
@@ -16,41 +16,45 @@ msgstr ""
 "X-Poedit-SearchPath-0: ../../src\n"
 "X-Poedit-SearchPath-1: ../../include\n"
 
-#: ../../src/ConfigPane.cpp:56
+#: ../../src/ConfigPane.cpp:64
 msgid "Important! All changed parameters will take effect at next boot!"
 msgstr "重要！只會在重新啟動本程式後，所有改變的參數方才會生效！"
 
-#: ../../src/ConfigPane.cpp:59
+#: ../../src/ConfigPane.cpp:68
 msgid "Language "
 msgstr "使用者介面語言"
 
-#: ../../src/ConfigPane.cpp:62
+#: ../../src/ConfigPane.cpp:71
 msgid "Use system default language"
 msgstr "使用系統預設語言"
 
-#: ../../src/ConfigPane.cpp:66
+#: ../../src/ConfigPane.cpp:75
 msgid "English"
 msgstr "English"
 
-#: ../../src/ConfigPane.cpp:67
+#: ../../src/ConfigPane.cpp:76
 msgid "Chinese (Traditional)"
 msgstr "正體中文"
 
-#: ../../src/ConfigPane.cpp:68
+#: ../../src/ConfigPane.cpp:77
 msgid "Chinese (Simplified)"
 msgstr "简体中文"
 
-#: ../../src/ConfigPane.cpp:79
-msgid "Port "
-msgstr "埠口"
+#: ../../src/ConfigPane.cpp:89
+msgid "Options "
+msgstr "選用項目"
 
-#: ../../src/ConfigPane.cpp:82
-msgid "Which port will be used by UDP protocol? "
-msgstr "UDP 協定使用的通訊埠口號碼？"
+#: ../../src/ConfigPane.cpp:92
+msgid "When application terminates, auto save the transaction history."
+msgstr "當應用程式結束時，自動儲存歷史紀錄。"
 
-#: ../../src/ConfigPane.cpp:147
+#: ../../src/ConfigPane.cpp:163
 msgid "Fail to update language setting!"
 msgstr "無法更新使用者介面語言設定！"
+
+#: ../../src/ConfigPane.cpp:174
+msgid "Fail to update auto save history setting!"
+msgstr "無法更新自動儲存歷史紀錄設定！"
 
 #: ../../src/HistoryPane.cpp:68
 msgid "Timestamp"
@@ -143,174 +147,171 @@ msgstr "您真的想要將全部的屬性值回復到初始預設值嗎？"
 msgid "Need user confirm"
 msgstr "需要使用者的確認"
 
-#: ../../src/SimCubeApp.cpp:94
+#: ../../src/SimCubeApp.cpp:45
+msgid "Welcome to Cube Simulator."
+msgstr "歡迎來到 Cube Simulator。"
+
+#: ../../src/SimCubeApp.cpp:46
+msgid "Idle"
+msgstr "閒置中"
+
+#: ../../src/SimCubeApp.cpp:47
+#, c-format
+msgid "Adapters: %d"
+msgstr "網路配接卡數：%d"
+
+#: ../../src/SimCubeApp.cpp:146
 msgid "SimCube is already running, this instance will be terminated!"
 msgstr "已經有另外一個 SimCube 正在執行中，目前的這個 SimCube 將會中止執行！"
 
-#: ../../src/SimCubeApp.cpp:103
+#: ../../src/SimCubeApp.cpp:155
 msgid "No network adapter is availabled, this application will be terminated!"
 msgstr "無可用的網路配接卡，本程式即將關閉！"
 
-#: ../../src/SimCubeApp.cpp:109
+#: ../../src/SimCubeApp.cpp:161
 msgid "Failed to detect network adapters information, this application will be terminated!"
 msgstr "偵測網路配接卡資訊時發生錯誤，本程式即將關閉！"
 
-#: ../../src/SimCubeApp.cpp:122
+#: ../../src/SimCubeApp.cpp:174
 msgid "Please insert USB dongle and restart application!"
 msgstr "請插入 USB 鎖並重新啟動本程式！"
 
-#: ../../src/SimCubeApp.cpp:159
+#: ../../src/SimCubeApp.cpp:211
 msgid "USB dongle is removed, application will be terminated now!"
 msgstr "USB 鎖已移除，本程式即將關閉！"
 
-#: ../../src/SimCubeApp.cpp:159
+#: ../../src/SimCubeApp.cpp:211
 msgid "Error"
 msgstr "錯誤"
 
-#: ../../src/SimCubeApp.cpp:206
-#: ../../src/SimCubeApp.cpp:217
+#: ../../src/SimCubeApp.cpp:258
+#: ../../src/SimCubeApp.cpp:269
 msgid "Fail to allocate memory space for GetAdaptersInfo."
 msgstr "無法為 API GetAdaptersInfo() 配置所需記憶體。"
 
-#: ../../src/SimCubeApp.cpp:223
+#: ../../src/SimCubeApp.cpp:275
 #, c-format
 msgid "GetAdaptersInfo failed with error code = %d"
 msgstr "API GetAdaptersInfo() 失敗，錯誤碼 = %d"
 
-#: ../../src/SimCubeApp.cpp:271
+#: ../../src/SimCubeApp.cpp:323
 #, c-format
 msgid "Fail to create UDP socket. errno = %d"
 msgstr "無法建立 UDP Socket。錯誤碼 = %d"
 
-#: ../../src/SimCubeApp.cpp:281
+#: ../../src/SimCubeApp.cpp:333
 msgid "Fail to retrieve interface configuration."
 msgstr "無法使用取得 ioctl(SIOCGIFCONF) 列舉網路介面。"
 
-#: ../../src/SimCubeApp.cpp:305
+#: ../../src/SimCubeApp.cpp:357
 msgid "Fail to get netmask address!"
 msgstr "無法取得子網路遮罩位址！"
 
-#: ../../src/SimCubeApp.cpp:317
+#: ../../src/SimCubeApp.cpp:369
 msgid "Fail to get broadcast address!"
 msgstr "無法取得廣播位址！"
 
-#: ../../src/SimCubeFrame.cpp:80
+#: ../../src/SimCubeFrame.cpp:78
 msgid "Fail to save perspective!"
 msgstr "無法儲存使用者介面佈局！"
 
-#: ../../src/SimCubeFrame.cpp:106
+#: ../../src/SimCubeFrame.cpp:104
 msgid "Property Pane\tCTRL+F1"
 msgstr "屬性值面版\tCTRL+F1"
 
-#: ../../src/SimCubeFrame.cpp:107
+#: ../../src/SimCubeFrame.cpp:105
 msgid "Show or hide the property pane."
 msgstr "顯示或隱藏屬性質面版。"
 
-#: ../../src/SimCubeFrame.cpp:108
+#: ../../src/SimCubeFrame.cpp:106
 msgid "Trap Pane\tCTRL+F2"
 msgstr "主動回應面版\tCTRL+F2"
 
-#: ../../src/SimCubeFrame.cpp:109
+#: ../../src/SimCubeFrame.cpp:107
 msgid "Show or hid the trap pane."
 msgstr "顯示或隱藏主動回應面版。"
 
-#: ../../src/SimCubeFrame.cpp:110
-msgid "History Pane\tCTRL+F3"
-msgstr "歷史記錄面版\tCTRL+F3"
+#: ../../src/SimCubeFrame.cpp:108
+msgid "Remote Pane\tCTRL+F3"
+msgstr "遠端面版\tCTRL+F3"
 
-#: ../../src/SimCubeFrame.cpp:111
-msgid "Show or hide the history pane."
-msgstr "顯示或隱藏歷史記錄面版。"
-
-#: ../../src/SimCubeFrame.cpp:112
-msgid "Remote Pane\tCTRL+F4"
-msgstr "遠端面版\tCTRL+F4"
-
-#: ../../src/SimCubeFrame.cpp:113
+#: ../../src/SimCubeFrame.cpp:109
 msgid "Show or hide the remote peer pane."
 msgstr "顯示或隱藏遠端面版。"
 
-#: ../../src/SimCubeFrame.cpp:114
-msgid "Configuration Pane\tCTRL+F5"
-msgstr "軟體設定面版\tCTRL+F5"
+#: ../../src/SimCubeFrame.cpp:110
+msgid "Configuration Pane\tCTRL+F4"
+msgstr "軟體設定面版\tCTRL+F4"
 
-#: ../../src/SimCubeFrame.cpp:115
+#: ../../src/SimCubeFrame.cpp:111
 msgid "Show or hide the configuration pane."
 msgstr "顯示或隱藏軟體設定面版。"
 
-#: ../../src/SimCubeFrame.cpp:116
-msgid "Download Pane\tCTRL+F6"
-msgstr "下載區面版\tCTRL+F6"
+#: ../../src/SimCubeFrame.cpp:112
+msgid "Log Widnow\tCTRL+F5"
+msgstr "紀錄視窗\tCTRL+F5"
 
-#: ../../src/SimCubeFrame.cpp:117
-msgid "Show or hide the download pane."
-msgstr "顯示或隱藏下載區面版。"
-
-#: ../../src/SimCubeFrame.cpp:118
-msgid "Log Widnow\tCTRL+F7"
-msgstr "紀錄視窗\tCTRL+F7"
-
-#: ../../src/SimCubeFrame.cpp:119
+#: ../../src/SimCubeFrame.cpp:113
 msgid "Show or hide the logging window."
 msgstr "顯示或隱藏紀錄視窗。"
 
-#: ../../src/SimCubeFrame.cpp:121
+#: ../../src/SimCubeFrame.cpp:115
 msgid "Reset all panes"
 msgstr "重置所有面版"
 
-#: ../../src/SimCubeFrame.cpp:122
+#: ../../src/SimCubeFrame.cpp:116
 msgid "Reset all panes to its default position and size."
 msgstr "重置所有面版至預設位置與尺寸。"
 
-#: ../../src/SimCubeFrame.cpp:124
+#: ../../src/SimCubeFrame.cpp:118
 msgid "Help file"
 msgstr "幫助檔案"
 
-#: ../../src/SimCubeFrame.cpp:125
+#: ../../src/SimCubeFrame.cpp:119
 msgid "Show help file."
 msgstr "顯示幫助檔案。"
 
-#: ../../src/SimCubeFrame.cpp:129
+#: ../../src/SimCubeFrame.cpp:123
 msgid "File"
 msgstr "檔案"
 
-#: ../../src/SimCubeFrame.cpp:130
+#: ../../src/SimCubeFrame.cpp:124
 msgid "View"
 msgstr "檢視"
 
-#: ../../src/SimCubeFrame.cpp:131
+#: ../../src/SimCubeFrame.cpp:125
 msgid "Help"
 msgstr "說明"
 
-#: ../../src/SimCubeFrame.cpp:142
+#: ../../src/SimCubeFrame.cpp:136
 msgid "Log Output"
 msgstr "紀錄視窗"
 
-#: ../../src/SimCubeFrame.cpp:147
+#: ../../src/SimCubeFrame.cpp:141
 msgid "Supported Property"
 msgstr "支援的屬性值"
 
-#: ../../src/SimCubeFrame.cpp:152
+#: ../../src/SimCubeFrame.cpp:146
 msgid "Transaction History"
 msgstr "交易歷史紀錄"
 
-#: ../../src/SimCubeFrame.cpp:157
+#: ../../src/SimCubeFrame.cpp:151
 msgid "SimCube Configuration"
 msgstr "SimCube 軟體設定"
 
-#: ../../src/SimCubeFrame.cpp:161
+#: ../../src/SimCubeFrame.cpp:155
 msgid "Send Trap Message"
 msgstr "傳送主動回應訊息"
 
-#: ../../src/SimCubeFrame.cpp:165
+#: ../../src/SimCubeFrame.cpp:159
 msgid "Remote Status"
 msgstr "遠端連線狀態"
 
-#: ../../src/SimCubeFrame.cpp:179
+#: ../../src/SimCubeFrame.cpp:175
 msgid "Fail to save software default perspective!"
 msgstr "無法儲存軟體預設介面佈局！"
 
-#: ../../src/SimCubeFrame.cpp:314
+#: ../../src/SimCubeFrame.cpp:300
 msgid "Fail to reset current perspective value"
 msgstr "無法回復目前的介面佈局"
 
@@ -362,15 +363,15 @@ msgstr "重置 Flash 保留區"
 
 #: ../../src/TCPProtocol.cpp:286
 msgid "Run FW from flash"
-msgstr ""
+msgstr "由 Flash 執行 firmware"
 
 #: ../../src/TCPProtocol.cpp:291
 msgid "Run FW from ram"
-msgstr ""
+msgstr "由記憶體執行 firmware"
 
 #: ../../src/TCPProtocol.cpp:327
 msgid "Verify checksum in memory load buffer failed!"
-msgstr ""
+msgstr "Verify checksum in memory load buffer failed!"
 
 #: ../../src/TrapPane.cpp:40
 msgid "Led Status"
@@ -379,35 +380,35 @@ msgstr "Led 燈號狀態"
 #: ../../src/TrapPane.cpp:43
 #: ../../src/TrapPane.cpp:74
 msgid "Off"
-msgstr ""
+msgstr "Off"
 
 #: ../../src/TrapPane.cpp:44
 msgid "Red"
-msgstr ""
+msgstr "Red"
 
 #: ../../src/TrapPane.cpp:45
 msgid "Green"
-msgstr ""
+msgstr "Green"
 
 #: ../../src/TrapPane.cpp:46
 msgid "Orange"
-msgstr ""
+msgstr "Orange"
 
 #: ../../src/TrapPane.cpp:47
 msgid "Green<->Off"
-msgstr ""
+msgstr "Green<->Off"
 
 #: ../../src/TrapPane.cpp:48
 msgid "Off<->Green"
-msgstr ""
+msgstr "Off<->Green"
 
 #: ../../src/TrapPane.cpp:49
 msgid "Red<->Green"
-msgstr ""
+msgstr "Red<->Green"
 
 #: ../../src/TrapPane.cpp:50
 msgid "Green<->Orange"
-msgstr ""
+msgstr "Green<->Orange"
 
 #: ../../src/TrapPane.cpp:51
 msgid "Power"
@@ -415,15 +416,15 @@ msgstr "電源"
 
 #: ../../src/TrapPane.cpp:53
 msgid "Fan"
-msgstr ""
+msgstr "Fan"
 
 #: ../../src/TrapPane.cpp:55
 msgid "LampA"
-msgstr ""
+msgstr "LampA"
 
 #: ../../src/TrapPane.cpp:57
 msgid "LampB"
-msgstr ""
+msgstr "LampB"
 
 #: ../../src/TrapPane.cpp:68
 msgid "Lamp A Status"
@@ -436,11 +437,11 @@ msgstr "狀態"
 
 #: ../../src/TrapPane.cpp:75
 msgid "In use"
-msgstr ""
+msgstr "In use"
 
 #: ../../src/TrapPane.cpp:76
 msgid "Lit failed"
-msgstr ""
+msgstr "Lit failed"
 
 #: ../../src/TrapPane.cpp:79
 #: ../../src/TrapPane.cpp:86
@@ -451,42 +452,42 @@ msgstr ""
 #: ../../src/TrapPane.cpp:133
 #: ../../src/TrapPane.cpp:140
 msgid "Send"
-msgstr ""
+msgstr "傳送"
 
 #: ../../src/TrapPane.cpp:83
 #: ../../src/TrapPane.cpp:123
 msgid "Hours"
-msgstr ""
+msgstr "點燈時數"
 
 #: ../../src/TrapPane.cpp:90
 #: ../../src/TrapPane.cpp:130
 msgid "Lit Count"
-msgstr ""
+msgstr "點燈次數"
 
 #: ../../src/TrapPane.cpp:97
 #: ../../src/TrapPane.cpp:137
 msgid "Temp Cond"
-msgstr ""
+msgstr "溫度狀態"
 
 #: ../../src/TrapPane.cpp:99
 msgid "Shutdown"
-msgstr ""
+msgstr "Shutdown"
 
 #: ../../src/TrapPane.cpp:100
 #: ../../src/TrapPane.cpp:101
 msgid "Out of spec"
-msgstr ""
+msgstr "Out of spec"
 
 #: ../../src/TrapPane.cpp:102
 msgid "Critical"
-msgstr ""
+msgstr "Critical"
 
 #: ../../src/TrapPane.cpp:103
 #: ../../src/TrapPane.cpp:104
 #: ../../src/TrapPane.cpp:105
 #: ../../src/TrapPane.cpp:106
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: ../../src/TrapPane.cpp:112
 msgid "Lamp B Status"
@@ -575,6 +576,18 @@ msgstr "Regular expression invalid: '"
 msgid "REGEXP called with wrong number of arguments: %d instead of 2."
 msgstr "REGEXP called with wrong number of arguments: %d instead of 2."
 
+#~ msgid "Port "
+#~ msgstr "埠口"
+#~ msgid "Which port will be used by UDP protocol? "
+#~ msgstr "UDP 協定使用的通訊埠口號碼？"
+#~ msgid "History Pane\tCTRL+F3"
+#~ msgstr "歷史記錄面版\tCTRL+F3"
+#~ msgid "Show or hide the history pane."
+#~ msgstr "顯示或隱藏歷史記錄面版。"
+#~ msgid "Download Pane\tCTRL+F6"
+#~ msgstr "下載區面版\tCTRL+F6"
+#~ msgid "Show or hide the download pane."
+#~ msgstr "顯示或隱藏下載區面版。"
 #~ msgid "Reset To Default"
 #~ msgstr "回復到預設值"
 
