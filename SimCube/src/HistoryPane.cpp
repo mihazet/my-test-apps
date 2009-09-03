@@ -120,9 +120,13 @@ void HistoryPane::OnSaveHistory(wxCommandEvent &WXUNUSED(event))
             if (db)
             {
                 if (!db->IsOpen())
+                {
                     wxLogError(_("Sorry! History database is closed!"));
+                }
                 if (!db->HasBackupSupport())
+                {
                     wxLogError(_("Sorry! History database doesn't support backup feature!"));
+                }
             }
         }
     }

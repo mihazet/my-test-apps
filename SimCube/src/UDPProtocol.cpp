@@ -223,7 +223,9 @@ void UDPProtocol::ProcessNormalModeProtocol(const char *buf, size_t len,
             handled = (this->*_normalHandler[handler].handler)(token.ToAscii(), token.length(), peer, local);
 
             if (!handled)
+            {
                 wxLogVerbose(_("Token (%s) didn't handle by handler"), token);
+            }
         }
     }
 }

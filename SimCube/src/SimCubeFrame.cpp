@@ -75,7 +75,9 @@ SimCubeFrame::~SimCubeFrame()
         << perspective
         << wxT("' WHERE ConfigName = 'Perspective'");
     if (1 != _db->ExecuteUpdate(sql))
+    {
         wxLogError(_("Fail to save perspective!"));
+    }
 
     _auiManager.UnInit();
 }
@@ -172,7 +174,9 @@ void SimCubeFrame::CreateControls()
         << _auiManager.SavePerspective()
         << wxT("' WHERE ConfigName = 'DefaultPerspective'");
     if (1 != _db->ExecuteUpdate(sql))
+    {
         wxLogError(_("Fail to save software default perspective!"));
+    }
 
     /* restore previous perspective or just use current perspective */
     sql.clear();
@@ -297,7 +301,9 @@ void SimCubeFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
 
     sql << wxT("UPDATE CfgTbl SET ConfigValue = '' WHERE ConfigName = 'Perspective'");
     if (1 != _db->ExecuteUpdate(sql))
+    {
         wxLogError(_("Fail to reset current perspective value"));
+    }
 
     sql.clear();
     sql << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'DefaultPerspective'");

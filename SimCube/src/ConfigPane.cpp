@@ -82,6 +82,7 @@ void ConfigPane::CreateControls()
     case eLANG_ENGLISH: lb->SetSelection(0); break;
     case eLANG_CHINESE_TRADITIONAL: lb->SetSelection(1); break;
     case eLANG_CHINESE_SIMPLIFIED: lb->SetSelection(2); break;
+    default: break;
     }
     langSizer->Add(lb, 0, wxALL, 5);
     /* auto save history */
@@ -160,18 +161,26 @@ void ConfigPane::TransferToDatabase(int item)
         }
         sqlUpdate << wxT("WHERE ConfigName = 'Language'");
         if (1 != _db->ExecuteUpdate(sqlUpdate))
+        {
             wxLogError(_("Fail to update language setting!"));
+        }
         break;
 
     case update_autosave:
         sqlUpdate << wxT("UPDATE CfgTbl SET ConfigValue = ");
         if (_autoSave)
+        {
             sqlUpdate << wxT("'True' ");
+        }
         else
+        {
             sqlUpdate << wxT("'False' ");
+        }
         sqlUpdate << wxT("WHERE ConfigName = 'AutoSaveHistory'");
         if (1 != _db->ExecuteUpdate(sqlUpdate))
+        {
             wxLogError(_("Fail to update auto save history setting!"));
+        }
         break;
 
     default:

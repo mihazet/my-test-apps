@@ -103,7 +103,9 @@ TCPProtocol::TCPProtocol()
         it->tcp->SetNotify(wxSOCKET_CONNECTION_FLAG);
         it->tcp->Notify(true);
         if (!it->tcp->Ok())
+        {
             wxLogError(_("Fail to bind %s:%d to tcp socket"), local.IPAddress(), local.Service());
+        }
     }
 
     pst_buffer_load = new tst_BUFFER_LOAD;
@@ -222,7 +224,6 @@ void TCPProtocol::OnSocketEvent(wxSocketEvent &event)
 bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
 {
     tst_LOAD_HEADER *stp_load_header = NULL;
-    tst_CTRL_HEADER *stp_ctrl_header = NULL;
     tst_LOAD_PACKET st_response_load_packet;
     tst_CTRL_PACKET st_response_ctrl_packet;
     unsigned char byaInitParam[4] = 
