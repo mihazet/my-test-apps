@@ -21,10 +21,8 @@ enum
     ID_VIEW_PANE_START = wxID_HIGHEST + 1,
     ID_VIEW_PROPERTY_PANE = ID_VIEW_PANE_START,
     ID_VIEW_TRAP_PANE,
-    ID_VIEW_HISTORY_PANE,
     ID_VIEW_PEER_PANE,
     ID_VIEW_CONFIG_PANE,
-    ID_VIEW_DOWNLOAD_PANE,
     ID_VIEW_LOG_PANE,
     ID_VIEW_PANE_END = ID_VIEW_LOG_PANE,
     ID_VIEW_RESET_LAYOUT,
@@ -107,15 +105,11 @@ void SimCubeFrame::CreateControls()
         _("Show or hide the property pane."));
     view_menu->AppendCheckItem(ID_VIEW_TRAP_PANE, _("Trap Pane\tCTRL+F2"),
         _("Show or hid the trap pane."));
-    view_menu->AppendCheckItem(ID_VIEW_HISTORY_PANE, _("History Pane\tCTRL+F3"),
-        _("Show or hide the history pane."));
-    view_menu->AppendCheckItem(ID_VIEW_PEER_PANE, _("Remote Pane\tCTRL+F4"),
+    view_menu->AppendCheckItem(ID_VIEW_PEER_PANE, _("Remote Pane\tCTRL+F3"),
         _("Show or hide the remote peer pane."));
-    view_menu->AppendCheckItem(ID_VIEW_CONFIG_PANE, _("Configuration Pane\tCTRL+F5"),
+    view_menu->AppendCheckItem(ID_VIEW_CONFIG_PANE, _("Configuration Pane\tCTRL+F4"),
         _("Show or hide the configuration pane."));
-    view_menu->AppendCheckItem(ID_VIEW_DOWNLOAD_PANE, _("Download Pane\tCTRL+F6"),
-        _("Show or hide the download pane."));
-    view_menu->AppendCheckItem(ID_VIEW_LOG_PANE, _("Log Widnow\tCTRL+F7"),
+    view_menu->AppendCheckItem(ID_VIEW_LOG_PANE, _("Log Widnow\tCTRL+F5"),
         _("Show or hide the logging window."));
     view_menu->AppendSeparator();
     view_menu->Append(ID_VIEW_RESET_LAYOUT, _("Reset all panes"),
@@ -150,8 +144,8 @@ void SimCubeFrame::CreateControls()
 
     _auiManager.AddPane(new HistoryPane(this), wxAuiPaneInfo().
         Name(wxT("HistoryPane")).Caption(_("Transaction History")).Center().
-        CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
-        MinSize(500, -1));
+        CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
+        MinSize(500, 300));
 
     _auiManager.AddPane(new ConfigPane(this), wxAuiPaneInfo().
         Name(wxT("ConfigPane")).Caption(_("SimCube Configuration")).
@@ -261,16 +255,11 @@ void SimCubeFrame::OnViewPane(wxCommandEvent &event)
     case ID_VIEW_TRAP_PANE:
         _auiManager.GetPane(wxT("TrapPane")).Show(event.IsChecked());
         break;
-    case ID_VIEW_HISTORY_PANE:
-        _auiManager.GetPane(wxT("HistoryPane")).Show(event.IsChecked());
-        break;
     case ID_VIEW_PEER_PANE:
         _auiManager.GetPane(wxT("PeerPane")).Show(event.IsChecked());
         break;
     case ID_VIEW_CONFIG_PANE:
         _auiManager.GetPane(wxT("ConfigPane")).Show(event.IsChecked());
-        break;
-    case ID_VIEW_DOWNLOAD_PANE:
         break;
     case ID_VIEW_LOG_PANE:
         _auiManager.GetPane(wxT("DebugPane")).Show(event.IsChecked());
@@ -289,16 +278,11 @@ void SimCubeFrame::OnUpdatePane(wxUpdateUIEvent &event)
     case ID_VIEW_TRAP_PANE:
         event.Check(_auiManager.GetPane(wxT("TrapPane")).IsShown());
         break;
-    case ID_VIEW_HISTORY_PANE:
-        event.Check(_auiManager.GetPane(wxT("HistoryPane")).IsShown());
-        break;
     case ID_VIEW_PEER_PANE:
         event.Check(_auiManager.GetPane(wxT("PeerPane")).IsShown());
         break;
     case ID_VIEW_CONFIG_PANE:
         event.Check(_auiManager.GetPane(wxT("ConfigPane")).IsShown());
-        break;
-    case ID_VIEW_DOWNLOAD_PANE:
         break;
     case ID_VIEW_LOG_PANE:
         event.Check(_auiManager.GetPane(wxT("DebugPane")).IsShown());
