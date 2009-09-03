@@ -154,8 +154,8 @@ void ConfigPane::TransferToDatabase(int item)
         switch (_language)
         {
         case eLANG_ENGLISH: sqlUpdate << wxT("'English' "); break;
-        case eLANG_CHINESE_TRADITIONAL: sqlUpdate << wxT("'Chinese Traditional' "); break;
-        case eLANG_CHINESE_SIMPLIFIED: sqlUpdate << wxT("'Chinese Simplified' "); break;
+        case eLANG_CHINESE_TRADITIONAL: sqlUpdate << wxT("'TraditionalChinese' "); break;
+        case eLANG_CHINESE_SIMPLIFIED: sqlUpdate << wxT("'SimplifiedChinese' "); break;
         default: sqlUpdate << wxT("'Default' "); break;
         }
         sqlUpdate << wxT("WHERE ConfigName = 'Language'");
@@ -193,9 +193,9 @@ void ConfigPane::TransferFromDatabase()
 
     if (value == wxT("English"))
         _language = eLANG_ENGLISH;
-    else if (value == wxT("Chinese Traditional"))
+    else if (value == wxT("TraditionalChinese"))
         _language = eLANG_CHINESE_TRADITIONAL;
-    else if (value == wxT("Chinese Simplified"))
+    else if (value == wxT("SimplifiedChinese"))
         _language = eLANG_CHINESE_SIMPLIFIED;
     else
         _language = eLANG_DEFAULT;
