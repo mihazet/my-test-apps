@@ -9,6 +9,57 @@
 #include "Rockey4_ND_32.h"
 #endif
 
+////////////////////////////////////////////////////////////////////////////
+enum
+{
+    SIMCUBE_STB_INFO,
+    SIMCUBE_STB_DOWNLOAD,
+    SIMCUBE_STB_ADAPTER,
+
+    SIMCUBE_STB_MAX
+};
+
+BEGIN_EVENT_TABLE(SimCubeStatusBar, wxStatusBar)
+    //EVT_SIZE(SimCubeStatusBar::OnSize)
+END_EVENT_TABLE()
+
+SimCubeStatusBar::SimCubeStatusBar(wxWindow *parent, long style)
+    : wxStatusBar(parent, wxID_ANY, style)
+{
+    Init();
+    Create(parent, style);
+}
+
+SimCubeStatusBar::~SimCubeStatusBar()
+{
+}
+
+bool SimCubeStatusBar::Create(wxWindow *parent, long style)
+{
+    bool result;
+    int widths[SIMCUBE_STB_MAX] = { -1, 100, 120 };
+    wxVector<NetAdapter> &adapters = wxGetApp().m_Adapters;
+
+    result = wxStatusBar::Create(parent, wxID_ANY, style);
+    SetFieldsCount(WXSIZEOF(widths), widths);
+    SetStatusText(_("Welcome to Cube Simulator."), SIMCUBE_STB_INFO);
+    SetStatusText(_("Idle"), SIMCUBE_STB_DOWNLOAD);
+    SetStatusText(wxString::Format(_("Adapters: %d"), adapters.size()),
+        SIMCUBE_STB_ADAPTER);
+
+    return result;
+}
+
+void SimCubeStatusBar::Init()
+{
+}
+
+void SimCubeStatusBar::OnSize(wxSizeEvent &event)
+{
+    event.Skip();
+}
+
+////////////////////////////////////////////////////////////////////////////
 IMPLEMENT_APP(SimCubeApp)
 
 BEGIN_EVENT_TABLE(SimCubeApp, wxApp)
@@ -65,6 +116,7 @@ void SimCubeApp::Init()
     _tcpProtocol = NULL;
     m_PeerData = new PeerDataModel();
     m_HistoryData = new HistoryDataModel(_memDB);
+    m_StatusBar = new SimCubeStatusBar();
 }
 
 bool SimCubeApp::OnInit()

@@ -26,6 +26,24 @@
 /* enable or disable software protection by using rockey4nd usb dongle */
 #undef PROTECTED_BY_ROCKEY4_USB_DONGLE
 
+////////////////////////////////////////////////////////////////////////////
+class SimCubeStatusBar : public wxStatusBar
+{
+public:
+    SimCubeStatusBar() { Init(); }
+    SimCubeStatusBar(wxWindow *parent, long style = wxSTB_DEFAULT_STYLE);
+    virtual ~SimCubeStatusBar();
+    bool Create(wxWindow *parent, long style = wxSTB_DEFAULT_STYLE);
+
+private:
+    void Init();
+
+    /* event handlers */
+    void OnSize(wxSizeEvent &event);
+
+    DECLARE_EVENT_TABLE()
+};
+////////////////////////////////////////////////////////////////////////////
 class SimCubeApp : public wxApp
 {
 public:
@@ -39,6 +57,7 @@ public:
     wxVector<NetAdapter> m_Adapters;
     PeerDataModel *m_PeerData;
     HistoryDataModel *m_HistoryData;
+    SimCubeStatusBar *m_StatusBar;
 
 private:
     // event handlers

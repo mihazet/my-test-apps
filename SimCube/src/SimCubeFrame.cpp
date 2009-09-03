@@ -166,7 +166,9 @@ void SimCubeFrame::CreateControls()
         CloseButton(true).DestroyOnClose(false).MinSize(200, 150));
 
     /* status bar */
-    SetStatusBar(CreateStatusBar(3));
+    SimCubeStatusBar *sb = wxGetApp().m_StatusBar;
+    sb->Create(this);
+    SetStatusBar(sb);
 
     /* update default perspective (use layout code above) */
     wxString sql, perspective;
