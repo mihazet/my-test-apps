@@ -30,9 +30,10 @@ private:
     void OnLangDefault(wxCommandEvent &event);
     void OnUpdateLangSelect(wxUpdateUIEvent &event);
     void OnLangSelect(wxCommandEvent &event);
+    void OnAutoSaveHistory(wxCommandEvent &event);
 
     /* helper functions */
-    void TransferToDatabase(void);
+    void TransferToDatabase(int);
     void TransferFromDatabase(void);
 
     wxSQLite3Database *_db;
@@ -43,6 +44,7 @@ private:
         eLANG_CHINESE_TRADITIONAL,
         eLANG_CHINESE_SIMPLIFIED,
     } _language;
+    bool _autoSave;
 
     DECLARE_EVENT_TABLE()
 };

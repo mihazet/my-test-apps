@@ -6,13 +6,20 @@ enum
 {
     ID_LANG_DEFAULT = wxID_HIGHEST + 100,
     ID_LANG_SELECT,
-    ID_UDP_PORT,
+    ID_OPT_AUTOSAVE_HISTORY,
+};
+
+enum
+{
+    update_language,
+    update_autosave,
 };
 
 BEGIN_EVENT_TABLE(ConfigPane, wxPanel)
     EVT_CHECKBOX(ID_LANG_DEFAULT, ConfigPane::OnLangDefault)
     EVT_UPDATE_UI(ID_LANG_SELECT, ConfigPane::OnUpdateLangSelect)
     EVT_LISTBOX(ID_LANG_SELECT, ConfigPane::OnLangSelect)
+    EVT_CHECKBOX(ID_OPT_AUTOSAVE_HISTORY, ConfigPane::OnAutoSaveHistory)
 END_EVENT_TABLE()
 
 ConfigPane::ConfigPane()
@@ -50,11 +57,13 @@ void ConfigPane::Init()
 void ConfigPane::CreateControls()
 {
     wxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
+    /* description */
     wxBoxSizer *descSizer = new wxBoxSizer(wxHORIZONTAL);
     allSizer->Add(descSizer, 0, wxALL | wxALIGN_CENTER | wxEXPAND, 5);
     descSizer->Add(new wxStaticText(this, wxID_STATIC,
         _("Important! All changed parameters will take effect at next boot!")),
         0, wxTOP | wxRIGHT | wxLEFT | wxALIGN_CENTER | wxEXPAND, 15);
+    /* language */
     wxStaticBoxSizer *langSizer = new wxStaticBoxSizer(wxVERTICAL,
         this, _("Language "));
     allSizer->Add(langSizer, 0, wxALL | wxEXPAND, 15);
@@ -75,14 +84,14 @@ void ConfigPane::CreateControls()
     case eLANG_CHINESE_SIMPLIFIED: lb->SetSelection(2); break;
     }
     langSizer->Add(lb, 0, wxALL, 5);
-    wxStaticBoxSizer *portSizer = new wxStaticBoxSizer(wxHORIZONTAL,
-        this, _("Port "));
-    allSizer->Add(portSizer, 0, wxRIGHT | wxLEFT | wxEXPAND, 15);
-    portSizer->Add(new wxStaticText(this, wxID_STATIC,
-        _("Which port will be used by UDP protocol? ")), 0,
-        wxALL | wxEXPAND, 5);
-    portSizer->Add(new wxTextCtrl(this, ID_UDP_PORT), 1,
-        wxALL | wxEXPAND, 5);    
+    /* auto save history */
+    wxStaticBoxSizer *optSizer = new wxStaticBoxSizer(wxHORIZONTAL,
+        this, _("Options "));
+    allSizer->Add(optSizer, 0, wxRIGHT | wxLEFT | wxBOTTOM | wxEXPAND, 15);
+    cb = new wxCheckBox(this, ID_OPT_AUTOSAVE_HISTORY,
+        _("When application terminates, auto save the transaction history."));
+    cb->SetValue(_autoSave);
+    optSizer->Add(cb, 0, wxALL | wxEXPAND, 5);
 
     SetSizerAndFit(allSizer);
 }
@@ -105,7 +114,7 @@ void ConfigPane::OnLangDefault(wxCommandEvent &event)
         }
     }
 
-    TransferToDatabase();
+    TransferToDatabase(update_language);
 }
 
 void ConfigPane::OnUpdateLangSelect(wxUpdateUIEvent &event)
@@ -124,27 +133,50 @@ void ConfigPane::OnLangSelect(wxCommandEvent &event)
     default: _language = eLANG_DEFAULT; break;
     }
 
-    TransferToDatabase();
+    TransferToDatabase(update_language);
+}
+
+void ConfigPane::OnAutoSaveHistory(wxCommandEvent &event)
+{
+    _autoSave = event.IsChecked();
+    TransferToDatabase(update_autosave);
 }
 
 // helper functions
-void ConfigPane::TransferToDatabase()
+void ConfigPane::TransferToDatabase(int item)
 {
     wxString sqlUpdate;
 
-    /* language */
-    sqlUpdate.clear();
-    sqlUpdate << wxT("UPDATE CfgTbl SET ConfigValue = ");
-    switch (_language)
+    switch (item)
     {
-    case eLANG_ENGLISH: sqlUpdate << wxT("'English' "); break;
-    case eLANG_CHINESE_TRADITIONAL: sqlUpdate << wxT("'Chinese Traditional' "); break;
-    case eLANG_CHINESE_SIMPLIFIED: sqlUpdate << wxT("'Chinese Simplified' "); break;
-    default: sqlUpdate << wxT("'Default' "); break;
+    case update_language:
+        sqlUpdate << wxT("UPDATE CfgTbl SET ConfigValue = ");
+        switch (_language)
+        {
+        case eLANG_ENGLISH: sqlUpdate << wxT("'English' "); break;
+        case eLANG_CHINESE_TRADITIONAL: sqlUpdate << wxT("'Chinese Traditional' "); break;
+        case eLANG_CHINESE_SIMPLIFIED: sqlUpdate << wxT("'Chinese Simplified' "); break;
+        default: sqlUpdate << wxT("'Default' "); break;
+        }
+        sqlUpdate << wxT("WHERE ConfigName = 'Language'");
+        if (1 != _db->ExecuteUpdate(sqlUpdate))
+            wxLogError(_("Fail to update language setting!"));
+        break;
+
+    case update_autosave:
+        sqlUpdate << wxT("UPDATE CfgTbl SET ConfigValue = ");
+        if (_autoSave)
+            sqlUpdate << wxT("'True' ");
+        else
+            sqlUpdate << wxT("'False' ");
+        sqlUpdate << wxT("WHERE ConfigName = 'AutoSaveHistory'");
+        if (1 != _db->ExecuteUpdate(sqlUpdate))
+            wxLogError(_("Fail to update auto save history setting!"));
+        break;
+
+    default:
+        break;
     }
-    sqlUpdate << wxT("WHERE ConfigName = 'Language'");
-    if (1 != _db->ExecuteUpdate(sqlUpdate))
-        wxLogError(_("Fail to update language setting!"));
 }
 
 void ConfigPane::TransferFromDatabase()
@@ -167,4 +199,20 @@ void ConfigPane::TransferFromDatabase()
         _language = eLANG_CHINESE_SIMPLIFIED;
     else
         _language = eLANG_DEFAULT;
+
+    /* auto save */
+    sqlQuery.clear();
+    sqlQuery << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'AutoSaveHistory'");
+    set = _db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        value = set.GetAsString(0);
+    set.Finalize();
+
+    if ((value == wxT("True")) || (value == wxT("Yes")))
+        _autoSave = true;
+    else if ((value == wxT("False")) || (value == wxT("No")))
+        _autoSave = false;
+    else
+        _autoSave = false;
 }
+

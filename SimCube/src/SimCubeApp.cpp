@@ -20,7 +20,7 @@ enum
 };
 
 BEGIN_EVENT_TABLE(SimCubeStatusBar, wxStatusBar)
-    //EVT_SIZE(SimCubeStatusBar::OnSize)
+    EVT_SIZE(SimCubeStatusBar::OnSize)
 END_EVENT_TABLE()
 
 SimCubeStatusBar::SimCubeStatusBar(wxWindow *parent, long style)
@@ -562,7 +562,7 @@ void SimCubeApp::InitMainDatabase()
     sql << wxT("BEGIN TRANSACTION;")
         << wxT("CREATE TABLE IF NOT EXISTS CfgTbl (ConfigName TEXT UNIQUE, ConfigValue TEXT);")
         << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"Language\", \"Default\");")
-        << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"ListenPort\", \"40000\");")
+        << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"AutoSaveHistory\", \"True\");")
         << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"FrameX\", \"-1\");")
         << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"FrameY\", \"-1\");")
         << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"FrameW\", \"-1\");")
