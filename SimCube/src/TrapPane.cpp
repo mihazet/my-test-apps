@@ -50,6 +50,8 @@ void TrapPane::CreateControls()
     ledStatus.push_back(_("Green<->Orange"));
     wxRadioBox *powerRB = new wxRadioBox(this, wxID_ANY, _("Power"), wxDefaultPosition,
         wxDefaultSize, ledStatus, 0, wxVERTICAL);
+    powerRB->Enable(0, false);
+    powerRB->SetSelection(1); // because of item 0 is disabled.
     powerRB->Enable(4, false);
     powerRB->Enable(5, false);
     wxRadioBox *fanRB = new wxRadioBox(this, wxID_ANY, _("Fan"), wxDefaultPosition,
