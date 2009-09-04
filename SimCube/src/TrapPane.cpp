@@ -2,6 +2,7 @@
 #include <wx/spinctrl.h>
 #include "SimCubeApp.h"
 #include "TrapPane.h"
+#include "led.h"
 
 TrapPane::TrapPane()
 {
@@ -37,8 +38,27 @@ void TrapPane::Init()
 void TrapPane::CreateControls()
 {
     wxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
-    wxStaticBoxSizer *ledSizer = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Led Status"));
-    allSizer->Add(ledSizer, 0, wxALL | wxEXPAND, 5);
+    wxStaticBoxSizer *ledSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Led Status"));
+    allSizer->Add(ledSizer, 0, wxALL | wxEXPAND, 15);
+    /* preview */
+    wxStaticBoxSizer *ledPreviewSizer = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Preview"));
+    ledSizer->Add(ledPreviewSizer, 0, wxALL | wxEXPAND, 5);
+    awxLed *awxLedPower = new awxLed(this, wxID_ANY, wxDefaultPosition,
+        wxSize(16, 16), awxLED_RED);
+    awxLed *awxLedFan = new awxLed(this, wxID_ANY, wxDefaultPosition,
+        wxSize(16, 16), awxLED_GREEN);
+    awxLed *awxLedLampA = new awxLed(this, wxID_ANY, wxDefaultPosition,
+        wxSize(16, 16), awxLED_GREEN);
+    awxLed *awxLedLampB = new awxLed(this, wxID_ANY, wxDefaultPosition,
+        wxSize(16, 16), awxLED_GREEN);
+    ledPreviewSizer->Add(awxLedPower, 1, wxALL, 5);
+    ledPreviewSizer->Add(awxLedFan, 1, wxALL, 5);
+    ledPreviewSizer->Add(awxLedLampA, 1, wxALL, 5);
+    ledPreviewSizer->Add(awxLedLampB, 1, wxALL, 5);
+
+    /* control */
+    wxSizer *ledControlSizer = new wxBoxSizer(wxHORIZONTAL);
+    ledSizer->Add(ledControlSizer, 0, wxALL | wxEXPAND, 0);
     wxArrayString ledStatus;
     ledStatus.push_back(_("Off"));
     ledStatus.push_back(_("Red"));
@@ -72,17 +92,17 @@ void TrapPane::CreateControls()
     lampbRB->Enable(3, false);
     lampbRB->Enable(6, false);
     lampbRB->Enable(7, false);
-    ledSizer->Add(powerRB, 0, wxALL|wxEXPAND, 5);
-    ledSizer->Add(fanRB, 0, wxALL|wxEXPAND, 5);
-    ledSizer->Add(lampaRB, 0, wxALL|wxEXPAND, 5);
-    ledSizer->Add(lampbRB, 0, wxALL|wxEXPAND, 5);
+    ledControlSizer->Add(powerRB, 1, wxALL|wxEXPAND, 5);
+    ledControlSizer->Add(fanRB, 1, wxALL|wxEXPAND, 5);
+    ledControlSizer->Add(lampaRB, 1, wxALL|wxEXPAND, 5);
+    ledControlSizer->Add(lampbRB, 1, wxALL|wxEXPAND, 5);
 
     /* lamp */
     wxBoxSizer *lampSizer = new wxBoxSizer(wxHORIZONTAL);
-    allSizer->Add(lampSizer, 1, wxALL | wxEXPAND, 0);
+    allSizer->Add(lampSizer, 1, wxBOTTOM | wxLEFT | wxRIGHT | wxEXPAND, 10);
     /* lamp a */
     wxStaticBoxSizer *lampASizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Lamp A Status"));
-    lampSizer->Add(lampASizer, 1, wxALL | wxEXPAND, 5);
+    lampSizer->Add(lampASizer, 1, wxBOTTOM | wxLEFT | wxRIGHT | wxEXPAND, 5);
     wxBoxSizer *lampAStatusSizer = new wxBoxSizer(wxHORIZONTAL);
     lampASizer->Add(lampAStatusSizer, 0, wxALL | wxEXPAND, 0);
     lampAStatusSizer->Add(new wxStaticText(this, wxID_STATIC, _("Status")), 0, wxALL, 5);
@@ -126,7 +146,7 @@ void TrapPane::CreateControls()
         wxDefaultSize, wxBU_EXACTFIT), 0, wxALL, 5);
     /* lamp b */
     wxStaticBoxSizer *lampBSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Lamp B Status"));
-    lampSizer->Add(lampBSizer, 1, wxALL | wxEXPAND, 5);
+    lampSizer->Add(lampBSizer, 1, wxBOTTOM | wxLEFT | wxRIGHT | wxEXPAND, 5);
     wxBoxSizer *lampBStatusSizer = new wxBoxSizer(wxHORIZONTAL);
     lampBSizer->Add(lampBStatusSizer, 0, wxALL | wxEXPAND, 0);
     lampBStatusSizer->Add(new wxStaticText(this, wxID_STATIC, _("Status")), 0, wxALL, 5);

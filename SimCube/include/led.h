@@ -6,12 +6,10 @@
 // Copyright:   (c) 2001 Joachim Buermann
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __LED_H
-#define __LED_H
+#ifndef _LED_H_
+#define _LED_H_
 
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
+#include <wx/wx.h>
 
 enum awxLedState {
     awxLED_OFF = 0,
@@ -20,7 +18,6 @@ enum awxLedState {
 };
 
 enum awxLedColour {
-    awxLED_LUCID = 0,
     awxLED_RED,
     awxLED_GREEN,
     awxLED_YELLOW
