@@ -52,9 +52,8 @@ void SimCubeAboutDialog::CreateControls()
     wx->Add(new wxStaticText(this, wxID_STATIC, wxVERSION_STRING), 0, wxALL, 5);
     wxSizer *sqlite = new wxBoxSizer(wxHORIZONTAL);
     lib->Add(sqlite, 0, wxALL | wxEXPAND, 0);
-    sqlite->Add(new wxStaticText(this, wxID_STATIC, wxT("SQLite")), 0, wxALL, 5);
     sqlite->Add(new wxStaticText(this, wxID_STATIC, 
-        wxGetApp().GetMainDatabase()->GetVersion()), 0, wxALL, 5);
+        wxT("SQLite ") + wxGetApp().GetMainDatabase()->GetVersion()), 0, wxALL, 5);
 
     /* button */
     wxButton *ok = new wxButton(this, wxID_ANY, _("OK"));
