@@ -16,6 +16,45 @@
 #include "img/SimCube-48.xpm"
 #include "img/SimCube-64.xpm"
 
+////////////////////////////////////////////////////////////////////////////////////
+class SimCubeAboutDialog : public wxDialog
+{
+public:
+    SimCubeAboutDialog(wxWindow *parent);
+    ~SimCubeAboutDialog();
+
+private:
+    void CreateControls();
+
+    void OnOkBtn(wxCommandEvent &event);
+};
+
+SimCubeAboutDialog::SimCubeAboutDialog(wxWindow *parent)
+    : wxDialog(parent, wxID_ANY, _("About SimCube"))
+{
+    CreateControls();
+    CenterOnParent();
+}
+
+SimCubeAboutDialog::~SimCubeAboutDialog()
+{
+}
+
+void SimCubeAboutDialog::CreateControls()
+{
+    wxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
+    wxButton *ok = new wxButton(this, wxID_ANY, _("OK"));
+    ok->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &SimCubeAboutDialog::OnOkBtn, this);
+    allSizer->Add(ok, 0, wxALL, 5);
+    SetSizerAndFit(allSizer);
+}
+
+void SimCubeAboutDialog::OnOkBtn(wxCommandEvent &WXUNUSED(event))
+{
+    EndModal(wxOK);
+}
+
+////////////////////////////////////////////////////////////////////////////////////
 enum
 {
     ID_VIEW_PANE_START = wxID_HIGHEST + 1,
@@ -36,6 +75,8 @@ BEGIN_EVENT_TABLE(SimCubeFrame, wxFrame)
     EVT_ERASE_BACKGROUND(SimCubeFrame::OnEraseBackground)
     EVT_SIZE(SimCubeFrame::OnSize)
     EVT_CLOSE(SimCubeFrame::OnClose)
+    EVT_MENU(wxID_ABOUT, SimCubeFrame::OnAbout)
+    EVT_MENU(wxID_EXIT, SimCubeFrame::OnQuit)
 END_EVENT_TABLE()
 
 SimCubeFrame::SimCubeFrame()
@@ -101,7 +142,7 @@ void SimCubeFrame::CreateControls()
 
     /* menu bar */
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(wxID_EXIT);
+    file_menu->Append(wxID_EXIT, _("Quit"), _("Quit this program"));
     wxMenu *view_menu = new wxMenu;
     view_menu->AppendCheckItem(ID_VIEW_PROPERTY_PANE, _("Property Pane\tCTRL+F1"),
         _("Show or hide the property pane."));
@@ -119,7 +160,7 @@ void SimCubeFrame::CreateControls()
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(ID_HELP_DOC, _("Help file"),
         _("Show help file."));
-    help_menu->Append(wxID_ABOUT);
+    help_menu->Append(wxID_ABOUT, _("About..."), _("Show about dialog"));
 
     wxMenuBar *mb = new wxMenuBar;
     mb->Append(file_menu, _("File"));
@@ -329,5 +370,16 @@ void SimCubeFrame::OnSize(wxSizeEvent &event)
 void SimCubeFrame::OnClose(wxCloseEvent &WXUNUSED(event))
 {
     Destroy();
+}
+
+void SimCubeFrame::OnAbout(wxCommandEvent &WXUNUSED(event))
+{
+    SimCubeAboutDialog dlg(this);
+    dlg.ShowModal();
+}
+
+void SimCubeFrame::OnQuit(wxCommandEvent &WXUNUSED(event))
+{
+    Close();
 }
 

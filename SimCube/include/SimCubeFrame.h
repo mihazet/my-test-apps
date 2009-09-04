@@ -38,6 +38,8 @@ private:
     void OnEraseBackground(wxEraseEvent &event);
     void OnSize(wxSizeEvent &event);
     void OnClose(wxCloseEvent &event);
+    void OnAbout(wxCommandEvent &event);
+    void OnQuit(wxCommandEvent &event);
     
 private:
     wxAuiManager _auiManager;
