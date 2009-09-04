@@ -1,6 +1,7 @@
 #include <wx/wx.h>
 #include <wx/srchctrl.h>
 #include <wx/wxsqlite3.h>
+#include <wx/filename.h>
 #include "SimCubeApp.h"
 #include "HistoryPane.h"
 
@@ -37,6 +38,19 @@ HistoryPane::HistoryPane(wxWindow *parent, wxWindowID id, const wxPoint &pos,
 
 HistoryPane::~HistoryPane()
 {
+    /* auto save */
+    wxSQLite3Database *memDB = wxGetApp().GetMemDatabase();
+    if (memDB && memDB->IsOpen() && memDB->HasBackupSupport()
+        && (memDB->GetLastRowId() != 0) && IsAutoSaveEnabled())
+    {
+        wxDateTime now = wxDateTime::Now();
+        wxString target = wxT("autosave");
+        if (!wxFileName::DirExists(target))
+            wxFileName::Mkdir(target);
+        target << wxFileName::GetPathSeparator() << now.Format(wxT("%y%m%d-%H%M%S")) << wxT(".db");
+        memDB->Backup(target);
+    }
+    
     wxDELETE(_autoScrollBtnImg);
 }
 
@@ -152,6 +166,25 @@ void HistoryPane::OnAutoscroll(wxCommandEvent &event)
     btn->SetToolTip(_historyAutoScroll ? _("Autoscroll is disabled") : _("Autoscroll is enabled"));
     btn->SetBitmap(_historyAutoScroll ? _autoScrollBtnImg->ConvertToGreyscale() : *_autoScrollBtnImg);
     _historyAutoScroll = _historyAutoScroll ? false : true;
+}
+
+bool HistoryPane::IsAutoSaveEnabled()
+{
+    bool result = false;
+    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3ResultSet set;
+    wxString sql, value;
+    
+    sql << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'AutoSaveHistory'");
+    set = db->ExecuteQuery(sql);
+    if (set.NextRow())
+        value = set.GetAsString(0);
+    set.Finalize();
+
+    if ((value == wxT("True")) || (value == wxT("Yes")))
+        result = true;
+
+    return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////

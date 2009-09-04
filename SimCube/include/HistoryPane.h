@@ -36,6 +36,9 @@ private:
     void OnDeleteHistory(wxCommandEvent &event);
     void OnAutoscroll(wxCommandEvent &event);
 
+    // helper functions
+    bool IsAutoSaveEnabled();
+
     wxDataViewCtrl *_historyView;
     bool _historyAutoScroll;
     wxImage *_autoScrollBtnImg;
