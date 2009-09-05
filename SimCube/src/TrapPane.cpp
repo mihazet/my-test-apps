@@ -97,6 +97,23 @@ void TrapPane::CreateControls()
     ledControlSizer->Add(lampaRB, 1, wxALL|wxEXPAND, 5);
     ledControlSizer->Add(lampbRB, 1, wxALL|wxEXPAND, 5);
 
+    /* preset */
+    wxSizer *ledPresetSizer = new wxBoxSizer(wxHORIZONTAL);
+    ledSizer->Add(ledPresetSizer, 0, wxALL | wxEXPAND, 0);
+    ledPresetSizer->Add(new wxStaticText(this, wxID_STATIC, _("Quick LED Preset")),
+        0, wxALL | wxALIGN_CENTER, 5);
+    wxArrayString ledPresetString;
+    ledPresetString.push_back(wxT("User define"));
+    ledPresetString.push_back(wxT("Standby"));
+    ledPresetString.push_back(wxT("Fan Check"));
+    ledPresetString.push_back(wxT("Lamp Door Check"));
+    ledPresetString.push_back(wxT("..."));
+    ledPresetSizer->Add(new wxChoice(this, wxID_ANY, wxDefaultPosition,
+        wxDefaultSize, ledPresetString), 1, wxALL, 5);
+    ledPresetSizer->AddStretchSpacer();
+    ledPresetSizer->Add(new wxButton(this, wxID_ANY, _("Send"), wxDefaultPosition,
+        wxDefaultSize, wxBU_EXACTFIT), 0, wxALL, 5);
+
     /* lamp */
     wxBoxSizer *lampSizer = new wxBoxSizer(wxHORIZONTAL);
     allSizer->Add(lampSizer, 1, wxBOTTOM | wxLEFT | wxRIGHT | wxEXPAND, 10);
