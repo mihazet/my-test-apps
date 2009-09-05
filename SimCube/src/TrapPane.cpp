@@ -4,6 +4,61 @@
 #include "TrapPane.h"
 #include "led.h"
 
+/////////////////////////////////////////////////////////////////////////////
+class LedStatusRadioBox : public wxRadioBox
+{
+public:
+    typedef enum
+    {
+        LedType1, // used for power
+        LedType2, // used for fan, lamp[ab]
+    } LedType;
+
+    LedStatusRadioBox(wxWindow *parent, wxWindowID id, const wxString &label,
+        const LedType type = LedType2);
+    ~LedStatusRadioBox() { }
+};
+
+LedStatusRadioBox::LedStatusRadioBox(wxWindow *parent, wxWindowID id,
+                                     const wxString &label, const LedType type)
+{
+    wxArrayString ledStatus;
+    ledStatus.push_back(wxT("Off"));
+    ledStatus.push_back(wxT("Red"));
+    ledStatus.push_back(wxT("Green"));
+    ledStatus.push_back(wxT("Orange"));
+    ledStatus.push_back(wxT("Green<->Off"));
+    ledStatus.push_back(wxT("Off<->Green"));
+    ledStatus.push_back(wxT("Red<->Green"));
+    ledStatus.push_back(wxT("Green<->Orange"));
+    Create(parent, id, label, wxDefaultPosition, wxDefaultSize, ledStatus,
+        0, wxVERTICAL);
+    SetItemToolTip(0, _("Led is in off state."));
+    SetItemToolTip(1, _("Red light constant on."));
+    SetItemToolTip(2, _("Green light constant on."));
+    SetItemToolTip(3, _("Orange light constant on."));
+    SetItemToolTip(4, _("Led light flashing between green and off."));
+    SetItemToolTip(5, _("Led light flashing between off and green."));
+    SetItemToolTip(6, _("Led light flashing between red and green."));
+    SetItemToolTip(7, _("Led light flashing between green and orange."));
+    if (type == LedType1)
+    {
+        Enable(0, false);
+        SetSelection(1);
+        Enable(4, false);
+        Enable(5, false);
+    }
+    else if (type == LedType2)
+    {
+        Enable(1, false);
+        Enable(3, false);
+        Enable(6, false);
+        Enable(7, false);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
 TrapPane::TrapPane()
 {
     Init();
@@ -59,39 +114,14 @@ void TrapPane::CreateControls()
     /* control */
     wxSizer *ledControlSizer = new wxBoxSizer(wxHORIZONTAL);
     ledSizer->Add(ledControlSizer, 0, wxALL | wxEXPAND, 0);
-    wxArrayString ledStatus;
-    ledStatus.push_back(_("Off"));
-    ledStatus.push_back(_("Red"));
-    ledStatus.push_back(_("Green"));
-    ledStatus.push_back(_("Orange"));
-    ledStatus.push_back(_("Green<->Off"));
-    ledStatus.push_back(_("Off<->Green"));
-    ledStatus.push_back(_("Red<->Green"));
-    ledStatus.push_back(_("Green<->Orange"));
-    wxRadioBox *powerRB = new wxRadioBox(this, wxID_ANY, _("Power"), wxDefaultPosition,
-        wxDefaultSize, ledStatus, 0, wxVERTICAL);
-    powerRB->Enable(0, false);
-    powerRB->SetSelection(1); // because of item 0 is disabled.
-    powerRB->Enable(4, false);
-    powerRB->Enable(5, false);
-    wxRadioBox *fanRB = new wxRadioBox(this, wxID_ANY, _("Fan"), wxDefaultPosition,
-        wxDefaultSize, ledStatus, 0, wxVERTICAL);
-    fanRB->Enable(1, false);
-    fanRB->Enable(3, false);
-    fanRB->Enable(6, false);
-    fanRB->Enable(7, false);
-    wxRadioBox *lampaRB = new wxRadioBox(this, wxID_ANY, _("LampA"), wxDefaultPosition,
-        wxDefaultSize, ledStatus, 0, wxVERTICAL);
-    lampaRB->Enable(1, false);
-    lampaRB->Enable(3, false);
-    lampaRB->Enable(6, false);
-    lampaRB->Enable(7, false);
-    wxRadioBox *lampbRB = new wxRadioBox(this, wxID_ANY, _("LampB"), wxDefaultPosition,
-        wxDefaultSize, ledStatus, 0, wxVERTICAL);
-    lampbRB->Enable(1, false);
-    lampbRB->Enable(3, false);
-    lampbRB->Enable(6, false);
-    lampbRB->Enable(7, false);
+    LedStatusRadioBox *powerRB = new LedStatusRadioBox(this, wxID_ANY, _("Power"),
+        LedStatusRadioBox::LedType1);
+    LedStatusRadioBox *fanRB = new LedStatusRadioBox(this, wxID_ANY, _("Fan"),
+        LedStatusRadioBox::LedType2);
+    LedStatusRadioBox *lampaRB = new LedStatusRadioBox(this, wxID_ANY, _("LampA"),
+        LedStatusRadioBox::LedType2);
+    LedStatusRadioBox *lampbRB = new LedStatusRadioBox(this, wxID_ANY, _("LampB"),
+        LedStatusRadioBox::LedType2);
     ledControlSizer->Add(powerRB, 1, wxALL|wxEXPAND, 5);
     ledControlSizer->Add(fanRB, 1, wxALL|wxEXPAND, 5);
     ledControlSizer->Add(lampaRB, 1, wxALL|wxEXPAND, 5);
