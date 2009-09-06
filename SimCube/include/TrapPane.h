@@ -28,6 +28,7 @@ private:
 
     // event handlers
     void OnLedStatusChosen(wxCommandEvent &event);
+    void OnLedPresetChosen(wxCommandEvent &event);
 
     wxSQLite3Database *_db;
     int _ledStatus;

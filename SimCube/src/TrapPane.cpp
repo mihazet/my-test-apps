@@ -57,6 +57,38 @@ LedStatusRadioBox::LedStatusRadioBox(wxWindow *parent, wxWindowID id,
     }
 }
 
+class LedPresetData : public wxObjectRefData
+{
+public:
+    wxVector<int> m_LedStatus;
+};
+
+class LedStatusPreset : public wxChoice
+{
+public:
+    LedStatusPreset(wxWindow *parent, wxWindowID id = wxID_ANY);
+    ~LedStatusPreset() { };
+};
+
+LedStatusPreset::LedStatusPreset(wxWindow *parent, wxWindowID id)
+{
+    /* preset and associate data */
+    wxArrayString ledPresetString;
+    LedPresetData *refObj = new LedPresetData;
+    ledPresetString.push_back(wxT("User define"));
+    refObj->m_LedStatus.push_back(0x1000);
+    ledPresetString.push_back(wxT("Standby"));
+    refObj->m_LedStatus.push_back(0x1000);
+    ledPresetString.push_back(wxT("Fan Check"));
+    refObj->m_LedStatus.push_back(0x2400);
+    ledPresetString.push_back(wxT("Lamp Door Check"));
+    refObj->m_LedStatus.push_back(0x2244);
+
+    /* create gui and asscoiate with data */
+    Create(parent, id, wxDefaultPosition, wxDefaultSize, ledPresetString);
+    SetRefData(refObj);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 
 enum
@@ -65,6 +97,7 @@ enum
     myID_RB_LED_FAN,
     myID_RB_LED_LAMPA,
     myID_RB_LED_LAMPB,
+    myID_CHOICE_LED_PRESET,
 };
 
 TrapPane::TrapPane()
@@ -155,14 +188,10 @@ void TrapPane::CreateControls()
     ledSizer->Add(ledPresetSizer, 0, wxALL | wxEXPAND, 0);
     ledPresetSizer->Add(new wxStaticText(this, wxID_STATIC, _("Quick LED Preset")),
         0, wxALL | wxALIGN_CENTER, 5);
-    wxArrayString ledPresetString;
-    ledPresetString.push_back(wxT("User define"));
-    ledPresetString.push_back(wxT("Standby"));
-    ledPresetString.push_back(wxT("Fan Check"));
-    ledPresetString.push_back(wxT("Lamp Door Check"));
-    ledPresetString.push_back(wxT("..."));
-    ledPresetSizer->Add(new wxChoice(this, wxID_ANY, wxDefaultPosition,
-        wxDefaultSize, ledPresetString), 1, wxALL, 5);
+    LedStatusPreset *ledPreset = new LedStatusPreset(this, myID_CHOICE_LED_PRESET);
+    ledPreset->Bind(wxEVT_COMMAND_CHOICE_SELECTED, &TrapPane::OnLedPresetChosen, this);
+    ledPresetSizer->Add(ledPreset, 1, wxALL, 5);
+
     ledPresetSizer->AddStretchSpacer();
     ledPresetSizer->Add(new wxButton(this, wxID_ANY, _("Send"), wxDefaultPosition,
         wxDefaultSize, wxBU_EXACTFIT), 0, wxALL, 5);
@@ -266,11 +295,45 @@ void TrapPane::OnLedStatusChosen(wxCommandEvent &event)
     _ledStatus &= mask;
     _ledStatus |= (event.GetSelection() << shift);
 
+    /* update database */
     sqlUpdate << wxT("UPDATE TrapTbl SET CurrentValue = '") << _ledStatus
         << wxT("' WHERE ProtocolName = 'LEDSTATUS'");
     if (1 != _db->ExecuteUpdate(sqlUpdate))
     {
         wxLogError(_("Fail to update LEDSTATUS."));
+    }
+
+    /* update preset */
+    wxChoice *preset = wxDynamicCast(FindWindow(myID_CHOICE_LED_PRESET), wxChoice);
+    if (preset)
+        preset->SetSelection(0);
+}
+
+void TrapPane::OnLedPresetChosen(wxCommandEvent &event)
+{
+    LedStatusPreset *obj = wxDynamicCast(event.GetEventObject(), LedStatusPreset);
+    LedPresetData *refData = (LedPresetData *)obj->GetRefData();
+    int select = event.GetSelection();
+    wxString sqlUpdate;
+
+    if ((select != 0) && (select != wxNOT_FOUND))
+    {
+        _ledStatus = refData->m_LedStatus.at(select);
+        LedStatusRadioBox *power = wxDynamicCast(FindWindow(myID_RB_LED_POWER), LedStatusRadioBox);
+        LedStatusRadioBox *fan = wxDynamicCast(FindWindow(myID_RB_LED_FAN), LedStatusRadioBox);
+        LedStatusRadioBox *lampa = wxDynamicCast(FindWindow(myID_RB_LED_LAMPA), LedStatusRadioBox);
+        LedStatusRadioBox *lampb = wxDynamicCast(FindWindow(myID_RB_LED_LAMPB), LedStatusRadioBox);
+        power->SetSelection((_ledStatus >> 12) & 0x7);
+        fan->SetSelection((_ledStatus >> 8) & 0x7);
+        lampa->SetSelection((_ledStatus >> 4) & 0x7);
+        lampb->SetSelection((_ledStatus >> 0) & 0x7);
+
+        sqlUpdate << wxT("UPDATE TrapTbl SET CurrentValue = '") << _ledStatus
+            << wxT("' WHERE ProtocolName = 'LEDSTATUS'");
+        if (1 != _db->ExecuteUpdate(sqlUpdate))
+        {
+            wxLogError(_("Fail to update LEDSTATUS."));
+        }
     }
 }
 
