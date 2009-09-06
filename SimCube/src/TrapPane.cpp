@@ -61,7 +61,7 @@ LedStatusRadioBox::LedStatusRadioBox(wxWindow *parent, wxWindowID id,
 
 enum
 {
-    myID_RB_LED_POWER = wxID_HIGHEST + 1,
+    myID_RB_LED_POWER = wxID_HIGHEST + 200,
     myID_RB_LED_FAN,
     myID_RB_LED_LAMPA,
     myID_RB_LED_LAMPB,
@@ -95,7 +95,14 @@ bool TrapPane::Create(wxWindow *parent, wxWindowID id, const wxPoint &pos,
 
 void TrapPane::Init()
 {
+    wxString sqlQuery;
+    wxSQLite3ResultSet set;
     _db = wxGetApp().GetMainDatabase();
+    sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = 'LEDSTATUS'");
+    set = _db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        _ledStatus = set.GetInt(0);
+    set.Finalize();
 }
 
 void TrapPane::CreateControls()
@@ -125,15 +132,19 @@ void TrapPane::CreateControls()
     LedStatusRadioBox *powerRB = new LedStatusRadioBox(this, myID_RB_LED_POWER,
         _("Power"), LedStatusRadioBox::LedType1);
     powerRB->Bind(wxEVT_COMMAND_RADIOBOX_SELECTED, &TrapPane::OnLedStatusChosen, this);
+    powerRB->SetSelection((_ledStatus >> 12) & 0x7);
     LedStatusRadioBox *fanRB = new LedStatusRadioBox(this, myID_RB_LED_FAN,
         _("Fan"), LedStatusRadioBox::LedType2);
     fanRB->Bind(wxEVT_COMMAND_RADIOBOX_SELECTED, &TrapPane::OnLedStatusChosen, this);
+    fanRB->SetSelection((_ledStatus >> 8) & 0x7);
     LedStatusRadioBox *lampaRB = new LedStatusRadioBox(this, myID_RB_LED_LAMPA,
         ("LampA"), LedStatusRadioBox::LedType2);
     lampaRB->Bind(wxEVT_COMMAND_RADIOBOX_SELECTED, &TrapPane::OnLedStatusChosen, this);
+    lampaRB->SetSelection((_ledStatus >> 4) & 0x7);
     LedStatusRadioBox *lampbRB = new LedStatusRadioBox(this, myID_RB_LED_LAMPB,
         _("LampB"), LedStatusRadioBox::LedType2);
     lampbRB->Bind(wxEVT_COMMAND_RADIOBOX_SELECTED, &TrapPane::OnLedStatusChosen, this);
+    lampbRB->SetSelection((_ledStatus >> 0) & 0x7);
     ledControlSizer->Add(powerRB, 1, wxALL|wxEXPAND, 5);
     ledControlSizer->Add(fanRB, 1, wxALL|wxEXPAND, 5);
     ledControlSizer->Add(lampaRB, 1, wxALL|wxEXPAND, 5);
@@ -240,16 +251,26 @@ void TrapPane::CreateControls()
 
 void TrapPane::OnLedStatusChosen(wxCommandEvent &event)
 {
-    wxString msg;
+    int mask, shift;
+    wxString sqlUpdate;
 
     switch (event.GetId())
     {
-    case myID_RB_LED_POWER: msg << wxT("Power"); break;
-    case myID_RB_LED_FAN: msg << wxT("Fan"); break;
-    case myID_RB_LED_LAMPA: msg << wxT("LampA"); break;
-    case myID_RB_LED_LAMPB: msg << wxT("LampB"); break;
+    case myID_RB_LED_POWER: mask = 0x0FFF; shift = 12; break;
+    default:
+    case myID_RB_LED_FAN: mask = 0xF0FF; shift = 8; break;
+    case myID_RB_LED_LAMPA: mask = 0xFF0F; shift = 4; break;
+    case myID_RB_LED_LAMPB: mask = 0xFFF0; shift = 0; break;
     }
-    msg << wxT("RadioBox Clicked. item = %d");
-    wxLogMessage(msg, event.GetSelection());
+
+    _ledStatus &= mask;
+    _ledStatus |= (event.GetSelection() << shift);
+
+    sqlUpdate << wxT("UPDATE TrapTbl SET CurrentValue = '") << _ledStatus
+        << wxT("' WHERE ProtocolName = 'LEDSTATUS'");
+    if (1 != _db->ExecuteUpdate(sqlUpdate))
+    {
+        wxLogError(_("Fail to update LEDSTATUS."));
+    }
 }
 

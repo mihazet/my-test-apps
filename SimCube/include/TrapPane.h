@@ -30,6 +30,7 @@ private:
     void OnLedStatusChosen(wxCommandEvent &event);
 
     wxSQLite3Database *_db;
+    int _ledStatus;
 
     //DECLARE_EVENT_TABLE()
 };
