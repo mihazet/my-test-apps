@@ -59,6 +59,14 @@ LedStatusRadioBox::LedStatusRadioBox(wxWindow *parent, wxWindowID id,
 
 /////////////////////////////////////////////////////////////////////////////
 
+enum
+{
+    myID_RB_LED_POWER = wxID_HIGHEST + 1,
+    myID_RB_LED_FAN,
+    myID_RB_LED_LAMPA,
+    myID_RB_LED_LAMPB,
+};
+
 TrapPane::TrapPane()
 {
     Init();
@@ -114,14 +122,18 @@ void TrapPane::CreateControls()
     /* control */
     wxSizer *ledControlSizer = new wxBoxSizer(wxHORIZONTAL);
     ledSizer->Add(ledControlSizer, 0, wxALL | wxEXPAND, 0);
-    LedStatusRadioBox *powerRB = new LedStatusRadioBox(this, wxID_ANY, _("Power"),
-        LedStatusRadioBox::LedType1);
-    LedStatusRadioBox *fanRB = new LedStatusRadioBox(this, wxID_ANY, _("Fan"),
-        LedStatusRadioBox::LedType2);
-    LedStatusRadioBox *lampaRB = new LedStatusRadioBox(this, wxID_ANY, _("LampA"),
-        LedStatusRadioBox::LedType2);
-    LedStatusRadioBox *lampbRB = new LedStatusRadioBox(this, wxID_ANY, _("LampB"),
-        LedStatusRadioBox::LedType2);
+    LedStatusRadioBox *powerRB = new LedStatusRadioBox(this, myID_RB_LED_POWER,
+        _("Power"), LedStatusRadioBox::LedType1);
+    powerRB->Bind(wxEVT_COMMAND_RADIOBOX_SELECTED, &TrapPane::OnLedStatusChosen, this);
+    LedStatusRadioBox *fanRB = new LedStatusRadioBox(this, myID_RB_LED_FAN,
+        _("Fan"), LedStatusRadioBox::LedType2);
+    fanRB->Bind(wxEVT_COMMAND_RADIOBOX_SELECTED, &TrapPane::OnLedStatusChosen, this);
+    LedStatusRadioBox *lampaRB = new LedStatusRadioBox(this, myID_RB_LED_LAMPA,
+        ("LampA"), LedStatusRadioBox::LedType2);
+    lampaRB->Bind(wxEVT_COMMAND_RADIOBOX_SELECTED, &TrapPane::OnLedStatusChosen, this);
+    LedStatusRadioBox *lampbRB = new LedStatusRadioBox(this, myID_RB_LED_LAMPB,
+        _("LampB"), LedStatusRadioBox::LedType2);
+    lampbRB->Bind(wxEVT_COMMAND_RADIOBOX_SELECTED, &TrapPane::OnLedStatusChosen, this);
     ledControlSizer->Add(powerRB, 1, wxALL|wxEXPAND, 5);
     ledControlSizer->Add(fanRB, 1, wxALL|wxEXPAND, 5);
     ledControlSizer->Add(lampaRB, 1, wxALL|wxEXPAND, 5);
@@ -226,4 +238,18 @@ void TrapPane::CreateControls()
     SetSizerAndFit(allSizer);
 }
 
+void TrapPane::OnLedStatusChosen(wxCommandEvent &event)
+{
+    wxString msg;
+
+    switch (event.GetId())
+    {
+    case myID_RB_LED_POWER: msg << wxT("Power"); break;
+    case myID_RB_LED_FAN: msg << wxT("Fan"); break;
+    case myID_RB_LED_LAMPA: msg << wxT("LampA"); break;
+    case myID_RB_LED_LAMPB: msg << wxT("LampB"); break;
+    }
+    msg << wxT("RadioBox Clicked. item = %d");
+    wxLogMessage(msg, event.GetSelection());
+}
 

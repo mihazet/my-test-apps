@@ -26,7 +26,12 @@ private:
     void Init();
     void CreateControls();
 
+    // event handlers
+    void OnLedStatusChosen(wxCommandEvent &event);
+
     wxSQLite3Database *_db;
+
+    //DECLARE_EVENT_TABLE()
 };
 
 #endif /* _TRAP_PANE_H_ */
