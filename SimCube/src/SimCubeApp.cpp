@@ -116,7 +116,6 @@ void SimCubeApp::Init()
     _tcpProtocol = NULL;
     m_PeerData = new PeerDataModel();
     m_HistoryData = new HistoryDataModel(_memDB);
-    m_StatusBar = new SimCubeStatusBar();
 }
 
 bool SimCubeApp::OnInit()
@@ -175,6 +174,10 @@ bool SimCubeApp::OnInit()
         return false;
     }
 #endif
+
+    /* init the status bar
+     * GTK doesn't allow this to be done in SimCubeApp::Init() */
+    m_StatusBar = new SimCubeStatusBar();
 
     /* init the main frame */
     SimCubeFrame *frame = new SimCubeFrame(NULL);
