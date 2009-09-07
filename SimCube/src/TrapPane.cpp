@@ -79,14 +79,59 @@ LedStatusPreset::LedStatusPreset(wxWindow *parent, wxWindowID id)
     refObj->m_LedStatus.push_back(0x1000);
     ledPresetString.push_back(wxT("Standby"));
     refObj->m_LedStatus.push_back(0x1000);
-    ledPresetString.push_back(wxT("Fan Check"));
+    ledPresetString.push_back(wxT("Fan Detection"));
     refObj->m_LedStatus.push_back(0x2400);
-    ledPresetString.push_back(wxT("Lamp Door Check"));
+    ledPresetString.push_back(wxT("LampDoor Detection"));
+    refObj->m_LedStatus.push_back(0x2444);
+    ledPresetString.push_back(wxT("LampOn Trying - LampA+B"));
     refObj->m_LedStatus.push_back(0x2244);
+    ledPresetString.push_back(wxT("LampOn Trying - LampA"));
+    refObj->m_LedStatus.push_back(0x2240);
+    ledPresetString.push_back(wxT("LampOn Trying - LampB"));
+    refObj->m_LedStatus.push_back(0x2204);
+    ledPresetString.push_back(wxT("LampOn Idle - LampA+B"));
+    refObj->m_LedStatus.push_back(0x2222);
+    ledPresetString.push_back(wxT("LampOn Idle - LampA"));
+    refObj->m_LedStatus.push_back(0x2220);
+    ledPresetString.push_back(wxT("LampOn Idle - LampB"));
+    refObj->m_LedStatus.push_back(0x2202);
+    ledPresetString.push_back(wxT("LampOff - LampA+B"));
+    refObj->m_LedStatus.push_back(0x2244);
+    ledPresetString.push_back(wxT("LampOff - LampA"));
+    refObj->m_LedStatus.push_back(0x2240);
+    ledPresetString.push_back(wxT("LampOff - LampB"));
+    refObj->m_LedStatus.push_back(0x2204);
+    ledPresetString.push_back(wxT("LampOff Fan Cooling"));
+    refObj->m_LedStatus.push_back(0x2200);
+    ledPresetString.push_back(wxT("Control BD Fan Error - LampA+B"));
+    refObj->m_LedStatus.push_back(0x1544);
+    ledPresetString.push_back(wxT("Control BD Fan Error - LampA"));
+    refObj->m_LedStatus.push_back(0x1540);
+    ledPresetString.push_back(wxT("Control BD Fan Error - LampB"));
+    refObj->m_LedStatus.push_back(0x1504);
+    ledPresetString.push_back(wxT("DMD BD Fan Error - LampA+B"));
+    refObj->m_LedStatus.push_back(0x1444);
+    ledPresetString.push_back(wxT("DMD BD Fan Error - LampA"));
+    refObj->m_LedStatus.push_back(0x1440);
+    ledPresetString.push_back(wxT("DMD BD Fan Error - LampB"));
+    refObj->m_LedStatus.push_back(0x1404);
+    ledPresetString.push_back(wxT("LampDoor Error"));
+    refObj->m_LedStatus.push_back(0x1245);
+    ledPresetString.push_back(wxT("LampOn LampA+B Fail - LampA+B"));
+    refObj->m_LedStatus.push_back(0x6444);
+    ledPresetString.push_back(wxT("LampOn LampA Fail - LampA+B"));
+    refObj->m_LedStatus.push_back(0x7454);
+    ledPresetString.push_back(wxT("LampOn LampB Fail - LampA+B"));
+    refObj->m_LedStatus.push_back(0x7445);
+    ledPresetString.push_back(wxT("LampOn LampA Fail - LampA"));
+    refObj->m_LedStatus.push_back(0x6440);
+    ledPresetString.push_back(wxT("LampOn LampB Fail - LampB"));
+    refObj->m_LedStatus.push_back(0x6404);
 
     /* create gui and asscoiate with data */
     Create(parent, id, wxDefaultPosition, wxDefaultSize, ledPresetString);
     SetRefData(refObj);
+    SetSelection(0);
 }
 
 /////////////////////////////////////////////////////////////////////////////
