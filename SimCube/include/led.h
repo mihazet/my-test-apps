@@ -32,17 +32,20 @@ public:
     awxLed(wxWindow *parent, wxWindowID id, int stateColorsPair);
     ~awxLed();
     awxLedState GetState() { return m_state; }
-    void Blink();
+    void Blink() { Redraw(); }
+    void UpdateStateAndColors(awxLedState state, awxLedColor color1,
+        awxLedColor color2 = awxLED_COLOR_BLANK);
+    void UpdateStateAndColors(int stateColorsPair);
     
     static wxVector<awxLed *> m_allLeds;
     static BlinkTimer *m_timer;
     static wxIcon *m_icons[awxLED_COLOR_INVALID];
+    static int m_blink;
 
 private:
     wxBitmap  *m_bitmap;
     awxLedState m_state;
     awxLedColor m_color[2];
-    int m_blink;
     int m_x;
     int m_y;
 
@@ -50,10 +53,6 @@ private:
     bool Create(wxWindow *parent, wxWindowID id, awxLedState state,
         awxLedColor color1, awxLedColor color2);
     void DrawOnBitmap();
-    void UpdateStateAndColors(awxLedState state, awxLedColor color1,
-        awxLedColor color2 = awxLED_COLOR_BLANK);
-    void UpdateStateAndColors(int stateColorsPair);
-    
     void GetStateColorsPair(int pair, awxLedState *state,
         awxLedColor *color1, awxLedColor *color2)
     {
@@ -105,14 +104,18 @@ class BlinkTimer : public wxTimer
 {
 private:
     wxVector<awxLed *> &_allLeds;
+    int &_blink;
 public:
     BlinkTimer(awxLed *led) 
-        : wxTimer(), _allLeds(led->m_allLeds)
+        : wxTimer(),
+        _allLeds(led->m_allLeds),
+        _blink(led->m_blink)
     {
         wxUnusedVar(led);
     }
     void Notify()
     {
+        _blink ^= 1;
         for (wxVector<awxLed *>::iterator it = _allLeds.begin();
             it != _allLeds.end();
             ++it)

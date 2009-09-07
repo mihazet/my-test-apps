@@ -326,15 +326,29 @@ void TrapPane::CreateControls()
 void TrapPane::OnLedStatusChosen(wxCommandEvent &event)
 {
     int mask, shift;
+    wxWindowID id;
     wxString sqlUpdate;
 
     switch (event.GetId())
     {
-    case myID_RB_LED_POWER: mask = 0x0FFF; shift = 12; break;
+    case myID_RB_LED_POWER:
+        id = myID_LED_POWER;
+        mask = 0x0FFF; shift = 12;
+        break;
+    case myID_RB_LED_FAN:
+        id = myID_LED_FAN;
+        mask = 0xF0FF; shift = 8;
+        break;
+    case myID_RB_LED_LAMPA:
+        id = myID_LED_LAMPA;
+        mask = 0xFF0F; shift = 4;
+        break;
+    case myID_RB_LED_LAMPB:
+        id = myID_LED_LAMPB;
+        mask = 0xFFF0; shift = 0;
+        break;
     default:
-    case myID_RB_LED_FAN: mask = 0xF0FF; shift = 8; break;
-    case myID_RB_LED_LAMPA: mask = 0xFF0F; shift = 4; break;
-    case myID_RB_LED_LAMPB: mask = 0xFFF0; shift = 0; break;
+        return;
     }
 
     _ledStatus &= mask;
@@ -347,6 +361,11 @@ void TrapPane::OnLedStatusChosen(wxCommandEvent &event)
     {
         wxLogError(_("Fail to update LEDSTATUS."));
     }
+
+    /* update led preview */
+    awxLed *preview = wxDynamicCast(FindWindow(id), awxLed);
+    if (preview)
+        preview->UpdateStateAndColors(event.GetSelection());
 
     /* update preset */
     wxChoice *preset = wxDynamicCast(FindWindow(myID_CHOICE_LED_PRESET), wxChoice);
@@ -363,6 +382,7 @@ void TrapPane::OnLedPresetChosen(wxCommandEvent &event)
 
     if ((select != 0) && (select != wxNOT_FOUND))
     {
+        /* update radiobox */
         _ledStatus = refData->m_LedStatus.at(select);
         LedStatusRadioBox *power = wxDynamicCast(FindWindow(myID_RB_LED_POWER), LedStatusRadioBox);
         LedStatusRadioBox *fan = wxDynamicCast(FindWindow(myID_RB_LED_FAN), LedStatusRadioBox);
@@ -373,6 +393,17 @@ void TrapPane::OnLedPresetChosen(wxCommandEvent &event)
         lampa->SetSelection((_ledStatus >> 4) & 0x7);
         lampb->SetSelection((_ledStatus >> 0) & 0x7);
 
+        /* update preview */
+        awxLed *powerPreview = wxDynamicCast(FindWindow(myID_LED_POWER), awxLed);
+        awxLed *fanPreview = wxDynamicCast(FindWindow(myID_LED_FAN), awxLed);
+        awxLed *lampaPreview = wxDynamicCast(FindWindow(myID_LED_LAMPA), awxLed);
+        awxLed *lampbPreview = wxDynamicCast(FindWindow(myID_LED_LAMPB), awxLed);
+        powerPreview->UpdateStateAndColors((_ledStatus >> 12) & 0x7);
+        fanPreview->UpdateStateAndColors((_ledStatus >> 8) & 0x7);
+        lampaPreview->UpdateStateAndColors((_ledStatus >> 4) & 0x7);
+        lampbPreview->UpdateStateAndColors((_ledStatus >> 0) & 0x7);
+
+        /* update database */
         sqlUpdate << wxT("UPDATE TrapTbl SET CurrentValue = '") << _ledStatus
             << wxT("' WHERE ProtocolName = 'LEDSTATUS'");
         if (1 != _db->ExecuteUpdate(sqlUpdate))

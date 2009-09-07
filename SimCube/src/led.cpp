@@ -7,7 +7,7 @@
 #include "img/leds.xpm"
 
 BEGIN_EVENT_TABLE(awxLed, wxWindow)
-    EVT_ERASE_BACKGROUND(awxLed::OnErase)
+    //EVT_ERASE_BACKGROUND(awxLed::OnErase)
     EVT_PAINT(awxLed::OnPaint)
     EVT_SIZE(awxLed::OnSize)
 END_EVENT_TABLE()
@@ -15,6 +15,7 @@ END_EVENT_TABLE()
 BlinkTimer *awxLed::m_timer = NULL;
 wxVector<awxLed *> awxLed::m_allLeds;
 wxIcon *awxLed::m_icons[awxLED_COLOR_INVALID] = { NULL, NULL, NULL, NULL };
+int awxLed::m_blink = 0;
 
 awxLed::awxLed(wxWindow *parent, wxWindowID id, awxLedState state,
                awxLedColor color1, awxLedColor color2)
@@ -90,12 +91,6 @@ awxLed::~awxLed()
     }
 
     delete m_bitmap;    
-};
-
-void awxLed::Blink()
-{
-    m_blink ^= 1;
-    Redraw();
 };
 
 void awxLed::DrawOnBitmap()
