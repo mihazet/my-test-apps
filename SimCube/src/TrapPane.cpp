@@ -138,7 +138,11 @@ LedStatusPreset::LedStatusPreset(wxWindow *parent, wxWindowID id)
 
 enum
 {
-    myID_RB_LED_POWER = wxID_HIGHEST + 200,
+    myID_LED_POWER = wxID_HIGHEST + 200,
+    myID_LED_FAN,
+    myID_LED_LAMPA,
+    myID_LED_LAMPB,
+    myID_RB_LED_POWER,
     myID_RB_LED_FAN,
     myID_RB_LED_LAMPA,
     myID_RB_LED_LAMPB,
@@ -191,14 +195,10 @@ void TrapPane::CreateControls()
     /* preview */
     wxStaticBoxSizer *ledPreviewSizer = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Preview"));
     ledSizer->Add(ledPreviewSizer, 0, wxALL | wxEXPAND, 5);
-    awxLed *awxLedPower = new awxLed(this, wxID_ANY, wxDefaultPosition,
-        wxSize(16, 16), awxLED_RED);
-    awxLed *awxLedFan = new awxLed(this, wxID_ANY, wxDefaultPosition,
-        wxSize(16, 16), awxLED_GREEN);
-    awxLed *awxLedLampA = new awxLed(this, wxID_ANY, wxDefaultPosition,
-        wxSize(16, 16), awxLED_GREEN);
-    awxLed *awxLedLampB = new awxLed(this, wxID_ANY, wxDefaultPosition,
-        wxSize(16, 16), awxLED_GREEN);
+    awxLed *awxLedPower = new awxLed(this, myID_LED_POWER, (_ledStatus >> 12) & 0x7);
+    awxLed *awxLedFan = new awxLed(this, myID_LED_FAN, (_ledStatus >> 8) & 0x7);
+    awxLed *awxLedLampA = new awxLed(this, myID_LED_LAMPA, (_ledStatus >> 4) & 0x7);
+    awxLed *awxLedLampB = new awxLed(this, myID_LED_LAMPB, (_ledStatus >> 0) & 0x7);
     ledPreviewSizer->Add(awxLedPower, 1, wxALL, 5);
     ledPreviewSizer->Add(awxLedFan, 1, wxALL, 5);
     ledPreviewSizer->Add(awxLedLampA, 1, wxALL, 5);

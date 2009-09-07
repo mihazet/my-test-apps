@@ -1,49 +1,95 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        led.cpp
-// Purpose:
-// Author:      Joachim Buermann
-// Id:          $Id$
-// Copyright:   (c) 2001 Joachim Buermann
+// Based on led.cpp implementation in awxLed developed by Joachim Buermann.
+// Copyright (c) 2001 Joachim Buermann
 /////////////////////////////////////////////////////////////////////////////
-
+#include <wx/wx.h>
 #include "led.h"
 #include "img/leds.xpm"
 
 BEGIN_EVENT_TABLE(awxLed, wxWindow)
     EVT_ERASE_BACKGROUND(awxLed::OnErase)
     EVT_PAINT(awxLed::OnPaint)
-    EVT_SIZE(awxLed::OnSizeEvent)
+    EVT_SIZE(awxLed::OnSize)
 END_EVENT_TABLE()
 
-awxLed::awxLed(wxWindow* parent,
-			wxWindowID id,
-			const wxPoint& pos,
-			const wxSize& size,
-			awxLedColour color) :
-    wxWindow(parent,id,pos,size,wxNO_FULL_REPAINT_ON_RESIZE)
+BlinkTimer *awxLed::m_timer = NULL;
+wxVector<awxLed *> awxLed::m_allLeds;
+wxIcon *awxLed::m_icons[awxLED_COLOR_INVALID] = { NULL, NULL, NULL, NULL };
+
+awxLed::awxLed(wxWindow *parent, wxWindowID id, awxLedState state,
+               awxLedColor color1, awxLedColor color2)
 {
-    m_state = awxLED_OFF;
+    Create(parent, id, state, color1, color2);
+}
+
+awxLed::awxLed(wxWindow *parent, wxWindowID id, int stateColorsPair)
+{
+    awxLedState state = awxLED_STATE_FIX;
+    awxLedColor color[2] = { awxLED_COLOR_BLANK, awxLED_COLOR_BLANK };
+    GetStateColorsPair(stateColorsPair, &state, &color[0], &color[1]);   
+    Create(parent, id, state, color[0], color[1]);
+}
+
+bool awxLed::Create(wxWindow *parent, wxWindowID id, awxLedState state,
+               awxLedColor color1, awxLedColor color2)
+{
+    m_state = state;
+    m_color[0] = color1;
+    m_color[1] = color2;
     m_bitmap = new wxBitmap(16,16);
-    m_timer = NULL;
     m_blink = 0;
     m_x = m_y = 0;
 
-    m_icons[awxLED_OFF] = new wxIcon((const char **)led_off_xpm);
-    m_icons[awxLED_ON] = NULL;
-    SetColour(color);
+    /* create timer in first awxLed ctor */
+    if (m_allLeds.empty())
+    {
+        m_icons[awxLED_COLOR_BLANK] = new wxIcon(led_off_xpm);
+        m_icons[awxLED_COLOR_RED] = new wxIcon(led_red_xpm);
+        m_icons[awxLED_COLOR_GREEN] = new wxIcon(led_green_xpm);
+        m_icons[awxLED_COLOR_YELLOW] = new wxIcon(led_yellow_xpm);
+        m_timer = new BlinkTimer(this);
+    }
 
-    m_timer = new BlinkTimer(this);
-};
+    if ((state == awxLED_STATE_BLINK) && !m_timer->IsRunning())
+        m_timer->Start(500);
+
+    /* add itself into the global awxLed vector */
+    m_allLeds.push_back(this);
+
+    return wxWindow::Create(parent, id, wxDefaultPosition, wxSize(16, 16),
+        wxNO_FULL_REPAINT_ON_RESIZE);
+}
 
 awxLed::~awxLed()
 {
-    if(m_timer) {
-	   m_timer->Stop();
-	   delete m_timer;
+    /* remove itself from the global awxLed vector */
+    for (wxVector<awxLed *>::iterator it = m_allLeds.begin();
+        it != m_allLeds.end();
+        ++it)
+    {
+        if (*it == this)
+        {
+            m_allLeds.erase(it);
+            break;
+        }
     }
-    delete m_bitmap;
-    delete m_icons[awxLED_OFF];
-    delete m_icons[awxLED_ON];
+
+    /* delete timer in last awxLed dtor */
+    if (m_allLeds.empty())
+    {
+        if (m_timer)
+        {
+            m_timer->Stop();
+            delete m_timer;
+        }
+
+        delete m_icons[awxLED_COLOR_BLANK];
+        delete m_icons[awxLED_COLOR_RED];
+        delete m_icons[awxLED_COLOR_GREEN];
+        delete m_icons[awxLED_COLOR_YELLOW];
+    }
+
+    delete m_bitmap;    
 };
 
 void awxLed::Blink()
@@ -55,47 +101,65 @@ void awxLed::Blink()
 void awxLed::DrawOnBitmap()
 {
     wxSize s = GetClientSize();
-    if((m_bitmap->GetWidth() != s.GetWidth()) || 
-	  (m_bitmap->GetHeight() != s.GetHeight())) {
-	   m_bitmap->Create(s.x,s.y);
+    if ((m_bitmap->GetWidth() != s.GetWidth())
+        || (m_bitmap->GetHeight() != s.GetHeight()))
+    {
+	   m_bitmap->Create(s.x, s.y);
     }
     wxMemoryDC dc;
     dc.SelectObject(*m_bitmap);
-    
-    wxBrush brush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE),
-				  wxSOLID);
+
+    wxBrush brush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE), wxSOLID);
     dc.SetBackground(brush);
     dc.Clear();
 
-    if(m_state == awxLED_BLINK) dc.DrawIcon(*m_icons[m_blink],m_x,m_y);
-    else dc.DrawIcon(*m_icons[m_state & 1],m_x,m_y);
+    if (m_state == awxLED_STATE_BLINK)
+        dc.DrawIcon(*m_icons[m_color[m_blink]], m_x, m_y);
+    else
+        dc.DrawIcon(*m_icons[m_color[0]], m_x, m_y);
 
     dc.SelectObject(wxNullBitmap);
 };
 
-void awxLed::SetColour(awxLedColour color)
+void awxLed::UpdateStateAndColors(awxLedState state, awxLedColor color1,
+                                  awxLedColor color2) 
 {
-    if(m_icons[awxLED_ON]) delete m_icons[awxLED_ON];
-    switch(color) {
-    case awxLED_GREEN:
-	   m_icons[awxLED_ON] = new wxIcon((const char **)led_green_xpm);
-	   break;
-    case awxLED_YELLOW:
-	   m_icons[awxLED_ON] = new wxIcon((const char **)led_yellow_xpm);
-	   break;
-    default:
-	   m_icons[awxLED_ON] = new wxIcon((const char **)led_red_xpm);
+    bool stopTimer = true;
+
+    if ((m_state != state) || (m_color[0] != color1) || (m_color[1] != color2))
+    {
+        m_state = state;
+        m_color[0] = color1;
+        m_color[1] = color2;
+
+        if ((m_state == awxLED_STATE_BLINK) && !m_timer->IsRunning())
+	        m_timer->Start(500);
+        else if ((m_state == awxLED_STATE_FIX) && m_timer->IsRunning())
+        {
+            for (wxVector<awxLed *>::iterator it = m_allLeds.begin();
+                it != m_allLeds.end();
+                ++it)
+            {
+                if ((*it)->m_state == awxLED_STATE_BLINK)
+                {
+                    stopTimer = false;
+                    break;
+                }
+            }
+
+            if (stopTimer)
+                m_timer->Stop();
+        }
+
+        Redraw();
     }
 };
 
-void awxLed::SetState(awxLedState state) 
+void awxLed::UpdateStateAndColors(int stateColorsPair)
 {
-    m_state = state;
-    if(m_timer->IsRunning()) {
-	   m_timer->Stop();
-    }
-    if(m_state == awxLED_BLINK) {
-	   m_timer->Start(500);
-    }
-    Redraw();
-};
+    awxLedState state;
+    awxLedColor color[2];
+    GetStateColorsPair(stateColorsPair, &state, &color[0], &color[1]);
+    UpdateStateAndColors(state, color[0], color[1]);
+}
+
