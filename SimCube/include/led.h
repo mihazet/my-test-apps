@@ -6,6 +6,7 @@
 #define _LED_H_
 
 #include <wx/wx.h>
+#include <wx/vector.h>
 
 enum awxLedState
 {
