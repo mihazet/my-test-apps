@@ -84,10 +84,8 @@ private:
     void OnSize(wxSizeEvent &event)
     {
 	   wxSize size = event.GetSize();
-	   m_x = (size.GetX() - m_icons[0]->GetWidth()) >> 1;
-	   m_y = (size.GetY() - m_icons[0]->GetHeight()) >> 1;
-	   if (m_x < 0) m_x = 0;
-	   if (m_y < 0) m_y = 0;
+	   m_x = wxMax(0, ((size.GetX() - m_icons[0]->GetWidth()) >> 1));
+	   m_y = wxMax(0, ((size.GetY() - m_icons[0]->GetHeight()) >> 1));
 	   DrawOnBitmap();
     }
     void Redraw()

@@ -199,10 +199,10 @@ void TrapPane::CreateControls()
     awxLed *awxLedFan = new awxLed(this, myID_LED_FAN, (_ledStatus >> 8) & 0x7);
     awxLed *awxLedLampA = new awxLed(this, myID_LED_LAMPA, (_ledStatus >> 4) & 0x7);
     awxLed *awxLedLampB = new awxLed(this, myID_LED_LAMPB, (_ledStatus >> 0) & 0x7);
-    ledPreviewSizer->Add(awxLedPower, 1, wxALL, 5);
-    ledPreviewSizer->Add(awxLedFan, 1, wxALL, 5);
-    ledPreviewSizer->Add(awxLedLampA, 1, wxALL, 5);
-    ledPreviewSizer->Add(awxLedLampB, 1, wxALL, 5);
+    ledPreviewSizer->Add(awxLedPower, 1, wxALL, 10);
+    ledPreviewSizer->Add(awxLedFan, 1, wxALL, 10);
+    ledPreviewSizer->Add(awxLedLampA, 1, wxALL, 10);
+    ledPreviewSizer->Add(awxLedLampB, 1, wxALL, 10);
 
     /* control */
     wxSizer *ledControlSizer = new wxBoxSizer(wxHORIZONTAL);

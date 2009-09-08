@@ -7,7 +7,7 @@
 #include "img/leds.xpm"
 
 BEGIN_EVENT_TABLE(awxLed, wxWindow)
-    //EVT_ERASE_BACKGROUND(awxLed::OnErase)
+    EVT_ERASE_BACKGROUND(awxLed::OnErase)
     EVT_PAINT(awxLed::OnPaint)
     EVT_SIZE(awxLed::OnSize)
 END_EVENT_TABLE()
