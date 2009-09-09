@@ -440,9 +440,19 @@ void TrapPane::OnLedPresetChosen(wxCommandEvent &event)
     }
 }
 
-void TrapPane::OnLedStatusSend(wxCommandEvent &event)
+void TrapPane::OnLedStatusSend(wxCommandEvent &WXUNUSED(event))
 {
-    wxLogMessage(wxT("led state"));
+    wxString sqlQuery;
+    wxSQLite3ResultSet set;
+    int value;
+
+    sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = 'LEDSTATUS'");
+    set = _db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        value = set.GetInt(0);
+    set.Finalize();
+
+    wxGetApp().m_PeerData->SendMessageToMonitors(wxString::Format(wxT("LEDSTATUS#%d"), value));
 }
 
 void TrapPane::OnLampAStateSend(wxCommandEvent &event)

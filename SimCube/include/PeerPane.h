@@ -9,12 +9,14 @@
 class PeerData
 {
 public:
-    PeerData(wxIPV4address &peer, wxDateTime timestamp, bool monitor = false)
+    PeerData(int id, wxIPV4address &peer, wxDateTime timestamp, bool monitor = false)
     {
+        m_AdapterId = id;
         m_Peer = peer;
         m_Timestamp = timestamp;
         m_Monitor = monitor;
     }
+    int m_AdapterId;
     wxIPV4address m_Peer;
     wxDateTime m_Timestamp;
     bool m_Monitor;
@@ -77,6 +79,7 @@ public:
     bool RemoveData(wxIPV4address &peer);
     bool SetMonitor(wxIPV4address &peer, bool monitor = true);
     bool GetMonitor(wxIPV4address &peer);
+    void SendMessageToMonitors(const wxString &msg);
 private:
     wxVector<PeerData> _container;
 };

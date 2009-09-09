@@ -184,3 +184,18 @@ bool PeerDataModel::GetMonitor(wxIPV4address &peer)
     return false;
 }
 
+void PeerDataModel::SendMessageToMonitors(const wxString &msg)
+{
+    wxVector<NetAdapter> &adapter = wxGetApp().m_Adapters;
+    wxVector<PeerData>::iterator it;
+
+    for (it = _container.begin(); it != _container.end(); ++it)
+    {
+        if (it->m_Monitor)
+        {
+            adapter.at(it->m_AdapterId).udp->SendTo(it->m_Peer,
+                msg.ToAscii(), msg.length() + 1);
+        }
+    }
+}
+

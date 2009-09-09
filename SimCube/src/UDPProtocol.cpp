@@ -506,7 +506,17 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
                 /* if this is new data, add it, and update ui. */
                 if (!data->IsContain(peer))
                 {
-                    PeerData item(peer, wxDateTime::Now());
+                    /* find out which adapter is associated with this socket */
+                    wxVector<NetAdapter> &adapter = wxGetApp().m_Adapters;
+                    int id = 0;
+                    for (wxVector<NetAdapter>::iterator it = adapter.begin();
+                        it != adapter.end();
+                        ++it, ++id)
+                    {
+                        if (it->udp == local)
+                            break;
+                    }
+                    PeerData item(id, peer, wxDateTime::Now());
                     data->AddData(item);
                 }
             }
