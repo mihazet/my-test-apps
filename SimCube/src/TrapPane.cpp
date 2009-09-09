@@ -674,13 +674,49 @@ void TrapPane::OnLampTempCondChosen(wxCommandEvent &event)
 
 void TrapPane::OnLampHoursUpdated(wxCommandEvent &event)
 {
+    wxString sqlQuery;
+    wxSQLite3ResultSet set;
+    int threshold = 0, current = event.GetInt();
+
+    /* update database with current value */
     LampHours *evtObj = wxDynamicCast(event.GetEventObject(), LampHours);
-    UpdateNumeric(evtObj->_dbString, event.GetInt());
+    UpdateNumeric(evtObj->_dbString, current);
+
+    /* compare current and threshold to update ui */
+    sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = '")
+        << evtObj->_dbString << wxT("_THRESHOLD'");
+    set = _db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        threshold = set.GetInt(0);
+    set.Finalize();
+
+    if (current > threshold)
+        evtObj->SetBackgroundColour(*wxYELLOW);
+    else
+        evtObj->SetBackgroundColour(evtObj->GetDefaultAttributes().colBg);
 }
 
 void TrapPane::OnLampLitCountUpdated(wxCommandEvent &event)
 {
+    wxString sqlQuery;
+    wxSQLite3ResultSet set;
+    int threshold = 0, current = event.GetInt();
+
+    /* update database with current value */
     LampLitCount *evtObj = wxDynamicCast(event.GetEventObject(), LampLitCount);
-    UpdateNumeric(evtObj->_dbString, event.GetInt());
+    UpdateNumeric(evtObj->_dbString, current);
+
+    /* compare current and threshold to update ui */
+    sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = '")
+        << evtObj->_dbString << wxT("_THRESHOLD'");
+    set = _db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        threshold = set.GetInt(0);
+    set.Finalize();
+
+    if (current > threshold)
+        evtObj->SetBackgroundColour(*wxYELLOW);
+    else
+        evtObj->SetBackgroundColour(evtObj->GetDefaultAttributes().colBg);
 }
 
