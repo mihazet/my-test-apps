@@ -355,7 +355,7 @@ void TrapPane::CreateControls()
     fanRB->Bind(wxEVT_COMMAND_RADIOBOX_SELECTED, &TrapPane::OnLedStatusChosen, this);
     fanRB->SetSelection((_ledStatus >> 8) & 0x7);
     LedStatusRadioBox *lampaRB = new LedStatusRadioBox(this, myID_RB_LED_LAMPA,
-        ("LampA"), LedStatusRadioBox::LedType2);
+        _("LampA"), LedStatusRadioBox::LedType2);
     lampaRB->Bind(wxEVT_COMMAND_RADIOBOX_SELECTED, &TrapPane::OnLedStatusChosen, this);
     lampaRB->SetSelection((_ledStatus >> 4) & 0x7);
     LedStatusRadioBox *lampbRB = new LedStatusRadioBox(this, myID_RB_LED_LAMPB,

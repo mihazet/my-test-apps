@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SimCube\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 16:13+0800\n"
+"POT-Creation-Date: 2009-09-10 03:10+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Yu Hui, Yang <yhuiyang@gmail.com>\n"
 "Language-Team:  <yhuiyang@gmail.com>\n"
@@ -160,54 +160,54 @@ msgstr "Idle"
 msgid "Adapters: %d"
 msgstr "Adapters: %d"
 
-#: ../../src/SimCubeApp.cpp:146
+#: ../../src/SimCubeApp.cpp:145
 msgid "SimCube is already running, this instance will be terminated!"
 msgstr "SimCube is already running, this instance will be terminated!"
 
-#: ../../src/SimCubeApp.cpp:155
+#: ../../src/SimCubeApp.cpp:154
 msgid "No network adapter is availabled, this application will be terminated!"
 msgstr "No network adapter is availabled, this application will be terminated!"
 
-#: ../../src/SimCubeApp.cpp:161
+#: ../../src/SimCubeApp.cpp:160
 msgid "Failed to detect network adapters information, this application will be terminated!"
 msgstr "Failed to detect network adapters information, this application will be terminated!"
 
-#: ../../src/SimCubeApp.cpp:174
+#: ../../src/SimCubeApp.cpp:173
 msgid "Please insert USB dongle and restart application!"
 msgstr "Please insert USB dongle and restart application!"
 
-#: ../../src/SimCubeApp.cpp:211
+#: ../../src/SimCubeApp.cpp:214
 msgid "USB dongle is removed, application will be terminated now!"
 msgstr "USB dongle is removed, application will be terminated now!"
 
-#: ../../src/SimCubeApp.cpp:211
+#: ../../src/SimCubeApp.cpp:214
 msgid "Error"
 msgstr "Error"
 
-#: ../../src/SimCubeApp.cpp:258
-#: ../../src/SimCubeApp.cpp:269
+#: ../../src/SimCubeApp.cpp:261
+#: ../../src/SimCubeApp.cpp:272
 msgid "Fail to allocate memory space for GetAdaptersInfo."
 msgstr "Fail to allocate memory space for GetAdaptersInfo."
 
-#: ../../src/SimCubeApp.cpp:275
+#: ../../src/SimCubeApp.cpp:278
 #, c-format
 msgid "GetAdaptersInfo failed with error code = %d"
 msgstr "GetAdaptersInfo failed with error code = %d"
 
-#: ../../src/SimCubeApp.cpp:323
+#: ../../src/SimCubeApp.cpp:326
 #, c-format
 msgid "Fail to create UDP socket. errno = %d"
 msgstr "Fail to create UDP socket. errno = %d"
 
-#: ../../src/SimCubeApp.cpp:333
+#: ../../src/SimCubeApp.cpp:336
 msgid "Fail to retrieve interface configuration."
 msgstr "Fail to retrieve interface configuration."
 
-#: ../../src/SimCubeApp.cpp:357
+#: ../../src/SimCubeApp.cpp:360
 msgid "Fail to get netmask address!"
 msgstr "Fail to get netmask address!"
 
-#: ../../src/SimCubeApp.cpp:369
+#: ../../src/SimCubeApp.cpp:372
 msgid "Fail to get broadcast address!"
 msgstr "Fail to get broadcast address!"
 
@@ -219,127 +219,127 @@ msgstr "About SimCube"
 msgid "Libraries Info "
 msgstr "Libraries Info "
 
-#: ../../src/SimCubeFrame.cpp:60
+#: ../../src/SimCubeFrame.cpp:59
 msgid "OK"
 msgstr "OK"
 
-#: ../../src/SimCubeFrame.cpp:134
+#: ../../src/SimCubeFrame.cpp:133
 msgid "Fail to save perspective!"
 msgstr "Fail to save perspective!"
 
-#: ../../src/SimCubeFrame.cpp:159
+#: ../../src/SimCubeFrame.cpp:158
 msgid "Quit"
 msgstr "Quit"
 
-#: ../../src/SimCubeFrame.cpp:159
+#: ../../src/SimCubeFrame.cpp:158
 msgid "Quit this program"
 msgstr "Quit this program"
 
-#: ../../src/SimCubeFrame.cpp:161
+#: ../../src/SimCubeFrame.cpp:160
 msgid "Property Pane\tCTRL+F1"
 msgstr "Property Pane\tCTRL+F1"
 
-#: ../../src/SimCubeFrame.cpp:162
+#: ../../src/SimCubeFrame.cpp:161
 msgid "Show or hide the property pane."
 msgstr "Show or hide the property pane."
 
-#: ../../src/SimCubeFrame.cpp:163
+#: ../../src/SimCubeFrame.cpp:162
 msgid "Trap Pane\tCTRL+F2"
 msgstr "Trap Pane\tCTRL+F2"
 
-#: ../../src/SimCubeFrame.cpp:164
+#: ../../src/SimCubeFrame.cpp:163
 msgid "Show or hid the trap pane."
 msgstr "Show or hid the trap pane."
 
-#: ../../src/SimCubeFrame.cpp:165
+#: ../../src/SimCubeFrame.cpp:164
 msgid "Remote Pane\tCTRL+F3"
 msgstr "Remote Pane\tCTRL+F3"
 
-#: ../../src/SimCubeFrame.cpp:166
+#: ../../src/SimCubeFrame.cpp:165
 msgid "Show or hide the remote peer pane."
 msgstr "Show or hide the remote peer pane."
 
-#: ../../src/SimCubeFrame.cpp:167
+#: ../../src/SimCubeFrame.cpp:166
 msgid "Configuration Pane\tCTRL+F4"
 msgstr "Configuration Pane\tCTRL+F4"
 
-#: ../../src/SimCubeFrame.cpp:168
+#: ../../src/SimCubeFrame.cpp:167
 msgid "Show or hide the configuration pane."
 msgstr "Show or hide the configuration pane."
 
-#: ../../src/SimCubeFrame.cpp:169
+#: ../../src/SimCubeFrame.cpp:168
 msgid "Log Widnow\tCTRL+F5"
 msgstr "Log Widnow\tCTRL+F5"
 
-#: ../../src/SimCubeFrame.cpp:170
+#: ../../src/SimCubeFrame.cpp:169
 msgid "Show or hide the logging window."
 msgstr "Show or hide the logging window."
 
-#: ../../src/SimCubeFrame.cpp:172
+#: ../../src/SimCubeFrame.cpp:171
 msgid "Reset all panes"
 msgstr "Reset all panes"
 
-#: ../../src/SimCubeFrame.cpp:173
+#: ../../src/SimCubeFrame.cpp:172
 msgid "Reset all panes to its default position and size."
 msgstr "Reset all panes to its default position and size."
 
-#: ../../src/SimCubeFrame.cpp:175
+#: ../../src/SimCubeFrame.cpp:174
 msgid "Help file"
 msgstr "Help file"
 
-#: ../../src/SimCubeFrame.cpp:176
+#: ../../src/SimCubeFrame.cpp:175
 msgid "Show help file."
 msgstr "Show help file."
 
-#: ../../src/SimCubeFrame.cpp:177
+#: ../../src/SimCubeFrame.cpp:176
 msgid "About..."
 msgstr "About..."
 
-#: ../../src/SimCubeFrame.cpp:177
+#: ../../src/SimCubeFrame.cpp:176
 msgid "Show about dialog"
 msgstr "Show about dialog"
 
-#: ../../src/SimCubeFrame.cpp:180
+#: ../../src/SimCubeFrame.cpp:179
 msgid "File"
 msgstr "File"
 
-#: ../../src/SimCubeFrame.cpp:181
+#: ../../src/SimCubeFrame.cpp:180
 msgid "View"
 msgstr "View"
 
-#: ../../src/SimCubeFrame.cpp:182
+#: ../../src/SimCubeFrame.cpp:181
 msgid "Help"
 msgstr "Help"
 
-#: ../../src/SimCubeFrame.cpp:193
+#: ../../src/SimCubeFrame.cpp:192
 msgid "Log Output"
 msgstr "Log Output"
 
-#: ../../src/SimCubeFrame.cpp:198
+#: ../../src/SimCubeFrame.cpp:197
 msgid "Supported Property"
 msgstr "Supported Property"
 
-#: ../../src/SimCubeFrame.cpp:203
+#: ../../src/SimCubeFrame.cpp:202
 msgid "Transaction History"
 msgstr "Transaction History"
 
-#: ../../src/SimCubeFrame.cpp:208
+#: ../../src/SimCubeFrame.cpp:207
 msgid "SimCube Configuration"
 msgstr "SimCube Configuration"
 
-#: ../../src/SimCubeFrame.cpp:212
+#: ../../src/SimCubeFrame.cpp:211
 msgid "Send Trap Message"
 msgstr "Send Trap Message"
 
-#: ../../src/SimCubeFrame.cpp:216
+#: ../../src/SimCubeFrame.cpp:215
 msgid "Remote Status"
 msgstr "Remote Status"
 
-#: ../../src/SimCubeFrame.cpp:233
+#: ../../src/SimCubeFrame.cpp:232
 msgid "Fail to save software default perspective!"
 msgstr "Fail to save software default perspective!"
 
-#: ../../src/SimCubeFrame.cpp:360
+#: ../../src/SimCubeFrame.cpp:359
 msgid "Fail to reset current perspective value"
 msgstr "Fail to reset current perspective value"
 
@@ -401,125 +401,110 @@ msgstr "Run FW from ram"
 msgid "Verify checksum in memory load buffer failed!"
 msgstr "Verify checksum in memory load buffer failed!"
 
+#: ../../src/TrapPane.cpp:36
+msgid "Led is in off state."
+msgstr "Led is in off state."
+
+#: ../../src/TrapPane.cpp:37
+msgid "Red light constant on."
+msgstr "Red light constant on."
+
+#: ../../src/TrapPane.cpp:38
+msgid "Green light constant on."
+msgstr "Green light constant on."
+
+#: ../../src/TrapPane.cpp:39
+msgid "Orange light constant on."
+msgstr "Orange light constant on."
+
 #: ../../src/TrapPane.cpp:40
+msgid "Led light flashing between green and off."
+msgstr "Led light flashing between green and off."
+
+#: ../../src/TrapPane.cpp:41
+msgid "Led light flashing between off and green."
+msgstr "Led light flashing between off and green."
+
+#: ../../src/TrapPane.cpp:42
+msgid "Led light flashing between red and green."
+msgstr "Led light flashing between red and green."
+
+#: ../../src/TrapPane.cpp:43
+msgid "Led light flashing between green and orange."
+msgstr "Led light flashing between green and orange."
+
+#: ../../src/TrapPane.cpp:332
 msgid "Led Status"
 msgstr "Led Status"
 
-#: ../../src/TrapPane.cpp:43
-#: ../../src/TrapPane.cpp:74
-msgid "Off"
-msgstr "Off"
+#: ../../src/TrapPane.cpp:335
+msgid "Preview"
+msgstr "Preview"
 
-#: ../../src/TrapPane.cpp:44
-msgid "Red"
-msgstr "Red"
-
-#: ../../src/TrapPane.cpp:45
-msgid "Green"
-msgstr "Green"
-
-#: ../../src/TrapPane.cpp:46
-msgid "Orange"
-msgstr "Orange"
-
-#: ../../src/TrapPane.cpp:47
-msgid "Green<->Off"
-msgstr "Green<->Off"
-
-#: ../../src/TrapPane.cpp:48
-msgid "Off<->Green"
-msgstr "Off<->Green"
-
-#: ../../src/TrapPane.cpp:49
-msgid "Red<->Green"
-msgstr "Red<->Green"
-
-#: ../../src/TrapPane.cpp:50
-msgid "Green<->Orange"
-msgstr "Green<->Orange"
-
-#: ../../src/TrapPane.cpp:51
+#: ../../src/TrapPane.cpp:350
 msgid "Power"
 msgstr "Power"
 
-#: ../../src/TrapPane.cpp:53
+#: ../../src/TrapPane.cpp:354
 msgid "Fan"
 msgstr "Fan"
 
-#: ../../src/TrapPane.cpp:55
+#: ../../src/TrapPane.cpp:358
 msgid "LampA"
 msgstr "LampA"
 
-#: ../../src/TrapPane.cpp:57
+#: ../../src/TrapPane.cpp:362
 msgid "LampB"
 msgstr "LampB"
 
-#: ../../src/TrapPane.cpp:68
-msgid "Lamp A Status"
-msgstr "Lamp A Status"
+#: ../../src/TrapPane.cpp:373
+msgid "Quick LED Preset"
+msgstr "Quick LED Preset"
 
-#: ../../src/TrapPane.cpp:72
-#: ../../src/TrapPane.cpp:116
-msgid "Status"
-msgstr "Status"
-
-#: ../../src/TrapPane.cpp:75
-msgid "In use"
-msgstr "In use"
-
-#: ../../src/TrapPane.cpp:76
-msgid "Lit failed"
-msgstr "Lit failed"
-
-#: ../../src/TrapPane.cpp:79
-#: ../../src/TrapPane.cpp:86
-#: ../../src/TrapPane.cpp:93
-#: ../../src/TrapPane.cpp:109
-#: ../../src/TrapPane.cpp:119
-#: ../../src/TrapPane.cpp:126
-#: ../../src/TrapPane.cpp:133
-#: ../../src/TrapPane.cpp:140
+#: ../../src/TrapPane.cpp:380
+#: ../../src/TrapPane.cpp:397
+#: ../../src/TrapPane.cpp:407
+#: ../../src/TrapPane.cpp:417
+#: ../../src/TrapPane.cpp:427
+#: ../../src/TrapPane.cpp:440
+#: ../../src/TrapPane.cpp:450
+#: ../../src/TrapPane.cpp:460
+#: ../../src/TrapPane.cpp:470
 msgid "Send"
 msgstr "Send"
 
-#: ../../src/TrapPane.cpp:83
-#: ../../src/TrapPane.cpp:123
+#: ../../src/TrapPane.cpp:389
+msgid "Lamp A Status"
+msgstr "Lamp A Status"
+
+#: ../../src/TrapPane.cpp:393
+#: ../../src/TrapPane.cpp:436
+msgid "Status"
+msgstr "Status"
+
+#: ../../src/TrapPane.cpp:403
+#: ../../src/TrapPane.cpp:446
 msgid "Hours"
 msgstr "Hours"
 
-#: ../../src/TrapPane.cpp:90
-#: ../../src/TrapPane.cpp:130
+#: ../../src/TrapPane.cpp:413
+#: ../../src/TrapPane.cpp:456
 msgid "Lit Count"
 msgstr "Lit Count"
 
-#: ../../src/TrapPane.cpp:97
-#: ../../src/TrapPane.cpp:137
+#: ../../src/TrapPane.cpp:423
+#: ../../src/TrapPane.cpp:466
 msgid "Temp Cond"
 msgstr "Temp Cond"
 
-#: ../../src/TrapPane.cpp:99
-msgid "Shutdown"
-msgstr "Shutdown"
-
-#: ../../src/TrapPane.cpp:100
-#: ../../src/TrapPane.cpp:101
-msgid "Out of spec"
-msgstr "Out of spec"
-
-#: ../../src/TrapPane.cpp:102
-msgid "Critical"
-msgstr "Critical"
-
-#: ../../src/TrapPane.cpp:103
-#: ../../src/TrapPane.cpp:104
-#: ../../src/TrapPane.cpp:105
-#: ../../src/TrapPane.cpp:106
-msgid "Ok"
-msgstr "Ok"
-
-#: ../../src/TrapPane.cpp:112
+#: ../../src/TrapPane.cpp:432
 msgid "Lamp B Status"
 msgstr "Lamp B Status"
+
+#: ../../src/TrapPane.cpp:564
+#: ../../src/TrapPane.cpp:613
+msgid "Fail to update LEDSTATUS."
+msgstr "Fail to update LEDSTATUS."
 
 #: ../../src/UDPProtocol.cpp:89
 #, c-format
@@ -561,36 +546,36 @@ msgstr "This may not be an error. Set Request (%s) is not handled by database up
 msgid "Fail to send check board config response back to peer. (error = %d)"
 msgstr "Fail to send check board config response back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:476
+#: ../../src/UDPProtocol.cpp:477
 #, c-format
 msgid "Fail to send check connection response back to peer. (error = %d)"
 msgstr "Fail to send check connection response back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:516
+#: ../../src/UDPProtocol.cpp:527
 #, c-format
 msgid "Fail to send connect response back to peer. (error = %d)"
 msgstr "Fail to send connect response back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:523
+#: ../../src/UDPProtocol.cpp:534
 msgid "Empty BoardName in CONNECT get request message"
 msgstr "Empty BoardName in CONNECT get request message"
 
-#: ../../src/UDPProtocol.cpp:541
+#: ../../src/UDPProtocol.cpp:552
 #, c-format
 msgid "Fail to send discover response back to peer. (error = %d)"
 msgstr "Fail to send discover response back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:564
+#: ../../src/UDPProtocol.cpp:575
 #, c-format
 msgid "Fail to send monitor response back to peer. (error = %d)"
 msgstr "Fail to send monitor response back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:595
+#: ../../src/UDPProtocol.cpp:606
 #, c-format
 msgid "Fail to send response (%s) back to peer. (error = %d)"
 msgstr "Fail to send response (%s) back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:614
+#: ../../src/UDPProtocol.cpp:625
 #, c-format
 msgid "Failt to send response (%s) back to peer. (error = %d)"
 msgstr "Failt to send response (%s) back to peer. (error = %d)"
@@ -604,6 +589,34 @@ msgstr "Regular expression invalid: '"
 msgid "REGEXP called with wrong number of arguments: %d instead of 2."
 msgstr "REGEXP called with wrong number of arguments: %d instead of 2."
 
+#~ msgid "Off"
+#~ msgstr "Off"
+#~ msgid "Red"
+#~ msgstr "Red"
+#~ msgid "Green"
+#~ msgstr "Green"
+#~ msgid "Orange"
+#~ msgstr "Orange"
+#~ msgid "Green<->Off"
+#~ msgstr "Green<->Off"
+#~ msgid "Off<->Green"
+#~ msgstr "Off<->Green"
+#~ msgid "Red<->Green"
+#~ msgstr "Red<->Green"
+#~ msgid "Green<->Orange"
+#~ msgstr "Green<->Orange"
+#~ msgid "In use"
+#~ msgstr "In use"
+#~ msgid "Lit failed"
+#~ msgstr "Lit failed"
+#~ msgid "Shutdown"
+#~ msgstr "Shutdown"
+#~ msgid "Out of spec"
+#~ msgstr "Out of spec"
+#~ msgid "Critical"
+#~ msgstr "Critical"
+#~ msgid "Ok"
+#~ msgstr "Ok"
 #~ msgid "Port "
 #~ msgstr "Port "
 #~ msgid "Which port will be used by UDP protocol? "
