@@ -139,10 +139,12 @@ class LampStatus : public wxChoice
 public:
     LampStatus(wxWindow *parent, wxWindowID id, const wxString &dbString);
     ~LampStatus() {};
+    wxString _dbString;
 };
 
 LampStatus::LampStatus(wxWindow *parent, wxWindowID id,
                        const wxString &dbString)
+                       : _dbString(dbString)
 {
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     wxSQLite3ResultSet set;
@@ -169,10 +171,12 @@ class LampTempCond : public wxChoice
 public:
     LampTempCond(wxWindow *parent, wxWindowID id, const wxString &dbString);
     ~LampTempCond() {};
+    wxString _dbString;
 };
 
 LampTempCond::LampTempCond(wxWindow *parent, wxWindowID id,
                            const wxString &dbString)
+                           : _dbString(dbString)
 {
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     wxSQLite3ResultSet set;
@@ -204,9 +208,11 @@ class LampHours : public wxSpinCtrl
 public:
     LampHours(wxWindow *parent, wxWindowID id, const wxString &dbString);
     ~LampHours() {};
+    wxString _dbString;
 };
 
 LampHours::LampHours(wxWindow *parent, wxWindowID id, const wxString &dbString)
+    : _dbString(dbString)
 {
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     wxSQLite3ResultSet set;
@@ -229,9 +235,11 @@ class LampLitCount : public wxSpinCtrl
 public:
     LampLitCount(wxWindow *parent, wxWindowID id, const wxString &dbString);
     ~LampLitCount() {};
+    wxString _dbString;
 };
 
 LampLitCount::LampLitCount(wxWindow *parent, wxWindowID id, const wxString &dbString)
+    : _dbString(dbString)
 {
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     wxSQLite3ResultSet set;
@@ -384,6 +392,7 @@ void TrapPane::CreateControls()
     lampASizer->Add(lampAStatusSizer, 0, wxALL | wxEXPAND, 0);
     lampAStatusSizer->Add(new wxStaticText(this, wxID_STATIC, _("Status")), 0, wxALL, 5);
     LampStatus *lampAStatus = new LampStatus(this, myID_CHOICE_LAMPA_STATUS, wxT("LAMP_A_STATUS"));
+    lampAStatus->Bind(wxEVT_COMMAND_CHOICE_SELECTED, &TrapPane::OnLampStatusChosen, this);
     lampAStatusSizer->Add(lampAStatus, 1, wxALL, 5);
     wxButton *lampAStateBtn = new wxButton(this, myID_BTN_LAMPASTATE_SEND, _("Send"),
         wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
@@ -393,6 +402,7 @@ void TrapPane::CreateControls()
     lampASizer->Add(lampAHoursSizer, 0, wxALL | wxEXPAND, 0);
     lampAHoursSizer->Add(new wxStaticText(this, wxID_STATIC, _("Hours")), 0, wxALL, 5);
     LampHours *lampAHours = new LampHours(this, myID_SPIN_LAMPA_HOURS, wxT("LAMP_A_HOURS"));
+    lampAHours->Bind(wxEVT_COMMAND_TEXT_UPDATED, &TrapPane::OnLampHoursUpdated, this);
     lampAHoursSizer->Add(lampAHours, 1, wxALL, 5);
     wxButton *lampAHoursBtn = new wxButton(this, myID_BTN_LAMPAHOURS_SEND, _("Send"),
         wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
@@ -402,6 +412,7 @@ void TrapPane::CreateControls()
     lampASizer->Add(lampALitCountSizer, 0, wxALL | wxEXPAND, 0);
     lampALitCountSizer->Add(new wxStaticText(this, wxID_STATIC, _("Lit Count")), 0, wxALL, 5);
     LampLitCount *lampALitCnt = new LampLitCount(this, myID_SPIN_LAMPA_LITCNT, wxT("LAMP_A_LIT_COUNT"));
+    lampALitCnt->Bind(wxEVT_COMMAND_TEXT_UPDATED, &TrapPane::OnLampLitCountUpdated, this);
     lampALitCountSizer->Add(lampALitCnt, 1, wxALL, 5);
     wxButton *lampALitCntBtn = new wxButton(this, myID_BTN_LAMPALITCNT_SEND, _("Send"),
         wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
@@ -411,6 +422,7 @@ void TrapPane::CreateControls()
     lampASizer->Add(lampATempCondSizer, 0, wxALL | wxEXPAND, 0);
     lampATempCondSizer->Add(new wxStaticText(this, wxID_STATIC, _("Temp Cond")), 0, wxALL, 5);
     LampTempCond *lampATempCond = new LampTempCond(this, myID_CHOICE_LAMPA_TEMPCOND, wxT("LAMP_A_TEMP_COND"));
+    lampATempCond->Bind(wxEVT_COMMAND_CHOICE_SELECTED, &TrapPane::OnLampTempCondChosen, this);
     lampATempCondSizer->Add(lampATempCond, 1, wxALL, 5);
     wxButton *lampATempCondBtn = new wxButton(this, myID_BTN_LAMPATEMPCOND_SEND, _("Send"),
         wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
@@ -423,6 +435,7 @@ void TrapPane::CreateControls()
     lampBSizer->Add(lampBStatusSizer, 0, wxALL | wxEXPAND, 0);
     lampBStatusSizer->Add(new wxStaticText(this, wxID_STATIC, _("Status")), 0, wxALL, 5);
     LampStatus *lampBStatus = new LampStatus(this, myID_CHOICE_LAMPB_STATUS, wxT("LAMP_B_STATUS"));
+    lampBStatus->Bind(wxEVT_COMMAND_CHOICE_SELECTED, &TrapPane::OnLampStatusChosen, this);
     lampBStatusSizer->Add(lampBStatus, 1, wxALL, 5);
     wxButton *lampBStateBtn = new wxButton(this, myID_BTN_LAMPBSTATE_SEND, _("Send"),
         wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
@@ -432,6 +445,7 @@ void TrapPane::CreateControls()
     lampBSizer->Add(lampBHoursSizer, 0, wxALL | wxEXPAND, 0);
     lampBHoursSizer->Add(new wxStaticText(this, wxID_STATIC, _("Hours")), 0, wxALL, 5);
     LampHours *lampBHours = new LampHours(this, myID_SPIN_LAMPB_HOURS, wxT("LAMP_B_HOURS"));
+    lampBHours->Bind(wxEVT_COMMAND_TEXT_UPDATED, &TrapPane::OnLampHoursUpdated, this);
     lampBHoursSizer->Add(lampBHours, 1, wxALL, 5);
     wxButton *lampBHoursBtn = new wxButton(this, myID_BTN_LAMPBHOURS_SEND, _("Send"),
         wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
@@ -441,6 +455,7 @@ void TrapPane::CreateControls()
     lampBSizer->Add(lampBLitCountSizer, 0, wxALL | wxEXPAND, 0);
     lampBLitCountSizer->Add(new wxStaticText(this, wxID_STATIC, _("Lit Count")), 0, wxALL, 5);
     LampLitCount *lampBLitCnt = new LampLitCount(this, myID_SPIN_LAMPB_LITCNT, wxT("LAMP_B_LIT_COUNT"));
+    lampBLitCnt->Bind(wxEVT_COMMAND_TEXT_UPDATED, &TrapPane::OnLampLitCountUpdated, this);
     lampBLitCountSizer->Add(lampBLitCnt, 1, wxALL, 5);
     wxButton *lampBLitCntBtn = new wxButton(this, myID_BTN_LAMPBLITCNT_SEND, _("Send"),
         wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
@@ -450,6 +465,7 @@ void TrapPane::CreateControls()
     lampBSizer->Add(lampBTempCondSizer, 0, wxALL | wxEXPAND, 0);
     lampBTempCondSizer->Add(new wxStaticText(this, wxID_STATIC, _("Temp Cond")), 0, wxALL, 5);
     LampTempCond *lampBTempCond = new LampTempCond(this, myID_CHOICE_LAMPB_TEMPCOND, wxT("LAMP_B_TEMP_COND"));
+    lampBTempCond->Bind(wxEVT_COMMAND_CHOICE_SELECTED, &TrapPane::OnLampTempCondChosen, this);
     lampBTempCondSizer->Add(lampBTempCond, 1, wxALL, 5);
     wxButton *lampBTempCondBtn = new wxButton(this, myID_BTN_LAMPBTEMPCOND_SEND, _("Send"),
         wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
@@ -488,6 +504,25 @@ void TrapPane::TrapNumeric(const wxString &str)
 
     msg << str << wxT("#") << wxString::Format(wxT("%d"), value);
     wxGetApp().m_PeerData->SendMessageToMonitors(msg);
+}
+
+void TrapPane::UpdateString(const wxString &dbString, const wxString &str)
+{
+    wxString sqlUpdate;
+    sqlUpdate << wxT("UPDATE TrapTbl SET CurrentValue = '") << str
+        << wxT("' WHERE ProtocolName = '") << dbString << wxT("'");
+    if (1 != _db->ExecuteUpdate(sqlUpdate))
+        wxLogError(wxT("Fail to update ") + dbString);
+}
+
+void TrapPane::UpdateNumeric(const wxString &dbString, const int num)
+{
+    wxString sqlUpdate;
+    sqlUpdate << wxT("UPDATE TrapTbl SET CurrentValue = '")
+        << wxString::Format(wxT("%d"), num) << wxT("' WHERE ProtocolName = '")
+        << dbString << wxT("'");
+    if (1 != _db->ExecuteUpdate(sqlUpdate))
+        wxLogError(wxT("Fail to update ") + dbString);
 }
 
 void TrapPane::OnLedStatusChosen(wxCommandEvent &event)
@@ -623,5 +658,29 @@ void TrapPane::OnLampATempCondSend(wxCommandEvent &WXUNUSED(event))
 void TrapPane::OnLampBTempCondSend(wxCommandEvent &WXUNUSED(event))
 {
     TrapString(wxT("LAMP_B_TEMP_COND"));
+}
+
+void TrapPane::OnLampStatusChosen(wxCommandEvent &event)
+{
+    LampStatus *evtObj = wxDynamicCast(event.GetEventObject(), LampStatus);
+    UpdateString(evtObj->_dbString, event.GetString());
+}
+
+void TrapPane::OnLampTempCondChosen(wxCommandEvent &event)
+{
+    LampTempCond *evtObj = wxDynamicCast(event.GetEventObject(), LampTempCond);
+    UpdateString(evtObj->_dbString, event.GetString());
+}
+
+void TrapPane::OnLampHoursUpdated(wxCommandEvent &event)
+{
+    LampHours *evtObj = wxDynamicCast(event.GetEventObject(), LampHours);
+    UpdateNumeric(evtObj->_dbString, event.GetInt());
+}
+
+void TrapPane::OnLampLitCountUpdated(wxCommandEvent &event)
+{
+    LampLitCount *evtObj = wxDynamicCast(event.GetEventObject(), LampLitCount);
+    UpdateNumeric(evtObj->_dbString, event.GetInt());
 }
 

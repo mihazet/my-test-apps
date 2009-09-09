@@ -28,6 +28,8 @@ private:
     void CreateControls();
     void TrapString(const wxString &str);
     void TrapNumeric(const wxString &str);
+    void UpdateString(const wxString &dbString, const wxString &str);
+    void UpdateNumeric(const wxString &dbString, const int num);
 
     // event handlers
     void OnLedStatusChosen(wxCommandEvent &event);
@@ -41,6 +43,10 @@ private:
     void OnLampBLitCntSend(wxCommandEvent &event);
     void OnLampATempCondSend(wxCommandEvent &event);
     void OnLampBTempCondSend(wxCommandEvent &event);
+    void OnLampStatusChosen(wxCommandEvent &event);
+    void OnLampTempCondChosen(wxCommandEvent &event);
+    void OnLampHoursUpdated(wxCommandEvent &event);
+    void OnLampLitCountUpdated(wxCommandEvent &event);
 
     wxSQLite3Database *_db;
     int _ledStatus;
