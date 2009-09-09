@@ -23,8 +23,11 @@ public:
         long style = wxTAB_TRAVERSAL);
 
 private:
+    // helper functions
     void Init();
     void CreateControls();
+    void TrapString(const wxString &str);
+    void TrapNumeric(const wxString &str);
 
     // event handlers
     void OnLedStatusChosen(wxCommandEvent &event);

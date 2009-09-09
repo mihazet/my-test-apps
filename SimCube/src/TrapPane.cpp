@@ -350,6 +350,37 @@ void TrapPane::CreateControls()
     SetSizerAndFit(allSizer);
 }
 
+void TrapPane::TrapString(const wxString &str)
+{
+    wxString sqlQuery, value, msg;
+    wxSQLite3ResultSet set;
+
+    sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = '") << str << wxT("'");
+    set = _db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        value = set.GetAsString(0);
+    set.Finalize();
+
+    msg << str << wxT("#") << value;
+    wxGetApp().m_PeerData->SendMessageToMonitors(msg);
+}
+
+void TrapPane::TrapNumeric(const wxString &str)
+{
+    wxString sqlQuery, msg;
+    wxSQLite3ResultSet set;
+    int value = 0;
+
+    sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = '") << str << wxT("'");
+    set = _db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        value = set.GetInt(0);
+    set.Finalize();
+
+    msg << str << wxT("#") << wxString::Format(wxT("%d"), value);
+    wxGetApp().m_PeerData->SendMessageToMonitors(msg);
+}
+
 void TrapPane::OnLedStatusChosen(wxCommandEvent &event)
 {
     int mask, shift;
@@ -442,56 +473,46 @@ void TrapPane::OnLedPresetChosen(wxCommandEvent &event)
 
 void TrapPane::OnLedStatusSend(wxCommandEvent &WXUNUSED(event))
 {
-    wxString sqlQuery;
-    wxSQLite3ResultSet set;
-    int value;
-
-    sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = 'LEDSTATUS'");
-    set = _db->ExecuteQuery(sqlQuery);
-    if (set.NextRow())
-        value = set.GetInt(0);
-    set.Finalize();
-
-    wxGetApp().m_PeerData->SendMessageToMonitors(wxString::Format(wxT("LEDSTATUS#%d"), value));
+    TrapNumeric(wxT("LEDSTATUS"));
 }
 
-void TrapPane::OnLampAStateSend(wxCommandEvent &event)
+void TrapPane::OnLampAStateSend(wxCommandEvent &WXUNUSED(event))
 {
-    wxLogMessage(wxT("Lamp A state"));
+    TrapString(wxT("LAMP_A_STATUS"));
 }
 
-void TrapPane::OnLampBStateSend(wxCommandEvent &event)
+void TrapPane::OnLampBStateSend(wxCommandEvent &WXUNUSED(event))
 {
-    wxLogMessage(wxT("Lamp B state"));
+    TrapString(wxT("LAMP_B_STATUS"));
 }
 
-void TrapPane::OnLampAHoursSend(wxCommandEvent &event)
+void TrapPane::OnLampAHoursSend(wxCommandEvent &WXUNUSED(event))
 {
-    wxLogMessage(wxT("Lamp A hours"));
+    TrapNumeric(wxT("LAMP_A_HOURS"));
 }
 
-void TrapPane::OnLampBHoursSend(wxCommandEvent &event)
+void TrapPane::OnLampBHoursSend(wxCommandEvent &WXUNUSED(event))
 {
-    wxLogMessage(wxT("Lamp B hours"));
+    TrapNumeric(wxT("LAMP_B_HOURS"));
 }
 
-void TrapPane::OnLampALitCntSend(wxCommandEvent &event)
+void TrapPane::OnLampALitCntSend(wxCommandEvent &WXUNUSED(event))
 {
-    wxLogMessage(wxT("Lamp A lit cnt"));
+    TrapNumeric(wxT("LAMP_A_LIT_COUNT"));
 }
 
-void TrapPane::OnLampBLitCntSend(wxCommandEvent &event)
+void TrapPane::OnLampBLitCntSend(wxCommandEvent &WXUNUSED(event))
 {
-    wxLogMessage(wxT("Lamp B lit cnt"));
+    TrapNumeric(wxT("LAMP_B_LIT_COUNT"));
 }
 
-void TrapPane::OnLampATempCondSend(wxCommandEvent &event)
+void TrapPane::OnLampATempCondSend(wxCommandEvent &WXUNUSED(event))
 {
-    wxLogMessage(wxT("Lamp A temp cond"));
+    TrapString(wxT("LAMP_A_TEMP_COND"));
 }
 
-void TrapPane::OnLampBTempCondSend(wxCommandEvent &event)
+void TrapPane::OnLampBTempCondSend(wxCommandEvent &WXUNUSED(event))
 {
-    wxLogMessage(wxT("Lamp B temp cond"));
+    TrapString(wxT("LAMP_B_TEMP_COND"));
 }
 
