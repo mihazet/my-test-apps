@@ -147,6 +147,15 @@ enum
     myID_RB_LED_LAMPA,
     myID_RB_LED_LAMPB,
     myID_CHOICE_LED_PRESET,
+    myID_BTN_LEDSTATUS_SEND,
+    myID_BTN_LAMPASTATE_SEND,
+    myID_BTN_LAMPBSTATE_SEND,
+    myID_BTN_LAMPAHOURS_SEND,
+    myID_BTN_LAMPBHOURS_SEND,
+    myID_BTN_LAMPALITCNT_SEND,
+    myID_BTN_LAMPBLITCNT_SEND,
+    myID_BTN_LAMPATEMPCOND_SEND,
+    myID_BTN_LAMPBTEMPCOND_SEND,
 };
 
 TrapPane::TrapPane()
@@ -238,8 +247,10 @@ void TrapPane::CreateControls()
     ledPresetSizer->Add(ledPreset, 1, wxALL, 5);
 
     ledPresetSizer->AddStretchSpacer();
-    ledPresetSizer->Add(new wxButton(this, wxID_ANY, _("Send"), wxDefaultPosition,
-        wxDefaultSize, wxBU_EXACTFIT), 0, wxALL, 5);
+    wxButton *ledStatusBtn = new wxButton(this, myID_BTN_LEDSTATUS_SEND, _("Send"),
+        wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    ledStatusBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TrapPane::OnLedStatusSend, this);
+    ledPresetSizer->Add(ledStatusBtn, 0, wxALL, 5);
 
     /* lamp */
     wxBoxSizer *lampSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -251,43 +262,51 @@ void TrapPane::CreateControls()
     lampASizer->Add(lampAStatusSizer, 0, wxALL | wxEXPAND, 0);
     lampAStatusSizer->Add(new wxStaticText(this, wxID_STATIC, _("Status")), 0, wxALL, 5);
     wxArrayString lampStatus;
-    lampStatus.push_back(_("Off"));
-    lampStatus.push_back(_("In use"));
-    lampStatus.push_back(_("Lit failed"));
+    lampStatus.push_back(wxT("OFF"));
+    lampStatus.push_back(wxT("IN_USE"));
+    lampStatus.push_back(wxT("LIGHT_FAILED"));
     lampAStatusSizer->Add(new wxChoice(this, wxID_ANY, wxDefaultPosition,
         wxDefaultSize, lampStatus), 1, wxALL, 5);
-    lampAStatusSizer->Add(new wxButton(this, wxID_ANY, _("Send"), wxDefaultPosition,
-        wxDefaultSize, wxBU_EXACTFIT), 0, wxALL, 5);
+    wxButton *lampAStateBtn = new wxButton(this, myID_BTN_LAMPASTATE_SEND, _("Send"),
+        wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    lampAStateBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TrapPane::OnLampAStateSend, this);
+    lampAStatusSizer->Add(lampAStateBtn, 0, wxALL, 5);
     wxBoxSizer *lampAHoursSizer = new wxBoxSizer(wxHORIZONTAL);
     lampASizer->Add(lampAHoursSizer, 0, wxALL | wxEXPAND, 0);
     lampAHoursSizer->Add(new wxStaticText(this, wxID_STATIC, _("Hours")), 0, wxALL, 5);
     lampAHoursSizer->Add(new wxSpinCtrl(this, wxID_ANY, wxT("3"), wxDefaultPosition,
         wxDefaultSize, wxSP_ARROW_KEYS, 0, 10000), 1, wxALL, 5);
-    lampAHoursSizer->Add(new wxButton(this, wxID_ANY, _("Send"), wxDefaultPosition,
-        wxDefaultSize, wxBU_EXACTFIT), 0, wxALL, 5);
+    wxButton *lampAHoursBtn = new wxButton(this, myID_BTN_LAMPAHOURS_SEND, _("Send"),
+        wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    lampAHoursBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TrapPane::OnLampAHoursSend, this);
+    lampAHoursSizer->Add(lampAHoursBtn, 0, wxALL, 5);
     wxBoxSizer *lampALitCountSizer = new wxBoxSizer(wxHORIZONTAL);
     lampASizer->Add(lampALitCountSizer, 0, wxALL | wxEXPAND, 0);
     lampALitCountSizer->Add(new wxStaticText(this, wxID_STATIC, _("Lit Count")), 0, wxALL, 5);
     lampALitCountSizer->Add(new wxSpinCtrl(this, wxID_ANY, wxT("5"), wxDefaultPosition,
         wxDefaultSize, wxSP_ARROW_KEYS, 0, 10000), 1, wxALL, 5);
-    lampALitCountSizer->Add(new wxButton(this, wxID_ANY, _("Send"), wxDefaultPosition,
-        wxDefaultSize, wxBU_EXACTFIT), 0, wxALL | wxEXPAND, 5);
+    wxButton *lampALitCntBtn = new wxButton(this, myID_BTN_LAMPALITCNT_SEND, _("Send"),
+        wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    lampALitCntBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TrapPane::OnLampALitCntSend, this);
+    lampALitCountSizer->Add(lampALitCntBtn, 0, wxALL | wxEXPAND, 5);
     wxBoxSizer *lampATempCondSizer = new wxBoxSizer(wxHORIZONTAL);
     lampASizer->Add(lampATempCondSizer, 0, wxALL | wxEXPAND, 0);
     lampATempCondSizer->Add(new wxStaticText(this, wxID_STATIC, _("Temp Cond")), 0, wxALL, 5);
     wxArrayString lampTempCond;
-    lampTempCond.push_back(_("Shutdown"));
-    lampTempCond.push_back(_("Out of spec"));
-    lampTempCond.push_back(_("Out of spec"));
-    lampTempCond.push_back(_("Critical"));
-    lampTempCond.push_back(_("Ok"));
-    lampTempCond.push_back(_("Ok"));
-    lampTempCond.push_back(_("Ok"));
-    lampTempCond.push_back(_("Ok"));
+    lampTempCond.push_back(wxT("SHUTDOWN"));
+    lampTempCond.push_back(wxT("OUT_OF_SPEC"));
+    lampTempCond.push_back(wxT("OUT_OF_SPEC"));
+    lampTempCond.push_back(wxT("CRITICAL"));
+    lampTempCond.push_back(wxT("OK"));
+    lampTempCond.push_back(wxT("OK"));
+    lampTempCond.push_back(wxT("OK"));
+    lampTempCond.push_back(wxT("OK"));
     lampATempCondSizer->Add(new wxChoice(this, wxID_ANY, wxDefaultPosition,
         wxDefaultSize, lampTempCond), 1, wxALL, 5);
-    lampATempCondSizer->Add(new wxButton(this, wxID_ANY, _("Send"), wxDefaultPosition,
-        wxDefaultSize, wxBU_EXACTFIT), 0, wxALL, 5);
+    wxButton *lampATempCondBtn = new wxButton(this, myID_BTN_LAMPATEMPCOND_SEND, _("Send"),
+        wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    lampATempCondBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TrapPane::OnLampATempCondSend, this);
+    lampATempCondSizer->Add(lampATempCondBtn, 0, wxALL, 5);
     /* lamp b */
     wxStaticBoxSizer *lampBSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Lamp B Status"));
     lampSizer->Add(lampBSizer, 1, wxBOTTOM | wxLEFT | wxRIGHT | wxEXPAND, 5);
@@ -296,29 +315,37 @@ void TrapPane::CreateControls()
     lampBStatusSizer->Add(new wxStaticText(this, wxID_STATIC, _("Status")), 0, wxALL, 5);
     lampBStatusSizer->Add(new wxChoice(this, wxID_ANY, wxDefaultPosition,
         wxDefaultSize, lampStatus), 1, wxALL, 5);
-    lampBStatusSizer->Add(new wxButton(this, wxID_ANY, _("Send"), wxDefaultPosition,
-        wxDefaultSize, wxBU_EXACTFIT), 0, wxALL, 5);
+    wxButton *lampBStateBtn = new wxButton(this, myID_BTN_LAMPBSTATE_SEND, _("Send"),
+        wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    lampBStateBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TrapPane::OnLampBStateSend, this);
+    lampBStatusSizer->Add(lampBStateBtn, 0, wxALL, 5);
     wxBoxSizer *lampBHoursSizer = new wxBoxSizer(wxHORIZONTAL);
     lampBSizer->Add(lampBHoursSizer, 0, wxALL | wxEXPAND, 0);
     lampBHoursSizer->Add(new wxStaticText(this, wxID_STATIC, _("Hours")), 0, wxALL, 5);
     lampBHoursSizer->Add(new wxSpinCtrl(this, wxID_ANY, wxT("3"), wxDefaultPosition,
         wxDefaultSize, wxSP_ARROW_KEYS, 0, 10000), 1, wxALL, 5);
-    lampBHoursSizer->Add(new wxButton(this, wxID_ANY, _("Send"), wxDefaultPosition,
-        wxDefaultSize, wxBU_EXACTFIT), 0, wxALL, 5);
+    wxButton *lampBHoursBtn = new wxButton(this, myID_BTN_LAMPBHOURS_SEND, _("Send"),
+        wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    lampBHoursBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TrapPane::OnLampBHoursSend, this);
+    lampBHoursSizer->Add(lampBHoursBtn, 0, wxALL, 5);
     wxBoxSizer *lampBLitCountSizer = new wxBoxSizer(wxHORIZONTAL);
     lampBSizer->Add(lampBLitCountSizer, 0, wxALL | wxEXPAND, 0);
     lampBLitCountSizer->Add(new wxStaticText(this, wxID_STATIC, _("Lit Count")), 0, wxALL, 5);
     lampBLitCountSizer->Add(new wxSpinCtrl(this, wxID_ANY, wxT("5"), wxDefaultPosition,
         wxDefaultSize, wxSP_ARROW_KEYS, 0, 10000), 1, wxALL, 5);
-    lampBLitCountSizer->Add(new wxButton(this, wxID_ANY, _("Send"), wxDefaultPosition,
-        wxDefaultSize, wxBU_EXACTFIT), 0, wxALL, 5);
+    wxButton *lampBLitCntBtn = new wxButton(this, myID_BTN_LAMPBLITCNT_SEND, _("Send"),
+        wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    lampBLitCntBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TrapPane::OnLampBLitCntSend, this);
+    lampBLitCountSizer->Add(lampBLitCntBtn, 0, wxALL, 5);
     wxBoxSizer *lampBTempCondSizer = new wxBoxSizer(wxHORIZONTAL);
     lampBSizer->Add(lampBTempCondSizer, 0, wxALL | wxEXPAND, 0);
     lampBTempCondSizer->Add(new wxStaticText(this, wxID_STATIC, _("Temp Cond")), 0, wxALL, 5);
     lampBTempCondSizer->Add(new wxChoice(this, wxID_ANY, wxDefaultPosition,
         wxDefaultSize, lampTempCond), 1, wxALL, 5);
-    lampBTempCondSizer->Add(new wxButton(this, wxID_ANY, _("Send"), wxDefaultPosition,
-        wxDefaultSize, wxBU_EXACTFIT), 0, wxALL, 5);
+    wxButton *lampBTempCondBtn = new wxButton(this, myID_BTN_LAMPBTEMPCOND_SEND, _("Send"),
+        wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    lampBTempCondBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TrapPane::OnLampBTempCondSend, this);
+    lampBTempCondSizer->Add(lampBTempCondBtn, 0, wxALL, 5);
 
     SetSizerAndFit(allSizer);
 }
@@ -411,5 +438,50 @@ void TrapPane::OnLedPresetChosen(wxCommandEvent &event)
             wxLogError(_("Fail to update LEDSTATUS."));
         }
     }
+}
+
+void TrapPane::OnLedStatusSend(wxCommandEvent &event)
+{
+    wxLogMessage(wxT("led state"));
+}
+
+void TrapPane::OnLampAStateSend(wxCommandEvent &event)
+{
+    wxLogMessage(wxT("Lamp A state"));
+}
+
+void TrapPane::OnLampBStateSend(wxCommandEvent &event)
+{
+    wxLogMessage(wxT("Lamp B state"));
+}
+
+void TrapPane::OnLampAHoursSend(wxCommandEvent &event)
+{
+    wxLogMessage(wxT("Lamp A hours"));
+}
+
+void TrapPane::OnLampBHoursSend(wxCommandEvent &event)
+{
+    wxLogMessage(wxT("Lamp B hours"));
+}
+
+void TrapPane::OnLampALitCntSend(wxCommandEvent &event)
+{
+    wxLogMessage(wxT("Lamp A lit cnt"));
+}
+
+void TrapPane::OnLampBLitCntSend(wxCommandEvent &event)
+{
+    wxLogMessage(wxT("Lamp B lit cnt"));
+}
+
+void TrapPane::OnLampATempCondSend(wxCommandEvent &event)
+{
+    wxLogMessage(wxT("Lamp A temp cond"));
+}
+
+void TrapPane::OnLampBTempCondSend(wxCommandEvent &event)
+{
+    wxLogMessage(wxT("Lamp B temp cond"));
 }
 

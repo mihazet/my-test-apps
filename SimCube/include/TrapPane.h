@@ -29,11 +29,18 @@ private:
     // event handlers
     void OnLedStatusChosen(wxCommandEvent &event);
     void OnLedPresetChosen(wxCommandEvent &event);
+    void OnLedStatusSend(wxCommandEvent &event);
+    void OnLampAStateSend(wxCommandEvent &event);
+    void OnLampBStateSend(wxCommandEvent &event);
+    void OnLampAHoursSend(wxCommandEvent &event);
+    void OnLampBHoursSend(wxCommandEvent &event);
+    void OnLampALitCntSend(wxCommandEvent &event);
+    void OnLampBLitCntSend(wxCommandEvent &event);
+    void OnLampATempCondSend(wxCommandEvent &event);
+    void OnLampBTempCondSend(wxCommandEvent &event);
 
     wxSQLite3Database *_db;
     int _ledStatus;
-
-    //DECLARE_EVENT_TABLE()
 };
 
 #endif /* _TRAP_PANE_H_ */
