@@ -512,7 +512,9 @@ void TrapPane::UpdateString(const wxString &dbString, const wxString &str)
     sqlUpdate << wxT("UPDATE TrapTbl SET CurrentValue = '") << str
         << wxT("' WHERE ProtocolName = '") << dbString << wxT("'");
     if (1 != _db->ExecuteUpdate(sqlUpdate))
+    {
         wxLogError(wxT("Fail to update ") + dbString);
+    }
 }
 
 void TrapPane::UpdateNumeric(const wxString &dbString, const int num)
@@ -522,7 +524,9 @@ void TrapPane::UpdateNumeric(const wxString &dbString, const int num)
         << wxString::Format(wxT("%d"), num) << wxT("' WHERE ProtocolName = '")
         << dbString << wxT("'");
     if (1 != _db->ExecuteUpdate(sqlUpdate))
+    {
         wxLogError(wxT("Fail to update ") + dbString);
+    }
 }
 
 void TrapPane::OnLedStatusChosen(wxCommandEvent &event)
