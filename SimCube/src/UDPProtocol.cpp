@@ -462,7 +462,8 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
         else
             handled = false;
     }
-    else if (name.IsSameAs(wxT("CHECK_CONNECTION")))
+    else if (name.IsSameAs(wxT("CHECK_CONNECTION"))
+        || name.IsSameAs(wxT("CHECK_CONNECTION_PERIODIC")))
     {
         response << name << MSG_KEYWORD_GET_RESPONSE;
         PeerDataModel *data = wxGetApp().m_PeerData;
