@@ -209,6 +209,7 @@ public:
     LampHours(wxWindow *parent, wxWindowID id, const wxString &dbString);
     ~LampHours() {};
     wxString _dbString;
+    bool m_normal;
 };
 
 LampHours::LampHours(wxWindow *parent, wxWindowID id, const wxString &dbString)
@@ -217,8 +218,9 @@ LampHours::LampHours(wxWindow *parent, wxWindowID id, const wxString &dbString)
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     wxSQLite3ResultSet set;
     wxString sqlQuery;
-    int initValue = 0;
+    int initValue = 0, threshold = 0;
 
+    /* init value */
     sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = '")
         << dbString << wxT("'");
     set = db->ExecuteQuery(sqlQuery);
@@ -226,8 +228,22 @@ LampHours::LampHours(wxWindow *parent, wxWindowID id, const wxString &dbString)
         initValue = set.GetInt(0);
     set.Finalize();
 
+    /* threshold */
+    sqlQuery.clear();
+    sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = '")
+        << dbString << wxT("_THRESHOLD'");
+    set = db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        threshold = set.GetInt(0);
+    set.Finalize();
+
+    m_normal = (initValue <= threshold);
+
     Create(parent, id, wxEmptyString, wxDefaultPosition,
         wxDefaultSize, wxSP_ARROW_KEYS | wxALIGN_LEFT, 0, 10000, initValue);
+
+    if (!m_normal)
+        SetBackgroundColour(*wxYELLOW);
 }
 
 class LampLitCount : public wxSpinCtrl
@@ -236,6 +252,7 @@ public:
     LampLitCount(wxWindow *parent, wxWindowID id, const wxString &dbString);
     ~LampLitCount() {};
     wxString _dbString;
+    bool m_normal;
 };
 
 LampLitCount::LampLitCount(wxWindow *parent, wxWindowID id, const wxString &dbString)
@@ -244,8 +261,9 @@ LampLitCount::LampLitCount(wxWindow *parent, wxWindowID id, const wxString &dbSt
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     wxSQLite3ResultSet set;
     wxString sqlQuery;
-    int initValue = 0;
+    int initValue = 0, threshold = 0;
 
+    /* init value */
     sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = '")
         << dbString << wxT("'");
     set = db->ExecuteQuery(sqlQuery);
@@ -253,8 +271,22 @@ LampLitCount::LampLitCount(wxWindow *parent, wxWindowID id, const wxString &dbSt
         initValue = set.GetInt(0);
     set.Finalize();
 
+    /* threshold */
+    sqlQuery.clear();
+    sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = '")
+        << dbString << wxT("_THRESHOLD'");
+    set = db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        threshold = set.GetInt(0);
+    set.Finalize();
+
+    m_normal = (initValue <= threshold);
+
     Create(parent, id, wxEmptyString, wxDefaultPosition,
         wxDefaultSize, wxSP_ARROW_KEYS | wxALIGN_LEFT, 0, 10000, initValue);
+
+    if (!m_normal)
+        SetBackgroundColour(*wxYELLOW);
 }
 /////////////////////////////////////////////////////////////////////////////
 
@@ -694,10 +726,16 @@ void TrapPane::OnLampHoursUpdated(wxCommandEvent &event)
         threshold = set.GetInt(0);
     set.Finalize();
 
-    if (current > threshold)
+    if ((current > threshold) && evtObj->m_normal)
+    {
         evtObj->SetBackgroundColour(*wxYELLOW);
-    else
+        evtObj->m_normal = false;
+    }
+    else if (!(current > threshold) && !evtObj->m_normal)
+    {
         evtObj->SetBackgroundColour(evtObj->GetDefaultAttributes().colBg);
+        evtObj->m_normal = true;
+    }
 }
 
 void TrapPane::OnLampLitCountUpdated(wxCommandEvent &event)
@@ -718,9 +756,15 @@ void TrapPane::OnLampLitCountUpdated(wxCommandEvent &event)
         threshold = set.GetInt(0);
     set.Finalize();
 
-    if (current > threshold)
+    if ((current > threshold) && evtObj->m_normal)
+    {
         evtObj->SetBackgroundColour(*wxYELLOW);
-    else
+        evtObj->m_normal = false;
+    }
+    else if (!(current > threshold) && !evtObj->m_normal)
+    {
         evtObj->SetBackgroundColour(evtObj->GetDefaultAttributes().colBg);
+        evtObj->m_normal = true;
+    }
 }
 
