@@ -120,9 +120,9 @@ LedStatusPreset::LedStatusPreset(wxWindow *parent, wxWindowID id)
     ledPresetString.push_back(wxT("LampOn LampA+B Fail - LampA+B"));
     refObj->m_LedStatus.push_back(0x6444);
     ledPresetString.push_back(wxT("LampOn LampA Fail - LampA+B"));
-    refObj->m_LedStatus.push_back(0x7454);
+    refObj->m_LedStatus.push_back(0x7252);
     ledPresetString.push_back(wxT("LampOn LampB Fail - LampA+B"));
-    refObj->m_LedStatus.push_back(0x7445);
+    refObj->m_LedStatus.push_back(0x7225);
     ledPresetString.push_back(wxT("LampOn LampA Fail - LampA"));
     refObj->m_LedStatus.push_back(0x6440);
     ledPresetString.push_back(wxT("LampOn LampB Fail - LampB"));
