@@ -227,7 +227,7 @@ LampHours::LampHours(wxWindow *parent, wxWindowID id, const wxString &dbString)
     set.Finalize();
 
     Create(parent, id, wxEmptyString, wxDefaultPosition,
-        wxDefaultSize, wxSP_ARROW_KEYS | wxALIGN_RIGHT, 0, 10000, initValue);
+        wxDefaultSize, wxSP_ARROW_KEYS | wxALIGN_LEFT, 0, 10000, initValue);
 }
 
 class LampLitCount : public wxSpinCtrl
@@ -254,7 +254,7 @@ LampLitCount::LampLitCount(wxWindow *parent, wxWindowID id, const wxString &dbSt
     set.Finalize();
 
     Create(parent, id, wxEmptyString, wxDefaultPosition,
-        wxDefaultSize, wxSP_ARROW_KEYS | wxALIGN_RIGHT, 0, 10000, initValue);
+        wxDefaultSize, wxSP_ARROW_KEYS | wxALIGN_LEFT, 0, 10000, initValue);
 }
 /////////////////////////////////////////////////////////////////////////////
 
