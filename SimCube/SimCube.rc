@@ -20,36 +20,40 @@ VS_VERSION_INFO VERSIONINFO
 FILEVERSION     0,10,2,167
 PRODUCTVERSION  0,10,0,0
 FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
+#ifdef _DEBUG
 FILEFLAGS       (VS_FF_PRERELEASE|VS_FF_DEBUG)
+#else
+FILEFLAGS       VS_FF_PRERELEASE
+#endif
 FILEOS          VOS_NT_WINDOWS32
 FILETYPE        VFT_APP
 FILESUBTYPE     VFT2_UNKNOWN
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "040904E4"
+        BLOCK "040904B0"
         BEGIN
-            VALUE "CompanyName",      "YH Yang"
-            VALUE "FileDescription",  "Mimic VideoWall Cube to talk to DVSnet"
-            VALUE "FileVersion",      "0.10.2.167"
-            VALUE "InternalName",     "SimCube"
-            VALUE "LegalCopyright",   "yhuiyang@gmail.com"
-            //VALUE "LegalTrademarks",  "yhuiyang@gmail.com"
-            VALUE "OriginalFilename", "SimCube"
-            VALUE "ProductName",      "SimCube"
-            VALUE "ProductVersion",   "0.10.0.0"
+            VALUE "CompanyName",      "Delta Electronics, Inc.\0"
+            VALUE "FileDescription",  "Mimic VideoWall Cube to talk with DVSnet\0"
+            VALUE "FileVersion",      "0.10.2.167\0"
+            VALUE "InternalName",     "SimCube\0"
+            VALUE "LegalCopyright",   "Copyright 2009 Yu-Hui, Yang\0"
+            //VALUE "LegalTrademarks",  "\0"
+            VALUE "OriginalFilename", "SimCube.exe\0"
+            VALUE "ProductName",      "Cube Simulator\0"
+            VALUE "ProductVersion",   "0.10.0.0\0"
         END
+    END
 
-        BLOCK "VarFileInfo"
-        BEGIN
-            /* The following line should only be modified for localized versions.     */
-            /* It consists of any number of WORD,WORD pairs, with each pair           */
-            /* describing a language,codepage combination supported by the file.      */
-            /*                                                                        */
-            /* For example, a file might have values "0x409,1252" indicating that it  */
-            /* supports English language (0x409) in the Windows ANSI codepage (1252). */
-            VALUE "Translation", 0x409, 1252
-        END
+    BLOCK "VarFileInfo"
+    BEGIN
+        /* The following line should only be modified for localized versions.     */
+        /* It consists of any number of WORD,WORD pairs, with each pair           */
+        /* describing a language,codepage combination supported by the file.      */
+        /*                                                                        */
+        /* For example, a file might have values "0x409,1252" indicating that it  */
+        /* supports English language (0x409) in the Windows ANSI codepage (1252). */
+        VALUE "Translation", 0x409, 1252
     END
 END
 
