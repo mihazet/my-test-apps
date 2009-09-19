@@ -12,9 +12,9 @@
 #include "TrapPane.h"
 #include "SimCubeApp.h"
 // resource headers
+#include "img/SimCube-16.xpm"
 #include "img/SimCube-32.xpm"
 #include "img/SimCube-48.xpm"
-#include "img/SimCube-64.xpm"
 
 ////////////////////////////////////////////////////////////////////////////////////
 class SimCubeAboutDialog : public wxDialog
@@ -148,9 +148,9 @@ void SimCubeFrame::CreateControls()
 
     /* setup icon for window title bar, taskbar and task switching bar */
     wxIconBundle icons;
+    icons.AddIcon(wxIcon(SimCube_16_xpm));
     icons.AddIcon(wxIcon(SimCube_32_xpm));
     icons.AddIcon(wxIcon(SimCube_48_xpm));
-    icons.AddIcon(wxIcon(SimCube_64_xpm));
     SetIcons(icons);
 
     /* menu bar */

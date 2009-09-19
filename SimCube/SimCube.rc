@@ -34,7 +34,7 @@ BEGIN
         BLOCK "040904B0"
         BEGIN
             VALUE "CompanyName",      "Delta Electronics, Inc.\0"
-            VALUE "FileDescription",  "Mimic VideoWall Cube to talk with DVSnet\0"
+            VALUE "FileDescription",  "Simulate VideoWall Cube Network Behavior\0"
             VALUE "FileVersion",      "0.10.2.167\0"
             VALUE "InternalName",     "SimCube\0"
             VALUE "LegalCopyright",   "Copyright 2009 Yu-Hui, Yang\0"
