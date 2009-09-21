@@ -27,7 +27,7 @@ awxLed::awxLed(wxWindow *parent, wxWindowID id, int stateColorsPair)
 {
     awxLedState state = awxLED_STATE_FIX;
     awxLedColor color[2] = { awxLED_COLOR_BLANK, awxLED_COLOR_BLANK };
-    GetStateColorsPair(stateColorsPair, &state, &color[0], &color[1]);   
+    GetStateColorsPair(stateColorsPair, &state, &color[0], &color[1]);
     Create(parent, id, state, color[0], color[1]);
 }
 
@@ -90,7 +90,7 @@ awxLed::~awxLed()
         delete m_icons[awxLED_COLOR_YELLOW];
     }
 
-    delete m_bitmap;    
+    delete m_bitmap;
 };
 
 void awxLed::DrawOnBitmap()
@@ -117,7 +117,7 @@ void awxLed::DrawOnBitmap()
 };
 
 void awxLed::UpdateStateAndColors(awxLedState state, awxLedColor color1,
-                                  awxLedColor color2) 
+                                  awxLedColor color2)
 {
     bool stopTimer = true;
 

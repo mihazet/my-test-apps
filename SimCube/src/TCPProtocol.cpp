@@ -226,7 +226,7 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
     tst_LOAD_HEADER *stp_load_header = NULL;
     tst_LOAD_PACKET st_response_load_packet;
     tst_CTRL_PACKET st_response_ctrl_packet;
-    unsigned char byaInitParam[4] = 
+    unsigned char byaInitParam[4] =
     {
         5, // retry num
         4, // receive timer

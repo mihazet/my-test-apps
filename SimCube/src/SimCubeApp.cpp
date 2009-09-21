@@ -319,14 +319,14 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
     int socketFd;
     size_t numInterfaces, idx;
     char ipBuf[INET_ADDRSTRLEN];
-    
+
     socketFd = socket(AF_INET, SOCK_DGRAM, 0);
     if (socketFd == -1)
     {
         wxLogError(_("Fail to create UDP socket. errno = %d"), errno);
         return false;
     }
-    
+
     /* get the active interface list */
     _adapterInfo = (struct ifreq *)malloc(sizeof(struct ifreq) * MAX_INTERFACE);
     ifc.ifc_buf = (char *)_adapterInfo;
@@ -337,7 +337,7 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
         free(ifc.ifc_buf);
         return false;
     }
-    
+
     /* retrieve info from list */
     numInterfaces = ifc.ifc_len / sizeof(struct ifreq);
     for (idx = 0; idx < numInterfaces; idx++)
@@ -346,14 +346,14 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
 
         /* name */
         name = wxString(ifr->ifr_name, *wxConvCurrent);
-        
+
         /* ip */
         memset(ipBuf, 0, INET_ADDRSTRLEN);
         struct sockaddr *addr = &(ifr->ifr_addr);
         inet_ntop(AF_INET, &(((struct sockaddr_in *)addr)->sin_addr),
             ipBuf, INET_ADDRSTRLEN);
         ip = wxString(ipBuf, *wxConvCurrent);
-        
+
         /* netmask */
         if (ioctl(socketFd, SIOCGIFNETMASK, ifr) != 0)
         {
@@ -365,7 +365,7 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
         inet_ntop(AF_INET, &(((struct sockaddr_in *)addr)->sin_addr),
             ipBuf, INET_ADDRSTRLEN);
         netmask = wxString(ipBuf, *wxConvCurrent);
-        
+
         /* broadcast */
         if (ioctl(socketFd, SIOCGIFBRDADDR, ifr) != 0)
         {
@@ -377,7 +377,7 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
         inet_ntop(AF_INET, &(((struct sockaddr_in *)addr)->sin_addr),
             ipBuf, INET_ADDRSTRLEN);
         broadcast = wxString(ipBuf, *wxConvCurrent);
-        
+
         if (ip.Cmp(wxEmptyString) && ip.Cmp(wxT("0.0.0.0"))
             && netmask.Cmp(wxEmptyString) && netmask.Cmp(wxT("0.0.0.0")))
         {
@@ -385,7 +385,7 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
             m_Adapters.push_back(*temp);
         }
     }
-    
+
     /* TODO: judge if result change. */
     if (changed)
         *changed = false;
@@ -397,13 +397,13 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
 
 wxString SimCubeApp::CalculateSubnetBroadcastAddress(wxString ipAddr, wxString netmaskAddr)
 {
-    if (ipAddr.IsEmpty() || netmaskAddr.IsEmpty() 
+    if (ipAddr.IsEmpty() || netmaskAddr.IsEmpty()
         || !ipAddr.Cmp(wxT("0.0.0.0")) || !netmaskAddr.Cmp(wxT("0.0.0.0")))
         return wxEmptyString;
     unsigned char ip[4], netmask[4], inetmask[4], broadcast[4], loop;
     unsigned long slice_num;
     wxStringTokenizer ipString(ipAddr, wxT("."));
-    wxString token;    
+    wxString token;
     for (loop = 0; ipString.HasMoreTokens() && (loop < 4); loop++)
     {
         token = ipString.GetNextToken();

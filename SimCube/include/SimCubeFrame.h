@@ -16,10 +16,10 @@ public:
         const wxPoint &pos = wxDefaultPosition,
         const wxSize &size = wxDefaultSize,
         long style = wxDEFAULT_FRAME_STYLE);
-        
+
     // dtor
     ~SimCubeFrame();
-    
+
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
         const wxString &caption = wxT("Cube Simulator"),
         const wxPoint &pos = wxDefaultPosition,
@@ -40,11 +40,11 @@ private:
     void OnClose(wxCloseEvent &event);
     void OnAbout(wxCommandEvent &event);
     void OnQuit(wxCommandEvent &event);
-    
+
 private:
     wxAuiManager _auiManager;
     wxSQLite3Database *_db;
-    
+
     DECLARE_EVENT_TABLE()
 };
 

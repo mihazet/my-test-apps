@@ -50,7 +50,7 @@ HistoryPane::~HistoryPane()
         target << wxFileName::GetPathSeparator() << now.Format(wxT("%y%m%d-%H%M%S")) << wxT(".db");
         memDB->Backup(target);
     }
-    
+
     wxDELETE(_autoScrollBtnImg);
 }
 
@@ -101,14 +101,14 @@ void HistoryPane::CreateControls()
     ctrlSizer->Add(save, 0, wxALL|wxALIGN_CENTER, 0);
     ctrlSizer->Add(del, 0, wxALL|wxALIGN_CENTER, 0);
     ctrlSizer->Add(scroll, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER, 5);
-    
+
     SetSizerAndFit(paneSizer);
 }
 
 void HistoryPane::UpdateCallback(wxUpdateType type, const wxString &database,
                                  const wxString &table, wxLongLong rowid)
 {
-    if (_historyAutoScroll && (type == SQLITE_INSERT) 
+    if (_historyAutoScroll && (type == SQLITE_INSERT)
         && (database == wxT("main")) && (table == wxT("HistoryTbl")))
     {
         //HistoryDataModel *data = wxGetApp().m_HistoryData;
@@ -174,7 +174,7 @@ bool HistoryPane::IsAutoSaveEnabled()
     wxSQLite3Database *db = wxGetApp().GetMainDatabase();
     wxSQLite3ResultSet set;
     wxString sql, value;
-    
+
     sql << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'AutoSaveHistory'");
     set = db->ExecuteQuery(sql);
     if (set.NextRow())
@@ -246,7 +246,7 @@ bool HistoryDataModel::SetValueByRow(const wxVariant &WXUNUSED(variant),
     return false;
 }
 
-bool HistoryDataModel::AddData(const wxString &ip, unsigned short port, 
+bool HistoryDataModel::AddData(const wxString &ip, unsigned short port,
                                const wxString &data, size_t len)
 {
     wxString sqlUpdate;

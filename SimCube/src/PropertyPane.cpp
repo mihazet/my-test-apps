@@ -103,7 +103,7 @@ void PropertyPane::CreateControls()
     wxBoxSizer *btnSizer = new wxBoxSizer(wxHORIZONTAL);
     btnSizer->Add(rst, 0, wxALL, 0);
     btnSizer->AddStretchSpacer();
-    wxStaticText *numProp = new wxStaticText(this, wxID_STATIC, 
+    wxStaticText *numProp = new wxStaticText(this, wxID_STATIC,
         wxString::Format(_("Total %d properties"), numProperty));
     btnSizer->Add(numProp, 0, wxALL | wxALIGN_CENTER, 0);
     allSizer->Add(btnSizer, 0, wxALL | wxEXPAND, 5);

@@ -37,7 +37,7 @@ public:
     void UpdateStateAndColors(awxLedState state, awxLedColor color1,
         awxLedColor color2 = awxLED_COLOR_BLANK);
     void UpdateStateAndColors(int stateColorsPair);
-    
+
     static wxVector<awxLed *> m_allLeds;
     static BlinkTimer *m_timer;
     static wxIcon *m_icons[awxLED_COLOR_INVALID];
@@ -105,7 +105,7 @@ private:
     wxVector<awxLed *> &_allLeds;
     int &_blink;
 public:
-    BlinkTimer(awxLed *led) 
+    BlinkTimer(awxLed *led)
         : wxTimer(),
         _allLeds(led->m_allLeds),
         _blink(led->m_blink)
