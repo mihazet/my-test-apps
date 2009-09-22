@@ -5,9 +5,7 @@
 #include <wx/tokenzr.h>
 #include "SimCubeApp.h"
 #include "SimCubeFrame.h"
-#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE // always put me after SimCubeApp.h
 #include "Rockey4_ND_32.h"
-#endif
 
 ////////////////////////////////////////////////////////////////////////////
 enum
@@ -63,9 +61,7 @@ void SimCubeStatusBar::OnSize(wxSizeEvent &event)
 IMPLEMENT_APP(SimCubeApp)
 
 BEGIN_EVENT_TABLE(SimCubeApp, wxApp)
-#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     EVT_IDLE(SimCubeApp::OnAppIdle)
-#endif
 END_EVENT_TABLE()
 
 SimCubeApp::SimCubeApp()
@@ -76,7 +72,7 @@ SimCubeApp::SimCubeApp()
 void SimCubeApp::Init()
 {
     wxStandardPaths &stdPaths = wxStandardPaths::Get();
-    wxString dbName;
+    wxString dbName, setting;
     wxSQLite3ResultSet set;
 
     /* database initialization */
@@ -90,21 +86,38 @@ void SimCubeApp::Init()
         _memDB->Open(wxT(":memory:"));
 
     /* initialization based on database */
+    // language
     set = _mainDB->ExecuteQuery(wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'Language'"));
     if (set.NextRow())
     {
-        wxString langSetting = set.GetAsString(0);
-        if (langSetting == wxT("English"))
+        setting = set.GetAsString(0);
+        if (setting == wxT("English"))
             _lang = wxLANGUAGE_ENGLISH;
-        else if (langSetting == wxT("TraditionalChinese"))
+        else if (setting == wxT("TraditionalChinese"))
             _lang = wxLANGUAGE_CHINESE_TRADITIONAL;
-        else if (langSetting == wxT("SimplifiedChinese"))
+        else if (setting == wxT("SimplifiedChinese"))
             _lang = wxLANGUAGE_CHINESE_SIMPLIFIED;
         else
             _lang = wxLANGUAGE_DEFAULT;
     }
     else
         _lang = wxLANGUAGE_DEFAULT;
+    set.Finalize();
+
+    // using rockey4nd
+    set = _mainDB->ExecuteQuery(wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'UsingRockey4ND'"));
+    if (set.NextRow())
+    {
+        setting = set.GetAsString(0);
+        if ((setting == wxT("True")) || (setting == wxT("Yes")))
+            _usingRockey = true;
+        else if ((setting == wxT("False")) || (setting == wxT("No")))
+            _usingRockey = false;
+        else
+            _usingRockey = false;
+    }
+    else
+        _usingRockey = false;
     set.Finalize();
 
     /* other data members */
@@ -166,14 +179,12 @@ bool SimCubeApp::OnInit()
     _udpProtocol = new UDPProtocol();
     _tcpProtocol = new TCPProtocol();
 
-#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     /* check for USB dongle */
     if (!CheckRockey())
     {
         wxLogError(_("Please insert USB dongle and restart application!"));
         return false;
     }
-#endif
 
     /* init the status bar
      * GTK doesn't allow this to be done in SimCubeApp::Init() */
@@ -206,7 +217,6 @@ int SimCubeApp::OnExit()
     return wxApp::OnExit();
 }
 
-#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
 void SimCubeApp::OnAppIdle(wxIdleEvent &WXUNUSED(event))
 {
     if (!CheckRockey())
@@ -218,22 +228,24 @@ void SimCubeApp::OnAppIdle(wxIdleEvent &WXUNUSED(event))
 
 bool SimCubeApp::CheckRockey()
 {
-    WORD handle[16], p1, p2, p3, p4, retcode;
-    DWORD lp1, lp2;
-    BYTE buffer[1024];
+    if (_usingRockey)
+    {
+        WORD handle[16], p1, p2, p3, p4, retcode;
+        DWORD lp1, lp2;
+        BYTE buffer[1024];
 
-    p1 = 0xC44C;
-    p2 = 0xC8F8;
-    p3 = 0x0799;
-    p4 = 0xC43B;
+        p1 = 0xC44C;
+        p2 = 0xC8F8;
+        p3 = 0x0799;
+        p4 = 0xC43B;
 
-    retcode = Rockey(RY_FIND, &handle[0], &lp1, &lp2, &p1, &p2, &p3, &p4, buffer);
-    if (retcode)
-        return false;
+        retcode = Rockey(RY_FIND, &handle[0], &lp1, &lp2, &p1, &p2, &p3, &p4, buffer);
+        if (retcode)
+            return false;
+    }
 
     return true;
 }
-#endif
 
 //^^
 // Description:
@@ -566,6 +578,7 @@ void SimCubeApp::InitMainDatabase()
         << wxT("CREATE TABLE IF NOT EXISTS CfgTbl (ConfigName TEXT UNIQUE, ConfigValue TEXT);")
         << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"Language\", \"Default\");")
         << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"AutoSaveHistory\", \"True\");")
+        << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"UsingRockey4ND\", \"False\");")
         << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"FrameX\", \"-1\");")
         << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"FrameY\", \"-1\");")
         << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"FrameW\", \"-1\");")

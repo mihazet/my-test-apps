@@ -7,12 +7,14 @@ enum
     ID_LANG_DEFAULT = wxID_HIGHEST + 100,
     ID_LANG_SELECT,
     ID_OPT_AUTOSAVE_HISTORY,
+    ID_OPT_USING_ROCKEY4ND,
 };
 
 enum
 {
     update_language,
     update_autosave,
+    update_rockey,
 };
 
 BEGIN_EVENT_TABLE(ConfigPane, wxPanel)
@@ -20,6 +22,7 @@ BEGIN_EVENT_TABLE(ConfigPane, wxPanel)
     EVT_UPDATE_UI(ID_LANG_SELECT, ConfigPane::OnUpdateLangSelect)
     EVT_LISTBOX(ID_LANG_SELECT, ConfigPane::OnLangSelect)
     EVT_CHECKBOX(ID_OPT_AUTOSAVE_HISTORY, ConfigPane::OnAutoSaveHistory)
+    EVT_CHECKBOX(ID_OPT_USING_ROCKEY4ND, ConfigPane::OnUsingRockey4ND)
 END_EVENT_TABLE()
 
 ConfigPane::ConfigPane()
@@ -86,12 +89,16 @@ void ConfigPane::CreateControls()
     }
     langSizer->Add(lb, 0, wxALL, 5);
     /* auto save history */
-    wxStaticBoxSizer *optSizer = new wxStaticBoxSizer(wxHORIZONTAL,
+    wxStaticBoxSizer *optSizer = new wxStaticBoxSizer(wxVERTICAL,
         this, _("Options "));
     allSizer->Add(optSizer, 0, wxRIGHT | wxLEFT | wxBOTTOM | wxEXPAND, 15);
     cb = new wxCheckBox(this, ID_OPT_AUTOSAVE_HISTORY,
         _("When application terminates, auto save the transaction history."));
     cb->SetValue(_autoSave);
+    optSizer->Add(cb, 0, wxALL | wxEXPAND, 5);
+    cb = new wxCheckBox(this, ID_OPT_USING_ROCKEY4ND,
+        _("Use ROCKEY4 (evaluate version only) to protect application."));
+    cb->SetValue(_rockey);
     optSizer->Add(cb, 0, wxALL | wxEXPAND, 5);
 
     SetSizerAndFit(allSizer);
@@ -143,6 +150,12 @@ void ConfigPane::OnAutoSaveHistory(wxCommandEvent &event)
     TransferToDatabase(update_autosave);
 }
 
+void ConfigPane::OnUsingRockey4ND(wxCommandEvent &event)
+{
+    _rockey = event.IsChecked();
+    TransferToDatabase(update_rockey);
+}
+
 // helper functions
 void ConfigPane::TransferToDatabase(int item)
 {
@@ -180,6 +193,19 @@ void ConfigPane::TransferToDatabase(int item)
         if (1 != _db->ExecuteUpdate(sqlUpdate))
         {
             wxLogError(_("Fail to update auto save history setting!"));
+        }
+        break;
+
+    case update_rockey:
+        sqlUpdate << wxT("UPDATE CfgTbl SET ConfigValue = ");
+        if (_rockey)
+            sqlUpdate << wxT("'True' ");
+        else
+            sqlUpdate << wxT("'False' ");
+        sqlUpdate << wxT("WHERE ConfigName = 'UsingRockey4ND'");
+        if (1 != _db->ExecuteUpdate(sqlUpdate))
+        {
+            wxLogError(_("Fail to update using rockey4nd setting!"));
         }
         break;
 
@@ -223,5 +249,20 @@ void ConfigPane::TransferFromDatabase()
         _autoSave = false;
     else
         _autoSave = false;
+
+    /* using rockey4nd */
+    sqlQuery.clear();
+    sqlQuery << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'UsingRockey4ND'");
+    set = _db->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        value = set.GetAsString(0);
+    set.Finalize();
+
+    if ((value == wxT("True")) || (value == wxT("Yes")))
+        _rockey = true;
+    else if ((value == wxT("False")) || (value == wxT("No")))
+        _rockey = false;
+    else
+        _rockey = false;
 }
 

@@ -31,6 +31,7 @@ private:
     void OnUpdateLangSelect(wxUpdateUIEvent &event);
     void OnLangSelect(wxCommandEvent &event);
     void OnAutoSaveHistory(wxCommandEvent &event);
+    void OnUsingRockey4ND(wxCommandEvent &event);
 
     /* helper functions */
     void TransferToDatabase(int);
@@ -45,6 +46,7 @@ private:
         eLANG_CHINESE_SIMPLIFIED,
     } _language;
     bool _autoSave;
+    bool _rockey;
 
     DECLARE_EVENT_TABLE()
 };

@@ -23,9 +23,6 @@
 #include "UDPProtocol.h"
 #include "TCPProtocol.h"
 
-/* enable or disable software protection by using rockey4nd usb dongle */
-#undef PROTECTED_BY_ROCKEY4_USB_DONGLE
-
 ////////////////////////////////////////////////////////////////////////////
 class SimCubeStatusBar : public wxStatusBar
 {
@@ -61,14 +58,10 @@ public:
 
 private:
     // event handlers
-#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     void OnAppIdle(wxIdleEvent &event);
-#endif
 
     // internal member functions
-#ifdef PROTECTED_BY_ROCKEY4_USB_DONGLE
     bool CheckRockey();
-#endif
     bool DetectNetAdapter(bool *changed = NULL);
     wxString CalculateSubnetBroadcastAddress(wxString, wxString);
     void InitMainDatabase();
@@ -87,6 +80,7 @@ private:
 #endif
     UDPProtocol *_udpProtocol;
     TCPProtocol *_tcpProtocol;
+    bool _usingRockey;
 
     DECLARE_EVENT_TABLE()
 };
