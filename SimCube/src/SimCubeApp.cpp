@@ -159,6 +159,13 @@ bool SimCubeApp::OnInit()
         return false;
     }
 
+    /* check for USB dongle */
+    if (!CheckRockey())
+    {
+        wxLogError(_("Please insert USB dongle and restart application!"));
+        return false;
+    }
+
     /* get network adapter info */
     if (DetectNetAdapter())
     {
@@ -178,13 +185,6 @@ bool SimCubeApp::OnInit()
        Each protocol object will init its related sockets per network adapter. */
     _udpProtocol = new UDPProtocol();
     _tcpProtocol = new TCPProtocol();
-
-    /* check for USB dongle */
-    if (!CheckRockey())
-    {
-        wxLogError(_("Please insert USB dongle and restart application!"));
-        return false;
-    }
 
     /* init the status bar
      * GTK doesn't allow this to be done in SimCubeApp::Init() */
