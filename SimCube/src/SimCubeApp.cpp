@@ -69,6 +69,17 @@ SimCubeApp::SimCubeApp()
     Init();
 }
 
+SimCubeApp::~SimCubeApp()
+{
+    wxDELETE(m_PeerData);
+    wxDELETE(m_HistoryData);
+
+    if (_mainDB)
+        _mainDB->Close();
+    if (_memDB)
+        _memDB->Close();
+}
+
 void SimCubeApp::Init()
 {
     wxStandardPaths &stdPaths = wxStandardPaths::Get();
@@ -199,11 +210,6 @@ bool SimCubeApp::OnInit()
 
 int SimCubeApp::OnExit()
 {
-    if (_mainDB)
-        _mainDB->Close();
-    if (_memDB)
-        _memDB->Close();
-
     if (_adapterInfo)
     {
         free(_adapterInfo);
@@ -211,8 +217,6 @@ int SimCubeApp::OnExit()
     }
     wxDELETE(_udpProtocol);
     wxDELETE(_tcpProtocol);
-    wxDELETE(m_PeerData);
-    wxDELETE(m_HistoryData);
 
     return wxApp::OnExit();
 }

@@ -45,6 +45,7 @@ class SimCubeApp : public wxApp
 {
 public:
     SimCubeApp();
+    ~SimCubeApp();
     void Init();
     virtual bool OnInit();
     virtual int OnExit();
