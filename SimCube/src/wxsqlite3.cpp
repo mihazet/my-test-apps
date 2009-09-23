@@ -127,8 +127,9 @@ const wxChar* wxERRMSG_SHARED_CACHE  = wxT("Setting SQLite shared cache mode fai
 const wxChar* wxERRMSG_INITIALIZE    = wxT("Initialization of SQLite failed");
 const wxChar* wxERRMSG_SHUTDOWN      = wxT("Shutdown of SQLite failed");
 
-const wxChar* wxERRMSG_SOURCEDB_BUSY = wxT("Source database is busy");
-const wxChar* wxERRMSG_DBOPEN_FAILED = wxT("Database open failed");
+const wxChar* wxERRMSG_SOURCEDB_BUSY   = wxT("Source database is busy");
+const wxChar* wxERRMSG_DBOPEN_FAILED   = wxT("Database open failed");
+const wxChar* wxERRMSG_DBASSIGN_FAILED = wxT("Database assignment failed");
 
 // ----------------------------------------------------------------------------
 // inline conversion from UTF8 strings to wxStringe
@@ -181,8 +182,8 @@ inline wxLongLong ConvertStringToLongLong(const wxString& str, wxLongLong defVal
 wxSQLite3Exception::wxSQLite3Exception(int errorCode, const wxString& errorMsg)
   : m_errorCode(errorCode)
 {
-  m_errorMessage = ErrorCodeAsString(errorCode) + _T("[") +
-                   wxString::Format(_T("%d"), errorCode) + _T("]: ") +
+  m_errorMessage = ErrorCodeAsString(errorCode) + wxT("[") +
+                   wxString::Format(wxT("%d"), errorCode) + wxT("]: ") +
                    wxGetTranslation(errorMsg);
 }
 
@@ -195,66 +196,66 @@ const wxString wxSQLite3Exception::ErrorCodeAsString(int errorCode)
 {
   switch (errorCode)
   {
-    case SQLITE_OK          : return _T("SQLITE_OK");
-    case SQLITE_ERROR       : return _T("SQLITE_ERROR");
-    case SQLITE_INTERNAL    : return _T("SQLITE_INTERNAL");
-    case SQLITE_PERM        : return _T("SQLITE_PERM");
-    case SQLITE_ABORT       : return _T("SQLITE_ABORT");
-    case SQLITE_BUSY        : return _T("SQLITE_BUSY");
-    case SQLITE_LOCKED      : return _T("SQLITE_LOCKED");
-    case SQLITE_NOMEM       : return _T("SQLITE_NOMEM");
-    case SQLITE_READONLY    : return _T("SQLITE_READONLY");
-    case SQLITE_INTERRUPT   : return _T("SQLITE_INTERRUPT");
-    case SQLITE_IOERR       : return _T("SQLITE_IOERR");
-    case SQLITE_CORRUPT     : return _T("SQLITE_CORRUPT");
-    case SQLITE_NOTFOUND    : return _T("SQLITE_NOTFOUND");
-    case SQLITE_FULL        : return _T("SQLITE_FULL");
-    case SQLITE_CANTOPEN    : return _T("SQLITE_CANTOPEN");
-    case SQLITE_PROTOCOL    : return _T("SQLITE_PROTOCOL");
-    case SQLITE_EMPTY       : return _T("SQLITE_EMPTY");
-    case SQLITE_SCHEMA      : return _T("SQLITE_SCHEMA");
-    case SQLITE_TOOBIG      : return _T("SQLITE_TOOBIG");
-    case SQLITE_CONSTRAINT  : return _T("SQLITE_CONSTRAINT");
-    case SQLITE_MISMATCH    : return _T("SQLITE_MISMATCH");
-    case SQLITE_MISUSE      : return _T("SQLITE_MISUSE");
-    case SQLITE_NOLFS       : return _T("SQLITE_NOLFS");
-    case SQLITE_AUTH        : return _T("SQLITE_AUTH");
-    case SQLITE_FORMAT      : return _T("SQLITE_FORMAT");
-    case SQLITE_RANGE       : return _T("SQLITE_RANGE");
-    case SQLITE_NOTADB      : return _T("SQLITE_NOTADB");
-    case SQLITE_ROW         : return _T("SQLITE_ROW");
-    case SQLITE_DONE        : return _T("SQLITE_DONE");
+    case SQLITE_OK          : return wxT("SQLITE_OK");
+    case SQLITE_ERROR       : return wxT("SQLITE_ERROR");
+    case SQLITE_INTERNAL    : return wxT("SQLITE_INTERNAL");
+    case SQLITE_PERM        : return wxT("SQLITE_PERM");
+    case SQLITE_ABORT       : return wxT("SQLITE_ABORT");
+    case SQLITE_BUSY        : return wxT("SQLITE_BUSY");
+    case SQLITE_LOCKED      : return wxT("SQLITE_LOCKED");
+    case SQLITE_NOMEM       : return wxT("SQLITE_NOMEM");
+    case SQLITE_READONLY    : return wxT("SQLITE_READONLY");
+    case SQLITE_INTERRUPT   : return wxT("SQLITE_INTERRUPT");
+    case SQLITE_IOERR       : return wxT("SQLITE_IOERR");
+    case SQLITE_CORRUPT     : return wxT("SQLITE_CORRUPT");
+    case SQLITE_NOTFOUND    : return wxT("SQLITE_NOTFOUND");
+    case SQLITE_FULL        : return wxT("SQLITE_FULL");
+    case SQLITE_CANTOPEN    : return wxT("SQLITE_CANTOPEN");
+    case SQLITE_PROTOCOL    : return wxT("SQLITE_PROTOCOL");
+    case SQLITE_EMPTY       : return wxT("SQLITE_EMPTY");
+    case SQLITE_SCHEMA      : return wxT("SQLITE_SCHEMA");
+    case SQLITE_TOOBIG      : return wxT("SQLITE_TOOBIG");
+    case SQLITE_CONSTRAINT  : return wxT("SQLITE_CONSTRAINT");
+    case SQLITE_MISMATCH    : return wxT("SQLITE_MISMATCH");
+    case SQLITE_MISUSE      : return wxT("SQLITE_MISUSE");
+    case SQLITE_NOLFS       : return wxT("SQLITE_NOLFS");
+    case SQLITE_AUTH        : return wxT("SQLITE_AUTH");
+    case SQLITE_FORMAT      : return wxT("SQLITE_FORMAT");
+    case SQLITE_RANGE       : return wxT("SQLITE_RANGE");
+    case SQLITE_NOTADB      : return wxT("SQLITE_NOTADB");
+    case SQLITE_ROW         : return wxT("SQLITE_ROW");
+    case SQLITE_DONE        : return wxT("SQLITE_DONE");
     // Extended error codes
-    case SQLITE_IOERR_READ       : return _T("SQLITE_IOERR_READ");
-    case SQLITE_IOERR_SHORT_READ : return _T("SQLITE_IOERR_SHORT_READ");
-    case SQLITE_IOERR_WRITE      : return _T("SQLITE_IOERR_WRITE");
-    case SQLITE_IOERR_FSYNC      : return _T("SQLITE_IOERR_FSYNC");
-    case SQLITE_IOERR_DIR_FSYNC  : return _T("SQLITE_IOERR_DIR_FSYNC");
-    case SQLITE_IOERR_TRUNCATE   : return _T("SQLITE_IOERR_TRUNCATE");
-    case SQLITE_IOERR_FSTAT      : return _T("SQLITE_IOERR_FSTAT");
-    case SQLITE_IOERR_UNLOCK     : return _T("SQLITE_IOERR_UNLOCK");
-    case SQLITE_IOERR_RDLOCK     : return _T("SQLITE_IOERR_RDLOCK");
-    case SQLITE_IOERR_DELETE     : return _T("SQLITE_IOERR_DELETE");
+    case SQLITE_IOERR_READ       : return wxT("SQLITE_IOERR_READ");
+    case SQLITE_IOERR_SHORT_READ : return wxT("SQLITE_IOERR_SHORT_READ");
+    case SQLITE_IOERR_WRITE      : return wxT("SQLITE_IOERR_WRITE");
+    case SQLITE_IOERR_FSYNC      : return wxT("SQLITE_IOERR_FSYNC");
+    case SQLITE_IOERR_DIR_FSYNC  : return wxT("SQLITE_IOERR_DIR_FSYNC");
+    case SQLITE_IOERR_TRUNCATE   : return wxT("SQLITE_IOERR_TRUNCATE");
+    case SQLITE_IOERR_FSTAT      : return wxT("SQLITE_IOERR_FSTAT");
+    case SQLITE_IOERR_UNLOCK     : return wxT("SQLITE_IOERR_UNLOCK");
+    case SQLITE_IOERR_RDLOCK     : return wxT("SQLITE_IOERR_RDLOCK");
+    case SQLITE_IOERR_DELETE     : return wxT("SQLITE_IOERR_DELETE");
 #if SQLITE_VERSION_NUMBER >= 3004000
-    case SQLITE_IOERR_BLOCKED    : return _T("SQLITE_IOERR_BLOCKED");
+    case SQLITE_IOERR_BLOCKED    : return wxT("SQLITE_IOERR_BLOCKED");
 #endif
 #if SQLITE_VERSION_NUMBER >= 3005001
-    case SQLITE_IOERR_NOMEM      : return _T("SQLITE_IOERR_NOMEM");
+    case SQLITE_IOERR_NOMEM      : return wxT("SQLITE_IOERR_NOMEM");
 #endif
 #if SQLITE_VERSION_NUMBER >= 3006000
-    case SQLITE_IOERR_ACCESS     : return _T("SQLITE_IOERR_ACCESS");
-    case SQLITE_IOERR_CHECKRESERVEDLOCK : return _T("SQLITE_IOERR_CHECKRESERVEDLOCK");
+    case SQLITE_IOERR_ACCESS     : return wxT("SQLITE_IOERR_ACCESS");
+    case SQLITE_IOERR_CHECKRESERVEDLOCK : return wxT("SQLITE_IOERR_CHECKRESERVEDLOCK");
 #endif
 #if SQLITE_VERSION_NUMBER >= 3006002
-    case SQLITE_IOERR_LOCK       : return _T("SQLITE_IOERR_LOCK");
+    case SQLITE_IOERR_LOCK       : return wxT("SQLITE_IOERR_LOCK");
 #endif
 #if SQLITE_VERSION_NUMBER >= 3006007
-    case SQLITE_IOERR_CLOSE      : return _T("SQLITE_IOERR_CLOSE");
-    case SQLITE_IOERR_DIR_CLOSE  : return _T("SQLITE_IOERR_DIR_CLOSE");
+    case SQLITE_IOERR_CLOSE      : return wxT("SQLITE_IOERR_CLOSE");
+    case SQLITE_IOERR_DIR_CLOSE  : return wxT("SQLITE_IOERR_DIR_CLOSE");
 #endif
 
-    case WXSQLITE_ERROR     : return _T("WXSQLITE_ERROR");
-    default                 : return _T("UNKNOWN_ERROR");
+    case WXSQLITE_ERROR     : return wxT("WXSQLITE_ERROR");
+    default                 : return wxT("UNKNOWN_ERROR");
   }
 }
 
@@ -348,20 +349,23 @@ wxSQLite3ResultSet::~wxSQLite3ResultSet()
 
 wxSQLite3ResultSet& wxSQLite3ResultSet::operator=(const wxSQLite3ResultSet& resultSet)
 {
-  try
+  if (this != &resultSet)
   {
-    Finalize();
+    try
+    {
+      Finalize();
+    }
+    catch (...)
+    {
+    }
+    m_stmt = resultSet.m_stmt;
+    // Only one object can own the statement
+    const_cast<wxSQLite3ResultSet&>(resultSet).m_stmt = 0;
+    m_eof = resultSet.m_eof;
+    m_first = resultSet.m_first;
+    m_cols = resultSet.m_cols;
+    m_ownStmt = resultSet.m_ownStmt;
   }
-  catch (...)
-  {
-  }
-  m_stmt = resultSet.m_stmt;
-  // Only one object can own the statement
-  const_cast<wxSQLite3ResultSet&>(resultSet).m_stmt = 0;
-  m_eof = resultSet.m_eof;
-  m_first = resultSet.m_first;
-  m_cols = resultSet.m_cols;
-  m_ownStmt = resultSet.m_ownStmt;
   return *this;
 }
 
@@ -912,19 +916,22 @@ wxSQLite3Table::~wxSQLite3Table()
 
 wxSQLite3Table& wxSQLite3Table::operator=(const wxSQLite3Table& table)
 {
-  try
+  if (this != &table)
   {
-    Finalize();
+    try
+    {
+      Finalize();
+    }
+    catch (...)
+    {
+    }
+    m_results = table.m_results;
+    // Only one object can own the results
+    const_cast<wxSQLite3Table&>(table).m_results = 0;
+    m_rows = table.m_rows;
+    m_cols = table.m_cols;
+    m_currentRow = table.m_currentRow;
   }
-  catch (...)
-  {
-  }
-  m_results = table.m_results;
-  // Only one object can own the results
-  const_cast<wxSQLite3Table&>(table).m_results = 0;
-  m_rows = table.m_rows;
-  m_cols = table.m_cols;
-  m_currentRow = table.m_currentRow;
   return *this;
 }
 
@@ -1343,10 +1350,20 @@ wxSQLite3Statement::~wxSQLite3Statement()
 
 wxSQLite3Statement& wxSQLite3Statement::operator=(const wxSQLite3Statement& statement)
 {
-  m_db = statement.m_db;
-  m_stmt = statement.m_stmt;
-  // Only one object can own prepared statement
-  const_cast<wxSQLite3Statement&>(statement).m_stmt = 0;
+  if (this != &statement)
+  {
+    try
+    {
+      Finalize();
+    }
+    catch (...)
+    {
+    }
+    m_db = statement.m_db;
+    m_stmt = statement.m_stmt;
+    // Only one object can own prepared statement
+    const_cast<wxSQLite3Statement&>(statement).m_stmt = 0;
+  }
   return *this;
 }
 
@@ -1539,7 +1556,7 @@ void wxSQLite3Statement::BindDateTime(int paramIndex, const wxDateTime& datetime
 {
   if (datetime.IsValid())
   {
-    Bind(paramIndex,datetime.Format(_T("%Y-%m-%d %H:%M:%S")));
+    Bind(paramIndex,datetime.Format(wxT("%Y-%m-%d %H:%M:%S")));
   }
   else
   {
@@ -1551,7 +1568,7 @@ void wxSQLite3Statement::BindTimestamp(int paramIndex, const wxDateTime& timesta
 {
   if (timestamp.IsValid())
   {
-    Bind(paramIndex,timestamp.Format(_T("%Y-%m-%d %H:%M:%S.%l")));
+    Bind(paramIndex,timestamp.Format(wxT("%Y-%m-%d %H:%M:%S.%l")));
   }
   else
   {
@@ -1714,20 +1731,22 @@ wxSQLite3Blob::wxSQLite3Blob(const wxSQLite3Blob& blob)
 
 wxSQLite3Blob& wxSQLite3Blob::operator=(const wxSQLite3Blob& blob)
 {
-  try
+  if (this != &blob)
   {
-    Finalize();
+    try
+    {
+      Finalize();
+    }
+    catch (...)
+    {
+    }
+    m_db   = blob.m_db;
+    m_blob = blob.m_blob;
+    m_ok   = blob.m_ok;
+    m_writable = blob.m_writable;
+    // only one blob can own the blob handle
+    const_cast<wxSQLite3Blob&>(blob).m_ok = false;
   }
-  catch (...)
-  {
-  }
-  m_db   = blob.m_db;
-  m_blob = blob.m_blob;
-  m_ok   = blob.m_ok;
-  m_writable = blob.m_writable;
-  // only one blob can own the blob handle
-  const_cast<wxSQLite3Blob&>(blob).m_ok = false;
-
   return *this;
 }
 
@@ -1965,13 +1984,23 @@ wxSQLite3Database::~wxSQLite3Database()
 
 wxSQLite3Database& wxSQLite3Database::operator=(const wxSQLite3Database& db)
 {
-  m_db = db.m_db;
-  m_busyTimeoutMs = 60000; // 60 seconds
-  m_isEncrypted = db.m_isEncrypted;
+  if (this != &db)
+  {
+    if (m_db == 0)
+    {
+      m_db = db.m_db;
+      m_busyTimeoutMs = 60000; // 60 seconds
+      m_isEncrypted = db.m_isEncrypted;
+    }
+    else
+    {
+      throw wxSQLite3Exception(WXSQLITE_ERROR, wxERRMSG_DBASSIGN_FAILED);
+    }
+  }
   return *this;
 }
 
-void wxSQLite3Database::Open(const wxString& fileName, const wxString& key)
+void wxSQLite3Database::Open(const wxString& fileName, const wxString& key, int flags)
 {
   wxCharBuffer strLocalKey = wxConvUTF8.cWC2MB(key.wc_str(*wxConvCurrent));
   const char* localKey = strLocalKey;
@@ -1980,15 +2009,15 @@ void wxSQLite3Database::Open(const wxString& fileName, const wxString& key)
   {
     binaryKey.AppendData((void*) localKey, strlen(localKey));
   }
-  Open(fileName, binaryKey);
+  Open(fileName, binaryKey, flags);
 }
 
-void wxSQLite3Database::Open(const wxString& fileName, const wxMemoryBuffer& key)
+void wxSQLite3Database::Open(const wxString& fileName, const wxMemoryBuffer& key, int flags)
 {
   wxCharBuffer strFileName = wxConvUTF8.cWC2MB(fileName.wc_str(*wxConvCurrent));
   const char* localFileName = strFileName;
 
-  int rc = sqlite3_open((const char*) localFileName, (sqlite3**) &m_db);
+  int rc = sqlite3_open_v2((const char*) localFileName, (sqlite3**) &m_db, flags, NULL);
 
   if (rc != SQLITE_OK)
   {
@@ -2215,16 +2244,16 @@ void wxSQLite3Database::Begin(wxSQLite3TransactionType transactionType)
   switch (transactionType)
   {
     case WXSQLITE_TRANSACTION_DEFERRED:
-      sql << _T("begin deferred transaction");
+      sql << wxT("begin deferred transaction");
       break;
     case WXSQLITE_TRANSACTION_IMMEDIATE:
-      sql << _T("begin immediate transaction");
+      sql << wxT("begin immediate transaction");
       break;
     case WXSQLITE_TRANSACTION_EXCLUSIVE:
-      sql << _T("begin exclusive transaction");
+      sql << wxT("begin exclusive transaction");
       break;
     default:
-      sql << _T("begin transaction");
+      sql << wxT("begin transaction");
       break;
   }
   ExecuteUpdate(sql);
@@ -2246,7 +2275,7 @@ void wxSQLite3Database::Rollback(const wxString& savepointName)
   }
   else
   {
-    ExecuteUpdate(wxString(_T("rollback transaction to savepoint "))+savepointName);
+    ExecuteUpdate(wxString(wxT("rollback transaction to savepoint "))+savepointName);
   }
 #endif
 }
@@ -2260,7 +2289,7 @@ bool wxSQLite3Database::GetAutoCommit()
 void wxSQLite3Database::Savepoint(const wxString& savepointName)
 {
 #if SQLITE_VERSION_NUMBER >= 3006008
-  ExecuteUpdate(wxString(_T("savepoint "))+savepointName);
+  ExecuteUpdate(wxString(wxT("savepoint "))+savepointName);
 #else
   wxUnusedVar(savepointName);
   throw wxSQLite3Exception(WXSQLITE_ERROR, wxERRMSG_NOSAVEPOINT);
@@ -2270,7 +2299,7 @@ void wxSQLite3Database::Savepoint(const wxString& savepointName)
 void wxSQLite3Database::ReleaseSavepoint(const wxString& savepointName)
 {
 #if SQLITE_VERSION_NUMBER >= 3006008
-  ExecuteUpdate(wxString(_T("release savepoint "))+savepointName);
+  ExecuteUpdate(wxString(wxT("release savepoint "))+savepointName);
 #else
   wxUnusedVar(savepointName);
   throw wxSQLite3Exception(WXSQLITE_ERROR, wxERRMSG_NOSAVEPOINT);
@@ -2301,11 +2330,11 @@ bool wxSQLite3Database::TableExists(const wxString& tableName, const wxString& d
   wxString sql;
   if (databaseName.IsEmpty())
   {
-    sql = _T("select count(*) from sqlite_master where type='table' and name like ?");
+    sql = wxT("select count(*) from sqlite_master where type='table' and name like ?");
   }
   else
   {
-    sql = wxString(_T("select count(*) from ")) + databaseName + wxString(_T(".sqlite_master where type='table' and name like ?"));
+    sql = wxString(wxT("select count(*) from ")) + databaseName + wxString(wxT(".sqlite_master where type='table' and name like ?"));
   }
   wxSQLite3Statement stmt = PrepareStatement(sql);
   stmt.Bind(1, tableName);
@@ -2574,6 +2603,15 @@ void wxSQLite3Database::SetBusyTimeout(int nMillisecs)
 wxString wxSQLite3Database::GetVersion()
 {
   return UTF8toWxString(sqlite3_libversion());
+}
+
+wxString wxSQLite3Database::GetSourceId()
+{
+#if SQLITE_VERSION_NUMBER >= 3006018
+  return UTF8toWxString(sqlite3_sourceid());
+#else
+  return wxEmptyString;
+#endif
 }
 
 bool wxSQLite3Database::CreateFunction(const wxString& funcName, int argCount, wxSQLite3ScalarFunction& function)
@@ -2876,18 +2914,19 @@ int wxSQLite3Database::SetLimit(wxSQLite3LimitType id, int newValue)
 }
 
 static const wxChar* limitCodeString[] =
-{ _T("SQLITE_LIMIT_LENGTH"),              _T("SQLITE_LIMIT_SQL_LENGTH"),
-  _T("SQLITE_LIMIT_COLUMN"),              _T("SQLITE_LIMIT_EXPR_DEPTH"),
-  _T("SQLITE_LIMIT_COMPOUND_SELECT"),     _T("SQLITE_LIMIT_VDBE_OP"),
-  _T("SQLITE_LIMIT_FUNCTION_ARG"),        _T("SQLITE_LIMIT_ATTACHED"),
-  _T("SQLITE_LIMIT_LIKE_PATTERN_LENGTH"), _T("SQLITE_LIMIT_VARIABLE_NUMBER")
+{ wxT("SQLITE_LIMIT_LENGTH"),              wxT("SQLITE_LIMIT_SQL_LENGTH"),
+  wxT("SQLITE_LIMIT_COLUMN"),              wxT("SQLITE_LIMIT_EXPR_DEPTH"),
+  wxT("SQLITE_LIMIT_COMPOUND_SELECT"),     wxT("SQLITE_LIMIT_VDBE_OP"),
+  wxT("SQLITE_LIMIT_FUNCTION_ARG"),        wxT("SQLITE_LIMIT_ATTACHED"),
+  wxT("SQLITE_LIMIT_LIKE_PATTERN_LENGTH"), wxT("SQLITE_LIMIT_VARIABLE_NUMBER"),
+  wxT("SQLITE_LIMIT_TRIGGER_DEPTH")
 };
 
 
 /* static */
 wxString wxSQLite3Database::LimitTypeToString(wxSQLite3LimitType type)
 {
-  const wxChar* limitString = _T("Unknown");
+  const wxChar* limitString = wxT("Unknown");
   if (type >= WXSQLITE_LIMIT_LENGTH && type <= WXSQLITE_LIMIT_VARIABLE_NUMBER)
   {
     limitString = limitCodeString[type];
@@ -3229,24 +3268,24 @@ wxSQLite3FunctionContext::wxSQLite3FunctionContext(void* ctx, bool isAggregate, 
 }
 
 static const wxChar* authCodeString[] =
-{ _T("SQLITE_COPY"),              _T("SQLITE_CREATE_INDEX"),      _T("SQLITE_CREATE_TABLE"),
-  _T("SQLITE_CREATE_TEMP_INDEX"), _T("SQLITE_CREATE_TEMP_TABLE"), _T("SQLITE_CREATE_TEMP_TRIGGER"),
-  _T("SQLITE_CREATE_TEMP_VIEW"),  _T("SQLITE_CREATE_TRIGGER"),    _T("SQLITE_CREATE_VIEW"),
-  _T("SQLITE_DELETE"),            _T("SQLITE_DROP_INDEX"),        _T("SQLITE_DROP_TABLE"), 
-  _T("SQLITE_DROP_TEMP_INDEX"),   _T("SQLITE_DROP_TEMP_TABLE"),   _T("SQLITE_DROP_TEMP_TRIGGER"), 
-  _T("SQLITE_DROP_TEMP_VIEW"),    _T("SQLITE_DROP_TRIGGER"),      _T("SQLITE_DROP_VIEW"), 
-  _T("SQLITE_INSERT"),            _T("SQLITE_PRAGMA"),            _T("SQLITE_READ"), 
-  _T("SQLITE_SELECT"),            _T("SQLITE_TRANSACTION"),       _T("SQLITE_UPDATE"), 
-  _T("SQLITE_ATTACH"),            _T("SQLITE_DETACH"),            _T("SQLITE_ALTER_TABLE"), 
-  _T("SQLITE_REINDEX"),           _T("SQLITE_ANALYZE"),           _T("SQLITE_CREATE_VTABLE"), 
-  _T("SQLITE_DROP_VTABLE"),       _T("SQLITE_FUNCTION"),          _T("SQLITE_SAVEPOINT")
+{ wxT("SQLITE_COPY"),              wxT("SQLITE_CREATE_INDEX"),      wxT("SQLITE_CREATE_TABLE"),
+  wxT("SQLITE_CREATE_TEMP_INDEX"), wxT("SQLITE_CREATE_TEMP_TABLE"), wxT("SQLITE_CREATE_TEMP_TRIGGER"),
+  wxT("SQLITE_CREATE_TEMP_VIEW"),  wxT("SQLITE_CREATE_TRIGGER"),    wxT("SQLITE_CREATE_VIEW"),
+  wxT("SQLITE_DELETE"),            wxT("SQLITE_DROP_INDEX"),        wxT("SQLITE_DROP_TABLE"), 
+  wxT("SQLITE_DROP_TEMP_INDEX"),   wxT("SQLITE_DROP_TEMP_TABLE"),   wxT("SQLITE_DROP_TEMP_TRIGGER"), 
+  wxT("SQLITE_DROP_TEMP_VIEW"),    wxT("SQLITE_DROP_TRIGGER"),      wxT("SQLITE_DROP_VIEW"), 
+  wxT("SQLITE_INSERT"),            wxT("SQLITE_PRAGMA"),            wxT("SQLITE_READ"), 
+  wxT("SQLITE_SELECT"),            wxT("SQLITE_TRANSACTION"),       wxT("SQLITE_UPDATE"), 
+  wxT("SQLITE_ATTACH"),            wxT("SQLITE_DETACH"),            wxT("SQLITE_ALTER_TABLE"), 
+  wxT("SQLITE_REINDEX"),           wxT("SQLITE_ANALYZE"),           wxT("SQLITE_CREATE_VTABLE"), 
+  wxT("SQLITE_DROP_VTABLE"),       wxT("SQLITE_FUNCTION"),          wxT("SQLITE_SAVEPOINT")
 };
 
 
 /* static */
 wxString wxSQLite3Authorizer::AuthorizationCodeToString(wxSQLite3Authorizer::wxAuthorizationCode type)
 {
-  const wxChar* authString = _T("Unknown");
+  const wxChar* authString = wxT("Unknown");
   if (type >= SQLITE_COPY && type <= SQLITE_MAX_CODE)
   {
     authString = authCodeString[type];
