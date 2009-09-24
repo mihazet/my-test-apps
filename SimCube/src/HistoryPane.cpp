@@ -8,6 +8,7 @@
 #include "img/save_16.xpm"
 #include "img/delete_16.xpm"
 #include "img/flag_16.xpm"
+#include "img/dictionary_16.xpm"
 
 enum
 {
@@ -70,7 +71,7 @@ void HistoryPane::Init()
 {
     _historyAutoScroll = false;
     _autoScrollBtnImg = new wxImage(flag_16_xpm);
-    _resolveAddrBtnImg = new wxImage(flag_16_xpm);
+    _resolveAddrBtnImg = new wxImage(dictionary_16_xpm);
     /* install an update hook for memory database */
     wxGetApp().GetMemDatabase()->SetUpdateHook(this);
 }
