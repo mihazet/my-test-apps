@@ -500,8 +500,8 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"-lwx_gtk2ud_propgrid-2.9 -lwx_gtk2ud_aui-2.9 %AUTO% -lsqlite3"</string>
-          <string name="Library path">"%AUTO%"</string>
+          <string name="Libraries">"-lwx_gtk2u_propgrid-2.9 -lwx_gtk2u_aui-2.9 $(shell $(WXWIN)/GCCBuildDebugGTK2Unicode/wx-config --inplace --exec-prefix=&quot;$(WXWIN)/GCCBuildDebugGTK2Unicode&quot; --libs --gl_libs --cxxflags) -lwx_gtk2u_richtext-2.9  -lsqlite3 -lRockey4ND"</string>
+          <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO% -Iinclude -Iresource"</string>
           <string name="Resource flags">"%AUTO%"</string>
@@ -1065,6 +1065,18 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"8/8/2009"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"rockey.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/rockey.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"24/9/2009"</string>
           <string name="language">""</string>
         </document>
       </document>

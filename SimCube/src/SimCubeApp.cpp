@@ -5,7 +5,11 @@
 #include <wx/tokenzr.h>
 #include "SimCubeApp.h"
 #include "SimCubeFrame.h"
+#if defined (__WXMSW__)
 #include "Rockey4_ND_32.h"
+#elif defined (__WXGTK__)
+#include "rockey.h"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////
 enum
@@ -232,6 +236,14 @@ void SimCubeApp::OnAppIdle(wxIdleEvent &WXUNUSED(event))
 
 bool SimCubeApp::CheckRockey()
 {
+#if defined (__WXGTK__)
+#define WORD unsigned short
+#define DWORD unsigned int
+#define BYTE unsigned char
+#define ROCKEY_API_CALL rockey
+#elif defined (__WXMSW__)
+#define ROCKEY_API_CALL Rockey
+#endif
     if (_usingRockey)
     {
         WORD handle[16], p1, p2, p3, p4, retcode;
@@ -243,12 +255,19 @@ bool SimCubeApp::CheckRockey()
         p3 = 0x0799;
         p4 = 0xC43B;
 
-        retcode = Rockey(RY_FIND, &handle[0], &lp1, &lp2, &p1, &p2, &p3, &p4, buffer);
+        retcode = ROCKEY_API_CALL(RY_FIND, &handle[0], &lp1, &lp2, &p1, &p2, &p3, &p4, buffer);
         if (retcode)
             return false;
     }
 
     return true;
+#if defined (__WXGTK__)
+#undef WORD
+#undef DWORD
+#undef BYTE
+#endif
+
+#undef ROCKEY_API_CALL
 }
 
 //^^
