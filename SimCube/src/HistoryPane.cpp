@@ -15,12 +15,14 @@ enum
     myID_SEARCH_HISTORY,
     myID_BTN_SAVE_HISTORY,
     myID_BTN_DELETE_HISTORY,
+    myID_BTN_RESOLVE_ADDRESS,
     myID_BTN_AUTOSCROLL,
 };
 
 BEGIN_EVENT_TABLE(HistoryPane, wxPanel)
     EVT_BUTTON(myID_BTN_SAVE_HISTORY, HistoryPane::OnSaveHistory)
     EVT_BUTTON(myID_BTN_DELETE_HISTORY, HistoryPane::OnDeleteHistory)
+    EVT_BUTTON(myID_BTN_RESOLVE_ADDRESS, HistoryPane::OnResolveAddress)
     EVT_BUTTON(myID_BTN_AUTOSCROLL, HistoryPane::OnAutoscroll)
 END_EVENT_TABLE()
 
@@ -52,6 +54,7 @@ HistoryPane::~HistoryPane()
     }
 
     wxDELETE(_autoScrollBtnImg);
+    wxDELETE(_resolveAddrBtnImg);
 }
 
 bool HistoryPane::Create(wxWindow *parent, wxWindowID id, const wxPoint &pos,
@@ -67,6 +70,7 @@ void HistoryPane::Init()
 {
     _historyAutoScroll = false;
     _autoScrollBtnImg = new wxImage(flag_16_xpm);
+    _resolveAddrBtnImg = new wxImage(flag_16_xpm);
     /* install an update hook for memory database */
     wxGetApp().GetMemDatabase()->SetUpdateHook(this);
 }
@@ -96,11 +100,18 @@ void HistoryPane::CreateControls()
     save->SetToolTip(_("Save history"));
     wxBitmapButton *del = new wxBitmapButton(this, myID_BTN_DELETE_HISTORY, wxBitmap(delete_16_xpm));
     del->SetToolTip(_("Delete history"));
+    wxBitmapButton *resolve = new wxBitmapButton(this, myID_BTN_RESOLVE_ADDRESS, 
+        wxGetApp().m_HistoryData->IsAddressResolved()
+            ? wxBitmap(*_resolveAddrBtnImg) : wxBitmap(_resolveAddrBtnImg->ConvertToGreyscale()));
+    resolve->SetToolTip(wxGetApp().m_HistoryData->IsAddressResolved()
+        ? _("Address is resolved") 
+        : _("Address is not resolved"));
     wxBitmapButton *scroll = new wxBitmapButton(this, myID_BTN_AUTOSCROLL,
         _historyAutoScroll ? wxBitmap(*_autoScrollBtnImg) : wxBitmap(_autoScrollBtnImg->ConvertToGreyscale()));
     scroll->SetToolTip(_historyAutoScroll ? _("Autoscroll is enabled") : _("Autoscroll is disabled"));
     ctrlSizer->Add(save, 0, wxALL|wxALIGN_CENTER, 0);
     ctrlSizer->Add(del, 0, wxALL|wxALIGN_CENTER, 0);
+    ctrlSizer->Add(resolve, 0, wxLEFT|wxALIGN_CENTER, 5);
     ctrlSizer->Add(scroll, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER, 5);
 
     SetSizerAndFit(paneSizer);
@@ -158,6 +169,18 @@ void HistoryPane::OnDeleteHistory(wxCommandEvent &WXUNUSED(event))
             data->Reset(0);
         }
     }
+}
+
+void HistoryPane::OnResolveAddress(wxCommandEvent &event)
+{
+    wxBitmapButton *btn = wxDynamicCast(event.GetEventObject(), wxBitmapButton);
+    btn->SetToolTip(wxGetApp().m_HistoryData->IsAddressResolved()
+        ? _("Address is not resolved") : _("Address is resolved"));
+    btn->SetBitmap(wxGetApp().m_HistoryData->IsAddressResolved()
+        ? _resolveAddrBtnImg->ConvertToGreyscale() : *_resolveAddrBtnImg);
+    wxGetApp().m_HistoryData->ToggleAddressResolve();
+    /* force specific column in the wxDVC to update */
+    wxGetApp().m_HistoryData->ValueChanged(wxDataViewItem(), HISTORY_DATA_REMOTE);
 }
 
 void HistoryPane::OnAutoscroll(wxCommandEvent &event)

@@ -45,6 +45,7 @@ private:
     // event handlers
     void OnSaveHistory(wxCommandEvent &event);
     void OnDeleteHistory(wxCommandEvent &event);
+    void OnResolveAddress(wxCommandEvent &event);
     void OnAutoscroll(wxCommandEvent &event);
 
     // helper functions
@@ -53,6 +54,7 @@ private:
     wxDataViewCtrl *_historyView;
     bool _historyAutoScroll;
     wxImage *_autoScrollBtnImg;
+    wxImage *_resolveAddrBtnImg;
 
     DECLARE_EVENT_TABLE()
 };
@@ -104,6 +106,9 @@ public:
         unsigned int col);
 
     bool AddData(const HistoryData &data);
+    bool IsAddressResolved() { return _resolveAddress; }
+    void ResolveAddress(bool resolve = true) { _resolveAddress = resolve; }
+    void ToggleAddressResolve() { _resolveAddress ^= 1; }
 
 private:
     wxSQLite3Database *_db;
