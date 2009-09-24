@@ -53,7 +53,7 @@ bool ConfigPane::Create(wxWindow *parent, wxWindowID id, const wxPoint &pos,
 
 void ConfigPane::Init()
 {
-    _db = wxGetApp().GetMainDatabase();
+    _cfgDB = wxGetApp().GetConfigDatabase();
     TransferFromDatabase();
 }
 
@@ -173,7 +173,7 @@ void ConfigPane::TransferToDatabase(int item)
         default: sqlUpdate << wxT("'Default' "); break;
         }
         sqlUpdate << wxT("WHERE ConfigName = 'Language'");
-        if (1 != _db->ExecuteUpdate(sqlUpdate))
+        if (1 != _cfgDB->ExecuteUpdate(sqlUpdate))
         {
             wxLogError(_("Fail to update language setting!"));
         }
@@ -190,7 +190,7 @@ void ConfigPane::TransferToDatabase(int item)
             sqlUpdate << wxT("'False' ");
         }
         sqlUpdate << wxT("WHERE ConfigName = 'AutoSaveHistory'");
-        if (1 != _db->ExecuteUpdate(sqlUpdate))
+        if (1 != _cfgDB->ExecuteUpdate(sqlUpdate))
         {
             wxLogError(_("Fail to update auto save history setting!"));
         }
@@ -203,7 +203,7 @@ void ConfigPane::TransferToDatabase(int item)
         else
             sqlUpdate << wxT("'False' ");
         sqlUpdate << wxT("WHERE ConfigName = 'UsingRockey4ND'");
-        if (1 != _db->ExecuteUpdate(sqlUpdate))
+        if (1 != _cfgDB->ExecuteUpdate(sqlUpdate))
         {
             wxLogError(_("Fail to update using rockey4nd setting!"));
         }
@@ -221,7 +221,7 @@ void ConfigPane::TransferFromDatabase()
 
     /* language */
     sqlQuery << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'Language'");
-    set = _db->ExecuteQuery(sqlQuery);
+    set = _cfgDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         value = set.GetAsString(0);
     set.Finalize();
@@ -238,7 +238,7 @@ void ConfigPane::TransferFromDatabase()
     /* auto save */
     sqlQuery.clear();
     sqlQuery << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'AutoSaveHistory'");
-    set = _db->ExecuteQuery(sqlQuery);
+    set = _cfgDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         value = set.GetAsString(0);
     set.Finalize();
@@ -253,7 +253,7 @@ void ConfigPane::TransferFromDatabase()
     /* using rockey4nd */
     sqlQuery.clear();
     sqlQuery << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'UsingRockey4ND'");
-    set = _db->ExecuteQuery(sqlQuery);
+    set = _cfgDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         value = set.GetAsString(0);
     set.Finalize();

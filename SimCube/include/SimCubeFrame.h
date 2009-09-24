@@ -43,7 +43,7 @@ private:
 
 private:
     wxAuiManager _auiManager;
-    wxSQLite3Database *_db;
+    wxSQLite3Database *_cfgDB;
 
     DECLARE_EVENT_TABLE()
 };

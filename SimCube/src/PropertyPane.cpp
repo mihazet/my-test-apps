@@ -47,9 +47,9 @@ bool PropertyPane::Create(wxWindow *parent, wxWindowID id,
 
 void PropertyPane::Init()
 {
-    _db = wxGetApp().GetMainDatabase();
+    _propDB = wxGetApp().GetPropertyDatabase();
     _pgUpdatedFromUI = false;
-    _db->SetUpdateHook(this);
+    _propDB->SetUpdateHook(this);
 }
 
 void PropertyPane::CreateControls()
@@ -60,9 +60,9 @@ void PropertyPane::CreateControls()
         wxDefaultPosition, wxSize(250, 400),
         wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED|wxPG_TOOLTIPS);
     size_t numProperty = 0;
-    if (_db && _db->IsOpen())
+    if (_propDB && _propDB->IsOpen())
     {
-        wxSQLite3ResultSet set = _db->ExecuteQuery(wxT("SELECT * FROM PropTbl"));
+        wxSQLite3ResultSet set = _propDB->ExecuteQuery(wxT("SELECT * FROM PropTbl"));
         while (set.NextRow())
         {
             name = set.GetAsString(wxT("DisplayedName"));
@@ -123,7 +123,7 @@ void PropertyPane::UpdateCallback(wxUpdateType type, const wxString &database,
         /* check which property to be updated to what value */
         sqlQuery << wxT("SELECT DisplayedName, CurrentValue FROM PropTbl LIMIT 1 OFFSET ")
             << (rowid - 1).ToString();
-        set = _db->ExecuteQuery(sqlQuery);
+        set = _propDB->ExecuteQuery(sqlQuery);
         if (set.NextRow())
         {
             name = set.GetAsString(0);
@@ -147,13 +147,13 @@ void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
     // event.GetValue() is always numeric base wxVariant.
     // Use wxPGProperty::ValueToString(wxVariant& value, int argFlags = 0) to
     // retrieve the string based property value for any kind of wxYYYProperty.
-    if (prop && _db)
+    if (prop && _propDB)
     {
         wxLogVerbose(wxT("OnPropertyChanging %s"), prop->ValueToString(value));
         sqlQuery << wxT("SELECT PropertyType, PropertyFormat FROM PropTbl WHERE DisplayedName = '")
             << prop->GetLabel()
             << wxT("'");
-        wxSQLite3ResultSet set = _db->ExecuteQuery(sqlQuery);
+        wxSQLite3ResultSet set = _propDB->ExecuteQuery(sqlQuery);
         if (set.NextRow())
         {
             type = set.GetAsString(wxT("PropertyType"));
@@ -195,7 +195,7 @@ void PropertyPane::OnPropertyChanging(wxPropertyGridEvent &event)
             << wxT("' WHERE DisplayedName = '")
             << prop->GetLabel()
             << wxT("'");
-        if (_db->ExecuteUpdate(sqlUpdate) != 1)
+        if (_propDB->ExecuteUpdate(sqlUpdate) != 1)
         {
             wxLogError(_("Failed to update property %s"), prop->GetLabel());
             event.Veto();
@@ -210,7 +210,7 @@ void PropertyPane::OnPropertyChanged(wxPropertyGridEvent &WXUNUSED(event))
 
 void PropertyPane::OnPropertyReset(wxCommandEvent &WXUNUSED(event))
 {
-    if (_db && _db->IsOpen())
+    if (_propDB && _propDB->IsOpen())
     {
         wxMessageDialog dlg(this, _("Would you like to reset all properties to their default value?"),
             _("Need user confirm"), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
@@ -220,7 +220,7 @@ void PropertyPane::OnPropertyReset(wxCommandEvent &WXUNUSED(event))
             wxString sqlUpdate;
             sqlUpdate << wxT("UPDATE PropTbl SET CurrentValue = InitValue ")
                 << wxT("WHERE CurrentValue != InitValue");
-            _db->ExecuteUpdate(sqlUpdate);
+            _propDB->ExecuteUpdate(sqlUpdate);
         }
     }
 }

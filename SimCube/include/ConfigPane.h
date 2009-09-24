@@ -37,7 +37,7 @@ private:
     void TransferToDatabase(int);
     void TransferFromDatabase(void);
 
-    wxSQLite3Database *_db;
+    wxSQLite3Database *_cfgDB;
     enum
     {
         eLANG_DEFAULT,

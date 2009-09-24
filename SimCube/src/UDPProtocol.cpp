@@ -128,7 +128,7 @@ void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
                                               wxIPV4address &peer,
                                               UDPSocket *local)
 {
-    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3Database *db = wxGetApp().GetPropertyDatabase();
     wxSQLite3ResultSet set;
     wxString sqlQuery, name;
     size_t nameLen;
@@ -289,7 +289,7 @@ bool UDPProtocol::set_request_handler(const char *buf, size_t len,
     bool handled = true;
     wxStringTokenizer request(wxString::FromAscii(buf, len), MSG_KEYWORD_SET_REQUEST);
     wxString name, value, sqlQuery, sqlUpdate, trapMessage;
-    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3Database *db = wxGetApp().GetPropertyDatabase();
     wxSQLite3ResultSet set;
 
     wxASSERT_MSG(db, wxT("Null Database"));
@@ -425,11 +425,14 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     bool handled = true;
     wxStringTokenizer request(wxString::FromAscii(buf, len), MSG_KEYWORD_GET_REQUEST);
     wxString name, value, sqlQuery, response;
-    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3Database *propDB = wxGetApp().GetPropertyDatabase();
+    wxSQLite3Database *trapDB = wxGetApp().GetTrapDatabase();
     wxSQLite3ResultSet set;
 
-    wxASSERT_MSG(db, wxT("Null Database"));
-    wxASSERT_MSG(db->IsOpen(), wxT("Database closed"));
+    wxASSERT_MSG(propDB, wxT("Null Porperyt Database"));
+    wxASSERT_MSG(trapDB, wxT("Null Trap Database"));
+    wxASSERT_MSG(propDB->IsOpen(), wxT("Property Database closed"));
+    wxASSERT_MSG(trapDB->IsOpen(), wxT("Trap Database closed"));
 
     /* property name */
     if (request.HasMoreTokens())
@@ -493,7 +496,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
             /* check request board name is matched or not */
             bool match = false;
             sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
-            set = db->ExecuteQuery(sqlQuery);
+            set = propDB->ExecuteQuery(sqlQuery);
             if (set.NextRow())
             {
                 if (value == set.GetAsString(0))
@@ -549,7 +552,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
     else if (name.IsSameAs(wxT("DISCOVER")))
     {
         sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE DisplayedName = 'BoardName'");
-        set = db->ExecuteQuery(sqlQuery);
+        set = propDB->ExecuteQuery(sqlQuery);
         if (set.NextRow())
         {
             response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
@@ -603,7 +606,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
             /* search property table */
             sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = '")
                 << name << wxT("'");
-            set = db->ExecuteQuery(sqlQuery);
+            set = propDB->ExecuteQuery(sqlQuery);
             if (set.NextRow())
             {
                 response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
@@ -621,7 +624,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
             sqlQuery.clear();
             sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE Protocolname = '")
                 << name << wxT("'");
-            set = db->ExecuteQuery(sqlQuery);
+            set = trapDB->ExecuteQuery(sqlQuery);
             if (set.NextRow())
             {
                 response.clear();

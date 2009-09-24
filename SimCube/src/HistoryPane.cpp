@@ -42,7 +42,7 @@ HistoryPane::HistoryPane(wxWindow *parent, wxWindowID id, const wxPoint &pos,
 HistoryPane::~HistoryPane()
 {
     /* auto save */
-    wxSQLite3Database *memDB = wxGetApp().GetMemDatabase();
+    wxSQLite3Database *memDB = wxGetApp().GetHistoryDatabase();
     if (memDB && memDB->IsOpen() && memDB->HasBackupSupport()
         && (memDB->GetLastRowId() != 0) && IsAutoSaveEnabled())
     {
@@ -73,7 +73,7 @@ void HistoryPane::Init()
     _autoScrollBtnImg = new wxImage(flag_16_xpm);
     _resolveAddrBtnImg = new wxImage(dictionary_16_xpm);
     /* install an update hook for memory database */
-    wxGetApp().GetMemDatabase()->SetUpdateHook(this);
+    wxGetApp().GetHistoryDatabase()->SetUpdateHook(this);
 }
 
 void HistoryPane::CreateControls()
@@ -138,7 +138,7 @@ void HistoryPane::OnSaveHistory(wxCommandEvent &WXUNUSED(event))
     dlg.CenterOnParent();
     if (wxID_OK == dlg.ShowModal())
     {
-        wxSQLite3Database *db = wxGetApp().GetMemDatabase();
+        wxSQLite3Database *db = wxGetApp().GetHistoryDatabase();
         if (db && db->IsOpen() && db->HasBackupSupport())
             db->Backup(dlg.GetPath());
         else
@@ -160,7 +160,7 @@ void HistoryPane::OnSaveHistory(wxCommandEvent &WXUNUSED(event))
 
 void HistoryPane::OnDeleteHistory(wxCommandEvent &WXUNUSED(event))
 {
-    wxSQLite3Database *db = wxGetApp().GetMemDatabase();
+    wxSQLite3Database *db = wxGetApp().GetHistoryDatabase();
 
     if (db && db->IsOpen())
     {
@@ -195,7 +195,7 @@ void HistoryPane::OnAutoscroll(wxCommandEvent &event)
 bool HistoryPane::IsAutoSaveEnabled()
 {
     bool result = false;
-    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3Database *db = wxGetApp().GetConfigDatabase();
     wxSQLite3ResultSet set;
     wxString sql, value;
 

@@ -50,8 +50,10 @@ public:
     virtual bool OnInit();
     virtual int OnExit();
 
-    wxSQLite3Database *GetMainDatabase() { return _mainDB; }
-    wxSQLite3Database *GetMemDatabase() { return _memDB; }
+    wxSQLite3Database *GetPropertyDatabase() { return _propertyDB; }
+    wxSQLite3Database *GetConfigDatabase() { return _configDB; }
+    wxSQLite3Database *GetTrapDatabase() { return _trapDB; }
+    wxSQLite3Database *GetHistoryDatabase() { return _historyDB; }
     wxVector<NetAdapter> m_Adapters;
     PeerDataModel *m_PeerData;
     HistoryDataModel *m_HistoryData;
@@ -65,12 +67,21 @@ private:
     bool CheckRockey();
     bool DetectNetAdapter(bool *changed = NULL);
     wxString CalculateSubnetBroadcastAddress(wxString, wxString);
-    void InitMainDatabase();
+    enum eDB
+    {
+        DB_PROPERTY,
+        DB_CONFIG,
+        DB_TRAP,
+        DB_HISTORY,
+    };
+    void InitDatabase(eDB db);
 
 private:
     // internal data members
-    wxSQLite3Database *_mainDB;
-    wxSQLite3Database *_memDB;
+    wxSQLite3Database *_propertyDB;
+    wxSQLite3Database *_configDB;
+    wxSQLite3Database *_trapDB;
+    wxSQLite3Database *_historyDB;
     wxLanguage _lang;
     wxLocale *_locale;
     wxSingleInstanceChecker *_onlyMe;

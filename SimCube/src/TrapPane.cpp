@@ -146,7 +146,7 @@ LampStatus::LampStatus(wxWindow *parent, wxWindowID id,
                        const wxString &dbString)
                        : _dbString(dbString)
 {
-    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3Database *db = wxGetApp().GetTrapDatabase();
     wxSQLite3ResultSet set;
     wxString sqlQuery, initValue;
 
@@ -178,7 +178,7 @@ LampTempCond::LampTempCond(wxWindow *parent, wxWindowID id,
                            const wxString &dbString)
                            : _dbString(dbString)
 {
-    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3Database *db = wxGetApp().GetTrapDatabase();
     wxSQLite3ResultSet set;
     wxString sqlQuery, initValue;
 
@@ -215,7 +215,8 @@ public:
 LampHours::LampHours(wxWindow *parent, wxWindowID id, const wxString &dbString)
     : _dbString(dbString)
 {
-    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3Database *trapDB = wxGetApp().GetTrapDatabase();
+    wxSQLite3Database *propDB = wxGetApp().GetPropertyDatabase();
     wxSQLite3ResultSet set;
     wxString sqlQuery;
     int initValue = 0, threshold = 0;
@@ -223,7 +224,7 @@ LampHours::LampHours(wxWindow *parent, wxWindowID id, const wxString &dbString)
     /* init value */
     sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = '")
         << dbString << wxT("'");
-    set = db->ExecuteQuery(sqlQuery);
+    set = trapDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         initValue = set.GetInt(0);
     set.Finalize();
@@ -232,7 +233,7 @@ LampHours::LampHours(wxWindow *parent, wxWindowID id, const wxString &dbString)
     sqlQuery.clear();
     sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = '")
         << dbString << wxT("_THRESHOLD'");
-    set = db->ExecuteQuery(sqlQuery);
+    set = propDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         threshold = set.GetInt(0);
     set.Finalize();
@@ -258,7 +259,8 @@ public:
 LampLitCount::LampLitCount(wxWindow *parent, wxWindowID id, const wxString &dbString)
     : _dbString(dbString)
 {
-    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3Database *trapDB = wxGetApp().GetTrapDatabase();
+    wxSQLite3Database *propDB = wxGetApp().GetPropertyDatabase();
     wxSQLite3ResultSet set;
     wxString sqlQuery;
     int initValue = 0, threshold = 0;
@@ -266,7 +268,7 @@ LampLitCount::LampLitCount(wxWindow *parent, wxWindowID id, const wxString &dbSt
     /* init value */
     sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = '")
         << dbString << wxT("'");
-    set = db->ExecuteQuery(sqlQuery);
+    set = trapDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         initValue = set.GetInt(0);
     set.Finalize();
@@ -275,7 +277,7 @@ LampLitCount::LampLitCount(wxWindow *parent, wxWindowID id, const wxString &dbSt
     sqlQuery.clear();
     sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = '")
         << dbString << wxT("_THRESHOLD'");
-    set = db->ExecuteQuery(sqlQuery);
+    set = propDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         threshold = set.GetInt(0);
     set.Finalize();
@@ -350,9 +352,10 @@ void TrapPane::Init()
 {
     wxString sqlQuery;
     wxSQLite3ResultSet set;
-    _db = wxGetApp().GetMainDatabase();
+    _propDB = wxGetApp().GetPropertyDatabase();
+    _trapDB = wxGetApp().GetTrapDatabase();
     sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = 'LEDSTATUS'");
-    set = _db->ExecuteQuery(sqlQuery);
+    set = _trapDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         _ledStatus = set.GetInt(0);
     set.Finalize();
@@ -513,7 +516,7 @@ void TrapPane::TrapString(const wxString &str)
     wxSQLite3ResultSet set;
 
     sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = '") << str << wxT("'");
-    set = _db->ExecuteQuery(sqlQuery);
+    set = _trapDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         value = set.GetAsString(0);
     set.Finalize();
@@ -529,7 +532,7 @@ void TrapPane::TrapNumeric(const wxString &str)
     int value = 0;
 
     sqlQuery << wxT("SELECT CurrentValue FROM TrapTbl WHERE ProtocolName = '") << str << wxT("'");
-    set = _db->ExecuteQuery(sqlQuery);
+    set = _trapDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         value = set.GetInt(0);
     set.Finalize();
@@ -543,7 +546,7 @@ void TrapPane::UpdateString(const wxString &dbString, const wxString &str)
     wxString sqlUpdate;
     sqlUpdate << wxT("UPDATE TrapTbl SET CurrentValue = '") << str
         << wxT("' WHERE ProtocolName = '") << dbString << wxT("'");
-    if (1 != _db->ExecuteUpdate(sqlUpdate))
+    if (1 != _trapDB->ExecuteUpdate(sqlUpdate))
     {
         wxLogError(wxT("Fail to update ") + dbString);
     }
@@ -555,7 +558,7 @@ void TrapPane::UpdateNumeric(const wxString &dbString, const int num)
     sqlUpdate << wxT("UPDATE TrapTbl SET CurrentValue = '")
         << wxString::Format(wxT("%d"), num) << wxT("' WHERE ProtocolName = '")
         << dbString << wxT("'");
-    if (1 != _db->ExecuteUpdate(sqlUpdate))
+    if (1 != _trapDB->ExecuteUpdate(sqlUpdate))
     {
         wxLogError(wxT("Fail to update ") + dbString);
     }
@@ -595,7 +598,7 @@ void TrapPane::OnLedStatusChosen(wxCommandEvent &event)
     /* update database */
     sqlUpdate << wxT("UPDATE TrapTbl SET CurrentValue = '") << _ledStatus
         << wxT("' WHERE ProtocolName = 'LEDSTATUS'");
-    if (1 != _db->ExecuteUpdate(sqlUpdate))
+    if (1 != _trapDB->ExecuteUpdate(sqlUpdate))
     {
         wxLogError(_("Fail to update LEDSTATUS."));
     }
@@ -644,7 +647,7 @@ void TrapPane::OnLedPresetChosen(wxCommandEvent &event)
         /* update database */
         sqlUpdate << wxT("UPDATE TrapTbl SET CurrentValue = '") << _ledStatus
             << wxT("' WHERE ProtocolName = 'LEDSTATUS'");
-        if (1 != _db->ExecuteUpdate(sqlUpdate))
+        if (1 != _trapDB->ExecuteUpdate(sqlUpdate))
         {
             wxLogError(_("Fail to update LEDSTATUS."));
         }
@@ -721,7 +724,7 @@ void TrapPane::OnLampHoursUpdated(wxCommandEvent &event)
     /* compare current and threshold to update ui */
     sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = '")
         << evtObj->_dbString << wxT("_THRESHOLD'");
-    set = _db->ExecuteQuery(sqlQuery);
+    set = _propDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         threshold = set.GetInt(0);
     set.Finalize();
@@ -751,7 +754,7 @@ void TrapPane::OnLampLitCountUpdated(wxCommandEvent &event)
     /* compare current and threshold to update ui */
     sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = '")
         << evtObj->_dbString << wxT("_THRESHOLD'");
-    set = _db->ExecuteQuery(sqlQuery);
+    set = _propDB->ExecuteQuery(sqlQuery);
     if (set.NextRow())
         threshold = set.GetInt(0);
     set.Finalize();

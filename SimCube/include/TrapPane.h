@@ -48,7 +48,8 @@ private:
     void OnLampHoursUpdated(wxCommandEvent &event);
     void OnLampLitCountUpdated(wxCommandEvent &event);
 
-    wxSQLite3Database *_db;
+    wxSQLite3Database *_trapDB;
+    wxSQLite3Database *_propDB;
     int _ledStatus;
 };
 

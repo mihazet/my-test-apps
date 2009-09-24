@@ -35,7 +35,7 @@ private:
     void OnPropertyChanged(wxPropertyGridEvent &event);
     void OnPropertyReset(wxCommandEvent &event);
 
-    wxSQLite3Database *_db;
+    wxSQLite3Database *_propDB;
     wxPropertyGrid *_pg;
     bool _pgUpdatedFromUI;
 

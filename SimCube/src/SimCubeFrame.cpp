@@ -53,7 +53,7 @@ void SimCubeAboutDialog::CreateControls()
     wxSizer *sqlite = new wxBoxSizer(wxHORIZONTAL);
     lib->Add(sqlite, 0, wxALL | wxEXPAND, 0);
     sqlite->Add(new wxStaticText(this, wxID_STATIC,
-        wxT("SQLite ") + wxGetApp().GetMainDatabase()->GetVersion()), 0, wxALL, 5);
+        wxT("SQLite ") + wxGetApp().GetPropertyDatabase()->GetVersion()), 0, wxALL, 5);
 
     /* button */
     wxButton *ok = new wxButton(this, wxID_ANY, _("OK"));
@@ -128,7 +128,7 @@ SimCubeFrame::~SimCubeFrame()
     sql << wxT("UPDATE CfgTbl SET ConfigValue = '")
         << perspective
         << wxT("' WHERE ConfigName = 'Perspective'");
-    if (1 != _db->ExecuteUpdate(sql))
+    if (1 != _cfgDB->ExecuteUpdate(sql))
     {
         wxLogError(_("Fail to save perspective!"));
     }
@@ -138,7 +138,7 @@ SimCubeFrame::~SimCubeFrame()
 
 void SimCubeFrame::Init()
 {
-    _db = wxGetApp().GetMainDatabase();
+    _cfgDB = wxGetApp().GetConfigDatabase();
 }
 
 void SimCubeFrame::CreateControls()
@@ -227,7 +227,7 @@ void SimCubeFrame::CreateControls()
     sql << wxT("UPDATE CfgTbl SET ConfigValue = '")
         << _auiManager.SavePerspective()
         << wxT("' WHERE ConfigName = 'DefaultPerspective'");
-    if (1 != _db->ExecuteUpdate(sql))
+    if (1 != _cfgDB->ExecuteUpdate(sql))
     {
         wxLogError(_("Fail to save software default perspective!"));
     }
@@ -235,7 +235,7 @@ void SimCubeFrame::CreateControls()
     /* restore previous perspective or just use current perspective */
     sql.clear();
     sql << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'Perspective'");
-    set = _db->ExecuteQuery(sql);
+    set = _cfgDB->ExecuteQuery(sql);
     if (set.NextRow())
         perspective = set.GetAsString(0);
     set.Finalize();
@@ -249,7 +249,7 @@ void SimCubeFrame::CreateControls()
 void SimCubeFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
 {
     int _x = -1, _y = -1, _w = -1, _h = -1;
-    wxSQLite3Database *db = wxGetApp().GetMainDatabase();
+    wxSQLite3Database *db = wxGetApp().GetConfigDatabase();
     wxSQLite3ResultSet set;
 
     wxASSERT_MSG(db, wxT("db is null pointer"));
@@ -354,14 +354,14 @@ void SimCubeFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
     wxSQLite3ResultSet set;
 
     sql << wxT("UPDATE CfgTbl SET ConfigValue = '' WHERE ConfigName = 'Perspective'");
-    if (1 != _db->ExecuteUpdate(sql))
+    if (1 != _cfgDB->ExecuteUpdate(sql))
     {
         wxLogError(_("Fail to reset current perspective value"));
     }
 
     sql.clear();
     sql << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'DefaultPerspective'");
-    set = _db->ExecuteQuery(sql);
+    set = _cfgDB->ExecuteQuery(sql);
     if (set.NextRow())
         defaultLayout = set.GetAsString(0);
     set.Finalize();
