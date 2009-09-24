@@ -16,6 +16,7 @@ UDPSocket& UDPSocket::SendToAndRecord(const wxIPV4address &addr,
     {
         HistoryData data;
         data.m_ip = addr.IPAddress();
+        data.m_host = addr.Hostname();
         data.m_port = addr.Service();
         data.m_len = LastCount();
         data.m_msg = wxString::FromAscii(buf, nBytes);

@@ -103,6 +103,7 @@ void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
             HistoryDataModel *history = wxGetApp().m_HistoryData;
             HistoryData data;
             data.m_ip = remote.IPAddress();
+            data.m_host = remote.Hostname();
             data.m_port = remote.Service();
             data.m_len = numByteInSafeBuf;
             data.m_msg = wxString::FromAscii(safeBuf, numByteInSafeBuf);

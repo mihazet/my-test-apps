@@ -81,7 +81,7 @@ void HistoryPane::CreateControls()
     _historyView->AppendTextColumn(wxT("#"), HISTORY_DATA_ID, wxDATAVIEW_CELL_INERT, 30, wxALIGN_CENTER);
     _historyView->AppendTextColumn(_("Timestamp"), HISTORY_DATA_TIMESTAMP, wxDATAVIEW_CELL_INERT, 125, wxALIGN_CENTER);
     _historyView->AppendTextColumn(_("Direction"), HISTORY_DATA_DIRECTION, wxDATAVIEW_CELL_INERT, 60, wxALIGN_CENTER);
-    _historyView->AppendTextColumn(_("IP Address"), HISTORY_DATA_IPADDRESS, wxDATAVIEW_CELL_INERT, 95, wxALIGN_CENTER);
+    _historyView->AppendTextColumn(_("Remote"), HISTORY_DATA_REMOTE, wxDATAVIEW_CELL_INERT, 95, wxALIGN_CENTER);
     _historyView->AppendTextColumn(_("Port"), HISTORY_DATA_PORT, wxDATAVIEW_CELL_INERT, 45, wxALIGN_CENTER);
     _historyView->AppendTextColumn(_("Length"), HISTORY_DATA_LENGTH, wxDATAVIEW_CELL_INERT, 55, wxALIGN_CENTER);
     _historyView->AppendTextColumn(_("Message"), HISTORY_DATA_MESSAGE, wxDATAVIEW_CELL_INERT, 360);
@@ -199,6 +199,7 @@ HistoryDataModel::HistoryDataModel(wxSQLite3Database *db)
                                         << wxT("Timestamp TEXT, ")
                                         << wxT("Direction TEXT, ")
                                         << wxT("Ip TEXT, ")
+                                        << wxT("Host TEXT, ")
                                         << wxT("Port TEXT, ")
                                         << wxT("Length TEXT, ")
                                         << wxT("Message TEXT)");
@@ -211,6 +212,9 @@ HistoryDataModel::HistoryDataModel(wxSQLite3Database *db)
               << wxT("UPDATE HistoryTbl SET Timestamp = DATETIME('NOW', 'LOCALTIME') WHERE rowid = new.rowid;")
               << wxT("END");
     modified_rows = _db->ExecuteUpdate(sqlUpdate);
+
+    /* init other private variables */
+    _resolveAddress = false;
 }
 
 void HistoryDataModel::GetValueByRow(wxVariant &variant,
@@ -226,7 +230,12 @@ void HistoryDataModel::GetValueByRow(wxVariant &variant,
         case HISTORY_DATA_ID: sqlQuery << wxT("Id"); break;
         case HISTORY_DATA_TIMESTAMP: sqlQuery << wxT("Timestamp"); break;
         case HISTORY_DATA_DIRECTION: sqlQuery << wxT("Direction"); break;
-        case HISTORY_DATA_IPADDRESS: sqlQuery << wxT("Ip"); break;
+        case HISTORY_DATA_REMOTE: 
+            if (_resolveAddress)
+                sqlQuery << wxT("Host");
+            else
+                sqlQuery << wxT("Ip");
+            break;
         case HISTORY_DATA_PORT: sqlQuery << wxT("Port"); break;
         case HISTORY_DATA_LENGTH: sqlQuery << wxT("Length"); break;
         case HISTORY_DATA_MESSAGE: sqlQuery << wxT("Message"); break;
@@ -253,10 +262,10 @@ bool HistoryDataModel::AddData(const HistoryData &data)
     wxString sqlUpdate;
     bool result = true;
 
-    sqlUpdate << wxT("INSERT INTO HistoryTbl (Direction, Ip, Port, Length, Message) VALUES ('")
+    sqlUpdate << wxT("INSERT INTO HistoryTbl (Direction, Ip, Host, Port, Length, Message) VALUES ('")
         << data.m_direction << wxT("', '") << data.m_ip << wxT("', '")
-        << data.m_port << wxT("', '") << data.m_len << wxT("', '")
-        << data.m_msg << wxT("')");
+        << data.m_host << wxT("', '") << data.m_port << wxT("', '")
+        << data.m_len << wxT("', '") << data.m_msg << wxT("')");
 
     if (1 != _db->ExecuteUpdate(sqlUpdate))
     {

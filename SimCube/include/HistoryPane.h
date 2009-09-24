@@ -10,7 +10,7 @@ enum
     HISTORY_DATA_ID,
     HISTORY_DATA_TIMESTAMP,
     HISTORY_DATA_DIRECTION,
-    HISTORY_DATA_IPADDRESS,
+    HISTORY_DATA_REMOTE,
     HISTORY_DATA_PORT,
     HISTORY_DATA_LENGTH,
     HISTORY_DATA_MESSAGE,
@@ -64,12 +64,14 @@ public:
     HistoryData()
     {
         m_ip = wxEmptyString;
+        m_host = wxEmptyString;
         m_port = 0;
         m_msg = wxEmptyString;
         m_len = 0;
         m_direction = wxEmptyString;
     }
     wxString m_ip;
+    wxString m_host;
     unsigned short m_port;
     wxString m_msg;
     size_t m_len;
@@ -105,6 +107,7 @@ public:
 
 private:
     wxSQLite3Database *_db;
+    bool _resolveAddress;
 };
 
 #endif /* _HISTORY_PANE_H_ */
