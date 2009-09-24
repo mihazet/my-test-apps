@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SimCube\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-10 03:11+0800\n"
+"POT-Creation-Date: 2009-09-24 20:23+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Yu Hui, Yang <yhuiyang@gmail.com>\n"
 "Language-Team:  <yhuiyang@gmail.com>\n"
@@ -16,101 +16,126 @@ msgstr ""
 "X-Poedit-SearchPath-0: ../../src\n"
 "X-Poedit-SearchPath-1: ../../include\n"
 
-#: ../../src/ConfigPane.cpp:64
+#: ../../src/ConfigPane.cpp:67
 msgid "Important! All changed parameters will take effect at next boot!"
 msgstr "Important! All changed parameters will take effect at next boot!"
 
-#: ../../src/ConfigPane.cpp:68
+#: ../../src/ConfigPane.cpp:71
 msgid "Language "
 msgstr "Language "
 
-#: ../../src/ConfigPane.cpp:71
+#: ../../src/ConfigPane.cpp:74
 msgid "Use system default language"
 msgstr "Use system default language"
 
-#: ../../src/ConfigPane.cpp:75
+#: ../../src/ConfigPane.cpp:78
 msgid "English"
 msgstr "English"
 
-#: ../../src/ConfigPane.cpp:76
+#: ../../src/ConfigPane.cpp:79
 msgid "Chinese (Traditional)"
 msgstr "正體中文"
 
-#: ../../src/ConfigPane.cpp:77
+#: ../../src/ConfigPane.cpp:80
 msgid "Chinese (Simplified)"
 msgstr "简体中文"
 
-#: ../../src/ConfigPane.cpp:90
+#: ../../src/ConfigPane.cpp:93
 msgid "Options "
 msgstr "Options "
 
-#: ../../src/ConfigPane.cpp:93
+#: ../../src/ConfigPane.cpp:96
 msgid "When application terminates, auto save the transaction history."
 msgstr "When application terminates, auto save the transaction history."
 
-#: ../../src/ConfigPane.cpp:165
+#: ../../src/ConfigPane.cpp:100
+msgid "Use ROCKEY4 (evaluate version only) to protect application."
+msgstr "Use ROCKEY4 (evaluate version only) to protect application."
+
+#: ../../src/ConfigPane.cpp:178
 msgid "Fail to update language setting!"
 msgstr "Fail to update language setting!"
 
-#: ../../src/ConfigPane.cpp:182
+#: ../../src/ConfigPane.cpp:195
 msgid "Fail to update auto save history setting!"
 msgstr "Fail to update auto save history setting!"
 
-#: ../../src/HistoryPane.cpp:82
+#: ../../src/ConfigPane.cpp:208
+msgid "Fail to update using rockey4nd setting!"
+msgstr "Fail to update using rockey4nd setting!"
+
+#: ../../src/HistoryPane.cpp:86
 msgid "Timestamp"
 msgstr "Timestamp"
 
-#: ../../src/HistoryPane.cpp:83
-#: ../../src/PeerPane.cpp:42
-msgid "IP Address"
-msgstr "IP Address"
+#: ../../src/HistoryPane.cpp:87
+msgid "Direction"
+msgstr "Direction"
 
-#: ../../src/HistoryPane.cpp:84
+#: ../../src/HistoryPane.cpp:88
+msgid "Remote"
+msgstr "Remote"
+
+#: ../../src/HistoryPane.cpp:89
 #: ../../src/PeerPane.cpp:43
 msgid "Port"
 msgstr "Port"
 
-#: ../../src/HistoryPane.cpp:85
+#: ../../src/HistoryPane.cpp:90
 msgid "Length"
 msgstr "Length"
 
-#: ../../src/HistoryPane.cpp:86
+#: ../../src/HistoryPane.cpp:91
 msgid "Message"
 msgstr "Message"
 
-#: ../../src/HistoryPane.cpp:95
+#: ../../src/HistoryPane.cpp:100
 msgid "Save history"
 msgstr "Save history"
 
-#: ../../src/HistoryPane.cpp:97
+#: ../../src/HistoryPane.cpp:102
 msgid "Delete history"
 msgstr "Delete history"
 
-#: ../../src/HistoryPane.cpp:100
-#: ../../src/HistoryPane.cpp:166
+#: ../../src/HistoryPane.cpp:107
+#: ../../src/HistoryPane.cpp:178
+msgid "Address is resolved"
+msgstr "Address is resolved"
+
+#: ../../src/HistoryPane.cpp:108
+#: ../../src/HistoryPane.cpp:178
+msgid "Address is not resolved"
+msgstr "Address is not resolved"
+
+#: ../../src/HistoryPane.cpp:111
+#: ../../src/HistoryPane.cpp:189
 msgid "Autoscroll is enabled"
 msgstr "Autoscroll is enabled"
 
-#: ../../src/HistoryPane.cpp:100
-#: ../../src/HistoryPane.cpp:166
+#: ../../src/HistoryPane.cpp:111
+#: ../../src/HistoryPane.cpp:189
 msgid "Autoscroll is disabled"
 msgstr "Autoscroll is disabled"
 
-#: ../../src/HistoryPane.cpp:122
+#: ../../src/HistoryPane.cpp:133
 msgid "Save history to"
 msgstr "Save history to"
 
-#: ../../src/HistoryPane.cpp:138
+#: ../../src/HistoryPane.cpp:149
 msgid "Sorry! History database is closed!"
 msgstr "Sorry! History database is closed!"
 
-#: ../../src/HistoryPane.cpp:142
+#: ../../src/HistoryPane.cpp:153
 msgid "Sorry! History database doesn't support backup feature!"
 msgstr "Sorry! History database doesn't support backup feature!"
 
-#: ../../src/HistoryPane.cpp:262
+#: ../../src/HistoryPane.cpp:296
 msgid "Fail to insert new value into history table."
 msgstr "Fail to insert new value into history table."
+
+#: ../../src/PeerPane.cpp:42
+msgid "IP Address"
+msgstr "IP Address"
 
 #: ../../src/PeerPane.cpp:44
 msgid "Established Time"
@@ -147,67 +172,67 @@ msgstr "Would you like to reset all properties to their default value?"
 msgid "Need user confirm"
 msgstr "Need user confirm"
 
-#: ../../src/SimCubeApp.cpp:45
+#: ../../src/SimCubeApp.cpp:47
 msgid "Welcome to Cube Simulator."
 msgstr "Welcome to Cube Simulator."
 
-#: ../../src/SimCubeApp.cpp:46
+#: ../../src/SimCubeApp.cpp:48
 msgid "Idle"
 msgstr "Idle"
 
-#: ../../src/SimCubeApp.cpp:47
+#: ../../src/SimCubeApp.cpp:49
 #, c-format
 msgid "Adapters: %d"
 msgstr "Adapters: %d"
 
-#: ../../src/SimCubeApp.cpp:145
+#: ../../src/SimCubeApp.cpp:173
 msgid "SimCube is already running, this instance will be terminated!"
 msgstr "SimCube is already running, this instance will be terminated!"
 
-#: ../../src/SimCubeApp.cpp:154
-msgid "No network adapter is availabled, this application will be terminated!"
-msgstr "No network adapter is availabled, this application will be terminated!"
-
-#: ../../src/SimCubeApp.cpp:160
-msgid "Failed to detect network adapters information, this application will be terminated!"
-msgstr "Failed to detect network adapters information, this application will be terminated!"
-
-#: ../../src/SimCubeApp.cpp:173
+#: ../../src/SimCubeApp.cpp:180
 msgid "Please insert USB dongle and restart application!"
 msgstr "Please insert USB dongle and restart application!"
 
-#: ../../src/SimCubeApp.cpp:214
+#: ../../src/SimCubeApp.cpp:189
+msgid "No network adapter is availabled, this application will be terminated!"
+msgstr "No network adapter is availabled, this application will be terminated!"
+
+#: ../../src/SimCubeApp.cpp:195
+msgid "Failed to detect network adapters information, this application will be terminated!"
+msgstr "Failed to detect network adapters information, this application will be terminated!"
+
+#: ../../src/SimCubeApp.cpp:232
 msgid "USB dongle is removed, application will be terminated now!"
 msgstr "USB dongle is removed, application will be terminated now!"
 
-#: ../../src/SimCubeApp.cpp:214
+#: ../../src/SimCubeApp.cpp:232
 msgid "Error"
 msgstr "Error"
 
-#: ../../src/SimCubeApp.cpp:261
-#: ../../src/SimCubeApp.cpp:272
+#: ../../src/SimCubeApp.cpp:296
+#: ../../src/SimCubeApp.cpp:307
 msgid "Fail to allocate memory space for GetAdaptersInfo."
 msgstr "Fail to allocate memory space for GetAdaptersInfo."
 
-#: ../../src/SimCubeApp.cpp:278
+#: ../../src/SimCubeApp.cpp:313
 #, c-format
 msgid "GetAdaptersInfo failed with error code = %d"
 msgstr "GetAdaptersInfo failed with error code = %d"
 
-#: ../../src/SimCubeApp.cpp:326
+#: ../../src/SimCubeApp.cpp:361
 #, c-format
 msgid "Fail to create UDP socket. errno = %d"
 msgstr "Fail to create UDP socket. errno = %d"
 
-#: ../../src/SimCubeApp.cpp:336
+#: ../../src/SimCubeApp.cpp:371
 msgid "Fail to retrieve interface configuration."
 msgstr "Fail to retrieve interface configuration."
 
-#: ../../src/SimCubeApp.cpp:360
+#: ../../src/SimCubeApp.cpp:395
 msgid "Fail to get netmask address!"
 msgstr "Fail to get netmask address!"
 
-#: ../../src/SimCubeApp.cpp:372
+#: ../../src/SimCubeApp.cpp:407
 msgid "Fail to get broadcast address!"
 msgstr "Fail to get broadcast address!"
 
@@ -433,158 +458,166 @@ msgstr "Led light flashing between red and green."
 msgid "Led light flashing between green and orange."
 msgstr "Led light flashing between green and orange."
 
-#: ../../src/TrapPane.cpp:332
+#: ../../src/TrapPane.cpp:364
 msgid "Led Status"
 msgstr "Led Status"
 
-#: ../../src/TrapPane.cpp:335
+#: ../../src/TrapPane.cpp:367
 msgid "Preview"
 msgstr "Preview"
 
-#: ../../src/TrapPane.cpp:350
+#: ../../src/TrapPane.cpp:382
 msgid "Power"
 msgstr "Power"
 
-#: ../../src/TrapPane.cpp:354
+#: ../../src/TrapPane.cpp:386
 msgid "Fan"
 msgstr "Fan"
 
-#: ../../src/TrapPane.cpp:358
+#: ../../src/TrapPane.cpp:390
 msgid "LampA"
 msgstr "LampA"
 
-#: ../../src/TrapPane.cpp:362
+#: ../../src/TrapPane.cpp:394
 msgid "LampB"
 msgstr "LampB"
 
-#: ../../src/TrapPane.cpp:373
+#: ../../src/TrapPane.cpp:405
 msgid "Quick LED Preset"
 msgstr "Quick LED Preset"
 
-#: ../../src/TrapPane.cpp:380
-#: ../../src/TrapPane.cpp:397
-#: ../../src/TrapPane.cpp:407
-#: ../../src/TrapPane.cpp:417
-#: ../../src/TrapPane.cpp:427
-#: ../../src/TrapPane.cpp:440
-#: ../../src/TrapPane.cpp:450
-#: ../../src/TrapPane.cpp:460
-#: ../../src/TrapPane.cpp:470
+#: ../../src/TrapPane.cpp:412
+#: ../../src/TrapPane.cpp:429
+#: ../../src/TrapPane.cpp:439
+#: ../../src/TrapPane.cpp:449
+#: ../../src/TrapPane.cpp:459
+#: ../../src/TrapPane.cpp:472
+#: ../../src/TrapPane.cpp:482
+#: ../../src/TrapPane.cpp:492
+#: ../../src/TrapPane.cpp:502
 msgid "Send"
 msgstr "Send"
 
-#: ../../src/TrapPane.cpp:389
+#: ../../src/TrapPane.cpp:421
 msgid "Lamp A Status"
 msgstr "Lamp A Status"
 
-#: ../../src/TrapPane.cpp:393
-#: ../../src/TrapPane.cpp:436
+#: ../../src/TrapPane.cpp:425
+#: ../../src/TrapPane.cpp:468
 msgid "Status"
 msgstr "Status"
 
-#: ../../src/TrapPane.cpp:403
-#: ../../src/TrapPane.cpp:446
+#: ../../src/TrapPane.cpp:435
+#: ../../src/TrapPane.cpp:478
 msgid "Hours"
 msgstr "Hours"
 
-#: ../../src/TrapPane.cpp:413
-#: ../../src/TrapPane.cpp:456
+#: ../../src/TrapPane.cpp:445
+#: ../../src/TrapPane.cpp:488
 msgid "Lit Count"
 msgstr "Lit Count"
 
-#: ../../src/TrapPane.cpp:423
-#: ../../src/TrapPane.cpp:466
+#: ../../src/TrapPane.cpp:455
+#: ../../src/TrapPane.cpp:498
 msgid "Temp Cond"
 msgstr "Temp Cond"
 
-#: ../../src/TrapPane.cpp:432
+#: ../../src/TrapPane.cpp:464
 msgid "Lamp B Status"
 msgstr "Lamp B Status"
 
-#: ../../src/TrapPane.cpp:564
-#: ../../src/TrapPane.cpp:613
+#: ../../src/TrapPane.cpp:600
+#: ../../src/TrapPane.cpp:649
 msgid "Fail to update LEDSTATUS."
 msgstr "Fail to update LEDSTATUS."
 
-#: ../../src/UDPProtocol.cpp:89
+#: ../../src/UDPProtocol.cpp:90
 #, c-format
 msgid "NetAdapter[%d]: Fail to receive something from UDP socket. Error = %d"
 msgstr "NetAdapter[%d]: Fail to receive something from UDP socket. Error = %d"
 
-#: ../../src/UDPProtocol.cpp:95
+#: ../../src/UDPProtocol.cpp:96
 #, c-format
 msgid "NetAdapter[%d]: Received %d byte(s) from %s:%d."
 msgstr "NetAdapter[%d]: Received %d byte(s) from %s:%d."
 
-#: ../../src/UDPProtocol.cpp:208
+#: ../../src/UDPProtocol.cpp:110
+msgid "RecvFrom"
+msgstr "RecvFrom"
+
+#: ../../src/UDPProtocol.cpp:215
 #, c-format
 msgid "No keyword in token (%s)"
 msgstr "No keyword in token (%s)"
 
-#: ../../src/UDPProtocol.cpp:215
+#: ../../src/UDPProtocol.cpp:222
 #, c-format
 msgid "Multiple keywords in token (%s)"
 msgstr "Multiple keywords in token (%s)"
 
-#: ../../src/UDPProtocol.cpp:227
+#: ../../src/UDPProtocol.cpp:234
 #, c-format
 msgid "Token (%s) didn't handle by handler"
 msgstr "Token (%s) didn't handle by handler"
 
-#: ../../src/UDPProtocol.cpp:370
+#: ../../src/UDPProtocol.cpp:377
 #, c-format
 msgid "Fail to send enable monitor trap message to peer. (error = %d)"
 msgstr "Fail to send enable monitor trap message to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:403
+#: ../../src/UDPProtocol.cpp:410
 #, c-format
 msgid "This may not be an error. Set Request (%s) is not handled by database update."
 msgstr "This may not be an error. Set Request (%s) is not handled by database update."
 
-#: ../../src/UDPProtocol.cpp:457
+#: ../../src/UDPProtocol.cpp:464
 #, c-format
 msgid "Fail to send check board config response back to peer. (error = %d)"
 msgstr "Fail to send check board config response back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:477
+#: ../../src/UDPProtocol.cpp:484
 #, c-format
 msgid "Fail to send check connection response back to peer. (error = %d)"
 msgstr "Fail to send check connection response back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:527
+#: ../../src/UDPProtocol.cpp:534
 #, c-format
 msgid "Fail to send connect response back to peer. (error = %d)"
 msgstr "Fail to send connect response back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:534
+#: ../../src/UDPProtocol.cpp:541
 msgid "Empty BoardName in CONNECT get request message"
 msgstr "Empty BoardName in CONNECT get request message"
 
-#: ../../src/UDPProtocol.cpp:552
+#: ../../src/UDPProtocol.cpp:559
 #, c-format
 msgid "Fail to send discover response back to peer. (error = %d)"
 msgstr "Fail to send discover response back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:575
+#: ../../src/UDPProtocol.cpp:582
 #, c-format
 msgid "Fail to send monitor response back to peer. (error = %d)"
 msgstr "Fail to send monitor response back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:606
+#: ../../src/UDPProtocol.cpp:613
 #, c-format
 msgid "Fail to send response (%s) back to peer. (error = %d)"
 msgstr "Fail to send response (%s) back to peer. (error = %d)"
 
-#: ../../src/UDPProtocol.cpp:625
+#: ../../src/UDPProtocol.cpp:632
 #, c-format
 msgid "Failt to send response (%s) back to peer. (error = %d)"
 msgstr "Failt to send response (%s) back to peer. (error = %d)"
 
-#: ../../src/wxsqlite3.cpp:3340
+#: ../../src/UDPSocket.cpp:23
+msgid "SendTo"
+msgstr "SendTo"
+
+#: ../../src/wxsqlite3.cpp:3379
 msgid "Regular expression invalid: '"
 msgstr "Regular expression invalid: '"
 
-#: ../../src/wxsqlite3.cpp:3345
+#: ../../src/wxsqlite3.cpp:3384
 #, c-format
 msgid "REGEXP called with wrong number of arguments: %d instead of 2."
 msgstr "REGEXP called with wrong number of arguments: %d instead of 2."
