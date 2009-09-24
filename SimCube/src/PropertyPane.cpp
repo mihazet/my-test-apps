@@ -3,6 +3,7 @@
 #include <wx/propgrid/props.h>
 #include <wx/wxsqlite3.h>
 #include "SimCubeApp.h"
+#include "PeerPane.h"
 #include "PropertyPane.h"
 
 #include "img/nuclear.xpm"
@@ -114,12 +115,12 @@ void PropertyPane::CreateControls()
 void PropertyPane::UpdateCallback(wxUpdateType type, const wxString &database,
                                   const wxString &table, wxLongLong rowid)
 {
-    if ((type == SQLITE_UPDATE) && (database == wxT("main"))
-        && (table == wxT("PropTbl")) && (_pgUpdatedFromUI == false))
-    {
-        wxString sqlQuery, name, value;
-        wxSQLite3ResultSet set;
+    wxString sqlQuery, name, value, trapMessage;
+    wxSQLite3ResultSet set;
 
+    if ((type == SQLITE_UPDATE) && (database == wxT("main"))
+        && (table == wxT("PropTbl")))
+    {
         /* check which property to be updated to what value */
         sqlQuery << wxT("SELECT DisplayedName, CurrentValue FROM PropTbl LIMIT 1 OFFSET ")
             << (rowid - 1).ToString();
@@ -131,9 +132,20 @@ void PropertyPane::UpdateCallback(wxUpdateType type, const wxString &database,
         }
         set.Finalize();
 
-        /* update the property grid ui to reflect database update */
-        wxPGProperty *prop = _pg->GetProperty(name);
-        prop->SetValueFromString(value);
+        /* update the property grid ui to reflect database updated by other means. */
+        if (_pgUpdatedFromUI == false)
+        {
+            wxPGProperty *prop = _pg->GetProperty(name);
+            prop->SetValueFromString(value);
+        }
+
+        /* send trap message for specific commands */
+        if (name == wxT("Main Input"))
+            trapMessage << wxT("MAIN_INPUT#") << value;
+        else if (name == wxT("Lamp Switch"))
+            trapMessage << wxT("LAMP_SELECTION#") << value;
+        if (!trapMessage.empty())
+            wxGetApp().m_PeerData->SendMessageToMonitors(trapMessage);
     }
 }
 
