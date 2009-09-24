@@ -3,13 +3,14 @@
 
 #include <wx/wx.h>
 #include <wx/socket.h>
+#include "UDPSocket.h"
 
 class UDPProtocol;
 class NormalHandler
 {
     friend class UDPProtocol;
     bool (UDPProtocol::*handler)(const char *buf, size_t len,
-        wxIPV4address &peer, wxDatagramSocket *local);
+        wxIPV4address &peer, UDPSocket *local);
     wxString keyword;
 };
 
@@ -26,9 +27,9 @@ private:
 
     /* internal functions */
     void ProcessDownloadModeProtocol(const char *buf, size_t len,
-        wxIPV4address &peer, wxDatagramSocket *local);
+        wxIPV4address &peer, UDPSocket *local);
     void ProcessNormalModeProtocol(const char *buf, size_t len,
-        wxIPV4address &peer, wxDatagramSocket *local);
+        wxIPV4address &peer, UDPSocket *local);
     void AllocateSafeBuf(char **safe, size_t *safeLen,
         const char *unsafe, size_t unsafeLen);
     void DeallocateSafeBuf(char *safe);
@@ -37,11 +38,11 @@ private:
         const char *unsafe, size_t unsafeLen);
     NormalHandler *_normalHandler;
     bool set_request_handler(const char *buf, size_t len,
-        wxIPV4address &peer, wxDatagramSocket *local);
+        wxIPV4address &peer, UDPSocket *local);
     bool get_request_handler(const char *buf, size_t len,
-        wxIPV4address &peer, wxDatagramSocket *local);
+        wxIPV4address &peer, UDPSocket *local);
     bool null_handler(const char *buf, size_t len,
-        wxIPV4address &peer, wxDatagramSocket *local);
+        wxIPV4address &peer, UDPSocket *local);
     bool _needDeallocateSafeBuf;
 
     DECLARE_EVENT_TABLE()

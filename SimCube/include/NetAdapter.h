@@ -3,6 +3,7 @@
 
 #include <wx/wx.h>
 #include <wx/socket.h>
+#include "UDPSocket.h"
 
 class NetAdapter
 {
@@ -21,7 +22,7 @@ public:
     wxString& GetIp(void) { return _ip; }
     wxString& GetNetmask(void) { return _netmask; }
     wxString& GetBroadcast(void) { return _broadcast; }
-    wxDatagramSocket *udp;
+    UDPSocket *udp;
     wxSocketServer *tcp;
 private:
     wxString _name;
