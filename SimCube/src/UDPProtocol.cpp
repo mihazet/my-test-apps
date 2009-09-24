@@ -100,9 +100,14 @@ void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
             AllocateSafeBuf(&safeBuf, &numByteInSafeBuf, unsafeBuf, numByte);
 
             /* add buffer content into history */
-            HistoryDataModel *data = wxGetApp().m_HistoryData;
-            data->AddData(remote.IPAddress(), remote.Service(),
-                wxString::FromAscii(safeBuf, numByteInSafeBuf), numByteInSafeBuf);
+            HistoryDataModel *history = wxGetApp().m_HistoryData;
+            HistoryData data;
+            data.m_ip = remote.IPAddress();
+            data.m_port = remote.Service();
+            data.m_len = numByteInSafeBuf;
+            data.m_msg = wxString::FromAscii(safeBuf, numByteInSafeBuf);
+            data.m_direction = _("RecvFrom");
+            history->AddData(data);
 
             /* process message */
             if (IsBufferUnsafe(unsafeBuf, numByte))

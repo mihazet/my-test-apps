@@ -14,8 +14,13 @@ UDPSocket& UDPSocket::SendToAndRecord(const wxIPV4address &addr,
     SendTo(addr, buf, nBytes);
     if (!LastError() && _history)
     {
-        _history->AddData(addr.IPAddress(), addr.Service(),
-            wxString::FromAscii(buf, nBytes), LastCount());
+        HistoryData data;
+        data.m_ip = addr.IPAddress();
+        data.m_port = addr.Service();
+        data.m_len = LastCount();
+        data.m_msg = wxString::FromAscii(buf, nBytes);
+        data.m_direction = _("SendTo");
+        _history->AddData(data);
     }
 
     return (*this);

@@ -5,7 +5,18 @@
 #include <wx/wxsqlite3.h>
 #include <wx/dataview.h>
 
-class HistoryDataModel;
+enum
+{
+    HISTORY_DATA_ID,
+    HISTORY_DATA_TIMESTAMP,
+    HISTORY_DATA_DIRECTION,
+    HISTORY_DATA_IPADDRESS,
+    HISTORY_DATA_PORT,
+    HISTORY_DATA_LENGTH,
+    HISTORY_DATA_MESSAGE,
+    HISTORY_DATA_MAX
+};
+
 class HistoryPane : public wxPanel, public wxSQLite3Hook
 {
 public:
@@ -46,6 +57,25 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+//------------------------------------------------------------------
+class HistoryData
+{
+public:
+    HistoryData()
+    {
+        m_ip = wxEmptyString;
+        m_port = 0;
+        m_msg = wxEmptyString;
+        m_len = 0;
+        m_direction = wxEmptyString;
+    }
+    wxString m_ip;
+    unsigned short m_port;
+    wxString m_msg;
+    size_t m_len;
+    wxString m_direction;
+};
+
 class HistoryDataModel : public wxDataViewVirtualListModel
 {
 public:
@@ -53,7 +83,7 @@ public:
 
     virtual unsigned int GetColumnCount() const
     {
-        return 6;
+        return HISTORY_DATA_MAX;
     }
 
     virtual wxString GetColumnType(unsigned int WXUNUSED(col)) const
@@ -71,7 +101,7 @@ public:
     virtual bool SetValueByRow(const wxVariant &variant, unsigned int row,
         unsigned int col);
 
-    bool AddData(const wxString &ip, unsigned short port, const wxString &data, size_t len);
+    bool AddData(const HistoryData &data);
 
 private:
     wxSQLite3Database *_db;

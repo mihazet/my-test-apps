@@ -78,12 +78,13 @@ void HistoryPane::CreateControls()
     _historyView = new wxDataViewCtrl(this, myID_HISTORY_VIEW);
     paneSizer->Add(_historyView, 1, wxALL | wxEXPAND, 5);
     _historyView->AssociateModel(wxGetApp().m_HistoryData);
-    _historyView->AppendTextColumn(wxT("#"), 0, wxDATAVIEW_CELL_INERT, 30, wxALIGN_CENTER);
-    _historyView->AppendTextColumn(_("Timestamp"), 1, wxDATAVIEW_CELL_INERT, 125);
-    _historyView->AppendTextColumn(_("IP Address"), 2, wxDATAVIEW_CELL_INERT, 95);
-    _historyView->AppendTextColumn(_("Port"), 3, wxDATAVIEW_CELL_INERT, 45, wxALIGN_CENTER);
-    _historyView->AppendTextColumn(_("Length"), 4, wxDATAVIEW_CELL_INERT, 55, wxALIGN_CENTER);
-    _historyView->AppendTextColumn(_("Message"), 5, wxDATAVIEW_CELL_INERT, 360);
+    _historyView->AppendTextColumn(wxT("#"), HISTORY_DATA_ID, wxDATAVIEW_CELL_INERT, 30, wxALIGN_CENTER);
+    _historyView->AppendTextColumn(_("Timestamp"), HISTORY_DATA_TIMESTAMP, wxDATAVIEW_CELL_INERT, 125, wxALIGN_CENTER);
+    _historyView->AppendTextColumn(_("Direction"), HISTORY_DATA_DIRECTION, wxDATAVIEW_CELL_INERT, 60, wxALIGN_CENTER);
+    _historyView->AppendTextColumn(_("IP Address"), HISTORY_DATA_IPADDRESS, wxDATAVIEW_CELL_INERT, 95, wxALIGN_CENTER);
+    _historyView->AppendTextColumn(_("Port"), HISTORY_DATA_PORT, wxDATAVIEW_CELL_INERT, 45, wxALIGN_CENTER);
+    _historyView->AppendTextColumn(_("Length"), HISTORY_DATA_LENGTH, wxDATAVIEW_CELL_INERT, 55, wxALIGN_CENTER);
+    _historyView->AppendTextColumn(_("Message"), HISTORY_DATA_MESSAGE, wxDATAVIEW_CELL_INERT, 360);
     /* history data ctrl */
     wxSizer *ctrlSizer = new wxBoxSizer(wxHORIZONTAL);
     paneSizer->Add(ctrlSizer, 0, wxALL | wxEXPAND, 0);
@@ -111,7 +112,6 @@ void HistoryPane::UpdateCallback(wxUpdateType type, const wxString &database,
     if (_historyAutoScroll && (type == SQLITE_INSERT)
         && (database == wxT("main")) && (table == wxT("HistoryTbl")))
     {
-        //HistoryDataModel *data = wxGetApp().m_HistoryData;
         wxDataViewItem item = wxGetApp().m_HistoryData->GetItem(rowid.ToLong());
         _historyView->EnsureVisible(item);
     }
@@ -197,10 +197,11 @@ HistoryDataModel::HistoryDataModel(wxSQLite3Database *db)
     /* create table */
     sqlUpdate << wxT("CREATE TABLE HistoryTbl (Id INTEGER PRIMARY KEY, ")
                                         << wxT("Timestamp TEXT, ")
+                                        << wxT("Direction TEXT, ")
                                         << wxT("Ip TEXT, ")
                                         << wxT("Port TEXT, ")
                                         << wxT("Length TEXT, ")
-                                        << wxT("Data TEXT)");
+                                        << wxT("Message TEXT)");
     modified_rows = _db->ExecuteUpdate(sqlUpdate);
 
     /* create trigger */
@@ -222,12 +223,13 @@ void HistoryDataModel::GetValueByRow(wxVariant &variant,
     sqlQuery << wxT("SELECT ");
     switch (col)
     {
-        case 0: sqlQuery << wxT("Id"); break;
-        case 1: sqlQuery << wxT("Timestamp"); break;
-        case 2: sqlQuery << wxT("Ip"); break;
-        case 3: sqlQuery << wxT("Port"); break;
-        case 4: sqlQuery << wxT("Length"); break;
-        case 5: sqlQuery << wxT("Data"); break;
+        case HISTORY_DATA_ID: sqlQuery << wxT("Id"); break;
+        case HISTORY_DATA_TIMESTAMP: sqlQuery << wxT("Timestamp"); break;
+        case HISTORY_DATA_DIRECTION: sqlQuery << wxT("Direction"); break;
+        case HISTORY_DATA_IPADDRESS: sqlQuery << wxT("Ip"); break;
+        case HISTORY_DATA_PORT: sqlQuery << wxT("Port"); break;
+        case HISTORY_DATA_LENGTH: sqlQuery << wxT("Length"); break;
+        case HISTORY_DATA_MESSAGE: sqlQuery << wxT("Message"); break;
     }
     sqlQuery << wxT(" FROM HistoryTbl WHERE Id = ") << row + 1;
 
@@ -246,15 +248,15 @@ bool HistoryDataModel::SetValueByRow(const wxVariant &WXUNUSED(variant),
     return false;
 }
 
-bool HistoryDataModel::AddData(const wxString &ip, unsigned short port,
-                               const wxString &data, size_t len)
+bool HistoryDataModel::AddData(const HistoryData &data)
 {
     wxString sqlUpdate;
     bool result = true;
 
-    sqlUpdate << wxT("INSERT INTO HistoryTbl (Ip, Port, Data, Length) VALUES ('")
-        << ip << wxString::Format(wxT("', '%u', '"), port) << data
-        << wxString::Format(wxT("', '%ld')"), len);
+    sqlUpdate << wxT("INSERT INTO HistoryTbl (Direction, Ip, Port, Length, Message) VALUES ('")
+        << data.m_direction << wxT("', '") << data.m_ip << wxT("', '")
+        << data.m_port << wxT("', '") << data.m_len << wxT("', '")
+        << data.m_msg << wxT("')");
 
     if (1 != _db->ExecuteUpdate(sqlUpdate))
     {
