@@ -4,6 +4,7 @@
 #include "img/save_16.xpm"
 #include "img/delete_16.xpm"
 #include "img/speaker_16.xpm"
+#include "img/cfg_16.xpm"
 
 DebugPane::DebugPane()
 {
@@ -55,9 +56,12 @@ void DebugPane::CreateControls()
     erase->SetToolTip(_("Erase all log text"));
     wxBitmapButton *verbose = new wxBitmapButton(this, wxID_ANY, wxBitmap(*_verboseImg));
     verbose->SetToolTip(_("Verbose"));
+    wxBitmapButton *config = new wxBitmapButton(this, wxID_ANY, wxBitmap(cfg_16_xpm));
+    config->SetToolTip(_("Config"));
     ctrlSizer->Add(save, 0, wxTOP, 5);
     ctrlSizer->Add(erase, 0, wxALL, 0);
-    ctrlSizer->Add(verbose, 0, wxTOP|wxBOTTOM, 5);
+    ctrlSizer->Add(verbose, 0, wxTOP, 5);
+    ctrlSizer->Add(config, 0, wxTOP|wxBOTTOM, 5);
     SetSizer(allSizer);
 }
 
