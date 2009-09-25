@@ -29,6 +29,7 @@ private:
 
 private:
     wxTextCtrl *_logTextCtrl;
+    wxImage *_verboseImg;
 };
 
 #endif /* _DEBUG_WIN_H_ */
