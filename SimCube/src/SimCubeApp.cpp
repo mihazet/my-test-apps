@@ -181,7 +181,7 @@ bool SimCubeApp::OnInit()
     }
 
     /* check single instance only */
-    _onlyMe = new wxSingleInstanceChecker(GetAppName());
+    _onlyMe = new wxSingleInstanceChecker();
     if (_onlyMe->IsAnotherRunning())
     {
         wxLogWarning(_("SimCube is already running, this instance will be terminated!"));
