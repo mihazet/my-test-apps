@@ -1,4 +1,5 @@
 #include <wx/wx.h>
+#include <wx/spinctrl.h>
 #include "SimCubeApp.h"
 #include "ConfigPane.h"
 
@@ -8,6 +9,8 @@ enum
     ID_LANG_SELECT,
     ID_OPT_AUTOSAVE_HISTORY,
     ID_OPT_USING_ROCKEY4ND,
+    ID_OPT_MAX_CONNECTION,
+    ID_OPT_HOURS_INTERVAL,
 };
 
 enum
@@ -15,6 +18,8 @@ enum
     update_language,
     update_autosave,
     update_rockey,
+    update_connection,
+    update_hours,
 };
 
 BEGIN_EVENT_TABLE(ConfigPane, wxPanel)
@@ -100,6 +105,23 @@ void ConfigPane::CreateControls()
         _("Use ROCKEY4 (evaluate version only) to protect application."));
     cb->SetValue(_rockey);
     optSizer->Add(cb, 0, wxALL | wxEXPAND, 5);
+    wxBoxSizer *connectionSizer = new wxBoxSizer(wxHORIZONTAL);
+    optSizer->Add(connectionSizer, 1, wxLEFT, 5);
+    connectionSizer->Add(new wxStaticText(this, wxID_STATIC,
+        _("Maximum connection with remote (0: no limit) ")), 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
+    wxSpinCtrl *connection = new wxSpinCtrl(this, ID_OPT_MAX_CONNECTION, wxEmptyString,
+        wxDefaultPosition, wxSize(40, -1), wxSP_ARROW_KEYS|wxSP_WRAP|wxALIGN_LEFT, 0, 10);
+    connection->SetValue(_connections);
+    connectionSizer->Add(connection, 0, wxALL|wxEXPAND, 0);
+    wxBoxSizer *hoursSizer = new wxBoxSizer(wxHORIZONTAL);
+    optSizer->Add(hoursSizer, 1, wxLEFT, 5);
+    hoursSizer->Add(new wxStaticText(this, wxID_STATIC,
+        _("Simulate lamp hour increase (0: don't increase. Unit: minutes) ")),
+        0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
+    wxSpinCtrl *hours = new wxSpinCtrl(this, ID_OPT_HOURS_INTERVAL, wxEmptyString,
+        wxDefaultPosition, wxSize(40, -1), wxSP_ARROW_KEYS|wxSP_WRAP|wxALIGN_LEFT, 0, 60);
+    hours->SetValue(_hoursInterval);
+    hoursSizer->Add(hours, 0, wxALL|wxEXPAND, 0);
 
     SetSizerAndFit(allSizer);
 }
@@ -209,6 +231,24 @@ void ConfigPane::TransferToDatabase(int item)
         }
         break;
 
+    case update_connection:
+        sqlUpdate << wxT("UPDATE CfgTbl SET ConfigValue = ") << _connections
+            << wxT(" WHERE ConfigName = 'MaxConnection'");
+        if (1 != _cfgDB->ExecuteUpdate(sqlUpdate))
+        {
+            wxLogError(_("Fail to update maximun connection setting!"));
+        }
+        break;
+
+    case update_hours:
+        sqlUpdate << wxT("UPDATE CfgTbl SET ConfigValue = ") << _hoursInterval
+            << wxT(" WHERE ConfigName = 'LampHoursIncreaseInterval'");
+        if (1 != _cfgDB->ExecuteUpdate(sqlUpdate))
+        {
+            wxLogError(_("Fail to update lamp hours increase interval setting!"));
+        }
+        break;
+
     default:
         break;
     }
@@ -264,5 +304,25 @@ void ConfigPane::TransferFromDatabase()
         _rockey = false;
     else
         _rockey = false;
+
+    /* max connection */
+    sqlQuery.clear();
+    sqlQuery << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'MaxConnection'");
+    set = _cfgDB->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        _connections = set.GetInt(0);
+    else
+        _connections = 0;
+    set.Finalize();
+    
+    /* lamp housr increase interval */
+    sqlQuery.clear();
+    sqlQuery << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'LampHoursIncreaseInterval'");
+    set = _cfgDB->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        _hoursInterval = set.GetInt(0);
+    else
+        _hoursInterval = 0;
+    set.Finalize();
 }
 

@@ -47,6 +47,8 @@ private:
     } _language;
     bool _autoSave;
     bool _rockey;
+    int _connections;
+    int _hoursInterval;
 
     DECLARE_EVENT_TABLE()
 };
