@@ -11,6 +11,7 @@
 #include "SimCubeFrame.h"
 #include "TrapPane.h"
 #include "SimCubeApp.h"
+#include "version.h"
 // resource headers
 #include "img/SimCube-16.xpm"
 #include "img/SimCube-32.xpm"
@@ -25,8 +26,6 @@ public:
 
 private:
     void CreateControls();
-
-    void OnOkBtn(wxCommandEvent &event);
 };
 
 SimCubeAboutDialog::SimCubeAboutDialog(wxWindow *parent)
@@ -44,6 +43,32 @@ void SimCubeAboutDialog::CreateControls()
 {
     wxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
 
+    /* description */
+    wxSizer *descSizer = new wxBoxSizer(wxHORIZONTAL);
+    allSizer->Add(descSizer, 1, wxALL | wxEXPAND, 5);
+    wxStaticBitmap *ico = new wxStaticBitmap(this, wxID_ANY, wxBitmap(SimCube_48_xpm));
+    descSizer->Add(ico, 0, wxALL | wxEXPAND, 5);
+    wxSizer *descTextSizer = new wxBoxSizer(wxVERTICAL);
+    descSizer->Add(descTextSizer, 1, wxALL | wxEXPAND, 5);
+    wxString msg;
+    msg << _("SimCube - A Cube Simulator");
+    descTextSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxALL, 5);
+    msg.clear();
+    msg << _("Version ") 
+        << wxT(SCVER_MAJOR_STRING) << wxT(".") << wxT(SCVER_MINOR_STRING) << wxT(".")
+        << wxT(SCVER_RELEASE_STRING) << _(" (build ") << wxT(SCVER_BUILD_STRING)
+        << _("), compiled at ") << wxT(SC_BUILDDATE_STRING);
+    descTextSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxALL, 5);
+    msg.clear();
+    msg << _("If I were a cube, I will try to response all requests from you.");
+    allSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxTOP|wxLEFT|wxRIGHT, 15);
+    msg.clear();
+    msg << _("If I were a cube, I will notify you of my change of state.");
+    allSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxRIGHT|wxLEFT, 15);
+    msg.clear();
+    msg << _("If I were a cube..., but I am not a real cube, just a simulated cube.");
+    allSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxBOTTOM|wxLEFT|wxRIGHT, 15);
+    
     /* library info */
     wxStaticBoxSizer *lib = new wxStaticBoxSizer(wxVERTICAL, this, _("Libraries Info "));
     allSizer->Add(lib, 0, wxALL | wxEXPAND, 5);
@@ -55,16 +80,7 @@ void SimCubeAboutDialog::CreateControls()
     sqlite->Add(new wxStaticText(this, wxID_STATIC,
         wxT("SQLite ") + wxGetApp().GetPropertyDatabase()->GetVersion()), 0, wxALL, 5);
 
-    /* button */
-    wxButton *ok = new wxButton(this, wxID_ANY, _("OK"));
-    ok->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &SimCubeAboutDialog::OnOkBtn, this);
-    allSizer->Add(ok, 0, wxALL, 5);
     SetSizerAndFit(allSizer);
-}
-
-void SimCubeAboutDialog::OnOkBtn(wxCommandEvent &WXUNUSED(event))
-{
-    EndModal(wxOK);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////

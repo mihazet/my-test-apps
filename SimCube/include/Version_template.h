@@ -9,5 +9,6 @@
 #define SCVER_MINOR_STRING      "0"
 #define SCVER_RELEASE_STRING    "0"
 #define SCVER_BUILD_STRING      "$WCREV$$WCMODS?*:$"
+#define SC_BUILDDATE_STRING     "$WCNOW$";
 
 #endif /* _VERSION_H_ */
