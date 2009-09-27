@@ -26,6 +26,9 @@ public:
 
 private:
     void CreateControls();
+
+    /* event handlers */
+    void OnMouseLButtonUp(wxMouseEvent &event);
 };
 
 SimCubeAboutDialog::SimCubeAboutDialog(wxWindow *parent)
@@ -33,6 +36,9 @@ SimCubeAboutDialog::SimCubeAboutDialog(wxWindow *parent)
 {
     CreateControls();
     CenterOnParent();
+
+    /* add event handler */
+    Bind(wxEVT_LEFT_UP, &SimCubeAboutDialog::OnMouseLButtonUp, this, wxID_ANY);
 }
 
 SimCubeAboutDialog::~SimCubeAboutDialog()
@@ -68,7 +74,7 @@ void SimCubeAboutDialog::CreateControls()
     msg.clear();
     msg << _("If I were a cube..., but I am not a real cube, just a simulated cube.");
     allSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxBOTTOM|wxLEFT|wxRIGHT, 15);
-    
+   
     /* library info */
     wxStaticBoxSizer *lib = new wxStaticBoxSizer(wxVERTICAL, this, _("Libraries Info "));
     allSizer->Add(lib, 0, wxALL | wxEXPAND, 5);
@@ -81,6 +87,11 @@ void SimCubeAboutDialog::CreateControls()
         wxT("SQLite ") + wxGetApp().GetPropertyDatabase()->GetVersion()), 0, wxALL, 5);
 
     SetSizerAndFit(allSizer);
+}
+
+void SimCubeAboutDialog::OnMouseLButtonUp(wxMouseEvent &WXUNUSED(event))
+{
+    EndModal(wxID_OK);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
