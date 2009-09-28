@@ -7,6 +7,8 @@
 
 #else
 #include <windows.h>
+#include "include/version.h" // version defintion for simcube
+
 // note that the icon used by the Explorer (i.e. the programs icon) is the
 // first icon is the executable adn the icon are sorted both by their order
 // (Win9x) and by alphabetically (!) (NT). so put this icon first and give it
@@ -17,8 +19,8 @@ aaaaaaaa ICON "SimCube.ico"
 SimCube ICON "SimCube.ico"
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION     0,10,2,167
-PRODUCTVERSION  0,10,0,0
+FILEVERSION     SCVER_MAJOR,SCVER_MINOR,SCVER_RELEASE,SCVER_BUILD
+PRODUCTVERSION  SCVER_MAJOR,SCVER_MINOR,SCVER_RELEASE,0
 FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
 #ifdef _DEBUG
 FILEFLAGS       (VS_FF_PRERELEASE|VS_FF_DEBUG)
@@ -35,13 +37,13 @@ BEGIN
         BEGIN
             VALUE "CompanyName",      "Delta Electronics, Inc.\0"
             VALUE "FileDescription",  "Simulate VideoWall Cube Network Behavior\0"
-            VALUE "FileVersion",      "0.10.2.167\0"
+            VALUE "FileVersion",      SCVER_MAJOR_STRING "." SCVER_MINOR_STRING "." SCVER_RELEASE_STRING "." SCVER_BUILD_STRING "\0"
             VALUE "InternalName",     "SimCube\0"
             VALUE "LegalCopyright",   "Copyright 2009 Yu-Hui, Yang\0"
             //VALUE "LegalTrademarks",  "\0"
             VALUE "OriginalFilename", "SimCube.exe\0"
             VALUE "ProductName",      "Cube Simulator\0"
-            VALUE "ProductVersion",   "0.10.0.0\0"
+            VALUE "ProductVersion",   SCVER_MAJOR_STRING "." SCVER_MINOR_STRING "." SCVER_RELEASE_STRING ".0\0"
         END
     END
 
