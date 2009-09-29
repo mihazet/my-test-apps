@@ -37,6 +37,10 @@ private:
 
     /* event handlers */
     void OnSize(wxSizeEvent &event);
+    void OnAdaptersLUp(wxMouseEvent &event);
+
+    /* internal ui */
+    wxStaticText *_adaptersInfo;
 
     DECLARE_EVENT_TABLE()
 };

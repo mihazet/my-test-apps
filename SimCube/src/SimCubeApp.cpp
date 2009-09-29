@@ -47,8 +47,11 @@ bool SimCubeStatusBar::Create(wxWindow *parent, long style)
     SetStatusWidths(WXSIZEOF(widths), widths);
     SetStatusText(_("Welcome to Cube Simulator."), SIMCUBE_STB_INFO);
     SetStatusText(_("Idle"), SIMCUBE_STB_DOWNLOAD);
-    SetStatusText(wxString::Format(_("Adapters: %d"), adapters.size()),
-        SIMCUBE_STB_ADAPTER);
+
+    /* adapters information - show on a wxStaticText object */
+    _adaptersInfo = new wxStaticText(this, wxID_ANY,
+        wxString::Format(_("Adapters: %d"), adapters.size()));
+    _adaptersInfo->Bind(wxEVT_LEFT_UP, &SimCubeStatusBar::OnAdaptersLUp, this);
 
     return result;
 }
@@ -59,7 +62,21 @@ void SimCubeStatusBar::Init()
 
 void SimCubeStatusBar::OnSize(wxSizeEvent &event)
 {
+    wxRect rect;
+
+    if (_adaptersInfo && GetFieldRect(SIMCUBE_STB_ADAPTER, rect))
+    {
+        wxRect rectCheck = rect;
+        rectCheck.Deflate(2);
+        _adaptersInfo->SetSize(rectCheck);
+    }
+
     event.Skip();
+}
+
+void SimCubeStatusBar::OnAdaptersLUp(wxMouseEvent &WXUNUSED(event))
+{
+    wxLogMessage(wxT("Adapters L Up"));
 }
 
 ////////////////////////////////////////////////////////////////////////////
