@@ -39,11 +39,12 @@ SimCubeStatusBar::~SimCubeStatusBar()
 bool SimCubeStatusBar::Create(wxWindow *parent, long style)
 {
     bool result;
-    int widths[SIMCUBE_STB_MAX] = { -1, 100, 120 };
+    int widths[SIMCUBE_STB_MAX] = { -1, 250, 180 };
     wxVector<NetAdapter> &adapters = wxGetApp().m_Adapters;
 
     result = wxStatusBar::Create(parent, wxID_ANY, style);
-    SetFieldsCount(WXSIZEOF(widths), widths);
+    SetFieldsCount(WXSIZEOF(widths));
+    SetStatusWidths(WXSIZEOF(widths), widths);
     SetStatusText(_("Welcome to Cube Simulator."), SIMCUBE_STB_INFO);
     SetStatusText(_("Idle"), SIMCUBE_STB_DOWNLOAD);
     SetStatusText(wxString::Format(_("Adapters: %d"), adapters.size()),
