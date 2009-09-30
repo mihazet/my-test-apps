@@ -166,7 +166,8 @@ void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
     {
         updaterMessage[0] += 0x20;
         updaterMessage[1] += 0x20;
-        local->SendToWithoutRecord(peer, updaterMessage, 16 + nameLen + 1);
+        local->SendToWithoutRecord(peer, (const char *)updaterMessage,
+            16 + nameLen + 1);
         return;
     }
 
@@ -176,7 +177,8 @@ void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
     {
         updaterMessage[0] += 0x20;
         updaterMessage[1] += 0x20;
-        local->SendToWithoutRecord(peer, updaterMessage, 16 + nameLen + 1);
+        local->SendToWithoutRecord(peer, (const char *)updaterMessage,
+            16 + nameLen + 1);
         return;
     }
 }
