@@ -79,29 +79,28 @@ void SimCubeStatusBar::OnAdaptersLUp(wxMouseEvent &WXUNUSED(event))
 {
     wxVector<NetAdapter> &adapters = wxGetApp().m_Adapters;
     wxString info, line;
-    size_t i = 0, maxLenInPixel = 300, lineLen;
+    size_t i = 0;
+    int maxLenInPixel = 0;
 
     info << _("Local Adapters Info:");
-#if 1
     for (wxVector<NetAdapter>::iterator it = adapters.begin();
         it != adapters.end();
         it++, i++)
     {
         line.clear();
-        //line << _("Adapter") << wxT("[") << i << wxT("] (") << iter->GetName() << wxT(")\n");
-        //if (maxLenInPixel < (lineLen = GetTextExtent(line).GetWidth()))
-        //    maxLenInPixel = lineLen;
-        line = wxT("X");
+        line << wxT("\n ") << _("Adapter") << wxT("[") << i << wxT("] (") 
+            << it->GetName() << wxT(")");
+        maxLenInPixel = wxMax(maxLenInPixel, GetTextExtent(line).GetWidth());
         info << line;
 
         line.clear();
-        //line << _("ip: ") << iter->GetIp() << _(" netmask: ") << iter->GetNetmask() << wxT("\n");
-        //if (maxLenInPixel < (lineLen = GetTextExtent(line).GetWidth()))
-        //    maxLenInPixel = lineLen;
-        line = wxT("Y");
+        line << wxT("\n  ") << _("ip")  << wxT(": ") << it->GetIp() << wxT(", ")
+            << _("netmask") << wxT(": ") << it->GetNetmask() << wxT(", ")
+            << _("broadcast") << wxT(": ") << it->GetBroadcast();
+        maxLenInPixel = wxMax(maxLenInPixel, GetTextExtent(line).GetWidth());
         info << line;
     }
-#endif
+
     wxTipWindow *tip = new wxTipWindow(this, info, maxLenInPixel);
     tip->SetTipWindowPtr(&tip);
     tip->Show();
