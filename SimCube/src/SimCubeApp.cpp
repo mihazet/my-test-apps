@@ -87,16 +87,29 @@ void SimCubeStatusBar::OnAdaptersLUp(wxMouseEvent &WXUNUSED(event))
         it != adapters.end();
         it++, i++)
     {
+        // adapter id and name
         line.clear();
         line << wxT("\n ") << _("Adapter") << wxT("[") << i << wxT("] (") 
             << it->GetName() << wxT(")");
         maxLenInPixel = wxMax(maxLenInPixel, GetTextExtent(line).GetWidth());
         info << line;
 
+        // addresses
         line.clear();
         line << wxT("\n  ") << _("ip")  << wxT(": ") << it->GetIp() << wxT(", ")
             << _("netmask") << wxT(": ") << it->GetNetmask() << wxT(", ")
             << _("broadcast") << wxT(": ") << it->GetBroadcast();
+        maxLenInPixel = wxMax(maxLenInPixel, GetTextExtent(line).GetWidth());
+        info << line;
+
+        // statistics
+        line.clear();
+        line << wxT("\n  ") << wxT("UDP ") << _("Rx (Bytes/Counts)") << wxT(": ")
+            << it->m_udpStatus[NetAdapter::RX_BYTE] << wxT("/")
+            << it->m_udpStatus[NetAdapter::RX_COUNT] << wxT(", ")
+            << _("Tx (Bytes/Counts)") << wxT(": ")
+            << it->m_udpStatus[NetAdapter::TX_BYTE] << wxT("/")
+            << it->m_udpStatus[NetAdapter::TX_COUNT];
         maxLenInPixel = wxMax(maxLenInPixel, GetTextExtent(line).GetWidth());
         info << line;
     }

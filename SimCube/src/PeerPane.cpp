@@ -193,8 +193,8 @@ void PeerDataModel::SendMessageToMonitors(const wxString &msg)
     {
         if (it->m_Monitor)
         {
-            adapter.at(it->m_AdapterId).udp->SendTo(it->m_Peer,
-                msg.ToAscii(), msg.length() + 1);
+            adapter.at(it->m_AdapterId).udp->SendToWithRecord(
+                it->m_Peer, msg.ToAscii(), msg.length() + 1);
         }
     }
 }

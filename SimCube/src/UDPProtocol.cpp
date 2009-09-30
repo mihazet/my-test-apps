@@ -96,6 +96,10 @@ void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
             wxLogVerbose(_("NetAdapter[%d]: Received %d byte(s) from %s:%d."),
                 id, numByte, remote.IPAddress(), remote.Service());
 
+            /* update socket statistics */
+            netAdapter.at(id).m_udpStatus[NetAdapter::RX_COUNT]++;
+            netAdapter.at(id).m_udpStatus[NetAdapter::RX_BYTE] += numByte;
+
             /* make sure buffer is safe for later process */
             AllocateSafeBuf(&safeBuf, &numByteInSafeBuf, unsafeBuf, numByte);
 
@@ -162,7 +166,7 @@ void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
     {
         updaterMessage[0] += 0x20;
         updaterMessage[1] += 0x20;
-        local->SendTo(peer, updaterMessage, 16 + nameLen + 1);
+        local->SendToWithoutRecord(peer, updaterMessage, 16 + nameLen + 1);
         return;
     }
 
@@ -172,7 +176,7 @@ void UDPProtocol::ProcessDownloadModeProtocol(const char *buf, size_t len,
     {
         updaterMessage[0] += 0x20;
         updaterMessage[1] += 0x20;
-        local->SendTo(peer, updaterMessage, 16 + nameLen + 1);
+        local->SendToWithoutRecord(peer, updaterMessage, 16 + nameLen + 1);
         return;
     }
 }
@@ -371,7 +375,7 @@ bool UDPProtocol::set_request_handler(const char *buf, size_t len,
                 set.Finalize();
                 if (!trapMessage.empty())
                 {
-                    local->SendToAndRecord(peer, trapMessage.ToAscii(), trapMessage.length() + 1);
+                    local->SendToWithRecord(peer, trapMessage.ToAscii(), trapMessage.length() + 1);
                     if (local->Error())
                     {
                         wxLogError(_("Fail to send enable monitor trap message to peer. (error = %d)"),
@@ -461,7 +465,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
         if (data->IsContain(peer))
         {
             response << name << MSG_KEYWORD_GET_RESPONSE << wxT("SUCCESS");
-            local->SendToAndRecord(peer, response.ToAscii(), response.length() + 1);
+            local->SendToWithRecord(peer, response.ToAscii(), response.length() + 1);
             if (local->Error())
             {
                 wxLogError(_("Fail to send check board config response back to peer. (error = %d)"),
@@ -481,7 +485,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
             response << wxT("CONNECTED");
         else
             response << wxT("NOT_CONNECTED");
-        local->SendToAndRecord(peer, response.ToAscii(), response.length() + 1);
+        local->SendToWithRecord(peer, response.ToAscii(), response.length() + 1);
         if (local->Error())
         {
             wxLogError(_("Fail to send check connection response back to peer. (error = %d)"),
@@ -531,7 +535,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
                     data->AddData(item);
                 }
             }
-            local->SendToAndRecord(peer, response.ToAscii(), response.length() + 1);
+            local->SendToWithRecord(peer, response.ToAscii(), response.length() + 1);
             if (local->Error())
             {
                 wxLogError(_("Fail to send connect response back to peer. (error = %d)"),
@@ -556,7 +560,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
         if (set.NextRow())
         {
             response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
-            local->SendToAndRecord(peer, response.ToAscii(), response.length() + 1);
+            local->SendToWithRecord(peer, response.ToAscii(), response.length() + 1);
             if (local->Error())
             {
                 wxLogError(_("Fail to send discover response back to peer. (error = %d)"),
@@ -579,7 +583,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
         }
         else
             response << wxT("DISABLE");
-        local->SendToAndRecord(peer, response.ToAscii(), response.length() + 1);
+        local->SendToWithRecord(peer, response.ToAscii(), response.length() + 1);
         if (local->Error())
         {
             wxLogError(_("Fail to send monitor response back to peer. (error = %d)"),
@@ -610,7 +614,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
             if (set.NextRow())
             {
                 response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
-                local->SendToAndRecord(peer, response.ToAscii(), response.length() + 1);
+                local->SendToWithRecord(peer, response.ToAscii(), response.length() + 1);
                 if (local->Error())
                 {
                     wxLogError(_("Fail to send response (%s) back to peer. (error = %d)"),
@@ -629,7 +633,7 @@ bool UDPProtocol::get_request_handler(const char *buf, size_t len,
             {
                 response.clear();
                 response << name << MSG_KEYWORD_GET_RESPONSE << set.GetAsString(0);
-                local->SendToAndRecord(peer, response.ToAscii(), response.length() + 1);
+                local->SendToWithRecord(peer, response.ToAscii(), response.length() + 1);
                 if (local->Error())
                 {
                     wxLogError(_("Failt to send response (%s) back to peer. (error = %d)"),

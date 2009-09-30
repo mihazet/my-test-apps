@@ -8,12 +8,13 @@ UDPSocket::UDPSocket(const wxSockAddress &addr, wxSocketFlags flags)
     _history = wxGetApp().m_HistoryData;
 }
 
-UDPSocket& UDPSocket::SendToAndRecord(const wxIPV4address &addr,
-                                      const char *buf, wxUint32 nBytes)
+UDPSocket& UDPSocket::SendToWithRecord(const wxIPV4address &addr,
+                                       const char *buf, wxUint32 nBytes)
 {
     SendTo(addr, buf, nBytes);
     if (!LastError() && _history)
     {
+        /* add into history record */
         HistoryData data;
         data.m_ip = addr.IPAddress();
         data.m_host = addr.Hostname();
@@ -22,8 +23,44 @@ UDPSocket& UDPSocket::SendToAndRecord(const wxIPV4address &addr,
         data.m_msg = wxString::FromAscii(buf, nBytes);
         data.m_direction = _("SendTo");
         _history->AddData(data);
+
+        /* add into socket statistics */
+        DoTxStatistics(nBytes);
     }
 
     return (*this);
+}
+
+UDPSocket& UDPSocket::SendToWithoutRecord(const wxIPV4address &addr,
+                                          const char *buf, wxUint32 nBytes)
+{
+    SendTo(addr, buf, nBytes);
+    if (!LastError())
+    {
+        /* add into socket statistics */
+        DoTxStatistics(nBytes);
+    }
+
+    return (*this);
+}
+
+bool UDPSocket::DoTxStatistics(wxUint32 nBytes)
+{
+    int id = 0;
+    wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
+
+    for (wxVector<NetAdapter>::iterator it = netAdapter.begin();
+        it != netAdapter.end();
+        it++, id++)
+    {
+        if (it->udp == this)
+        {
+            it->m_udpStatus[NetAdapter::TX_COUNT]++;
+            it->m_udpStatus[NetAdapter::TX_BYTE] += nBytes;
+            return true;
+        }
+    }
+
+    return false;
 }
 
