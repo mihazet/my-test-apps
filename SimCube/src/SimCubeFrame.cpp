@@ -11,7 +11,7 @@
 #include "SimCubeFrame.h"
 #include "TrapPane.h"
 #include "SimCubeApp.h"
-#include "version.h"
+#include "Version.h"
 // resource headers
 #include "img/SimCube-16.xpm"
 #include "img/SimCube-32.xpm"
