@@ -38,6 +38,8 @@ private:
     /* event handlers */
     void OnSize(wxSizeEvent &event);
     void OnAdaptersLUp(wxMouseEvent &event);
+    void OnAdaptersContextMenu(wxContextMenuEvent &event);
+    void OnToggleUDPSocket(wxCommandEvent &event);
 
     /* internal ui */
     wxStaticText *_adaptersInfo;

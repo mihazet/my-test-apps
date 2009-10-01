@@ -6,11 +6,17 @@ UDPSocket::UDPSocket(const wxSockAddress &addr, wxSocketFlags flags)
     : wxDatagramSocket(addr, flags)
 {
     _history = wxGetApp().m_HistoryData;
+    m_enabled = false;
+    m_tempContextMenuItemId = wxID_ANY;
 }
 
 UDPSocket& UDPSocket::SendToWithRecord(const wxIPV4address &addr,
                                        const char *buf, wxUint32 nBytes)
 {
+    /* don't sent if socket is disabled */
+    if (!m_enabled)
+        return (*this);
+
     SendTo(addr, buf, nBytes);
     if (!LastError() && _history)
     {
@@ -34,6 +40,10 @@ UDPSocket& UDPSocket::SendToWithRecord(const wxIPV4address &addr,
 UDPSocket& UDPSocket::SendToWithoutRecord(const wxIPV4address &addr,
                                           const char *buf, wxUint32 nBytes)
 {
+    /* don't sent if socket is disabled */
+    if (!m_enabled)
+        return (*this);
+
     SendTo(addr, buf, nBytes);
     if (!LastError())
     {

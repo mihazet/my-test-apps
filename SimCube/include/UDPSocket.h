@@ -16,6 +16,9 @@ public:
     UDPSocket& SendToWithoutRecord(const wxIPV4address &addr,
         const char *buf, wxUint32 nBytes);
 
+    bool m_enabled;
+    int m_tempContextMenuItemId;
+
 private:
     bool DoTxStatistics(wxUint32 nBytes);
 

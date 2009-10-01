@@ -50,6 +50,7 @@ UDPProtocol::UDPProtocol() :
             it->udp->SetEventHandler(*this, socketId);
             it->udp->SetNotify(wxSOCKET_INPUT_FLAG);
             it->udp->Notify(true);
+            it->udp->m_enabled = true;
         }
     }
 }

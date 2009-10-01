@@ -53,6 +53,7 @@ bool SimCubeStatusBar::Create(wxWindow *parent, long style)
     _adaptersInfo = new wxStaticText(this, wxID_ANY,
         wxString::Format(_("Adapters: %d"), adapters.size()));
     _adaptersInfo->Bind(wxEVT_LEFT_UP, &SimCubeStatusBar::OnAdaptersLUp, this);
+    _adaptersInfo->Bind(wxEVT_CONTEXT_MENU, &SimCubeStatusBar::OnAdaptersContextMenu, this);
 
     return result;
 }
@@ -117,6 +118,65 @@ void SimCubeStatusBar::OnAdaptersLUp(wxMouseEvent &WXUNUSED(event))
     wxTipWindow *tip = new wxTipWindow(this, info, maxLenInPixel);
     tip->SetTipWindowPtr(&tip);
     tip->Show();
+}
+
+void SimCubeStatusBar::OnAdaptersContextMenu(wxContextMenuEvent &WXUNUSED(event))
+{
+    wxVector<NetAdapter> &adapters = wxGetApp().m_Adapters;
+    // Only 1st level pop up menu on stack, and others on heap
+    wxMenu adapterListMenu;
+    int id = wxID_HIGHEST + 1;
+
+    for (wxVector<NetAdapter>::iterator it = adapters.begin();
+        it != adapters.end();
+        it++, id += 10)
+    {
+        wxMenu *adapter = new wxMenu;
+        wxMenuItem *item = NULL;
+        /* item: udp */
+        item = adapter->AppendCheckItem(id, _("UDP Socket Enabled"),
+            _("Enable or disable the UDP socket transmision and receive."));
+        if (it->udp && item)
+        {
+            it->udp->m_tempContextMenuItemId = id;
+            adapter->Check(id, it->udp->m_enabled);
+        }
+        adapterListMenu.Bind(wxEVT_COMMAND_MENU_SELECTED,
+            &SimCubeStatusBar::OnToggleUDPSocket, this, id);
+        /* item: tcp */
+        item = adapter->AppendCheckItem(id + 1, _("TCP Socket Enabled"),
+            _("Enable or disable the TCP socket transmission and receive."));
+        adapter->Check(id + 1, true);
+
+        adapterListMenu.AppendSubMenu(adapter, it->GetIp(), it->GetName());
+    }
+
+    PopupMenu(&adapterListMenu);
+}
+
+void SimCubeStatusBar::OnToggleUDPSocket(wxCommandEvent &event)
+{
+    wxVector<NetAdapter> &adapters = wxGetApp().m_Adapters;
+
+    wxLogMessage(event.IsChecked() ? wxT("Checked event") : wxT("Unchecked event"));
+
+    for (wxVector<NetAdapter>::iterator it = adapters.begin();
+        it != adapters.end();
+        it++)
+    {
+        if (it->udp)
+        {
+            if (it->udp->m_tempContextMenuItemId == event.GetId())
+            {
+                wxLogMessage(it->GetIp());
+                it->udp->Notify(event.IsChecked());
+                it->udp->m_enabled = event.IsChecked();
+                break;
+            }
+        }
+    }
+
+    event.Skip();
 }
 
 ////////////////////////////////////////////////////////////////////////////
