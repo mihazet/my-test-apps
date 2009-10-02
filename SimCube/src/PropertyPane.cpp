@@ -5,14 +5,9 @@
 #include "SimCubeApp.h"
 #include "PeerPane.h"
 #include "PropertyPane.h"
+#include "WidgetId.h"
 
 #include "img/nuclear.xpm"
-
-enum
-{
-    myID_PROPERTY_GRID = wxID_HIGHEST + 1,
-    myID_BTN_RESET,
-};
 
 BEGIN_EVENT_TABLE(PropertyPane, wxPanel)
     EVT_PG_CHANGING(myID_PROPERTY_GRID, PropertyPane::OnPropertyChanging)

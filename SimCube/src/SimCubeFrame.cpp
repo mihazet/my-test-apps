@@ -11,6 +11,7 @@
 #include "SimCubeFrame.h"
 #include "TrapPane.h"
 #include "SimCubeApp.h"
+#include "WidgetId.h"
 #include "Version.h"
 // resource headers
 #include "img/SimCube-16.xpm"
@@ -95,23 +96,11 @@ void SimCubeAboutDialog::OnMouseLButtonUp(wxMouseEvent &WXUNUSED(event))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
-enum
-{
-    ID_VIEW_PANE_START = wxID_HIGHEST + 1,
-    ID_VIEW_PROPERTY_PANE = ID_VIEW_PANE_START,
-    ID_VIEW_TRAP_PANE,
-    ID_VIEW_PEER_PANE,
-    ID_VIEW_CONFIG_PANE,
-    ID_VIEW_LOG_PANE,
-    ID_VIEW_PANE_END = ID_VIEW_LOG_PANE,
-    ID_VIEW_RESET_LAYOUT,
-    ID_HELP_DOC,
-};
 
 BEGIN_EVENT_TABLE(SimCubeFrame, wxFrame)
-    EVT_MENU_RANGE(ID_VIEW_PANE_START, ID_VIEW_PANE_END, SimCubeFrame::OnViewPane)
-    EVT_UPDATE_UI_RANGE(ID_VIEW_PANE_START, ID_VIEW_PANE_END, SimCubeFrame::OnUpdatePane)
-    EVT_MENU(ID_VIEW_RESET_LAYOUT, SimCubeFrame::OnResetLayout)
+    EVT_MENU_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, SimCubeFrame::OnViewPane)
+    EVT_UPDATE_UI_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, SimCubeFrame::OnUpdatePane)
+    EVT_MENU(myID_VIEW_RESET_LAYOUT, SimCubeFrame::OnResetLayout)
     EVT_ERASE_BACKGROUND(SimCubeFrame::OnEraseBackground)
     EVT_SIZE(SimCubeFrame::OnSize)
     EVT_CLOSE(SimCubeFrame::OnClose)
@@ -184,21 +173,21 @@ void SimCubeFrame::CreateControls()
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_EXIT, _("Quit"), _("Quit this program"));
     wxMenu *view_menu = new wxMenu;
-    view_menu->AppendCheckItem(ID_VIEW_PROPERTY_PANE, _("Property Pane\tCTRL+F1"),
+    view_menu->AppendCheckItem(myID_VIEW_PROPERTY_PANE, _("Property Pane\tCTRL+F1"),
         _("Show or hide the property pane."));
-    view_menu->AppendCheckItem(ID_VIEW_TRAP_PANE, _("Trap Pane\tCTRL+F2"),
+    view_menu->AppendCheckItem(myID_VIEW_TRAP_PANE, _("Trap Pane\tCTRL+F2"),
         _("Show or hid the trap pane."));
-    view_menu->AppendCheckItem(ID_VIEW_PEER_PANE, _("Remote Pane\tCTRL+F3"),
+    view_menu->AppendCheckItem(myID_VIEW_PEER_PANE, _("Remote Pane\tCTRL+F3"),
         _("Show or hide the remote peer pane."));
-    view_menu->AppendCheckItem(ID_VIEW_CONFIG_PANE, _("Configuration Pane\tCTRL+F4"),
+    view_menu->AppendCheckItem(myID_VIEW_CONFIG_PANE, _("Configuration Pane\tCTRL+F4"),
         _("Show or hide the configuration pane."));
-    view_menu->AppendCheckItem(ID_VIEW_LOG_PANE, _("Log Widnow\tCTRL+F5"),
+    view_menu->AppendCheckItem(myID_VIEW_LOG_PANE, _("Log Widnow\tCTRL+F5"),
         _("Show or hide the logging window."));
     view_menu->AppendSeparator();
-    view_menu->Append(ID_VIEW_RESET_LAYOUT, _("Reset all panes"),
+    view_menu->Append(myID_VIEW_RESET_LAYOUT, _("Reset all panes"),
         _("Reset all panes to its default position and size."));
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(ID_HELP_DOC, _("Help file"),
+    help_menu->Append(myID_HELP_DOC, _("Help file"),
         _("Show help file."));
     help_menu->Append(wxID_ABOUT, _("About..."), _("Show about dialog"));
 
@@ -334,19 +323,19 @@ void SimCubeFrame::OnViewPane(wxCommandEvent &event)
 {
     switch (event.GetId())
     {
-    case ID_VIEW_PROPERTY_PANE:
+    case myID_VIEW_PROPERTY_PANE:
         _auiManager.GetPane(wxT("PropertyPane")).Show(event.IsChecked());
         break;
-    case ID_VIEW_TRAP_PANE:
+    case myID_VIEW_TRAP_PANE:
         _auiManager.GetPane(wxT("TrapPane")).Show(event.IsChecked());
         break;
-    case ID_VIEW_PEER_PANE:
+    case myID_VIEW_PEER_PANE:
         _auiManager.GetPane(wxT("PeerPane")).Show(event.IsChecked());
         break;
-    case ID_VIEW_CONFIG_PANE:
+    case myID_VIEW_CONFIG_PANE:
         _auiManager.GetPane(wxT("ConfigPane")).Show(event.IsChecked());
         break;
-    case ID_VIEW_LOG_PANE:
+    case myID_VIEW_LOG_PANE:
         _auiManager.GetPane(wxT("DebugPane")).Show(event.IsChecked());
         break;
     }
@@ -357,19 +346,19 @@ void SimCubeFrame::OnUpdatePane(wxUpdateUIEvent &event)
 {
     switch (event.GetId())
     {
-    case ID_VIEW_PROPERTY_PANE:
+    case myID_VIEW_PROPERTY_PANE:
         event.Check(_auiManager.GetPane(wxT("PropertyPane")).IsShown());
         break;
-    case ID_VIEW_TRAP_PANE:
+    case myID_VIEW_TRAP_PANE:
         event.Check(_auiManager.GetPane(wxT("TrapPane")).IsShown());
         break;
-    case ID_VIEW_PEER_PANE:
+    case myID_VIEW_PEER_PANE:
         event.Check(_auiManager.GetPane(wxT("PeerPane")).IsShown());
         break;
-    case ID_VIEW_CONFIG_PANE:
+    case myID_VIEW_CONFIG_PANE:
         event.Check(_auiManager.GetPane(wxT("ConfigPane")).IsShown());
         break;
-    case ID_VIEW_LOG_PANE:
+    case myID_VIEW_LOG_PANE:
         event.Check(_auiManager.GetPane(wxT("DebugPane")).IsShown());
         break;
     }

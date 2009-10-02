@@ -6,6 +6,7 @@
 #include <wx/tokenzr.h>
 #include "SimCubeApp.h"
 #include "SimCubeFrame.h"
+#include "WidgetId.h"
 #if defined (__WXMSW__)
 #include "Rockey4_ND_32.h"
 #elif defined (__WXGTK__)
@@ -125,7 +126,7 @@ void SimCubeStatusBar::OnAdaptersContextMenu(wxContextMenuEvent &WXUNUSED(event)
     wxVector<NetAdapter> &adapters = wxGetApp().m_Adapters;
     // Only 1st level pop up menu on stack, and others on heap
     wxMenu adapterListMenu;
-    int id = wxID_HIGHEST + 1;
+    int id = myID_CXTMENU_ADAPTER_FIRST;
 
     for (wxVector<NetAdapter>::iterator it = adapters.begin();
         it != adapters.end();

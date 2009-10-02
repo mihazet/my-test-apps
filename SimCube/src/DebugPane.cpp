@@ -1,5 +1,6 @@
 #include <wx/wx.h>
 #include "DebugPane.h"
+#include "WidgetId.h"
 
 #include "img/save_16.xpm"
 #include "img/delete_16.xpm"

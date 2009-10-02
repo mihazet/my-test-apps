@@ -2,16 +2,7 @@
 #include <wx/spinctrl.h>
 #include "SimCubeApp.h"
 #include "ConfigPane.h"
-
-enum
-{
-    ID_LANG_DEFAULT = wxID_HIGHEST + 100,
-    ID_LANG_SELECT,
-    ID_OPT_AUTOSAVE_HISTORY,
-    ID_OPT_USING_ROCKEY4ND,
-    ID_OPT_MAX_CONNECTION,
-    ID_OPT_HOURS_INTERVAL,
-};
+#include "WidgetId.h"
 
 enum
 {
@@ -23,11 +14,11 @@ enum
 };
 
 BEGIN_EVENT_TABLE(ConfigPane, wxPanel)
-    EVT_CHECKBOX(ID_LANG_DEFAULT, ConfigPane::OnLangDefault)
-    EVT_UPDATE_UI(ID_LANG_SELECT, ConfigPane::OnUpdateLangSelect)
-    EVT_LISTBOX(ID_LANG_SELECT, ConfigPane::OnLangSelect)
-    EVT_CHECKBOX(ID_OPT_AUTOSAVE_HISTORY, ConfigPane::OnAutoSaveHistory)
-    EVT_CHECKBOX(ID_OPT_USING_ROCKEY4ND, ConfigPane::OnUsingRockey4ND)
+    EVT_CHECKBOX(myID_LANG_DEFAULT, ConfigPane::OnLangDefault)
+    EVT_UPDATE_UI(myID_LANG_SELECT, ConfigPane::OnUpdateLangSelect)
+    EVT_LISTBOX(myID_LANG_SELECT, ConfigPane::OnLangSelect)
+    EVT_CHECKBOX(myID_OPT_AUTOSAVE_HISTORY, ConfigPane::OnAutoSaveHistory)
+    EVT_CHECKBOX(myID_OPT_USING_ROCKEY4ND, ConfigPane::OnUsingRockey4ND)
 END_EVENT_TABLE()
 
 ConfigPane::ConfigPane()
@@ -75,7 +66,7 @@ void ConfigPane::CreateControls()
     wxStaticBoxSizer *langSizer = new wxStaticBoxSizer(wxVERTICAL,
         this, _("Language "));
     allSizer->Add(langSizer, 0, wxALL | wxEXPAND, 15);
-    wxCheckBox *cb = new wxCheckBox(this, ID_LANG_DEFAULT,
+    wxCheckBox *cb = new wxCheckBox(this, myID_LANG_DEFAULT,
         _("Use system default language"));
     cb->SetValue(_language == eLANG_DEFAULT);
     langSizer->Add(cb, 0, wxALL, 5);
@@ -83,7 +74,7 @@ void ConfigPane::CreateControls()
     langArray.push_back(_("English"));
     langArray.push_back(_("Chinese (Traditional)"));
     langArray.push_back(_("Chinese (Simplified)"));
-    wxListBox *lb = new wxListBox(this, ID_LANG_SELECT, wxDefaultPosition,
+    wxListBox *lb = new wxListBox(this, myID_LANG_SELECT, wxDefaultPosition,
         wxDefaultSize, langArray);
     switch (_language)
     {
@@ -97,11 +88,11 @@ void ConfigPane::CreateControls()
     wxStaticBoxSizer *optSizer = new wxStaticBoxSizer(wxVERTICAL,
         this, _("Options "));
     allSizer->Add(optSizer, 0, wxRIGHT | wxLEFT | wxBOTTOM | wxEXPAND, 15);
-    cb = new wxCheckBox(this, ID_OPT_AUTOSAVE_HISTORY,
+    cb = new wxCheckBox(this, myID_OPT_AUTOSAVE_HISTORY,
         _("When application terminates, auto save the transaction history."));
     cb->SetValue(_autoSave);
     optSizer->Add(cb, 0, wxALL | wxEXPAND, 5);
-    cb = new wxCheckBox(this, ID_OPT_USING_ROCKEY4ND,
+    cb = new wxCheckBox(this, myID_OPT_USING_ROCKEY4ND,
         _("Use ROCKEY4 (evaluate version only) to protect application."));
     cb->SetValue(_rockey);
     optSizer->Add(cb, 0, wxALL | wxEXPAND, 5);
@@ -109,7 +100,7 @@ void ConfigPane::CreateControls()
     optSizer->Add(connectionSizer, 1, wxLEFT, 5);
     connectionSizer->Add(new wxStaticText(this, wxID_STATIC,
         _("Maximum connection with remote (0: no limit) ")), 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
-    wxSpinCtrl *connection = new wxSpinCtrl(this, ID_OPT_MAX_CONNECTION, wxEmptyString,
+    wxSpinCtrl *connection = new wxSpinCtrl(this, myID_OPT_MAX_CONNECTION, wxEmptyString,
         wxDefaultPosition, wxSize(40, -1), wxSP_ARROW_KEYS|wxSP_WRAP|wxALIGN_LEFT, 0, 10);
     connection->SetValue(_connections);
     connectionSizer->Add(connection, 0, wxALL|wxEXPAND, 0);
@@ -118,7 +109,7 @@ void ConfigPane::CreateControls()
     hoursSizer->Add(new wxStaticText(this, wxID_STATIC,
         _("Simulate lamp hour increase (0: don't increase. Unit: minutes) ")),
         0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
-    wxSpinCtrl *hours = new wxSpinCtrl(this, ID_OPT_HOURS_INTERVAL, wxEmptyString,
+    wxSpinCtrl *hours = new wxSpinCtrl(this, myID_OPT_HOURS_INTERVAL, wxEmptyString,
         wxDefaultPosition, wxSize(40, -1), wxSP_ARROW_KEYS|wxSP_WRAP|wxALIGN_LEFT, 0, 60);
     hours->SetValue(_hoursInterval);
     hoursSizer->Add(hours, 0, wxALL|wxEXPAND, 0);
@@ -129,7 +120,7 @@ void ConfigPane::CreateControls()
 // event handlers
 void ConfigPane::OnLangDefault(wxCommandEvent &event)
 {
-    wxListBox *list = wxDynamicCast(FindWindow(ID_LANG_SELECT), wxListBox);
+    wxListBox *list = wxDynamicCast(FindWindow(myID_LANG_SELECT), wxListBox);
 
     if (event.IsChecked())
         _language = eLANG_DEFAULT;
@@ -149,7 +140,7 @@ void ConfigPane::OnLangDefault(wxCommandEvent &event)
 
 void ConfigPane::OnUpdateLangSelect(wxUpdateUIEvent &event)
 {
-    wxCheckBox *chk = wxDynamicCast(FindWindow(ID_LANG_DEFAULT), wxCheckBox);
+    wxCheckBox *chk = wxDynamicCast(FindWindow(myID_LANG_DEFAULT), wxCheckBox);
     event.Enable(chk && !chk->IsChecked());
 }
 

@@ -3,6 +3,7 @@
 #include "SimCubeApp.h"
 #include "TrapPane.h"
 #include "led.h"
+#include "WidgetId.h"
 
 /////////////////////////////////////////////////////////////////////////////
 class LedStatusRadioBox : public wxRadioBox
@@ -291,36 +292,6 @@ LampLitCount::LampLitCount(wxWindow *parent, wxWindowID id, const wxString &dbSt
         SetBackgroundColour(*wxYELLOW);
 }
 /////////////////////////////////////////////////////////////////////////////
-
-enum
-{
-    myID_LED_POWER = wxID_HIGHEST + 200,
-    myID_LED_FAN,
-    myID_LED_LAMPA,
-    myID_LED_LAMPB,
-    myID_RB_LED_POWER,
-    myID_RB_LED_FAN,
-    myID_RB_LED_LAMPA,
-    myID_RB_LED_LAMPB,
-    myID_CHOICE_LED_PRESET,
-    myID_BTN_LEDSTATUS_SEND,
-    myID_BTN_LAMPASTATE_SEND,
-    myID_BTN_LAMPBSTATE_SEND,
-    myID_BTN_LAMPAHOURS_SEND,
-    myID_BTN_LAMPBHOURS_SEND,
-    myID_BTN_LAMPALITCNT_SEND,
-    myID_BTN_LAMPBLITCNT_SEND,
-    myID_BTN_LAMPATEMPCOND_SEND,
-    myID_BTN_LAMPBTEMPCOND_SEND,
-    myID_CHOICE_LAMPA_STATUS,
-    myID_CHOICE_LAMPB_STATUS,
-    myID_CHOICE_LAMPA_TEMPCOND,
-    myID_CHOICE_LAMPB_TEMPCOND,
-    myID_SPIN_LAMPA_HOURS,
-    myID_SPIN_LAMPB_HOURS,
-    myID_SPIN_LAMPA_LITCNT,
-    myID_SPIN_LAMPB_LITCNT,
-};
 
 TrapPane::TrapPane()
 {
