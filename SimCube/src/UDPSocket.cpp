@@ -23,7 +23,7 @@ UDPSocket& UDPSocket::SendToWithRecord(const wxIPV4address &addr,
         /* add into history record */
         HistoryData data;
         data.m_ip = addr.IPAddress();
-        data.m_host = addr.Hostname();
+        data.m_host = wxT("NotSupported"); //addr.Hostname();
         data.m_port = addr.Service();
         data.m_len = LastCount();
         data.m_msg = wxString::FromAscii(buf, nBytes);
