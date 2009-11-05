@@ -32,6 +32,7 @@ private:
     void OnLangSelect(wxCommandEvent &event);
     void OnAutoSaveHistory(wxCommandEvent &event);
     void OnUsingRockey4ND(wxCommandEvent &event);
+    void OnSkipVmwareAdapter(wxCommandEvent &event);
 
     /* helper functions */
     void TransferToDatabase(int);
@@ -49,6 +50,7 @@ private:
     bool _rockey;
     int _connections;
     int _hoursInterval;
+    bool _skipVmwareAdapter;
 
     DECLARE_EVENT_TABLE()
 };

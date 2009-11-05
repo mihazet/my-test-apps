@@ -66,6 +66,7 @@ enum
     myID_OPT_USING_ROCKEY4ND,
     myID_OPT_MAX_CONNECTION,
     myID_OPT_HOURS_INTERVAL,
+    myID_OPT_SKIP_VMWARE_ADAPTER,
 
     /* log */
 };

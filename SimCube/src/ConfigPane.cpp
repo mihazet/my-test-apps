@@ -11,6 +11,7 @@ enum
     update_rockey,
     update_connection,
     update_hours,
+    update_vmware,
 };
 
 BEGIN_EVENT_TABLE(ConfigPane, wxPanel)
@@ -19,6 +20,7 @@ BEGIN_EVENT_TABLE(ConfigPane, wxPanel)
     EVT_LISTBOX(myID_LANG_SELECT, ConfigPane::OnLangSelect)
     EVT_CHECKBOX(myID_OPT_AUTOSAVE_HISTORY, ConfigPane::OnAutoSaveHistory)
     EVT_CHECKBOX(myID_OPT_USING_ROCKEY4ND, ConfigPane::OnUsingRockey4ND)
+    EVT_CHECKBOX(myID_OPT_SKIP_VMWARE_ADAPTER, ConfigPane::OnSkipVmwareAdapter)
 END_EVENT_TABLE()
 
 ConfigPane::ConfigPane()
@@ -113,6 +115,10 @@ void ConfigPane::CreateControls()
         wxDefaultPosition, wxSize(40, -1), wxSP_ARROW_KEYS|wxSP_WRAP|wxALIGN_LEFT, 0, 60);
     hours->SetValue(_hoursInterval);
     hoursSizer->Add(hours, 0, wxALL|wxEXPAND, 0);
+    cb = new wxCheckBox(this, myID_OPT_SKIP_VMWARE_ADAPTER,
+        _("Skip network adapters created by VMWare."));
+    cb->SetValue(_skipVmwareAdapter);
+    optSizer->Add(cb, 0, wxALL | wxEXPAND, 5);
 
     SetSizerAndFit(allSizer);
 }
@@ -167,6 +173,12 @@ void ConfigPane::OnUsingRockey4ND(wxCommandEvent &event)
 {
     _rockey = event.IsChecked();
     TransferToDatabase(update_rockey);
+}
+
+void ConfigPane::OnSkipVmwareAdapter(wxCommandEvent &event)
+{
+    _skipVmwareAdapter = event.IsChecked();
+    TransferToDatabase(update_vmware);
 }
 
 // helper functions
@@ -237,6 +249,19 @@ void ConfigPane::TransferToDatabase(int item)
         if (1 != _cfgDB->ExecuteUpdate(sqlUpdate))
         {
             wxLogError(_("Fail to update lamp hours increase interval setting!"));
+        }
+        break;
+
+    case update_vmware:
+        sqlUpdate << wxT("UPDATE CfgTbl SET ConfigValue = ");
+        if (_skipVmwareAdapter)
+            sqlUpdate << wxT("'True' ");
+        else
+            sqlUpdate << wxT("'False' ");
+        sqlUpdate << wxT("WHERE ConfigName = 'SkipVMWareNetAdapter'");
+        if (1 != _cfgDB->ExecuteUpdate(sqlUpdate))
+        {
+            wxLogError(_("Fail to update skip vmware netadapter setting!"));
         }
         break;
 
@@ -315,5 +340,20 @@ void ConfigPane::TransferFromDatabase()
     else
         _hoursInterval = 0;
     set.Finalize();
+
+    /* skip vmware network adapter */
+    sqlQuery.clear();
+    sqlQuery << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'SkipVMWareNetAdapter'");
+    set = _cfgDB->ExecuteQuery(sqlQuery);
+    if (set.NextRow())
+        value = set.GetAsString(0);
+    set.Finalize();
+
+    if ((value == wxT("True")) || (value == wxT("Yes")))
+        _skipVmwareAdapter = true;
+    else if ((value == wxT("False")) || (value == wxT("No")))
+        _skipVmwareAdapter = false;
+    else
+        _skipVmwareAdapter = true;
 }
 
