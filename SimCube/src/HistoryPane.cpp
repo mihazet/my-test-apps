@@ -101,11 +101,11 @@ void HistoryPane::CreateControls()
     save->SetToolTip(_("Save history"));
     wxBitmapButton *del = new wxBitmapButton(this, myID_BTN_DELETE_HISTORY, wxBitmap(delete_16_xpm));
     del->SetToolTip(_("Delete history"));
-    wxBitmapButton *resolve = new wxBitmapButton(this, myID_BTN_RESOLVE_ADDRESS, 
+    wxBitmapButton *resolve = new wxBitmapButton(this, myID_BTN_RESOLVE_ADDRESS,
         wxGetApp().m_HistoryData->IsAddressResolved()
             ? wxBitmap(*_resolveAddrBtnImg) : wxBitmap(_resolveAddrBtnImg->ConvertToGreyscale()));
     resolve->SetToolTip(wxGetApp().m_HistoryData->IsAddressResolved()
-        ? _("Address is resolved") 
+        ? _("Address is resolved")
         : _("Address is not resolved"));
     wxBitmapButton *scroll = new wxBitmapButton(this, myID_BTN_AUTOSCROLL,
         _historyAutoScroll ? wxBitmap(*_autoScrollBtnImg) : wxBitmap(_autoScrollBtnImg->ConvertToGreyscale()));
@@ -254,7 +254,7 @@ void HistoryDataModel::GetValueByRow(wxVariant &variant,
         case HISTORY_DATA_ID: sqlQuery << wxT("Id"); break;
         case HISTORY_DATA_TIMESTAMP: sqlQuery << wxT("Timestamp"); break;
         case HISTORY_DATA_DIRECTION: sqlQuery << wxT("Direction"); break;
-        case HISTORY_DATA_REMOTE: 
+        case HISTORY_DATA_REMOTE:
             if (_resolveAddress)
                 sqlQuery << wxT("Host");
             else

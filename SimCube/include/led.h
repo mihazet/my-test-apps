@@ -75,25 +75,25 @@ private:
     }
     void OnErase(wxEraseEvent &WXUNUSED(event))
     {
-	   Redraw();
+       Redraw();
     }
     void OnPaint(wxPaintEvent &WXUNUSED(event))
     {
-	   wxPaintDC dc(this);
-	   dc.DrawBitmap(*m_bitmap, 0, 0, false);
+       wxPaintDC dc(this);
+       dc.DrawBitmap(*m_bitmap, 0, 0, false);
     }
     void OnSize(wxSizeEvent &event)
     {
-	   wxSize size = event.GetSize();
-	   m_x = wxMax(0, ((size.GetX() - m_icons[0]->GetWidth()) >> 1));
-	   m_y = wxMax(0, ((size.GetY() - m_icons[0]->GetHeight()) >> 1));
-	   DrawOnBitmap();
+       wxSize size = event.GetSize();
+       m_x = wxMax(0, ((size.GetX() - m_icons[0]->GetWidth()) >> 1));
+       m_y = wxMax(0, ((size.GetY() - m_icons[0]->GetHeight()) >> 1));
+       DrawOnBitmap();
     }
     void Redraw()
     {
-	   wxClientDC dc(this);
-	   DrawOnBitmap();
-	   dc.DrawBitmap(*m_bitmap, 0, 0, false);
+       wxClientDC dc(this);
+       DrawOnBitmap();
+       dc.DrawBitmap(*m_bitmap, 0, 0, false);
     }
 
     DECLARE_EVENT_TABLE()

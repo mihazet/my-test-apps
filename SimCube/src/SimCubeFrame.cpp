@@ -61,7 +61,7 @@ void SimCubeAboutDialog::CreateControls()
     msg << _("SimCube - A Cube Simulator");
     descTextSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxALL, 5);
     msg.clear();
-    msg << _("Version ") 
+    msg << _("Version ")
         << wxT(SCVER_MAJOR_STRING) << wxT(".") << wxT(SCVER_MINOR_STRING) << wxT(".")
         << wxT(SCVER_RELEASE_STRING) << _(" (build ") << wxT(SCVER_BUILD_STRING)
         << _("), compiled at ") << wxT(SC_BUILDDATE_STRING);
@@ -75,7 +75,7 @@ void SimCubeAboutDialog::CreateControls()
     msg.clear();
     msg << _("If I were a cube..., but I am not a real cube, just a simulated cube.");
     allSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxBOTTOM|wxLEFT|wxRIGHT, 15);
-   
+
     /* library info */
     wxStaticBoxSizer *lib = new wxStaticBoxSizer(wxVERTICAL, this, _("Libraries Info "));
     allSizer->Add(lib, 0, wxALL | wxEXPAND, 5);

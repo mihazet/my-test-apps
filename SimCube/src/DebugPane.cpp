@@ -47,7 +47,7 @@ void DebugPane::CreateControls()
         wxDefaultPosition, wxDefaultSize,
         wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH2);
     allSizer->Add(_logTextCtrl, 1, wxTOP|wxBOTTOM|wxLEFT|wxEXPAND, 5);
-  
+
     /* ctrl buttons */
     wxBoxSizer *ctrlSizer = new wxBoxSizer(wxVERTICAL);
     allSizer->Add(ctrlSizer, 0, wxALL|wxEXPAND, 0);

@@ -91,7 +91,7 @@ void SimCubeStatusBar::OnAdaptersLUp(wxMouseEvent &WXUNUSED(event))
     {
         // adapter id and name
         line.clear();
-        line << wxT("\n ") << _("Adapter") << wxT("[") << i << wxT("] (") 
+        line << wxT("\n ") << _("Adapter") << wxT("[") << i << wxT("] (")
             << it->GetName() << wxT(")");
         maxLenInPixel = wxMax(maxLenInPixel, GetTextExtent(line).GetWidth());
         info << line;

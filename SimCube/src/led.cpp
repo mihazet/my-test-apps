@@ -99,7 +99,7 @@ void awxLed::DrawOnBitmap()
     if ((m_bitmap->GetWidth() != s.GetWidth())
         || (m_bitmap->GetHeight() != s.GetHeight()))
     {
-	   m_bitmap->Create(s.x, s.y);
+       m_bitmap->Create(s.x, s.y);
     }
     wxMemoryDC dc;
     dc.SelectObject(*m_bitmap);
@@ -128,7 +128,7 @@ void awxLed::UpdateStateAndColors(awxLedState state, awxLedColor color1,
         m_color[1] = color2;
 
         if ((m_state == awxLED_STATE_BLINK) && !m_timer->IsRunning())
-	        m_timer->Start(500);
+            m_timer->Start(500);
         else if ((m_state == awxLED_STATE_FIX) && m_timer->IsRunning())
         {
             for (wxVector<awxLed *>::iterator it = m_allLeds.begin();

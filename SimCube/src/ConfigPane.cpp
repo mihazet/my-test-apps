@@ -305,7 +305,7 @@ void ConfigPane::TransferFromDatabase()
     else
         _connections = 0;
     set.Finalize();
-    
+
     /* lamp housr increase interval */
     sqlQuery.clear();
     sqlQuery << wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'LampHoursIncreaseInterval'");
