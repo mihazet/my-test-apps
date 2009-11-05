@@ -24,8 +24,14 @@ public:
     wxTextCtrl *GetLogTextCtrl() { return _logTextCtrl; }
 
 private:
+    // helper functions
     void Init();
     void CreateControls();
+    bool IsVerbose();
+    void SetVerbose(bool verbose = true);
+
+    // event handlers
+    void OnVerbose(wxCommandEvent &event);
 
 private:
     wxTextCtrl *_logTextCtrl;

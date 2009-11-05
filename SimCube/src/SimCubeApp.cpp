@@ -745,6 +745,7 @@ void SimCubeApp::InitDatabase(eDB db)
             << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"FrameH\", \"-1\");")
             << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"Perspective\", \"\");")
             << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"DefaultPerspective\", \"\");")
+            << wxT("INSERT OR IGNORE INTO CfgTbl VALUES (\"DebugVerbose\", \"0\");")
             << wxT("COMMIT TRANSACTION;");
         _configDB->ExecuteUpdate(sql);
         break;
