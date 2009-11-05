@@ -99,6 +99,7 @@ private:
     UDPProtocol *_udpProtocol;
     TCPProtocol *_tcpProtocol;
     bool _usingRockey;
+    bool _skipVmwareNetworkAdapter;
 
     DECLARE_EVENT_TABLE()
 };

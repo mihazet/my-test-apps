@@ -267,6 +267,21 @@ void SimCubeApp::Init()
     else
         _usingRockey = false;
     set.Finalize();
+    // skip vmware network adapter
+    set = _configDB->ExecuteQuery(wxT("SELECT ConfigValue FROM CfgTbl WHERE ConfigName = 'SkipVMWareNetAdapter'"));
+    if (set.NextRow())
+    {
+        setting = set.GetAsString(0);
+        if ((setting == wxT("True")) || (setting == wxT("Yes")))
+            _skipVmwareNetworkAdapter = true;
+        else if ((setting == wxT("False")) || (setting == wxT("No")))
+            _skipVmwareNetworkAdapter = false;
+        else
+            _skipVmwareNetworkAdapter = true;
+    }
+    else
+        _skipVmwareNetworkAdapter = true;
+    set.Finalize();
 
     /* other data members */
     _locale = NULL;
@@ -458,6 +473,11 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
         if (pAdapter->Type == MIB_IF_TYPE_ETHERNET)
         {
             name = wxString(pAdapter->Description, *wxConvCurrent);
+            /* skip by adapter description */
+            if (_skipVmwareNetworkAdapter 
+                && name.Matches(wxT("VMware Virtual Ethernet Adapter*")))
+                continue;
+            /* iterate ip address list */
             for (pIpAddrString = &pAdapter->IpAddressList;
                 pIpAddrString != NULL;
                 pIpAddrString = pIpAddrString->Next)
