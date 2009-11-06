@@ -189,22 +189,42 @@ void TCPProtocol::OnSocketEvent(wxSocketEvent &event)
         {
         case wxSOCKET_INPUT:
             tcpSocket->Read(rxBuf, sizeof(tst_LOAD_HEADER));
-            stp_load_header = (tst_LOAD_HEADER *)rxBuf;
-            if (stp_load_header->u32Payload)
-                tcpSocket->Read(rxBuf + sizeof(tst_LOAD_HEADER), stp_load_header->u32Payload);
-
-            // Default response: same header as request
-            memcpy(txBuf, rxBuf, sizeof(tst_LOAD_HEADER));
-
-            // Process data
-            ProcessDownloadModeProtocol((void *)rxBuf, (void *)txBuf);
-
-            // Send response
-            tcpSocket->Write((void *)txBuf, sizeof(tst_LOAD_HEADER));
             if (tcpSocket->Error())
-                wxLogError(_("Fail to write data via tcp socket 0x%p, error = %d."), tcpSocket, tcpSocket->LastError());
+            {
+                wxLogError(_("Fail to read load header via tcp socket 0x%p, error = %d."), tcpSocket, tcpSocket->LastError());
+            }
             else
-                wxLogVerbose(_("Success write data (%d bytes) via tcp socket 0x%p."), tcpSocket->LastCount(), tcpSocket);
+            {
+                stp_load_header = (tst_LOAD_HEADER *)rxBuf;
+                wxLogVerbose(_("Success to read load header, optional payload size = %lu."), 
+                    wxUINT32_SWAP_ON_LE(stp_load_header->u32Payload));
+                if (wxUINT32_SWAP_ON_LE(stp_load_header->u32Payload))
+                {
+                    tcpSocket->Read(rxBuf + sizeof(tst_LOAD_HEADER), wxUINT32_SWAP_ON_LE(stp_load_header->u32Payload));
+                    if (tcpSocket->Error())
+                    {
+                        wxLogError(_("Fail to read optional payload via tcp socket 0x%p, error = %d."), tcpSocket, tcpSocket->LastError());
+                    }
+                    else
+                    {
+                        wxUint32 count = tcpSocket->LastCount();
+                        wxLogVerbose(_("Success to read optional payload (%lu bytes) vai tcp socket 0x%p."), count, tcpSocket);
+                    }
+                }
+
+                // Default response: same header as request
+                memcpy(txBuf, rxBuf, sizeof(tst_LOAD_HEADER));
+
+                // Process data
+                ProcessDownloadModeProtocol((void *)rxBuf, (void *)txBuf);
+
+                // Send response
+                tcpSocket->Write((void *)txBuf, sizeof(tst_LOAD_HEADER));
+                if (tcpSocket->Error())
+                    wxLogError(_("Fail to write data via tcp socket 0x%p, error = %d."), tcpSocket, tcpSocket->LastError());
+                else
+                    wxLogVerbose(_("Success write data (%d bytes) via tcp socket 0x%p."), tcpSocket->LastCount(), tcpSocket);
+            }
             break;
 
         case wxSOCKET_LOST:
@@ -232,7 +252,7 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
         5, // retry num
         4, // receive timer
         6, // response timer
-        0x10 // little endian
+        0 // big endian
     };
     unsigned char byMode;
     unsigned short u16Err = 2;
@@ -250,14 +270,14 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
         st_response_ctrl_packet.stp_ctrl_header->byProtocolId = SOI_BOOT_CTRL_RESPONSE;
         st_response_ctrl_packet.stp_ctrl_header->byAppType = 0;
         st_response_ctrl_packet.stp_ctrl_header->byAppId = 0;
-        st_response_ctrl_packet.stp_ctrl_header->u32Reserved = 0;
+        st_response_ctrl_packet.stp_ctrl_header->u32Reserved = wxUINT32_SWAP_ON_LE(0);
 
         if (stp_load_header->byAppType == SOI_BOOT_CTRL_CONNECT)
         {
             st_response_ctrl_packet.stp_ctrl_header->byControlId
                 = SOI_BOOT_CTRL_ACK_CONNECT;
             st_response_ctrl_packet.stp_ctrl_header->u32Payload
-                = SOI_BOOT_MAX_RX_SIZE;
+                = wxUINT32_SWAP_ON_LE(SOI_BOOT_MAX_RX_SIZE);
             memcpy(&(st_response_ctrl_packet.stp_ctrl_header->u32SeqNo),
                 &byaInitParam[0], 4);
         }
@@ -272,7 +292,7 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
         // Default response packet
         memcpy((unsigned char *)st_response_load_packet.stp_load_header,
             (unsigned char *)stp_load_header, sizeof(tst_LOAD_HEADER));
-        st_response_load_packet.stp_load_header->u32Chksum = 0;
+        st_response_load_packet.stp_load_header->u32Chksum = wxUINT32_SWAP_ON_LE(0);
 
         if (stp_load_header->byAppType == SOI_BOOT_LOAD_APPTYPE)
         {
@@ -312,10 +332,10 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
                 // copy input to the load buffer
                 bypPayload = (unsigned char *)pIn + sizeof(tst_LOAD_HEADER);
                 memcpy(pst_buffer_load->byp_load_buffer + pst_buffer_load->u32_load_offset,
-                    bypPayload, stp_load_header->u32Payload);
-                pst_buffer_load->u32_total_load += stp_load_header->u32Payload;
+                    bypPayload, wxUINT32_SWAP_ON_LE(stp_load_header->u32Payload));
+                pst_buffer_load->u32_total_load += wxUINT32_SWAP_ON_LE(stp_load_header->u32Payload);
                 if (stp_load_header->u16SeqNo != 0xFFFF)
-                    pst_buffer_load->u32_load_offset += stp_load_header->u32Payload;
+                    pst_buffer_load->u32_load_offset += wxUINT32_SWAP_ON_LE(stp_load_header->u32Payload);
                 else
                 {
                     // Full load is received
@@ -354,6 +374,10 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
         st_response_load_packet.stp_load_header->u32Payload = 0;
         st_response_load_packet.stp_load_header->u16Error = u16Err;
         break;
+
+    //default:
+    //    wxLogError(_("Undefined SOI Updater protocol: 0x%X. Don't know how to process!"),
+    //        stp_load_header->byProtocolId);
     }
     return true;
 }
