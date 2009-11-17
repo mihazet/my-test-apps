@@ -230,10 +230,10 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% wxmsw29ud_ribbon.lib"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,include,include/ctb"</string>
+          <string name="Include path">"%AUTO%,include,resource,include/ctb"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
@@ -302,10 +302,10 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% wxmsw29u_ribbon.lib"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,include,include/ctb"</string>
+          <string name="Include path">"%AUTO%,include,resource,include/ctb"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>

@@ -7,9 +7,19 @@
 
 #include "SimCL200Frame.h"
 
+#include "port_32_16.xpm"
+#include "baud_32_16.xpm"
+#include "csize_32_16.xpm"
+#include "parity_32_16.xpm"
+#include "stopb_32_16.xpm"
+
 enum
 {
-    myID_ = wxID_HIGHEST + 1,
+    myID_PORT = wxID_HIGHEST + 1,
+    myID_BAUDRATE,
+    myID_CHARSIZE,
+    myID_STOPBITS,
+    myID_PARITY,
 };
 
 IMPLEMENT_CLASS(SimCL200Frame, wxFrame)
@@ -50,16 +60,34 @@ void SimCL200Frame::Init()
 
 void SimCL200Frame::CreateControls()
 {
-    wxBoxSizer *frameSizer = new wxBoxSizer(wxHORIZONTAL);
-    wxPanel *basePanel = new wxPanel(this);
-    frameSizer->Add(basePanel, 1, wxEXPAND | wxALL, 0);
-    wxBoxSizer *basePanelSizer = new wxBoxSizer(wxVERTICAL);
-    basePanel->SetSizer(basePanelSizer);
-    wxButton *btn = new wxButton(basePanel, wxID_ANY, wxT("Test Button"));
-    basePanelSizer->Add(btn, 0, wxEXPAND | wxALL, 5);
-    wxButton *btn2 = new wxButton(basePanel, wxID_ANY, wxT("Another Button"));
-    basePanelSizer->Add(btn2, 0, wxEXPAND | wxALL, 5);
-    
+    m_ribbon = new wxRibbonBar(this);
+
+    /* serial port page */
+    wxRibbonPage *portPage = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("SerialPort"));
+    wxRibbonPanel *configPanel = new wxRibbonPanel(portPage, wxID_ANY, wxT("Configuration"), wxNullBitmap,
+        wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+    wxRibbonToolBar *configToolBar = new wxRibbonToolBar(configPanel);
+    configToolBar->AddTool(wxID_ANY, port_32_16_xpm);
+    configToolBar->AddTool(wxID_ANY, baud_32_16_xpm);
+    configToolBar->AddTool(wxID_ANY, csize_32_16_xpm);
+    configToolBar->AddTool(wxID_ANY, parity_32_16_xpm);
+    configToolBar->AddTool(wxID_ANY, stopb_32_16_xpm);
+    configToolBar->SetRows(1, 2);
+
+    new wxRibbonPanel(portPage, wxID_ANY, wxT("Connection"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
+
+    /* dummy page */
+    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("CL-200"));
+
+    m_ribbon->Realize();
+
+    wxTextCtrl *log = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+        wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxTE_LEFT | wxTE_BESTWRAP | wxBORDER_NONE);
+
+    wxSizer *frameSizer = new wxBoxSizer(wxVERTICAL);
+    frameSizer->Add(m_ribbon, 0, wxEXPAND);
+    frameSizer->Add(log, 1, wxEXPAND);
+
     SetSizerAndFit(frameSizer);
 }
 

@@ -2,6 +2,10 @@
 #define _SIMCL200FRAME_H_
 
 #include <wx/wx.h>
+#include <wx/ribbon/bar.h>
+#include <wx/ribbon/buttonbar.h>
+#include <wx/ribbon/toolbar.h>
+#include <wx/ribbon/gallery.h>
 
 class SimCL200Frame: public wxFrame
 {    
@@ -28,7 +32,9 @@ private:
     void Init();
     void CreateControls();
 
-    DECLARE_CLASS( SimCL200Frame )
+    wxRibbonBar *m_ribbon;
+
+    DECLARE_CLASS(SimCL200Frame)
     DECLARE_EVENT_TABLE()
 };
 
