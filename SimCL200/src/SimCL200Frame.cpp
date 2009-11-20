@@ -243,7 +243,30 @@ void SimCL200Frame::ProcessCL200ShortMessage(unsigned char *msg)
 
 void SimCL200Frame::ProcessCL200LongMessage(unsigned char *msg)
 {
-    wxLogDebug(wxT("Long Message"));
+    unsigned char idealBCC = CalculateBCC(&msg[1], 27);
+    unsigned char receivedBCC = 0;
+    
+    if ((msg[28] >= '0') && (msg[28] <= '9'))
+        receivedBCC += ((msg[28] - '0') << 4);
+    else if ((msg[28] > 'A') && (msg[28] <= 'F'))
+        receivedBCC += ((msg[28] - 'A' + 10) << 4);
+    else if ((msg[28] > 'a') && (msg[28] <= 'f'))
+        receivedBCC += ((msg[28] - 'a' + 10) << 4);
+    if ((msg[29] >= '0') && (msg[29] <= '9'))
+        receivedBCC += (msg[29] - '0');
+    else if ((msg[29] > 'A') && (msg[29] <= 'F'))
+        receivedBCC += (msg[29] - 'A' + 10);
+    else if ((msg[29] > 'a') && (msg[29] <= 'f'))
+        receivedBCC += (msg[29] - 'a' + 10);
+
+    if (idealBCC != receivedBCC)
+    {
+        wxLogDebug(wxT("BCC mis-match!!!"));
+    }
+    else
+    {
+
+    }
 }
 
 void SimCL200Frame::OnReadSerialPortTimer(wxTimerEvent &event)
