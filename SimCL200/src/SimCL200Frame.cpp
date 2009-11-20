@@ -237,7 +237,29 @@ void SimCL200Frame::ProcessCL200ShortMessage(unsigned char *msg)
     }
     else
     {
-
+        if ((msg[3] == '5') && (msg[4] == '4')) // PC connect mode ON OFF
+        {
+            if ((msg[1] == '9') && (msg[2] == '9'))
+            {
+                if ((msg[5] == '1') && (msg[6] == ' ') && (msg[7] == ' ') && (msg[8] == ' ')) // On
+                {
+                    msg[5] = ' ';
+                    idealBCC = CalculateBCC(&msg[1], 9);
+                    if (((idealBCC >> 4) & 0xF) >= 10)
+                        msg[10] = 'A' + ((idealBCC >> 4) & 0xF) - 10;
+                    else
+                        msg[10] = '0' + ((idealBCC >> 4) & 0xF);
+                    if ((idealBCC & 0xF) >= 10)
+                        msg[11] = 'A' + (idealBCC & 0xF) - 10;
+                    else
+                        msg[11] = '0' + (idealBCC & 0xF);
+                    if (14 != m_port->Write((char *)&msg[0], 14))
+                    {
+                        wxLogDebug(wxT("Send PC CONNECT ack fail"));
+                    }
+                }
+            }
+        }
     }
 }
 
