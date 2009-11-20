@@ -215,6 +215,7 @@ void SimCL200Frame::ProcessCL200ShortMessage(unsigned char *msg)
     wxLogDebug(wxT("Short Message: %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X"),
         msg[0], msg[1], msg[2], msg[3], msg[4], msg[5], msg[6], msg[7], msg[8], msg[9], msg[10], msg[11], msg[12], msg[13]);
 
+    char responseBuffer[32];
     unsigned char idealBCC = CalculateBCC(&msg[1], 9);
     unsigned char receivedBCC = 0;
     
@@ -243,22 +244,31 @@ void SimCL200Frame::ProcessCL200ShortMessage(unsigned char *msg)
             {
                 if ((msg[5] == '1') && (msg[6] == ' ') && (msg[7] == ' ') && (msg[8] == ' ')) // On
                 {
-                    msg[5] = ' ';
-                    idealBCC = CalculateBCC(&msg[1], 9);
+                    memcpy(&responseBuffer[0], &msg[0], 14);
+                    responseBuffer[5] = ' ';
+                    idealBCC = CalculateBCC((unsigned char *)&responseBuffer[1], 9);
                     if (((idealBCC >> 4) & 0xF) >= 10)
-                        msg[10] = 'A' + ((idealBCC >> 4) & 0xF) - 10;
+                        responseBuffer[10] = 'A' + ((idealBCC >> 4) & 0xF) - 10;
                     else
-                        msg[10] = '0' + ((idealBCC >> 4) & 0xF);
+                        responseBuffer[10] = '0' + ((idealBCC >> 4) & 0xF);
                     if ((idealBCC & 0xF) >= 10)
-                        msg[11] = 'A' + (idealBCC & 0xF) - 10;
+                        responseBuffer[11] = 'A' + (idealBCC & 0xF) - 10;
                     else
-                        msg[11] = '0' + (idealBCC & 0xF);
-                    if (14 != m_port->Write((char *)&msg[0], 14))
+                        responseBuffer[11] = '0' + (idealBCC & 0xF);
+                    if (14 != m_port->Write(&responseBuffer[0], 14))
                     {
                         wxLogDebug(wxT("Send PC CONNECT ack fail"));
                     }
                 }
             }
+        }
+        else if ((msg[3] == '5') && (msg[4] == '5')) // Hold ON OFF
+        {
+
+        }
+        else if ((msg[3] == '4') && (msg[4] == '0')) // EXT mode
+        {
+
         }
     }
 }
