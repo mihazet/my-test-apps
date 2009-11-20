@@ -32,6 +32,9 @@ private:
     void Init();
     void CreateControls();
 
+    void OnBaudRateClicked(wxRibbonButtonBarEvent &event);
+    void OnBaudRateDropDown(wxRibbonButtonBarEvent &event);
+
     wxRibbonBar *m_ribbon;
 
     DECLARE_CLASS(SimCL200Frame)

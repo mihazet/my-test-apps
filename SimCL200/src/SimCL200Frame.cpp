@@ -25,6 +25,8 @@ enum
 IMPLEMENT_CLASS(SimCL200Frame, wxFrame)
 
 BEGIN_EVENT_TABLE(SimCL200Frame, wxFrame)
+    EVT_RIBBONBUTTONBAR_CLICKED(myID_BAUDRATE, SimCL200Frame::OnBaudRateClicked)
+    EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED(myID_BAUDRATE, SimCL200Frame::OnBaudRateDropDown)
 END_EVENT_TABLE()
 
 SimCL200Frame::SimCL200Frame()
@@ -60,21 +62,29 @@ void SimCL200Frame::Init()
 
 void SimCL200Frame::CreateControls()
 {
+    SetStatusBar(CreateStatusBar());
+
     m_ribbon = new wxRibbonBar(this);
 
     /* serial port page */
     wxRibbonPage *portPage = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("SerialPort"));
-    wxRibbonPanel *configPanel = new wxRibbonPanel(portPage, wxID_ANY, wxT("Configuration"), wxNullBitmap,
+    wxRibbonPanel *connectionPanel = new wxRibbonPanel(portPage, wxID_ANY, wxT("Connection"), wxNullBitmap,
         wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
-    wxRibbonToolBar *configToolBar = new wxRibbonToolBar(configPanel);
-    configToolBar->AddTool(wxID_ANY, port_32_16_xpm);
-    configToolBar->AddTool(wxID_ANY, baud_32_16_xpm);
-    configToolBar->AddTool(wxID_ANY, csize_32_16_xpm);
-    configToolBar->AddTool(wxID_ANY, parity_32_16_xpm);
-    configToolBar->AddTool(wxID_ANY, stopb_32_16_xpm);
-    configToolBar->SetRows(1, 2);
-
-    new wxRibbonPanel(portPage, wxID_ANY, wxT("Connection"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
+    wxRibbonToolBar *connectionToolBar = new wxRibbonToolBar(connectionPanel);
+    connectionToolBar->AddTool(wxID_ANY, port_32_16_xpm, wxT("Serial port selection"), wxRIBBON_BUTTON_HYBRID);
+    connectionToolBar->AddTool(wxID_ANY, port_32_16_xpm, wxT("Scan all not used port on system")); // scan
+    connectionToolBar->AddSeparator();
+    connectionToolBar->AddTool(wxID_ANY, port_32_16_xpm, wxT("Connect to specific port")); // connect
+    connectionToolBar->AddTool(wxID_ANY, port_32_16_xpm, wxT("Disconnect with specific port")); // disconnect
+    connectionToolBar->SetRows(2, 3);
+    
+    wxRibbonPanel *configPanel = new wxRibbonPanel(portPage, wxID_ANY, wxT("Configuration"), wxNullBitmap,
+        wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_DEFAULT_STYLE);
+    wxRibbonButtonBar *configBtnBar = new wxRibbonButtonBar(configPanel);
+    configBtnBar->AddButton(myID_BAUDRATE, wxT("Baud Rate"), baud_32_16_xpm, wxT("Baud Rate Selection"), wxRIBBON_BUTTON_HYBRID);
+    configBtnBar->AddButton(myID_CHARSIZE, wxT("Char Size"), csize_32_16_xpm, wxT("Character Size Selection"));
+    configBtnBar->AddButton(myID_PARITY, wxT("Parity"), parity_32_16_xpm, wxT("Parity Selection"), wxRIBBON_BUTTON_DROPDOWN);
+    configBtnBar->AddButton(myID_STOPBITS, wxT("Stop Bit"), stopb_32_16_xpm, wxT("Stop Bit Selection"));
 
     /* dummy page */
     new wxRibbonPage(m_ribbon, wxID_ANY, wxT("CL-200"));
@@ -91,3 +101,15 @@ void SimCL200Frame::CreateControls()
     SetSizerAndFit(frameSizer);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Event handlers
+///////////////////////////////////////////////////////////////////////////////////////////////////
+void SimCL200Frame::OnBaudRateClicked(wxRibbonButtonBarEvent &WXUNUSED(event))
+{
+    wxLogDebug(wxT("Baud rate button clicked"));
+}
+
+void SimCL200Frame::OnBaudRateDropDown(wxRibbonButtonBarEvent &WXUNUSED(event))
+{
+    wxLogDebug(wxT("Baud rate drop down clicked"));
+}
