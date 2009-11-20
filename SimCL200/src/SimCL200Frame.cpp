@@ -161,6 +161,9 @@ void SimCL200Frame::OnBaudRateDropDown(wxRibbonButtonBarEvent &WXUNUSED(event))
     wxLogDebug(wxT("Baud rate drop down clicked"));
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+// CL200 Protocol helper functions
+/////////////////////////////////////////////////////////////////////////////////////////////
 void SimCL200Frame::AppendDataToRingBuffer(unsigned char *buf, size_t len)
 {
     unsigned long len1, len2;
@@ -196,10 +199,46 @@ unsigned char SimCL200Frame::GetDataAtRingBufferOffset(unsigned long offset)
         return m_ringBuffer[pos];
 }
 
+unsigned char SimCL200Frame::CalculateBCC(unsigned char *msg, size_t len)
+{
+    unsigned char bcc;
+    size_t loop;
+
+    for (bcc = 0, loop = 0; loop < len; loop++)
+        bcc ^=  msg[loop];
+
+    return bcc;
+}
+
 void SimCL200Frame::ProcessCL200ShortMessage(unsigned char *msg)
 {
     wxLogDebug(wxT("Short Message: %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X"),
         msg[0], msg[1], msg[2], msg[3], msg[4], msg[5], msg[6], msg[7], msg[8], msg[9], msg[10], msg[11], msg[12], msg[13]);
+
+    unsigned char idealBCC = CalculateBCC(&msg[1], 9);
+    unsigned char receivedBCC = 0;
+    
+    if ((msg[10] >= '0') && (msg[10] <= '9'))
+        receivedBCC += ((msg[10] - '0') << 4);
+    else if ((msg[10] > 'A') && (msg[10] <= 'F'))
+        receivedBCC += ((msg[10] - 'A' + 10) << 4);
+    else if ((msg[10] > 'a') && (msg[10] <= 'f'))
+        receivedBCC += ((msg[10] - 'a' + 10) << 4);
+    if ((msg[11] >= '0') && (msg[11] <= '9'))
+        receivedBCC += (msg[11] - '0');
+    else if ((msg[11] > 'A') && (msg[11] <= 'F'))
+        receivedBCC += (msg[11] - 'A' + 10);
+    else if ((msg[11] > 'a') && (msg[11] <= 'f'))
+        receivedBCC += (msg[11] - 'a' + 10);
+
+    if (idealBCC != receivedBCC)
+    {
+        wxLogDebug(wxT("BCC mis-match!!!"));
+    }
+    else
+    {
+
+    }
 }
 
 void SimCL200Frame::ProcessCL200LongMessage(unsigned char *msg)

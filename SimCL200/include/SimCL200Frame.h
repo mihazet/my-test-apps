@@ -42,6 +42,7 @@ private:
     void AppendDataToRingBuffer(unsigned char *buf, size_t len);
     void ParseDataLengthFinish(unsigned long len);
     unsigned char GetDataAtRingBufferOffset(unsigned long offset);
+    unsigned char CalculateBCC(unsigned char *msg, size_t len);
     void ProcessCL200ShortMessage(unsigned char *msg);
     void ProcessCL200LongMessage(unsigned char *msg);
 
