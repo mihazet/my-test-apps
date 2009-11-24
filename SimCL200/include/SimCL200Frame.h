@@ -53,6 +53,12 @@ private:
     unsigned long m_parseIndex;
     unsigned long m_appendIndex;
     wxDateTime m_previousAppendTime;
+    unsigned char m_headNo10;
+    unsigned char m_headNo01;
+    bool m_pcConnectMode;
+    bool m_holdState;
+    bool m_extMode;
+    bool m_responseReturn;
 
     DECLARE_CLASS(SimCL200Frame)
     DECLARE_EVENT_TABLE()

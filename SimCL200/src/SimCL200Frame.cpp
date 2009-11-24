@@ -85,6 +85,14 @@ SimCL200Frame::~SimCL200Frame()
 
 void SimCL200Frame::Init()
 {
+    /* CL200 parameter */
+    m_headNo10 = '0';
+    m_headNo01 = '0';
+    m_pcConnectMode = false;
+    m_holdState = false;
+    m_extMode = false;
+    m_responseReturn = true;
+
     /* ring buffer */
     m_ringBuffer = new unsigned char[RING_BUFFER_SIZE];
     m_parseIndex = m_appendIndex = 0;
@@ -242,7 +250,8 @@ void SimCL200Frame::ProcessCL200ShortMessage(unsigned char *msg)
         {
             if ((msg[1] == '9') && (msg[2] == '9'))
             {
-                if ((msg[5] == '1') && (msg[6] == ' ') && (msg[7] == ' ') && (msg[8] == ' ')) // On
+                if (((msg[5] == '1') && (msg[6] == ' ') && (msg[7] == ' ') && (msg[8] == ' ')) // On
+                    || ((msg[5] == '0') && (msg[6] == ' ') && (msg[7] == ' ') && (msg[8] == ' '))) // Off
                 {
                     memcpy(&responseBuffer[0], &msg[0], 14);
                     responseBuffer[5] = ' ';
@@ -259,16 +268,89 @@ void SimCL200Frame::ProcessCL200ShortMessage(unsigned char *msg)
                     {
                         wxLogDebug(wxT("Send PC CONNECT ack fail"));
                     }
+                    else
+                    {
+                        wxLogDebug(wxT("Send PC CONNECT ack ok"));
+                    }
+
+                    /* update pc connect mode */
+                    if (msg[5] == '1')
+                        m_pcConnectMode = true;
+                    else
+                        m_pcConnectMode = false;
                 }
             }
         }
         else if ((msg[3] == '5') && (msg[4] == '5')) // Hold ON OFF
         {
+            if (((msg[1] == '9') && (msg[2] == '9'))
+                || ((msg[1] == m_headNo10) && (msg[2] == m_headNo01)))
+            {
+                if (((msg[5] == '1') && (msg[6] == ' ') && (msg[7] == ' ') && (msg[8] == '1')) // On
+                    || ((msg[5] == '1') && (msg[6] == ' ') && (msg[7] == ' ') && (msg[8] == '0'))) // Off
+                {
+                    if (msg[8] == '1')
+                        m_holdState = true;
+                    else
+                        m_holdState = false;
 
+                    wxLogDebug(wxT("Hold on/off ok"));
+                }
+            }
         }
         else if ((msg[3] == '4') && (msg[4] == '0')) // EXT mode
         {
+            if (((msg[1] == '9') && (msg[2] == '9'))
+                || ((msg[1] == m_headNo10) && (msg[2] == m_headNo01)))
+            {
+                if (((msg[5] == '0') || (msg[5] == '1') || (msg[5] == '2')) 
+                    && ((msg[6] == '0') || (msg[6] == '1')) 
+                    && (msg[7] == ' ') && (msg[8] == ' '))
+                {
+                    memcpy(&responseBuffer[0], &msg[0], 14);
+                    responseBuffer[5] = ' ';
+                    responseBuffer[6] = ' ';
+                    if ((msg[5] == '2') && ((m_holdState == false) || (m_extMode == false)))
+                    {
+                        responseBuffer[6] = '4';
+                        if (m_holdState == false)
+                            wxLogDebug(wxT("Hold OFF"));
+                        if (m_extMode == false)
+                            wxLogDebug(wxT("EXT OFF"));
+                    }
+                    idealBCC = CalculateBCC((unsigned char *)&responseBuffer[1], 9);
+                    if (((idealBCC >> 4) & 0xF) >= 10)
+                        responseBuffer[10] = 'A' + ((idealBCC >> 4) & 0xF) - 10;
+                    else
+                        responseBuffer[10] = '0' + ((idealBCC >> 4) & 0xF);
+                    if ((idealBCC & 0xF) >= 10)
+                        responseBuffer[11] = 'A' + (idealBCC & 0xF) - 10;
+                    else
+                        responseBuffer[11] = '0' + (idealBCC & 0xF);
+                    if (14 != m_port->Write(&responseBuffer[0], 14))
+                    {
+                        wxLogDebug(wxT("Send EXT Mode ack fail"));
+                    }
+                    else
+                    {
+                        wxLogDebug(wxT("Send EXT Mode ack ok"));
+                    }
 
+                    /* update m_extMode & m_responseReturn */
+                    if (msg[5] == '0')
+                        m_extMode = false;
+                    else if (msg[5] == '1')
+                        m_extMode = true;
+                    if (msg[6] == '0')
+                        m_responseReturn = true;
+                    else
+                        m_responseReturn = false;
+                }
+            }
+        }
+        else if ((msg[3] == '5') && (msg[4] == '3')) // Set head terminal numbers
+        {
+            wxLogDebug(wxT("Set Head terminal # function is not implemented"));
         }
     }
 }
@@ -301,7 +383,7 @@ void SimCL200Frame::ProcessCL200LongMessage(unsigned char *msg)
     }
 }
 
-void SimCL200Frame::OnReadSerialPortTimer(wxTimerEvent &event)
+void SimCL200Frame::OnReadSerialPortTimer(wxTimerEvent &WXUNUSED(event))
 {
     unsigned char buf[256];
     size_t nRead, unparsedLen;
