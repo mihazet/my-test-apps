@@ -53,7 +53,7 @@ void PropertyPane::CreateControls()
     wxString name, type, format, value;
     wxBoxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
     _pg = new wxPropertyGrid(this, myID_PROPERTY_GRID,
-        wxDefaultPosition, wxSize(250, 400),
+        wxDefaultPosition, wxSize(250, -1),
         wxPG_SPLITTER_AUTO_CENTER|wxPG_BOLD_MODIFIED|wxPG_TOOLTIPS);
     size_t numProperty = 0;
     if (_propDB && _propDB->IsOpen())
