@@ -110,7 +110,7 @@ void UDPProtocol::OnSocketEvent(wxSocketEvent& event)
             data.m_ip = remote.IPAddress();
             data.m_host = wxT("NotSupported"); //remote.Hostname();
             data.m_port = remote.Service();
-            data.m_len = numByteInSafeBuf;
+            data.m_len = numByte;
             data.m_msg = wxString::FromAscii(safeBuf, numByteInSafeBuf);
             data.m_direction = _("RecvFrom");
             history->AddData(data);
