@@ -184,6 +184,7 @@ void TCPProtocol::OnSocketEvent(wxSocketEvent &event)
         unsigned char *rxBuf = new unsigned char[SOI_BOOT_MAX_RX_SIZE + sizeof(tst_LOAD_HEADER)];
         unsigned char *txBuf = rxBuf + SOI_BOOT_MAX_RX_SIZE;
         tst_LOAD_HEADER *stp_load_header;
+        long remainedPayloadSize = 0, totalPayloadSize = 0, singleReadCount = 0;
 
         switch (notify)
         {
@@ -196,20 +197,21 @@ void TCPProtocol::OnSocketEvent(wxSocketEvent &event)
             else
             {
                 stp_load_header = (tst_LOAD_HEADER *)rxBuf;
-                wxLogVerbose(_("Success to read load header, optional payload size = %lu."), 
-                    wxUINT32_SWAP_ON_LE(stp_load_header->u32Payload));
-                if (wxUINT32_SWAP_ON_LE(stp_load_header->u32Payload))
+                remainedPayloadSize = totalPayloadSize = wxUINT32_SWAP_ON_LE(stp_load_header->u32Payload);
+                wxLogVerbose(_("Success to read load header, optional payload size = %lu."), totalPayloadSize);
+                while (remainedPayloadSize > 0)
                 {
-                    tcpSocket->Read(rxBuf + sizeof(tst_LOAD_HEADER), wxUINT32_SWAP_ON_LE(stp_load_header->u32Payload));
+                    tcpSocket->Read(rxBuf + sizeof(tst_LOAD_HEADER) + totalPayloadSize - remainedPayloadSize, remainedPayloadSize);
                     if (tcpSocket->Error())
                     {
                         wxLogError(_("Fail to read optional payload via tcp socket 0x%p, error = %d."), tcpSocket, tcpSocket->LastError());
                     }
                     else
                     {
-                        wxUint32 count = tcpSocket->LastCount();
-                        wxLogVerbose(_("Success to read optional payload (%lu bytes) vai tcp socket 0x%p."), count, tcpSocket);
+                        singleReadCount = tcpSocket->LastCount();
+                        wxLogVerbose(_("Success to read optional payload (%lu bytes) vai tcp socket 0x%p."), singleReadCount, tcpSocket);
                     }
+                    remainedPayloadSize -= singleReadCount;
                 }
 
                 // Default response: same header as request
