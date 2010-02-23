@@ -258,7 +258,7 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
         0 // big endian
     };
     unsigned char byMode;
-    unsigned short u16Err = 2;
+    unsigned short u16Err = 0;
     static unsigned short u16SeqNo = 0;
     unsigned char *bypPayload = NULL;
     unsigned int u32Chksum = 0, u32TotalLoad;
@@ -375,7 +375,7 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
         }
         st_response_load_packet.stp_load_header->byProtocolId = SOI_BOOT_LOAD_RESPONSE;
         st_response_load_packet.stp_load_header->u32Payload = 0;
-        st_response_load_packet.stp_load_header->u16Error = u16Err;
+        st_response_load_packet.stp_load_header->u16Error = wxUINT16_SWAP_ON_LE(u16Err);
         break;
 
     //default:
