@@ -204,6 +204,7 @@ void TCPProtocol::OnSocketEvent(wxSocketEvent &event)
                     tcpSocket->Read(rxBuf + sizeof(tst_LOAD_HEADER) + totalPayloadSize - remainedPayloadSize, remainedPayloadSize);
                     if (tcpSocket->Error())
                     {
+                        singleReadCount = 0;
                         wxLogError(_("Fail to read optional payload via tcp socket 0x%p, error = %d."), tcpSocket, tcpSocket->LastError());
                     }
                     else
