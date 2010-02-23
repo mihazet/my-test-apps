@@ -1,4 +1,5 @@
 #include <wx/wx.h>
+#include <wx/wfstream.h>
 #include "SimCubeApp.h"
 #include "NetAdapter.h"
 #include "TCPProtocol.h"
@@ -365,6 +366,24 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
                                 *(pst_buffer_load->byp_load_buffer + u32TotalLoad);
                         }
                         u16Err = 0;
+
+                        /* in this simulated application, we save the whole image to a file */
+                        wxDateTime now = wxDateTime::Now();
+                        wxString fileName;
+                        if (byMode == MODE_DOWNLOAD_FW_TO_FLASH)
+                            fileName << wxT("FW-");
+                        else if (byMode == MODE_DOWNLOAD_BOOTLOADER_TO_FLASH)
+                            fileName << wxT("BTL-");
+                        else
+                            fileName << wxT("WHAT-");
+                        fileName << now.Format(wxT("FW-%y%m%d-%H%M%S")) << wxT(".brec");
+                        wxFFileOutputStream ofs(fileName);
+                        if (ofs.IsOk())
+                        {
+                            ofs.Write(pst_buffer_load->byp_load_buffer, pst_buffer_load->u32_total_load);
+                            wxLogMessage(_("Write %d bytes to file: %s"), ofs.LastWrite(), fileName);
+                            ofs.Close();
+                        }
                     }
                 }
                 break;
