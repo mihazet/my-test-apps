@@ -318,6 +318,7 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
                 break;
 
             case MODE_DOWNLOAD_FW_TO_FLASH:
+            case MODE_DOWNLOAD_BOOTLOADER_TO_FLASH:
                 if (u16SeqNo == 0)
                 {
                     pst_buffer_load->u32_load_offset = 0;
@@ -369,7 +370,6 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
                 break;
             default:
             case MODE_DOWNLOAD_FW_TO_RAM:
-            case MODE_DOWNLOAD_BOOTLOADER_TO_FLASH:
                 u16Err = ERR_BL_LOAD_MODE;
                 break;
             }
