@@ -347,11 +347,13 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
                     while (u32TotalLoad--)
                         u32Chksum += *(pst_buffer_load->byp_load_buffer + u32TotalLoad);
 
-                    if (u32Chksum != stp_load_header->u32Chksum)
+                    /* check sum is not matched */
+                    if (u32Chksum != wxUINT32_SWAP_ON_LE(stp_load_header->u32Chksum))
                     {
                         wxLogError(_("Verify checksum in memory load buffer failed!"));
                         u16Err = ERR_BL_RAM_CHECKSUM;
                     }
+                    /* check sum is matched */
                     else
                     {
                         /* real cube will erase, write, read back flash */
@@ -362,7 +364,6 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
                                 *(pst_buffer_load->byp_load_buffer + u32TotalLoad);
                         }
                         u16Err = 0;
-
                     }
                 }
                 break;
