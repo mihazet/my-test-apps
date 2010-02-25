@@ -26,6 +26,8 @@ private:
     void CreateControls();
 
     // event handlers
+    void OnSearchButtonClicked(wxCommandEvent &event);
+    void OnSearchThread(wxThreadEvent &event);
 
     DECLARE_EVENT_TABLE()
 };

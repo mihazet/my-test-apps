@@ -29,6 +29,9 @@ enum
     myID_TARGET_SEARCH_BTN,
 
     /* log */
+
+    /* threads */
+    myID_SEARCH_THREAD,
 };
 
 #endif /* _WIDGET_ID_H_ */
