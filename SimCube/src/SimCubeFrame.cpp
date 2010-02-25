@@ -65,7 +65,13 @@ void SimCubeAboutDialog::CreateControls()
         << wxT(SCVER_MAJOR_STRING) << wxT(".") << wxT(SCVER_MINOR_STRING) << wxT(".")
         << wxT(SCVER_RELEASE_STRING) << _(" (build ") << wxT(SCVER_BUILD_STRING)
         << _("), compiled at ") << wxT(SC_BUILDDATE_STRING);
-    descTextSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxALL, 5);
+    descTextSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxLEFT|wxRIGHT|wxTOP, 5);
+    msg.clear();
+    msg << wxT("Source code available at:");
+    descTextSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxLEFT|wxRIGHT, 5);
+    msg.clear();
+    msg << wxT("https://my-test-apps.googlecode.com/svn/trunk/SimCube");
+    descTextSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxLEFT|wxRIGHT|wxBOTTOM, 5);
     msg.clear();
     msg << _("If I were a cube, I will try to response all requests from you.");
     allSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxTOP|wxLEFT|wxRIGHT, 15);
