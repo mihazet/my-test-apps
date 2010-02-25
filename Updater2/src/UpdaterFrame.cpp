@@ -6,6 +6,7 @@
 #include "UpdaterFrame.h"
 #include "UpdaterApp.h"
 #include "LogPane.h"
+#include "TargetsPane.h"
 #include "WidgetId.h"
 
 // ------------------------------------------------------------------------
@@ -81,6 +82,11 @@ void UpdaterFrame::CreateControls()
     _auiManager.AddPane(dbgWin, wxAuiPaneInfo().Name(wxT("LogPane")).
         Caption(_("Log Window")).Bottom().CloseButton(true).
         DestroyOnClose(false).MaximizeButton(true).MinSize(-1, 150));
+
+    _auiManager.AddPane(new TargetsPane(this), wxAuiPaneInfo().
+        Name(wxT("TargetsPane")).Caption(_("Targets")).Left().
+        CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
+        MinSize(300, -1));
 
     /* status bar */
 
