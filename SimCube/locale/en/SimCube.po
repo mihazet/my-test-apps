@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SimCube\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-05 19:47+0800\n"
+"POT-Creation-Date: 2010-02-25 18:49+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team:  <yhuiyang@gmail.com>\n"
@@ -200,21 +200,21 @@ msgstr "Reset properties"
 msgid "Total %d properties"
 msgstr "Total %d properties"
 
-#: ../../src/PropertyPane.cpp:183
+#: ../../src/PropertyPane.cpp:187
 #, c-format
 msgid "Input number out of range! Max = %s, Min = %s"
 msgstr "Input number out of range! Max = %s, Min = %s"
 
-#: ../../src/PropertyPane.cpp:207
+#: ../../src/PropertyPane.cpp:211
 #, c-format
 msgid "Failed to update property %s"
 msgstr "Failed to update property %s"
 
-#: ../../src/PropertyPane.cpp:222
+#: ../../src/PropertyPane.cpp:226
 msgid "Would you like to reset all properties to their default value?"
 msgstr "Would you like to reset all properties to their default value?"
 
-#: ../../src/PropertyPane.cpp:223
+#: ../../src/PropertyPane.cpp:227
 msgid "Need user confirm"
 msgstr "Need user confirm"
 
@@ -346,202 +346,227 @@ msgstr " (build "
 msgid "), compiled at "
 msgstr "), compiled at "
 
-#: ../../src/SimCubeFrame.cpp:70
+#: ../../src/SimCubeFrame.cpp:76
 msgid "If I were a cube, I will try to response all requests from you."
 msgstr "If I were a cube, I will try to response all requests from you."
 
-#: ../../src/SimCubeFrame.cpp:73
+#: ../../src/SimCubeFrame.cpp:79
 msgid "If I were a cube, I will notify you of my change of state."
 msgstr "If I were a cube, I will notify you of my change of state."
 
-#: ../../src/SimCubeFrame.cpp:76
+#: ../../src/SimCubeFrame.cpp:82
 msgid "If I were a cube..., but I am not a real cube, just a simulated cube."
 msgstr "If I were a cube..., but I am not a real cube, just a simulated cube."
 
-#: ../../src/SimCubeFrame.cpp:80
+#: ../../src/SimCubeFrame.cpp:86
 msgid "Libraries Info "
 msgstr "Libraries Info "
 
-#: ../../src/SimCubeFrame.cpp:149
+#: ../../src/SimCubeFrame.cpp:155
 msgid "Fail to save perspective!"
 msgstr "Fail to save perspective!"
 
-#: ../../src/SimCubeFrame.cpp:174
+#: ../../src/SimCubeFrame.cpp:180
 msgid "Quit"
 msgstr "Quit"
 
-#: ../../src/SimCubeFrame.cpp:174
+#: ../../src/SimCubeFrame.cpp:180
 msgid "Quit this program"
 msgstr "Quit this program"
 
-#: ../../src/SimCubeFrame.cpp:176
+#: ../../src/SimCubeFrame.cpp:182
 msgid "Property Pane\tCTRL+F1"
 msgstr "Property Pane\tCTRL+F1"
 
-#: ../../src/SimCubeFrame.cpp:177
+#: ../../src/SimCubeFrame.cpp:183
 msgid "Show or hide the property pane."
 msgstr "Show or hide the property pane."
 
-#: ../../src/SimCubeFrame.cpp:178
+#: ../../src/SimCubeFrame.cpp:184
 msgid "Trap Pane\tCTRL+F2"
 msgstr "Trap Pane\tCTRL+F2"
 
-#: ../../src/SimCubeFrame.cpp:179
+#: ../../src/SimCubeFrame.cpp:185
 msgid "Show or hid the trap pane."
 msgstr "Show or hid the trap pane."
 
-#: ../../src/SimCubeFrame.cpp:180
+#: ../../src/SimCubeFrame.cpp:186
 msgid "Remote Pane\tCTRL+F3"
 msgstr "Remote Pane\tCTRL+F3"
 
-#: ../../src/SimCubeFrame.cpp:181
+#: ../../src/SimCubeFrame.cpp:187
 msgid "Show or hide the remote peer pane."
 msgstr "Show or hide the remote peer pane."
 
-#: ../../src/SimCubeFrame.cpp:182
+#: ../../src/SimCubeFrame.cpp:188
 msgid "Configuration Pane\tCTRL+F4"
 msgstr "Configuration Pane\tCTRL+F4"
 
-#: ../../src/SimCubeFrame.cpp:183
+#: ../../src/SimCubeFrame.cpp:189
 msgid "Show or hide the configuration pane."
 msgstr "Show or hide the configuration pane."
 
-#: ../../src/SimCubeFrame.cpp:184
+#: ../../src/SimCubeFrame.cpp:190
 msgid "Log Widnow\tCTRL+F5"
 msgstr "Log Widnow\tCTRL+F5"
 
-#: ../../src/SimCubeFrame.cpp:185
+#: ../../src/SimCubeFrame.cpp:191
 msgid "Show or hide the logging window."
 msgstr "Show or hide the logging window."
 
-#: ../../src/SimCubeFrame.cpp:187
+#: ../../src/SimCubeFrame.cpp:193
 msgid "Reset all panes"
 msgstr "Reset all panes"
 
-#: ../../src/SimCubeFrame.cpp:188
+#: ../../src/SimCubeFrame.cpp:194
 msgid "Reset all panes to its default position and size."
 msgstr "Reset all panes to its default position and size."
 
-#: ../../src/SimCubeFrame.cpp:190
+#: ../../src/SimCubeFrame.cpp:196
 msgid "Help file"
 msgstr "Help file"
 
-#: ../../src/SimCubeFrame.cpp:191
+#: ../../src/SimCubeFrame.cpp:197
 msgid "Show help file."
 msgstr "Show help file."
 
-#: ../../src/SimCubeFrame.cpp:192
+#: ../../src/SimCubeFrame.cpp:198
 msgid "About..."
 msgstr "About..."
 
-#: ../../src/SimCubeFrame.cpp:192
+#: ../../src/SimCubeFrame.cpp:198
 msgid "Show about dialog"
 msgstr "Show about dialog"
 
-#: ../../src/SimCubeFrame.cpp:195
+#: ../../src/SimCubeFrame.cpp:201
 msgid "File"
 msgstr "File"
 
-#: ../../src/SimCubeFrame.cpp:196
+#: ../../src/SimCubeFrame.cpp:202
 msgid "View"
 msgstr "View"
 
-#: ../../src/SimCubeFrame.cpp:197
+#: ../../src/SimCubeFrame.cpp:203
 msgid "Help"
 msgstr "Help"
 
-#: ../../src/SimCubeFrame.cpp:208
+#: ../../src/SimCubeFrame.cpp:214
 msgid "Log Output"
 msgstr "Log Output"
 
-#: ../../src/SimCubeFrame.cpp:213
+#: ../../src/SimCubeFrame.cpp:219
 msgid "Supported Property"
 msgstr "Supported Property"
 
-#: ../../src/SimCubeFrame.cpp:218
+#: ../../src/SimCubeFrame.cpp:224
 msgid "Transaction History"
 msgstr "Transaction History"
 
-#: ../../src/SimCubeFrame.cpp:223
+#: ../../src/SimCubeFrame.cpp:229
 msgid "SimCube Configuration"
 msgstr "SimCube Configuration"
 
-#: ../../src/SimCubeFrame.cpp:227
+#: ../../src/SimCubeFrame.cpp:233
 msgid "Send Trap Message"
 msgstr "Send Trap Message"
 
-#: ../../src/SimCubeFrame.cpp:231
+#: ../../src/SimCubeFrame.cpp:237
 msgid "Remote Status"
 msgstr "Remote Status"
 
-#: ../../src/SimCubeFrame.cpp:248
+#: ../../src/SimCubeFrame.cpp:254
 msgid "Fail to save software default perspective!"
 msgstr "Fail to save software default perspective!"
 
-#: ../../src/SimCubeFrame.cpp:375
+#: ../../src/SimCubeFrame.cpp:381
 msgid "Fail to reset current perspective value"
 msgstr "Fail to reset current perspective value"
 
-#: ../../src/TCPProtocol.cpp:107
+#: ../../src/TCPProtocol.cpp:108
 #, c-format
 msgid "Fail to bind %s:%d to tcp socket"
 msgstr "Fail to bind %s:%d to tcp socket"
 
-#: ../../src/TCPProtocol.cpp:154
+#: ../../src/TCPProtocol.cpp:155
 #, c-format
 msgid "Unexpect event (%d) received in server listening socket!"
 msgstr "Unexpect event (%d) received in server listening socket!"
 
-#: ../../src/TCPProtocol.cpp:162
+#: ../../src/TCPProtocol.cpp:163
 #, c-format
 msgid "Accept new client connection from %s:%d on tcp socket 0x%p, new created socket = 0x%p"
 msgstr "Accept new client connection from %s:%d on tcp socket 0x%p, new created socket = 0x%p"
 
-#: ../../src/TCPProtocol.cpp:166
+#: ../../src/TCPProtocol.cpp:167
 #, c-format
 msgid "Accept new connection from unknown client on tcp socket 0x%p, new created socket = 0x%p"
 msgstr "Accept new connection from unknown client on tcp socket 0x%p, new created socket = 0x%p"
 
-#: ../../src/TCPProtocol.cpp:171
+#: ../../src/TCPProtocol.cpp:172
 #, c-format
 msgid "Fail to accept new connection on tcp socket 0x%p!"
 msgstr "Fail to accept new connection on tcp socket 0x%p!"
 
-#: ../../src/TCPProtocol.cpp:205
+#: ../../src/TCPProtocol.cpp:196
+#, c-format
+msgid "Fail to read load header via tcp socket 0x%p, error = %d."
+msgstr "Fail to read load header via tcp socket 0x%p, error = %d."
+
+#: ../../src/TCPProtocol.cpp:202
+#, c-format
+msgid "Success to read load header, optional payload size = %lu."
+msgstr "Success to read load header, optional payload size = %lu."
+
+#: ../../src/TCPProtocol.cpp:209
+#, c-format
+msgid "Fail to read optional payload via tcp socket 0x%p, error = %d."
+msgstr "Fail to read optional payload via tcp socket 0x%p, error = %d."
+
+#: ../../src/TCPProtocol.cpp:214
+#, c-format
+msgid "Success to read optional payload (%lu bytes) vai tcp socket 0x%p."
+msgstr "Success to read optional payload (%lu bytes) vai tcp socket 0x%p."
+
+#: ../../src/TCPProtocol.cpp:228
 #, c-format
 msgid "Fail to write data via tcp socket 0x%p, error = %d."
 msgstr "Fail to write data via tcp socket 0x%p, error = %d."
 
-#: ../../src/TCPProtocol.cpp:207
+#: ../../src/TCPProtocol.cpp:230
 #, c-format
 msgid "Success write data (%d bytes) via tcp socket 0x%p."
 msgstr "Success write data (%d bytes) via tcp socket 0x%p."
 
-#: ../../src/TCPProtocol.cpp:211
+#: ../../src/TCPProtocol.cpp:235
 #, c-format
 msgid "Receive socket lost event on tcp socket 0x%p."
 msgstr "Receive socket lost event on tcp socket 0x%p."
 
-#: ../../src/TCPProtocol.cpp:217
+#: ../../src/TCPProtocol.cpp:241
 #, c-format
 msgid "Unexpect event (%d) received in server accepted socket!"
 msgstr "Unexpect event (%d) received in server accepted socket!"
 
-#: ../../src/TCPProtocol.cpp:283
+#: ../../src/TCPProtocol.cpp:307
 msgid "Reset reserved flash"
 msgstr "Reset reserved flash"
 
-#: ../../src/TCPProtocol.cpp:288
+#: ../../src/TCPProtocol.cpp:312
 msgid "Run FW from flash"
 msgstr "Run FW from flash"
 
-#: ../../src/TCPProtocol.cpp:293
+#: ../../src/TCPProtocol.cpp:317
 msgid "Run FW from ram"
 msgstr "Run FW from ram"
 
-#: ../../src/TCPProtocol.cpp:329
+#: ../../src/TCPProtocol.cpp:355
 msgid "Verify checksum in memory load buffer failed!"
 msgstr "Verify checksum in memory load buffer failed!"
+
+#: ../../src/TCPProtocol.cpp:384
+#, c-format
+msgid "Write %d bytes to file: %s"
+msgstr "Write %d bytes to file: %s"
 
 #: ../../src/TrapPane.cpp:37
 msgid "Led is in off state."
@@ -730,11 +755,11 @@ msgstr "Failt to send response (%s) back to peer. (error = %d)"
 msgid "SendTo"
 msgstr "SendTo"
 
-#: ../../src/wxsqlite3.cpp:3379
+#: ../../src/wxsqlite3.cpp:3443
 msgid "Regular expression invalid: '"
 msgstr "Regular expression invalid: '"
 
-#: ../../src/wxsqlite3.cpp:3384
+#: ../../src/wxsqlite3.cpp:3448
 #, c-format
 msgid "REGEXP called with wrong number of arguments: %d instead of 2."
 msgstr "REGEXP called with wrong number of arguments: %d instead of 2."

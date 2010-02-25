@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SimCube\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-05 20:00+0800\n"
+"POT-Creation-Date: 2010-02-25 18:50+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team:  <yhuiyang@gmail.com>\n"
@@ -200,21 +200,21 @@ msgstr "重設全部屬性值"
 msgid "Total %d properties"
 msgstr "共計 %d 個屬性值"
 
-#: ../../src/PropertyPane.cpp:183
+#: ../../src/PropertyPane.cpp:187
 #, c-format
 msgid "Input number out of range! Max = %s, Min = %s"
 msgstr "輸入數值的值域不正確！最大值 = %s, 最小值 = %s。"
 
-#: ../../src/PropertyPane.cpp:207
+#: ../../src/PropertyPane.cpp:211
 #, c-format
 msgid "Failed to update property %s"
 msgstr "無法更新屬性 %s"
 
-#: ../../src/PropertyPane.cpp:222
+#: ../../src/PropertyPane.cpp:226
 msgid "Would you like to reset all properties to their default value?"
 msgstr "您真的想要將全部的屬性值回復到初始預設值嗎？"
 
-#: ../../src/PropertyPane.cpp:223
+#: ../../src/PropertyPane.cpp:227
 msgid "Need user confirm"
 msgstr "需要使用者的確認"
 
@@ -346,202 +346,227 @@ msgstr "〈建立號"
 msgid "), compiled at "
 msgstr "〉，編譯於"
 
-#: ../../src/SimCubeFrame.cpp:70
+#: ../../src/SimCubeFrame.cpp:76
 msgid "If I were a cube, I will try to response all requests from you."
 msgstr "如果我是一個 Cube，我會試著回應您所有的要求。"
 
-#: ../../src/SimCubeFrame.cpp:73
+#: ../../src/SimCubeFrame.cpp:79
 msgid "If I were a cube, I will notify you of my change of state."
 msgstr "如果我是一個 Cube，我會通知您我的狀態有了變更。"
 
-#: ../../src/SimCubeFrame.cpp:76
+#: ../../src/SimCubeFrame.cpp:82
 msgid "If I were a cube..., but I am not a real cube, just a simulated cube."
 msgstr "如果我是一個 Cube...，但我不是，我只是個模擬的 Cube。"
 
-#: ../../src/SimCubeFrame.cpp:80
+#: ../../src/SimCubeFrame.cpp:86
 msgid "Libraries Info "
 msgstr "函式庫版本資訊"
 
-#: ../../src/SimCubeFrame.cpp:149
+#: ../../src/SimCubeFrame.cpp:155
 msgid "Fail to save perspective!"
 msgstr "無法儲存使用者介面佈局！"
 
-#: ../../src/SimCubeFrame.cpp:174
+#: ../../src/SimCubeFrame.cpp:180
 msgid "Quit"
 msgstr "離開"
 
-#: ../../src/SimCubeFrame.cpp:174
+#: ../../src/SimCubeFrame.cpp:180
 msgid "Quit this program"
 msgstr "離開本程式"
 
-#: ../../src/SimCubeFrame.cpp:176
+#: ../../src/SimCubeFrame.cpp:182
 msgid "Property Pane\tCTRL+F1"
 msgstr "屬性值面版\tCTRL+F1"
 
-#: ../../src/SimCubeFrame.cpp:177
+#: ../../src/SimCubeFrame.cpp:183
 msgid "Show or hide the property pane."
 msgstr "顯示或隱藏屬性質面版。"
 
-#: ../../src/SimCubeFrame.cpp:178
+#: ../../src/SimCubeFrame.cpp:184
 msgid "Trap Pane\tCTRL+F2"
 msgstr "主動回應面版\tCTRL+F2"
 
-#: ../../src/SimCubeFrame.cpp:179
+#: ../../src/SimCubeFrame.cpp:185
 msgid "Show or hid the trap pane."
 msgstr "顯示或隱藏主動回應面版。"
 
-#: ../../src/SimCubeFrame.cpp:180
+#: ../../src/SimCubeFrame.cpp:186
 msgid "Remote Pane\tCTRL+F3"
 msgstr "遠端面版\tCTRL+F3"
 
-#: ../../src/SimCubeFrame.cpp:181
+#: ../../src/SimCubeFrame.cpp:187
 msgid "Show or hide the remote peer pane."
 msgstr "顯示或隱藏遠端面版。"
 
-#: ../../src/SimCubeFrame.cpp:182
+#: ../../src/SimCubeFrame.cpp:188
 msgid "Configuration Pane\tCTRL+F4"
 msgstr "軟體設定面版\tCTRL+F4"
 
-#: ../../src/SimCubeFrame.cpp:183
+#: ../../src/SimCubeFrame.cpp:189
 msgid "Show or hide the configuration pane."
 msgstr "顯示或隱藏軟體設定面版。"
 
-#: ../../src/SimCubeFrame.cpp:184
+#: ../../src/SimCubeFrame.cpp:190
 msgid "Log Widnow\tCTRL+F5"
 msgstr "紀錄視窗\tCTRL+F5"
 
-#: ../../src/SimCubeFrame.cpp:185
+#: ../../src/SimCubeFrame.cpp:191
 msgid "Show or hide the logging window."
 msgstr "顯示或隱藏紀錄視窗。"
 
-#: ../../src/SimCubeFrame.cpp:187
+#: ../../src/SimCubeFrame.cpp:193
 msgid "Reset all panes"
 msgstr "重置所有面版"
 
-#: ../../src/SimCubeFrame.cpp:188
+#: ../../src/SimCubeFrame.cpp:194
 msgid "Reset all panes to its default position and size."
 msgstr "重置所有面版至預設位置與尺寸。"
 
-#: ../../src/SimCubeFrame.cpp:190
+#: ../../src/SimCubeFrame.cpp:196
 msgid "Help file"
 msgstr "幫助檔案"
 
-#: ../../src/SimCubeFrame.cpp:191
+#: ../../src/SimCubeFrame.cpp:197
 msgid "Show help file."
 msgstr "顯示幫助檔案。"
 
-#: ../../src/SimCubeFrame.cpp:192
+#: ../../src/SimCubeFrame.cpp:198
 msgid "About..."
 msgstr "關於..."
 
-#: ../../src/SimCubeFrame.cpp:192
+#: ../../src/SimCubeFrame.cpp:198
 msgid "Show about dialog"
 msgstr "顯示關於對話盒"
 
-#: ../../src/SimCubeFrame.cpp:195
+#: ../../src/SimCubeFrame.cpp:201
 msgid "File"
 msgstr "檔案"
 
-#: ../../src/SimCubeFrame.cpp:196
+#: ../../src/SimCubeFrame.cpp:202
 msgid "View"
 msgstr "檢視"
 
-#: ../../src/SimCubeFrame.cpp:197
+#: ../../src/SimCubeFrame.cpp:203
 msgid "Help"
 msgstr "說明"
 
-#: ../../src/SimCubeFrame.cpp:208
+#: ../../src/SimCubeFrame.cpp:214
 msgid "Log Output"
 msgstr "紀錄視窗"
 
-#: ../../src/SimCubeFrame.cpp:213
+#: ../../src/SimCubeFrame.cpp:219
 msgid "Supported Property"
 msgstr "支援的屬性值"
 
-#: ../../src/SimCubeFrame.cpp:218
+#: ../../src/SimCubeFrame.cpp:224
 msgid "Transaction History"
 msgstr "交易歷史紀錄"
 
-#: ../../src/SimCubeFrame.cpp:223
+#: ../../src/SimCubeFrame.cpp:229
 msgid "SimCube Configuration"
 msgstr "SimCube 軟體設定"
 
-#: ../../src/SimCubeFrame.cpp:227
+#: ../../src/SimCubeFrame.cpp:233
 msgid "Send Trap Message"
 msgstr "傳送主動回應訊息"
 
-#: ../../src/SimCubeFrame.cpp:231
+#: ../../src/SimCubeFrame.cpp:237
 msgid "Remote Status"
 msgstr "遠端連線狀態"
 
-#: ../../src/SimCubeFrame.cpp:248
+#: ../../src/SimCubeFrame.cpp:254
 msgid "Fail to save software default perspective!"
 msgstr "無法儲存軟體預設介面佈局！"
 
-#: ../../src/SimCubeFrame.cpp:375
+#: ../../src/SimCubeFrame.cpp:381
 msgid "Fail to reset current perspective value"
 msgstr "無法回復目前的介面佈局"
 
-#: ../../src/TCPProtocol.cpp:107
+#: ../../src/TCPProtocol.cpp:108
 #, c-format
 msgid "Fail to bind %s:%d to tcp socket"
 msgstr "無法繫結 %s:%d 至 TCP Socket"
 
-#: ../../src/TCPProtocol.cpp:154
+#: ../../src/TCPProtocol.cpp:155
 #, c-format
 msgid "Unexpect event (%d) received in server listening socket!"
 msgstr "TCP 監聽專用 Socket 接收到非預期的事件 (%d)！"
 
-#: ../../src/TCPProtocol.cpp:162
+#: ../../src/TCPProtocol.cpp:163
 #, c-format
 msgid "Accept new client connection from %s:%d on tcp socket 0x%p, new created socket = 0x%p"
 msgstr "接受來自 %s:%d 的新連結。本地端 TCP Socket 0x%p，新建立 TCP Socket 0x%p"
 
-#: ../../src/TCPProtocol.cpp:166
+#: ../../src/TCPProtocol.cpp:167
 #, c-format
 msgid "Accept new connection from unknown client on tcp socket 0x%p, new created socket = 0x%p"
 msgstr "接受來自未知處的新連結。本地端 TCP Socket 0x%p，新建立 TCP Socket 0x%p"
 
-#: ../../src/TCPProtocol.cpp:171
+#: ../../src/TCPProtocol.cpp:172
 #, c-format
 msgid "Fail to accept new connection on tcp socket 0x%p!"
 msgstr "無法接受新連結！本地端 TCP Socket 0x%p！"
 
-#: ../../src/TCPProtocol.cpp:205
+#: ../../src/TCPProtocol.cpp:196
+#, c-format
+msgid "Fail to read load header via tcp socket 0x%p, error = %d."
+msgstr "無法藉由 TCP Socket 0x%p 讀取封包標頭，錯誤碼 = %d。"
+
+#: ../../src/TCPProtocol.cpp:202
+#, c-format
+msgid "Success to read load header, optional payload size = %lu."
+msgstr "成功讀取封包標頭，額外待讀封包大小 = %lu。"
+
+#: ../../src/TCPProtocol.cpp:209
+#, c-format
+msgid "Fail to read optional payload via tcp socket 0x%p, error = %d."
+msgstr "無法藉由 TCP Socket 0x%p 讀取額外待讀封包，錯誤碼 = %d。"
+
+#: ../../src/TCPProtocol.cpp:214
+#, c-format
+msgid "Success to read optional payload (%lu bytes) vai tcp socket 0x%p."
+msgstr "成功藉由 TCP Socket 讀取額外待讀封包共 %lu 位元組。(0x%p)"
+
+#: ../../src/TCPProtocol.cpp:228
 #, c-format
 msgid "Fail to write data via tcp socket 0x%p, error = %d."
 msgstr "無法藉由 TCP Socket 0x%p 傳輸出資料，錯誤碼 = %d。"
 
-#: ../../src/TCPProtocol.cpp:207
+#: ../../src/TCPProtocol.cpp:230
 #, c-format
 msgid "Success write data (%d bytes) via tcp socket 0x%p."
 msgstr "成功藉由 TCP Socket 傳輸出 %d 位元組資料。(0x%p)"
 
-#: ../../src/TCPProtocol.cpp:211
+#: ../../src/TCPProtocol.cpp:235
 #, c-format
 msgid "Receive socket lost event on tcp socket 0x%p."
 msgstr "接收到 TCP Socket 0x%p 斷線事件。"
 
-#: ../../src/TCPProtocol.cpp:217
+#: ../../src/TCPProtocol.cpp:241
 #, c-format
 msgid "Unexpect event (%d) received in server accepted socket!"
 msgstr "TCP 傳輸專用 Socket 接收到非預期的事件(%d)！"
 
-#: ../../src/TCPProtocol.cpp:283
+#: ../../src/TCPProtocol.cpp:307
 msgid "Reset reserved flash"
 msgstr "重置 Flash 保留區"
 
-#: ../../src/TCPProtocol.cpp:288
+#: ../../src/TCPProtocol.cpp:312
 msgid "Run FW from flash"
 msgstr "由 Flash 執行 firmware"
 
-#: ../../src/TCPProtocol.cpp:293
+#: ../../src/TCPProtocol.cpp:317
 msgid "Run FW from ram"
 msgstr "由記憶體執行 firmware"
 
-#: ../../src/TCPProtocol.cpp:329
+#: ../../src/TCPProtocol.cpp:355
 msgid "Verify checksum in memory load buffer failed!"
 msgstr "Verify checksum in memory load buffer failed!"
+
+#: ../../src/TCPProtocol.cpp:384
+#, c-format
+msgid "Write %d bytes to file: %s"
+msgstr "寫入 %d 位元組至檔案：%s"
 
 #: ../../src/TrapPane.cpp:37
 msgid "Led is in off state."
@@ -730,11 +755,11 @@ msgstr "無法回應訊息(%s)至遠端。(錯誤碼 = %d)"
 msgid "SendTo"
 msgstr "傳送至"
 
-#: ../../src/wxsqlite3.cpp:3379
+#: ../../src/wxsqlite3.cpp:3443
 msgid "Regular expression invalid: '"
 msgstr "Regular expression invalid: '"
 
-#: ../../src/wxsqlite3.cpp:3384
+#: ../../src/wxsqlite3.cpp:3448
 #, c-format
 msgid "REGEXP called with wrong number of arguments: %d instead of 2."
 msgstr "REGEXP called with wrong number of arguments: %d instead of 2."
