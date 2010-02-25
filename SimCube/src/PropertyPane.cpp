@@ -132,6 +132,10 @@ void PropertyPane::UpdateCallback(wxUpdateType type, const wxString &database,
         {
             wxPGProperty *prop = _pg->GetProperty(name);
             prop->SetValueFromString(value);
+
+            /* temp solution: force propgrid to refresh. 
+            It worked before, but now I need to explicit refresh */
+            _pg->Refresh();
         }
 
         /* send trap message for specific commands */
