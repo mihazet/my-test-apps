@@ -70,6 +70,9 @@ bool UpdaterApp::OnInit()
         return false;
     }
 
+    /* For socket works in secondary thread, we need to do this */
+    wxSocketBase::Initialize();
+
     /* init the main frame */
     UpdaterFrame *frame = new UpdaterFrame(NULL);
     frame->Show();

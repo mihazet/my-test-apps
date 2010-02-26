@@ -17,10 +17,8 @@
 class SearchThread : public wxThread
 {
 public:
-    SearchThread(TargetsPane *handler) : wxThread(wxTHREAD_DETACHED)
-    { _pHandler = handler; }
-    ~SearchThread() { }
-
+    SearchThread(TargetsPane *handler);
+    ~SearchThread();
     virtual wxThread::ExitCode Entry();
 
 private:
@@ -49,15 +47,47 @@ public:
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
+SearchThread::SearchThread(TargetsPane *handler) 
+    : wxThread(wxTHREAD_DETACHED), _pHandler(handler)
+{
+    wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
+    wxIPV4address local;
+
+    if (!netAdapter.empty())
+    {
+        local.Hostname(netAdapter.at(0).GetIp());
+        netAdapter.at(0).udp = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
+    }
+}
+
+SearchThread::~SearchThread()
+{
+    wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
+    if (!netAdapter.empty())
+    {
+        wxDELETE(netAdapter.at(0).udp);
+    }
+}
+
 wxThread::ExitCode SearchThread::Entry()
 {
     int loop;
     wxThreadEvent event(wxEVT_COMMAND_THREAD, myID_SEARCH_THREAD);
     SearchThreadMessage msg;
+    unsigned char targetQueryCommand[] =
+    {
+        0x53, 0x51, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+    wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
+    wxIPV4address broadcast;
+    broadcast.Hostname(netAdapter.at(0).GetBroadcast());
+    broadcast.Service(40000);
     
     for (loop = 0; (loop < 5) && !TestDestroy(); loop++)
     {
         wxLogMessage(wxT("Message from thread[%ld], loop = %d"), GetId(), loop);
+        netAdapter.at(0).udp->SendTo(broadcast, targetQueryCommand, 16);
 
         if (loop == 2)
         {
