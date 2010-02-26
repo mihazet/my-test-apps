@@ -27,25 +27,53 @@ private:
     TargetsPane *_pHandler;
 };
 
+typedef enum
+{
+    SEARCH_THREAD_COMPLETED,
+    SEARCH_THREAD_TARGET_FOUND,
+} STMType;
+
+class SearchThreadMessage
+{
+public:
+    SearchThreadMessage()
+    {
+        type = SEARCH_THREAD_COMPLETED;
+        ip = name = wxEmptyString;
+    }
+    STMType type;
+    wxString ip;
+    wxString name;
+};
+
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
 wxThread::ExitCode SearchThread::Entry()
 {
-    int loop = 5;
-
-    while (loop > 0)
+    int loop;
+    wxThreadEvent event(wxEVT_COMMAND_THREAD, myID_SEARCH_THREAD);
+    SearchThreadMessage msg;
+    
+    for (loop = 0; (loop < 5) && !TestDestroy(); loop++)
     {
-        if (TestDestroy())
-            break;
-
         wxLogMessage(wxT("Message from thread[%ld], loop = %d"), GetId(), loop);
-        loop--;
+
+        if (loop == 2)
+        {
+            msg.type = SEARCH_THREAD_TARGET_FOUND;
+            msg.ip = wxT("192.168.1.1");
+            msg.name = wxT("Winner");
+            event.SetPayload(msg);
+            wxQueueEvent(_pHandler, event.Clone());
+        }
 
         wxMilliSleep(3000);
     }
 
-    wxThreadEvent event(wxEVT_COMMAND_THREAD, myID_SEARCH_THREAD);
+    /* thread completed */
+    msg.type = SEARCH_THREAD_COMPLETED;
+    event.SetPayload(msg);
     wxQueueEvent(_pHandler, event.Clone());
 
     return (ExitCode)0;
@@ -94,6 +122,7 @@ void TargetsPane::CreateControls()
     wxBoxSizer *bgSizer = new wxBoxSizer(wxVERTICAL);
 
     bgSizer->Add(new wxButton(this, myID_TARGET_SEARCH_BTN, wxT("Search")), 0, wxALL, 5);
+    bgSizer->Add(new wxButton(this, wxID_ANY, wxT("Cancel")), 0, wxALL, 5);
 
     SetSizer(bgSizer);
 }
@@ -115,6 +144,20 @@ void TargetsPane::OnSearchButtonClicked(wxCommandEvent &event)
 
 void TargetsPane::OnSearchThread(wxThreadEvent &event)
 {
-    wxButton *btn = wxDynamicCast(FindWindow(myID_TARGET_SEARCH_BTN), wxButton);
-    if (btn) btn->Enable(true);
+    SearchThreadMessage msg = event.GetPayload<SearchThreadMessage>();
+    wxButton *btn;
+
+    switch (msg.type)
+    {
+    case SEARCH_THREAD_COMPLETED:
+        wxLogMessage(wxT("Target search thread is completed!"));
+        btn = wxDynamicCast(FindWindow(myID_TARGET_SEARCH_BTN), wxButton);
+        if (btn) btn->Enable(true);
+        break;
+    case SEARCH_THREAD_TARGET_FOUND:
+        wxLogMessage(wxT("Target found: name(%s), ip(%s)"), msg.name, msg.ip);
+        break;
+    default:
+        break;
+    }
 }
