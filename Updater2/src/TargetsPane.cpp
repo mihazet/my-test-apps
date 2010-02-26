@@ -22,6 +22,7 @@ public:
     virtual wxThread::ExitCode Entry();
 
 private:
+    wxString LookupRemoteMAC(const wxString &ipAddress);
     TargetsPane *_pHandler;
     unsigned char *_recvBuf;
 };
@@ -140,6 +141,11 @@ wxThread::ExitCode SearchThread::Entry()
     wxQueueEvent(_pHandler, event.Clone());
 
     return (ExitCode)0;
+}
+
+wxString SearchThread::LookupRemoteMAC(const wxString &ipAddress)
+{
+    return wxEmptyString;
 }
 
 BEGIN_EVENT_TABLE(TargetsPane, wxPanel)
