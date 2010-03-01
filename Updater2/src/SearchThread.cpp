@@ -88,7 +88,9 @@ wxThread::ExitCode SearchThread::Entry()
                         count, remote.IPAddress());
                     if ((count > 16) && (count <= 36))
                     {
-                        if (!memcmp(_recvBuf, targetReplyCommand, 16)
+                        if (!memcmp(&_recvBuf[0], &targetReplyCommand[0], 11)
+                            && !memcmp(&_recvBuf[12], &targetReplyCommand[12], 4)
+                            && ((_recvBuf[11] == 0) || (_recvBuf[11] == (count - 16)))
                             && ((count - 16 - 1) == strlen((const char *)&_recvBuf[16])))
                         {
                             msg.type = SEARCH_THREAD_TARGET_FOUND;
