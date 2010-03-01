@@ -12,7 +12,9 @@
 // ------------------------------------------------------------------------
 // Resources
 // ------------------------------------------------------------------------
-
+#include "img/update_16.xpm"
+#include "img/update_32.xpm"
+#include "img/update_48.xpm"
 
 // ------------------------------------------------------------------------
 // Implementation
@@ -69,6 +71,11 @@ void UpdaterFrame::CreateControls()
     _auiManager.SetManagedWindow(this);
 
     /* setup icon for window title bar, taskbar and task switching bar */
+    wxIconBundle icons;
+    icons.AddIcon(wxIcon(update_16_xpm));
+    icons.AddIcon(wxIcon(update_32_xpm));
+    icons.AddIcon(wxIcon(update_48_xpm));
+    SetIcons(icons);
 
     /* menu bar */
 
