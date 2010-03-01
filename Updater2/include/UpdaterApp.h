@@ -3,6 +3,7 @@
 
 #include <wx/wx.h>
 #include <wx/snglinst.h>
+#include <wx/vector.h>
 #ifdef __WXMSW__
 #include <iphlpapi.h>
 #elif defined (__WXGTK__)

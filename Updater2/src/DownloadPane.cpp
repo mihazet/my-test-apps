@@ -4,7 +4,9 @@
 #include <wx/wx.h>
 #include <wx/thread.h>
 #include <wx/dataview.h>
+#ifdef __WXMSW__
 #include <iphlpapi.h>
+#endif
 #include "WidgetId.h"
 #include "DownloadPane.h"
 #include "SearchThread.h"

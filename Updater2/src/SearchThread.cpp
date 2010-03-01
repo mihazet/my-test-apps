@@ -3,7 +3,9 @@
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
 #include <wx/thread.h>
+#ifdef __WXMSW__
 #include <iphlpapi.h>
+#endif
 #include "SearchThread.h"
 #include "WidgetId.h"
 #include "UpdaterApp.h"
@@ -163,7 +165,7 @@ wxString SearchThread::LookupRemoteMAC(const wxString &ipAddress)
         return wxEmptyString;
     }
 
-#elif define __WXGTK__
+#elif defined (__WXGTK__)
     return wxEmptyString;
 #else
     return wxEmptyString;
