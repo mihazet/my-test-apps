@@ -165,7 +165,8 @@ wxString SearchThread::LookupRemoteMAC(const wxString &ipAddress)
 
 #elif define __WXGTK__
     return wxEmptyString;
-#endif
+#else
     return wxEmptyString;
+#endif
 }
 
