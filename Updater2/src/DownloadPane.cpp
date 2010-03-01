@@ -5,7 +5,7 @@
 #include <wx/thread.h>
 #include <iphlpapi.h>
 #include "WidgetId.h"
-#include "TargetsPane.h"
+#include "DownloadPane.h"
 #include "SearchThread.h"
 #include "UpdaterApp.h"
 
@@ -20,17 +20,17 @@
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
-BEGIN_EVENT_TABLE(TargetsPane, wxPanel)
-    EVT_BUTTON(myID_TARGET_SEARCH_BTN, TargetsPane::OnSearchButtonClicked)
-    EVT_THREAD(myID_SEARCH_THREAD, TargetsPane::OnSearchThread)
+BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
+    EVT_BUTTON(myID_DOWNLOAD_SEARCH_BTN, DownloadPane::OnSearchButtonClicked)
+    EVT_THREAD(myID_SEARCH_THREAD, DownloadPane::OnSearchThread)
 END_EVENT_TABLE()
 
-TargetsPane::TargetsPane()
+DownloadPane::DownloadPane()
 {
     Init();
 }
 
-TargetsPane::TargetsPane(wxWindow *parent, wxWindowID id, 
+DownloadPane::DownloadPane(wxWindow *parent, wxWindowID id, 
                          const wxPoint &pos, const wxSize &size,
                          long style)
 {
@@ -38,17 +38,17 @@ TargetsPane::TargetsPane(wxWindow *parent, wxWindowID id,
     Create(parent, id, pos, size, style);
 }
 
-TargetsPane::~TargetsPane()
+DownloadPane::~DownloadPane()
 {
 
 }
 
-void TargetsPane::Init()
+void DownloadPane::Init()
 {
 
 }
 
-bool TargetsPane::Create(wxWindow *parent, wxWindowID id,
+bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
                          const wxPoint &pos, const wxSize &size,
                          long style)
 {
@@ -58,11 +58,11 @@ bool TargetsPane::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-void TargetsPane::CreateControls()
+void DownloadPane::CreateControls()
 {
     wxBoxSizer *bgSizer = new wxBoxSizer(wxVERTICAL);
 
-    bgSizer->Add(new wxButton(this, myID_TARGET_SEARCH_BTN, wxT("Search")), 0, wxALL, 5);
+    bgSizer->Add(new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search")), 0, wxALL, 5);
     bgSizer->Add(new wxButton(this, wxID_ANY, wxT("Cancel")), 0, wxALL, 5);
 
     SetSizer(bgSizer);
@@ -71,7 +71,7 @@ void TargetsPane::CreateControls()
 //
 // event handlers
 //
-void TargetsPane::OnSearchButtonClicked(wxCommandEvent &event)
+void DownloadPane::OnSearchButtonClicked(wxCommandEvent &event)
 {
     SearchThread *thread = new SearchThread(this);
     if (thread
@@ -83,7 +83,7 @@ void TargetsPane::OnSearchButtonClicked(wxCommandEvent &event)
     }
 }
 
-void TargetsPane::OnSearchThread(wxThreadEvent &event)
+void DownloadPane::OnSearchThread(wxThreadEvent &event)
 {
     SearchThreadMessage msg = event.GetPayload<SearchThreadMessage>();
     wxButton *btn;
@@ -92,7 +92,7 @@ void TargetsPane::OnSearchThread(wxThreadEvent &event)
     {
     case SEARCH_THREAD_COMPLETED:
         wxLogMessage(wxT("Target search thread is completed!"));
-        btn = wxDynamicCast(FindWindow(myID_TARGET_SEARCH_BTN), wxButton);
+        btn = wxDynamicCast(FindWindow(myID_DOWNLOAD_SEARCH_BTN), wxButton);
         if (btn) btn->Enable(true);
         break;
     case SEARCH_THREAD_TARGET_FOUND:

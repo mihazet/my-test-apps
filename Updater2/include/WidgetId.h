@@ -25,8 +25,8 @@ enum
     myID_VIEW_RESET_LAYOUT,
     myID_HELP_DOC,
 
-    /* targets */
-    myID_TARGET_SEARCH_BTN,
+    /* download */
+    myID_DOWNLOAD_SEARCH_BTN,
 
     /* log */
 

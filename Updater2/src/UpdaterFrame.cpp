@@ -6,7 +6,7 @@
 #include "UpdaterFrame.h"
 #include "UpdaterApp.h"
 #include "LogPane.h"
-#include "TargetsPane.h"
+#include "DownloadPane.h"
 #include "WidgetId.h"
 
 // ------------------------------------------------------------------------
@@ -90,8 +90,8 @@ void UpdaterFrame::CreateControls()
         Caption(_("Log Window")).Bottom().CloseButton(true).
         DestroyOnClose(false).MaximizeButton(true).MinSize(-1, 150));
 
-    _auiManager.AddPane(new TargetsPane(this), wxAuiPaneInfo().
-        Name(wxT("TargetsPane")).Caption(_("Targets")).Center().
+    _auiManager.AddPane(new DownloadPane(this), wxAuiPaneInfo().
+        Name(wxT("DownloadPane")).Caption(_("Targets")).Center().
         CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
         MinSize(300, -1));
 

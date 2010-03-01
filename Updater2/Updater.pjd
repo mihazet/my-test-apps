@@ -310,6 +310,30 @@
         <long name="title-mode">0</long>
         <long name="locked">1</long>
         <document>
+          <string name="title">"DownloadPane.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/DownloadPane.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"1/3/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"DownloadPane.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/DownloadPane.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"1/3/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"LogPane.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/LogPane.cpp"</string>
@@ -367,30 +391,6 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"1/3/2010"</string>
-          <string name="language">""</string>
-        </document>
-        <document>
-          <string name="title">"TargetsPane.cpp"</string>
-          <string name="type">"source-editor-document"</string>
-          <string name="filename">"src/TargetsPane.cpp"</string>
-          <string name="icon-name">"source-editor"</string>
-          <long name="is-transient">0</long>
-          <long name="owns-file">0</long>
-          <long name="title-mode">1</long>
-          <long name="locked">0</long>
-          <string name="created">"25/2/2010"</string>
-          <string name="language">""</string>
-        </document>
-        <document>
-          <string name="title">"TargetsPane.h"</string>
-          <string name="type">"source-editor-document"</string>
-          <string name="filename">"include/TargetsPane.h"</string>
-          <string name="icon-name">"source-editor"</string>
-          <long name="is-transient">0</long>
-          <long name="owns-file">0</long>
-          <long name="title-mode">1</long>
-          <long name="locked">0</long>
-          <string name="created">"25/2/2010"</string>
           <string name="language">""</string>
         </document>
         <document>

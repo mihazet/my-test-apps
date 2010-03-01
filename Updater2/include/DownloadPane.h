@@ -1,20 +1,20 @@
-#ifndef _TARGETS_PANE_H_
-#define _TARGETS_PANE_H_
+#ifndef _DOWNLOAD_PANE_H_
+#define _DOWNLOAD_PANE_H_
 
 #include <wx/wx.h>
 
-class TargetsPane : public wxPanel
+class DownloadPane : public wxPanel
 {
 public:
     // ctor
-    TargetsPane();
-    TargetsPane(wxWindow *parent, wxWindowID id = wxID_ANY,
+    DownloadPane();
+    DownloadPane(wxWindow *parent, wxWindowID id = wxID_ANY,
         const wxPoint &pos = wxDefaultPosition,
         const wxSize &size = wxDefaultSize,
         long style = wxTAB_TRAVERSAL);
 
     // dtor
-    ~TargetsPane();
+    ~DownloadPane();
 
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
         const wxPoint &pos = wxDefaultPosition,
@@ -32,4 +32,4 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif /* _TARGETS_PANE_H_ */
+#endif /* _DOWNLOAD_PANE_H_ */
