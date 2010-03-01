@@ -16,17 +16,13 @@ enum
 
     /* frame */
     myID_VIEW_PANE_START,
-    myID_VIEW_PROPERTY_PANE = myID_VIEW_PANE_START,
-    myID_VIEW_TRAP_PANE,
-    myID_VIEW_PEER_PANE,
-    myID_VIEW_CONFIG_PANE,
-    myID_VIEW_LOG_PANE,
-    myID_VIEW_PANE_END = myID_VIEW_LOG_PANE,
+    myID_VIEW_PANE_END,
     myID_VIEW_RESET_LAYOUT,
     myID_HELP_DOC,
 
     /* download */
     myID_DOWNLOAD_SEARCH_BTN,
+    myID_DOWNLOAD_TARGET_LIST,
 
     /* log */
 
