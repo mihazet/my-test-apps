@@ -78,6 +78,30 @@ void UpdaterFrame::CreateControls()
     SetIcons(icons);
 
     /* menu bar */
+    wxMenu *file_menu = new wxMenu;
+    file_menu->Append(wxID_EXIT, _("&Quit"), _("Quit this program"));
+    wxMenu *view_menu = new wxMenu;
+    view_menu->AppendCheckItem(myID_VIEW_MAC_SETUP_PANE, _("MAC Setup\tCTRL+F1"),
+        _("Show or hide the MAC address setup pane."));
+    view_menu->AppendCheckItem(myID_VIEW_MAC_USAGE_PANE, _("MAC Usage\tCTRL+F2"),
+        _("Show or hide the MAC usage pane."));
+    view_menu->AppendCheckItem(myID_VIEW_MAC_UPDATE_PANE, _("MAC Update\tCTRL+F3"),
+        _("Show or hide the MAC update pane."));
+    view_menu->AppendCheckItem(myID_VIEW_LOG_PANE, _("Log Window\tCTRL+F4"),
+        _("Show or hide the log window."));
+    view_menu->AppendCheckItem(myID_VIEW_OPTION_PANE, _("Preference\tCTRL+F5"),
+        _("Show or hide the preference."));
+    view_menu->AppendSeparator();
+    view_menu->Append(myID_VIEW_RESET_LAYOUT, _("Reset layout"),
+        _("Reset all panes to the default position and size."));
+    wxMenu *help_menu = new wxMenu;
+    help_menu->Append(myID_HELP_DOC, _("Help file"), _("Show html help file."));
+    help_menu->Append(wxID_ABOUT, _("About..."), _("Show about dialog."));
+    wxMenuBar *menubar = new wxMenuBar;
+    menubar->Append(file_menu, _("&File"));
+    menubar->Append(view_menu, _("&View"));
+    menubar->Append(help_menu, _("&Help"));
+    SetMenuBar(menubar);
 
     /* tool bar */
 

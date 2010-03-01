@@ -16,6 +16,11 @@ enum
 
     /* frame */
     myID_VIEW_PANE_START,
+    myID_VIEW_MAC_SETUP_PANE,
+    myID_VIEW_MAC_USAGE_PANE,
+    myID_VIEW_MAC_UPDATE_PANE,
+    myID_VIEW_LOG_PANE,
+    myID_VIEW_OPTION_PANE,
     myID_VIEW_PANE_END,
     myID_VIEW_RESET_LAYOUT,
     myID_HELP_DOC,
