@@ -132,7 +132,7 @@ wxString SearchThread::LookupRemoteMAC(const wxString &ipAddress)
     dwRetVal = SendARP(destIp, 0, &macAddr[0], &phyAddrLen);
     if (dwRetVal == NO_ERROR)
     {
-        return wxString::Format("%X:%X:%X:%X:%X:%X",
+        return wxString::Format("%02X:%02X:%02X:%02X:%02X:%02X",
             macAddr[0], macAddr[1], macAddr[2], macAddr[3], macAddr[4], macAddr[5]);
     }
     else
