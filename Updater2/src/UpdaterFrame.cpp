@@ -91,7 +91,7 @@ void UpdaterFrame::CreateControls()
         DestroyOnClose(false).MaximizeButton(true).MinSize(-1, 150));
 
     _auiManager.AddPane(new TargetsPane(this), wxAuiPaneInfo().
-        Name(wxT("TargetsPane")).Caption(_("Targets")).Left().
+        Name(wxT("TargetsPane")).Caption(_("Targets")).Center().
         CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
         MinSize(300, -1));
 
