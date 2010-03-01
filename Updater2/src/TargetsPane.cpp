@@ -3,6 +3,7 @@
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
 #include <wx/thread.h>
+#include <iphlpapi.h>
 #include "WidgetId.h"
 #include "TargetsPane.h"
 #include "UpdaterApp.h"
@@ -39,11 +40,12 @@ public:
     SearchThreadMessage()
     {
         type = SEARCH_THREAD_COMPLETED;
-        ip = name = wxEmptyString;
+        ip = name = mac = wxEmptyString;
     }
     STMType type;
     wxString ip;
     wxString name;
+    wxString mac;
 };
 
 // ------------------------------------------------------------------------
@@ -117,11 +119,13 @@ wxThread::ExitCode SearchThread::Entry()
                         count, remote.IPAddress());
                     if ((count > 16) && (count <= 36))
                     {
-                        if (!memcmp(_recvBuf, targetReplyCommand, 16))
+                        if (!memcmp(_recvBuf, targetReplyCommand, 16)
+                            && ((count - 16 - 1) == strlen((const char *)&_recvBuf[16])))
                         {
                             msg.type = SEARCH_THREAD_TARGET_FOUND;
                             msg.ip = remote.IPAddress();
                             msg.name = wxString(&_recvBuf[16]);
+                            msg.mac = LookupRemoteMAC(msg.ip);
                             event.SetPayload(msg);
                             wxQueueEvent(_pHandler, event.Clone());
                         }
@@ -145,6 +149,52 @@ wxThread::ExitCode SearchThread::Entry()
 
 wxString SearchThread::LookupRemoteMAC(const wxString &ipAddress)
 {
+#ifdef __WXMSW__
+    IPAddr destIp = 0;
+    unsigned char macAddr[6];
+    unsigned long phyAddrLen = sizeof(macAddr);
+    DWORD dwRetVal;
+
+    memset(macAddr, 0xFF, phyAddrLen);
+    destIp = inet_addr(ipAddress.ToAscii());
+
+    dwRetVal = SendARP(destIp, 0, &macAddr[0], &phyAddrLen);
+    if (dwRetVal == NO_ERROR)
+    {
+        return wxString::Format("%X:%X:%X:%X:%X:%X",
+            macAddr[0], macAddr[1], macAddr[2], macAddr[3], macAddr[4], macAddr[5]);
+    }
+    else
+    {
+        switch (dwRetVal)
+        {
+        case ERROR_GEN_FAILURE:
+            wxLogError(wxT("SendARP error = ERROR_GEN_FAILURE"));
+            break;
+        case ERROR_INVALID_PARAMETER:
+            wxLogError(wxT("SendARP error = ERROR_INVALID_PARAMETER"));
+            break;
+        case ERROR_INVALID_USER_BUFFER:
+            wxLogError(wxT("SendARP error = ERROR_INVALID_USER_BUFFER"));
+            break;
+        case ERROR_BAD_NET_NAME:
+            wxLogError(wxT("SendARP error = ERROR_GEN_FAILURE"));
+            break;
+        case ERROR_BUFFER_OVERFLOW:
+            wxLogError(wxT("SendARP error = ERROR_BUFFER_OVERFLOW"));
+            break;
+        case ERROR_NOT_FOUND:
+            wxLogError(wxT("SendARP error = ERROR_NOT_FOUND"));
+            break;
+        default:
+            wxLogError(wxT("SendARP error = %lu"), dwRetVal);
+        }
+        return wxEmptyString;
+    }
+
+#elif define __WXGTK__
+    return wxEmptyString;
+#endif
     return wxEmptyString;
 }
 
@@ -224,7 +274,8 @@ void TargetsPane::OnSearchThread(wxThreadEvent &event)
         if (btn) btn->Enable(true);
         break;
     case SEARCH_THREAD_TARGET_FOUND:
-        wxLogMessage(wxT("Target found: name(%s), ip(%s)"), msg.name, msg.ip);
+        wxLogMessage(wxT("Target found: name(%s), ip(%s), mac(%s)"),
+            msg.name, msg.ip, msg.mac);
         break;
     default:
         break;
