@@ -93,8 +93,17 @@ void DownloadPane::OnSearchButtonClicked(wxCommandEvent &event)
         && (thread->Create() == wxTHREAD_NO_ERROR)
         && (thread->Run() == wxTHREAD_NO_ERROR))
     {
+        wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
+        wxDataViewListStore *model;
         wxButton *btn = wxDynamicCast(FindWindow(event.GetId()), wxButton);
-        btn->Enable(false);
+
+        if (lc)
+        {
+            model = static_cast<wxDataViewListStore *>(lc->GetModel());
+            model->DeleteAllItems();
+        }
+        if (btn)
+            btn->Enable(false);
     }
 }
 
