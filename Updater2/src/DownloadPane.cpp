@@ -4,6 +4,7 @@
 #include <wx/wx.h>
 #include <wx/thread.h>
 #include <wx/dataview.h>
+#include <wx/filepicker.h>
 #ifdef __WXMSW__
 #include <iphlpapi.h>
 #endif
@@ -63,10 +64,10 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
 
 void DownloadPane::CreateControls()
 {
-    wxBoxSizer *bgSizer = new wxBoxSizer(wxVERTICAL);
+    wxStaticBoxSizer *listBoxSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Target list"));
 
     /* target search */
-    bgSizer->Add(new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search")), 0, wxALL, 5);
+    listBoxSizer->Add(new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search")), 0, wxALL, 5);
 
     /* target list */
     wxDataViewListCtrl *lc = new wxDataViewListCtrl(this, myID_DOWNLOAD_TARGET_LIST,
@@ -75,13 +76,30 @@ void DownloadPane::CreateControls()
     lc->AppendTextColumn(_("Name"), wxDATAVIEW_CELL_INERT, 120);
     lc->AppendTextColumn(_("IP Address"), wxDATAVIEW_CELL_INERT, 120);
     lc->AppendTextColumn(_("MAC Address"), wxDATAVIEW_CELL_INERT, 120);
-    lc->AppendProgressColumn(_("Progress"), wxDATAVIEW_CELL_INERT, 250);
-    lc->AppendTextColumn(_("File path"), wxDATAVIEW_CELL_INERT);
+    lc->AppendProgressColumn(_("Progress"), wxDATAVIEW_CELL_INERT, 200);
+    lc->AppendTextColumn(_("Target-specific image file path"), wxDATAVIEW_CELL_INERT, 250);
 
-    bgSizer->Add(lc, 1, wxALL | wxEXPAND, 5);
+    listBoxSizer->Add(lc, 1, wxALL | wxEXPAND, 5);
+
+    wxStaticBoxSizer *operationBoxSizer = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Target operation"));
 
     /* target operations */
+    wxBoxSizer *op1Sizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer *op2Sizer = new wxBoxSizer(wxVERTICAL);
     
+    op1Sizer->Add(new wxButton(this, myID_DOWNLOAD_SELECTED_BTN, _("Update Selected")), 1, wxALL | wxEXPAND, 5);
+    
+    op2Sizer->Add(new wxCheckBox(this, myID_DOWNLOAD_SPECIFIC_CB, _("Use Target-specific image?")), 0, wxALL, 5);
+    op2Sizer->Add(new wxStaticText(this, wxID_STATIC, _("Global Image File Path: ")), 0, wxALL, 5);
+    op2Sizer->Add(new wxFilePickerCtrl(this, myID_DOWNLOAD_GLOBAL_FILE), 0, wxALL | wxEXPAND, 5);
+
+    operationBoxSizer->Add(op1Sizer, 0, wxALL | wxEXPAND, 5);
+    operationBoxSizer->Add(op2Sizer, 1, wxALL | wxEXPAND, 5);
+    
+    wxBoxSizer *bgSizer = new wxBoxSizer(wxVERTICAL);
+    bgSizer->Add(listBoxSizer, 1, wxALL | wxEXPAND, 5);
+    bgSizer->Add(operationBoxSizer, 0, wxALL | wxEXPAND, 5);
+
     SetSizer(bgSizer);
 }
 

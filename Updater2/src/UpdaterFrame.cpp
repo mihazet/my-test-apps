@@ -115,7 +115,7 @@ void UpdaterFrame::CreateControls()
         DestroyOnClose(false).MaximizeButton(true).MinSize(-1, 150));
 
     _auiManager.AddPane(new DownloadPane(this), wxAuiPaneInfo().
-        Name(wxT("DownloadPane")).Caption(_("Targets")).Center().
+        Name(wxT("DownloadPane")).Caption(_("Download Window")).Center().
         CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
         MinSize(300, -1));
 

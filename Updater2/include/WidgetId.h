@@ -28,6 +28,9 @@ enum
     /* download */
     myID_DOWNLOAD_SEARCH_BTN,
     myID_DOWNLOAD_TARGET_LIST,
+    myID_DOWNLOAD_SPECIFIC_CB,
+    myID_DOWNLOAD_GLOBAL_FILE,
+    myID_DOWNLOAD_SELECTED_BTN,
 
     /* log */
 
