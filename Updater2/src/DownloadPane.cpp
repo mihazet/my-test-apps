@@ -20,10 +20,57 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
+class TargetList : public wxDataViewListCtrl
+{
+public:
+    TargetList(wxWindow *parent, wxWindowID id = wxID_ANY);
+
+private:
+    void OnSelectionChanged(wxDataViewEvent &event);
+    void OnItemActivated(wxDataViewEvent &event);
+    void OnItemValueChanged(wxDataViewEvent &event);
+};
 
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
+TargetList::TargetList(wxWindow *parent, wxWindowID id)
+    : wxDataViewListCtrl(parent, id, wxDefaultPosition, wxDefaultSize,
+    wxDV_SINGLE | wxDV_HORIZ_RULES | wxDV_VERT_RULES)
+{
+    /* 
+    the second parameter affects if that column will emit wxEVT_COMMOND_DATAVIEW_ITEM_ACTIVATED
+    event or not. wxDATAVIEW_CELL_INERT may emit it, but wxDATAVIEW_CELL_ACTIVATABLE won't.
+    See wxDataViewMainWindow::OnMouse() process in src/generic/datavgen.cpp for detail.
+    */
+    AppendToggleColumn(_("Update?"), wxDATAVIEW_CELL_INERT, 60);
+    AppendTextColumn(_("Name"), wxDATAVIEW_CELL_ACTIVATABLE, 120);
+    AppendTextColumn(_("IP Address"), wxDATAVIEW_CELL_ACTIVATABLE, 120);
+    AppendTextColumn(_("MAC Address"), wxDATAVIEW_CELL_ACTIVATABLE, 120);
+    AppendProgressColumn(_("Progress"), wxDATAVIEW_CELL_ACTIVATABLE, 200);
+    AppendTextColumn(_("Target-specific image file path"), wxDATAVIEW_CELL_INERT, 250);
+
+    Bind(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, &TargetList::OnSelectionChanged, this);
+    Bind(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, &TargetList::OnItemActivated, this);
+    Bind(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, &TargetList::OnItemValueChanged, this);
+}
+
+void TargetList::OnSelectionChanged(wxDataViewEvent &event)
+{
+    event.Skip();
+}
+
+void TargetList::OnItemActivated(wxDataViewEvent &event)
+{
+    wxDataViewItem item = event.GetItem();
+    wxLogMessage(wxT("Item Activated at row %d"), GetRowByItem(item));
+}
+
+void TargetList::OnItemValueChanged(wxDataViewEvent &event)
+{
+    wxLogMessage(wxT("Item value changed"));
+}
+
 BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_BUTTON(myID_DOWNLOAD_SEARCH_BTN, DownloadPane::OnSearchButtonClicked)
     EVT_THREAD(myID_SEARCH_THREAD, DownloadPane::OnSearchThread)
@@ -70,16 +117,8 @@ void DownloadPane::CreateControls()
     listBoxSizer->Add(new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search")), 0, wxALL, 5);
 
     /* target list */
-    wxDataViewListCtrl *lc = new wxDataViewListCtrl(this, myID_DOWNLOAD_TARGET_LIST,
-        wxDefaultPosition, wxDefaultSize, wxDV_SINGLE | wxDV_HORIZ_RULES);
-    lc->AppendToggleColumn(_("Update?"), wxDATAVIEW_CELL_ACTIVATABLE, 60);
-    lc->AppendTextColumn(_("Name"), wxDATAVIEW_CELL_INERT, 120);
-    lc->AppendTextColumn(_("IP Address"), wxDATAVIEW_CELL_INERT, 120);
-    lc->AppendTextColumn(_("MAC Address"), wxDATAVIEW_CELL_INERT, 120);
-    lc->AppendProgressColumn(_("Progress"), wxDATAVIEW_CELL_INERT, 200);
-    lc->AppendTextColumn(_("Target-specific image file path"), wxDATAVIEW_CELL_INERT, 250);
-
-    listBoxSizer->Add(lc, 1, wxALL | wxEXPAND, 5);
+    TargetList *tl = new TargetList(this, myID_DOWNLOAD_TARGET_LIST);
+    listBoxSizer->Add(tl, 1, wxALL | wxEXPAND, 5);
 
     wxStaticBoxSizer *operationBoxSizer = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Target operation"));
 
@@ -184,3 +223,4 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
         break;
     }
 }
+
