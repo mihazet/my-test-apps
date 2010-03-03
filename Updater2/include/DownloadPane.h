@@ -27,7 +27,11 @@ private:
 
     // event handlers
     void OnSearchButtonClicked(wxCommandEvent &event);
+    void OnUpdateButtonClicked(wxCommandEvent &event);
     void OnSearchThread(wxThreadEvent &event);
+    void OnUpdateThread(wxThreadEvent &event);
+
+    int _updateThreadCount;
 
     DECLARE_EVENT_TABLE()
 };

@@ -36,6 +36,7 @@ enum
 
     /* threads */
     myID_SEARCH_THREAD,
+    myID_UPDATE_THREAD,
 };
 
 #endif /* _WIDGET_ID_H_ */

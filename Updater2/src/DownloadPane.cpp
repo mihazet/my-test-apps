@@ -12,6 +12,7 @@
 #include "WidgetId.h"
 #include "DownloadPane.h"
 #include "SearchThread.h"
+#include "UpdateThread.h"
 #include "UpdaterApp.h"
 
 // ------------------------------------------------------------------------
@@ -184,7 +185,9 @@ void TargetList::OnItemValueChanged(wxDataViewEvent &WXUNUSED(event))
 
 BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_BUTTON(myID_DOWNLOAD_SEARCH_BTN, DownloadPane::OnSearchButtonClicked)
+    EVT_BUTTON(myID_DOWNLOAD_SELECTED_BTN, DownloadPane::OnUpdateButtonClicked)
     EVT_THREAD(myID_SEARCH_THREAD, DownloadPane::OnSearchThread)
+    EVT_THREAD(myID_UPDATE_THREAD, DownloadPane::OnUpdateThread)
 END_EVENT_TABLE()
 
 DownloadPane::DownloadPane()
@@ -207,7 +210,7 @@ DownloadPane::~DownloadPane()
 
 void DownloadPane::Init()
 {
-
+    _updateThreadCount = 0;
 }
 
 bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
@@ -277,6 +280,54 @@ void DownloadPane::OnSearchButtonClicked(wxCommandEvent &event)
     }
 }
 
+void DownloadPane::OnUpdateButtonClicked(wxCommandEvent &event)
+{
+    wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
+
+    if (lc)
+    {
+        wxDataViewListStore *store = lc->GetStore();
+        if (store)
+        {
+            unsigned int row, nRow = store->GetCount();
+            _updateThreadCount = 0;
+            for (row = 0; row < nRow; row++)
+            {
+                wxVariant data;
+                store->GetValueByRow(data, row, 0);
+                if (data.GetBool())
+                {
+                    store->GetValueByRow(data, row, 2);
+                    wxString ip = data.GetString();
+
+                    UpdateThread *thread = new UpdateThread(this, ip, row);
+                    if (thread
+                        && (thread->Create() == wxTHREAD_NO_ERROR)
+                        && (thread->Run() == wxTHREAD_NO_ERROR))
+                    {
+                        _updateThreadCount++;
+                    }
+                }
+            }
+
+            if (_updateThreadCount)
+            {
+                wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
+                if (btn)
+                    btn->Enable(false);
+            }
+            else
+                wxLogVerbose(wxT("No target is selected! Please make sure the first column is checked if you want to update it."));
+        }
+        else
+            wxLogError(wxT("Can not find store in wxDataViewListCtrl instance to validate required information!"));
+
+        lc->UnselectAll();
+    }
+    else
+        wxLogError(wxT("Can not find wxDataViewListCtrl instance to validate required information!"));
+}
+
 void DownloadPane::OnSearchThread(wxThreadEvent &event)
 {
     SearchThreadMessage msg = event.GetPayload<SearchThreadMessage>();
@@ -335,3 +386,42 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
     }
 }
 
+void DownloadPane::OnUpdateThread(wxThreadEvent &event)
+{
+    UpdateThreadMessage msg = event.GetPayload<UpdateThreadMessage>();
+    wxButton *btn;
+    wxDataViewListCtrl *lc;
+    wxDataViewListStore *store;
+
+    switch (msg.type)
+    {
+    case UPDATE_THREAD_COMPLETED:
+        wxLogMessage(wxT("UpdateThread is completed with error code = %d"), msg.error);
+        if (--_updateThreadCount == 0)
+        {
+            if ((btn = wxDynamicCast(FindWindow(myID_DOWNLOAD_SELECTED_BTN), wxButton)) != NULL)
+                btn->Enable();
+        }
+        break;
+    case UPDATE_THREAD_PROGRESS:
+        if ((lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl)) != NULL)
+        {
+            if ((store = lc->GetStore()) != NULL)
+            {
+                wxString ipInList;
+                wxVariant data;
+                store->GetValueByRow(data, msg.row, 2);
+                ipInList = data.GetString();
+                if (ipInList == msg.targetIpAddress)
+                {
+                    data = (long)msg.progress;
+                    store->SetValueByRow(data, msg.row, 4);
+                    store->RowChanged(msg.row);
+                }
+            }
+        }
+        break;
+    default:
+        break;
+    }
+}
