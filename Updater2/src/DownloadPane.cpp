@@ -63,7 +63,13 @@ void TargetList::OnSelectionChanged(wxDataViewEvent &event)
 void TargetList::OnItemActivated(wxDataViewEvent &event)
 {
     wxDataViewItem item = event.GetItem();
-    wxLogMessage(wxT("Item Activated at row %d"), GetRowByItem(item));
+    wxDataViewListStore *store = GetStore();
+    wxVariant data;
+
+    store->GetValue(data, item, 0);
+    data = data ? false : true;
+    store->SetValue(data, item, 0);
+    store->ItemChanged(item);
 }
 
 void TargetList::OnItemValueChanged(wxDataViewEvent &event)
