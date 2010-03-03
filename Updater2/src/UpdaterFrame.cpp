@@ -153,12 +153,12 @@ void UpdaterFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
 //////////////////////////////////////////////////////////////////////////////
 // Event handlers
 //////////////////////////////////////////////////////////////////////////////
-void UpdaterFrame::OnViewPane(wxCommandEvent &event)
+void UpdaterFrame::OnViewPane(wxCommandEvent &WXUNUSED(event))
 {
 
 }
 
-void UpdaterFrame::OnUpdatePane(wxUpdateUIEvent &event)
+void UpdaterFrame::OnUpdatePane(wxUpdateUIEvent &WXUNUSED(event))
 {
 }
 
@@ -171,7 +171,7 @@ void UpdaterFrame::OnEraseBackground(wxEraseEvent &event)
     event.Skip();
 }
 
-void UpdaterFrame::OnSize(wxSizeEvent &event)
+void UpdaterFrame::OnSize(wxSizeEvent &WXUNUSED(event))
 {
     //event.Skip();
 }
