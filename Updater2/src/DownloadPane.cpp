@@ -91,6 +91,52 @@ private:
     bool m_toggle;
 };
 
+class MyCustomFilePathRenderer : public wxDataViewCustomRenderer
+{
+public:
+    MyCustomFilePathRenderer()
+        : wxDataViewCustomRenderer(wxT("string"), 
+            wxDATAVIEW_CELL_ACTIVATABLE,
+            wxALIGN_LEFT)
+    { m_path = wxEmptyString; }
+
+    virtual bool Render(wxRect cell, wxDC *dc, int state)
+    {
+        RenderText(m_path, 0, cell, dc, state);
+        return true;
+    }
+
+    virtual bool Activate(wxRect WXUNUSED(cell), wxDataViewModel *model,
+        const wxDataViewItem &item, unsigned int col)
+    {
+        wxLogMessage(wxT("MyCustomFilePathRenderer activate"));
+        return false;
+    }
+
+    virtual wxSize GetSize() const
+    {
+        const wxDataViewCtrl *view = GetView();
+        if (!m_path.empty())
+            return view->wxWindowBase::GetTextExtent(m_path);
+        return wxSize(wxDVC_DEFAULT_RENDERER_SIZE,wxDVC_DEFAULT_RENDERER_SIZE);
+    }
+
+    virtual bool SetValue(const wxVariant &value)
+    {
+        m_path = value.GetString();
+        return true;
+    }
+
+    virtual bool GetValue(wxVariant &value) const 
+    {
+        value = m_path;
+        return true;
+    }
+
+private:
+    wxString m_path;
+};
+
 class TargetList : public wxDataViewListCtrl
 {
 public:
@@ -114,7 +160,7 @@ TargetList::TargetList(wxWindow *parent, wxWindowID id)
     AppendTextColumn(_("IP Address"), wxDATAVIEW_CELL_INERT, 120);
     AppendTextColumn(_("MAC Address"), wxDATAVIEW_CELL_INERT, 120);
     AppendProgressColumn(_("Progress"), wxDATAVIEW_CELL_INERT, 200);
-    AppendTextColumn(_("Target-specific image file path"), wxDATAVIEW_CELL_INERT, 250);
+    AppendColumn(new wxDataViewColumn(_("Target-specific Image File Path"), new MyCustomFilePathRenderer, 5, 250, wxALIGN_LEFT));
 
     //Bind(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, &TargetList::OnSelectionChanged, this);
     //Bind(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, &TargetList::OnItemActivated, this);
