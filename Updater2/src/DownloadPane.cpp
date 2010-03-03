@@ -4,6 +4,7 @@
 #include <wx/wx.h>
 #include <wx/thread.h>
 #include <wx/dataview.h>
+#include <wx/renderer.h>
 #include <wx/filepicker.h>
 #ifdef __WXMSW__
 #include <iphlpapi.h>
@@ -20,6 +21,76 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
+class MyCustomToggleRenderer : public wxDataViewCustomRenderer
+{
+public:
+    MyCustomToggleRenderer()
+        : wxDataViewCustomRenderer(wxT("bool"), 
+            wxDATAVIEW_CELL_ACTIVATABLE,
+            wxALIGN_CENTER)
+    { m_toggle = false; }
+
+    virtual bool Render(wxRect cell, wxDC *dc, int WXUNUSED(state))
+    {
+        int flags = 0;
+        if (m_toggle)
+            flags |= wxCONTROL_CHECKED;
+        if (GetMode() != wxDATAVIEW_CELL_ACTIVATABLE)
+            flags |= wxCONTROL_DISABLED;
+
+        // check boxes we draw must always have the same, standard size (if it's
+        // bigger than the cell size the checkbox will be truncated because the
+        // caller had set the clipping rectangle to prevent us from drawing outside
+        // the cell)
+        cell.SetSize(GetSize());
+
+        wxRendererNative::Get().DrawCheckBox(
+                GetOwner()->GetOwner(),
+                *dc,
+                cell,
+                flags );
+
+        return true;
+    }
+
+    virtual bool Activate(wxRect WXUNUSED(cell), wxDataViewModel *model,
+        const wxDataViewItem &item, unsigned int col)
+    {
+        model->ChangeValue(!m_toggle, item, col);
+        return false;
+    }
+
+    virtual bool LeftClick(wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell),
+        wxDataViewModel *model, const wxDataViewItem &item,
+        unsigned int col)
+    {
+        model->ChangeValue(!m_toggle, item, col);
+        return false;
+    }
+
+    virtual wxSize GetSize() const
+    {
+        // the window parameter is not used by GetCheckBoxSize() so it's
+        // safe to pass NULL
+        return wxRendererNative::Get().GetCheckBoxSize(NULL);
+    }
+
+    virtual bool SetValue(const wxVariant &value)
+    {
+        m_toggle = value.GetBool();
+        return true;
+    }
+
+    virtual bool GetValue(wxVariant &value) const 
+    {
+        value = m_toggle;
+        return true;
+    }
+
+private:
+    bool m_toggle;
+};
+
 class TargetList : public wxDataViewListCtrl
 {
 public:
@@ -38,41 +109,29 @@ TargetList::TargetList(wxWindow *parent, wxWindowID id)
     : wxDataViewListCtrl(parent, id, wxDefaultPosition, wxDefaultSize,
     wxDV_SINGLE | wxDV_HORIZ_RULES | wxDV_VERT_RULES)
 {
-    /* 
-    the second parameter affects if that column will emit wxEVT_COMMOND_DATAVIEW_ITEM_ACTIVATED
-    event or not. wxDATAVIEW_CELL_INERT may emit it, but wxDATAVIEW_CELL_ACTIVATABLE won't.
-    See wxDataViewMainWindow::OnMouse() process in src/generic/datavgen.cpp for detail.
-    */
-    AppendToggleColumn(_("Update?"), wxDATAVIEW_CELL_INERT, 60);
-    AppendTextColumn(_("Name"), wxDATAVIEW_CELL_ACTIVATABLE, 120);
-    AppendTextColumn(_("IP Address"), wxDATAVIEW_CELL_ACTIVATABLE, 120);
-    AppendTextColumn(_("MAC Address"), wxDATAVIEW_CELL_ACTIVATABLE, 120);
-    AppendProgressColumn(_("Progress"), wxDATAVIEW_CELL_ACTIVATABLE, 200);
+    AppendColumn(new wxDataViewColumn(_("Update?"), new MyCustomToggleRenderer, 0, 60, wxALIGN_CENTER, wxDATAVIEW_COL_RESIZABLE));
+    AppendTextColumn(_("Name"), wxDATAVIEW_CELL_INERT, 120);
+    AppendTextColumn(_("IP Address"), wxDATAVIEW_CELL_INERT, 120);
+    AppendTextColumn(_("MAC Address"), wxDATAVIEW_CELL_INERT, 120);
+    AppendProgressColumn(_("Progress"), wxDATAVIEW_CELL_INERT, 200);
     AppendTextColumn(_("Target-specific image file path"), wxDATAVIEW_CELL_INERT, 250);
 
-    Bind(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, &TargetList::OnSelectionChanged, this);
-    Bind(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, &TargetList::OnItemActivated, this);
-    Bind(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, &TargetList::OnItemValueChanged, this);
+    //Bind(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, &TargetList::OnSelectionChanged, this);
+    //Bind(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, &TargetList::OnItemActivated, this);
+    //Bind(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, &TargetList::OnItemValueChanged, this);
 }
 
-void TargetList::OnSelectionChanged(wxDataViewEvent &event)
+void TargetList::OnSelectionChanged(wxDataViewEvent &WXUNUSED(event))
 {
-    event.Skip();
+    wxLogMessage(wxT("Selection changed"));
 }
 
-void TargetList::OnItemActivated(wxDataViewEvent &event)
+void TargetList::OnItemActivated(wxDataViewEvent &WXUNUSED(event))
 {
-    wxDataViewItem item = event.GetItem();
-    wxDataViewListStore *store = GetStore();
-    wxVariant data;
-
-    store->GetValue(data, item, 0);
-    data = data ? false : true;
-    store->SetValue(data, item, 0);
-    store->ItemChanged(item);
+    wxLogMessage(wxT("Item activated"));
 }
 
-void TargetList::OnItemValueChanged(wxDataViewEvent &event)
+void TargetList::OnItemValueChanged(wxDataViewEvent &WXUNUSED(event))
 {
     wxLogMessage(wxT("Item value changed"));
 }
