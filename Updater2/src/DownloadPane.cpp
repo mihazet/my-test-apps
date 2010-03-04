@@ -269,7 +269,7 @@ void DownloadPane::CreateControls()
     radioSizer->Add(rb1, 0, wxALL, 5);
     radioSizer->Add(rb2, 0, wxALL, 5);
 
-    wxFilePickerCtrl *filePicker = new wxFilePickerCtrl(this, myID_DOWNLOAD_GLOBAL_FILE);
+    wxFilePickerCtrl *filePicker = new wxFilePickerCtrl(this, myID_DOWNLOAD_GLOBAL_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("Bootloader or Firmware Binary Files(*.brec)|*.brec|All Files(*.*)|*.*"));
     wxBoxSizer *fileSizer = new wxBoxSizer(wxVERTICAL);
     fileSizer->AddStretchSpacer(1);
     fileSizer->Add(new wxStaticText(this, wxID_STATIC, _("Global Image File Path:")), 0, wxALL, 5);
