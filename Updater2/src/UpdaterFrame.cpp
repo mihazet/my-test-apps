@@ -3,11 +3,13 @@
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
 #include <wx/iconbndl.h>
+#include <wx/aboutdlg.h>
 #include "UpdaterFrame.h"
 #include "UpdaterApp.h"
 #include "LogPane.h"
 #include "DownloadPane.h"
 #include "WidgetId.h"
+#include "Version.h"
 
 // ------------------------------------------------------------------------
 // Resources
@@ -183,6 +185,26 @@ void UpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
 
 void UpdaterFrame::OnAbout(wxCommandEvent &WXUNUSED(event))
 {
+    wxAboutDialogInfo info;
+    wxString copyright, description, version, longVersion;
+        
+    copyright
+        << wxT("Copyright 2010 (c), Delta Electronics, Inc. All Rights Reserved.");
+    description
+        << wxT("This program is used to download the firmware and/or bootloader\n")
+        << wxT("into flash memory in parallel for the RELTA platform.\n")
+        << wxT("And it also helps user to manage the MAC address management.\n");
+    version
+        << VER_MAJOR_STRING << "." << VER_MINOR_STRING << "." << VER_RELEASE_STRING;
+    longVersion = version + "." + VER_BUILD_STRING;        
+
+    info.SetDescription(description);
+    info.SetCopyright(copyright);
+    info.SetIcon(wxIcon(update_48_xpm));
+    info.SetName(wxT("Updater"));
+    info.SetVersion(version, longVersion);
+
+    wxAboutBox(info, this);
 }
 
 void UpdaterFrame::OnQuit(wxCommandEvent &WXUNUSED(event))
