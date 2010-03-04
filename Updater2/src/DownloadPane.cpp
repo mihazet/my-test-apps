@@ -244,7 +244,7 @@ void DownloadPane::CreateControls()
 {
     wxStaticBoxSizer *listBoxSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Target list"));
 
-    /* target search */
+    /* target list box */
     wxButton *search = new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     search->SetBitmap(wxBitmap(search_32_xpm));
     listBoxSizer->Add(search, 0, wxALL, 5);
@@ -255,27 +255,31 @@ void DownloadPane::CreateControls()
     selectSizer->Add(new MyLinkAction(this, myID_DOWNLOAD_TARGET_LIST_SELECT_NONE, _("Select None")), 0, wxLEFT, 5);
     listBoxSizer->Add(selectSizer, 0, wxALL, 0);
 
-    /* target list */
     TargetList *tl = new TargetList(this, myID_DOWNLOAD_TARGET_LIST);
     listBoxSizer->Add(tl, 1, wxALL | wxEXPAND, 5);
 
-    wxStaticBoxSizer *operationBoxSizer = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Target operation"));
-
-    /* target operations */
-    wxBoxSizer *op1Sizer = new wxBoxSizer(wxVERTICAL);
-    wxBoxSizer *op2Sizer = new wxBoxSizer(wxVERTICAL);
-    
+    /* target operation box */
     wxButton *download = new wxButton(this, myID_DOWNLOAD_SELECTED_BTN, _("Update selected"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     download->SetBitmap(wxBitmap(download_to_chip2_64_xpm));
-    op1Sizer->Add(download, 1, wxALL | wxEXPAND, 5);
     
-    op2Sizer->Add(new wxCheckBox(this, myID_DOWNLOAD_SPECIFIC_CB, _("Use Target-specific image?")), 0, wxALL, 5);
-    op2Sizer->Add(new wxStaticText(this, wxID_STATIC, _("Global Image File Path: ")), 0, wxALL, 5);
-    op2Sizer->Add(new wxFilePickerCtrl(this, myID_DOWNLOAD_GLOBAL_FILE), 0, wxALL | wxEXPAND, 5);
+    wxRadioButton *rb1 = new wxRadioButton(this, myID_DOWNLOAD_SPECIFIC_RB, _("Use Target-specific Image File"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    wxRadioButton *rb2 = new wxRadioButton(this, myID_DOWNLOAD_GLOBAL_RB, _("Use Global Image File"));
+    wxBoxSizer *radioSizer = new wxBoxSizer(wxVERTICAL);
+    radioSizer->AddStretchSpacer(1);
+    radioSizer->Add(rb1, 0, wxALL, 5);
+    radioSizer->Add(rb2, 0, wxALL, 5);
 
-    operationBoxSizer->Add(op1Sizer, 0, wxALL | wxEXPAND, 5);
-    operationBoxSizer->Add(op2Sizer, 1, wxALL | wxEXPAND, 5);
+    wxFilePickerCtrl *filePicker = new wxFilePickerCtrl(this, myID_DOWNLOAD_GLOBAL_FILE);
+    wxBoxSizer *fileSizer = new wxBoxSizer(wxVERTICAL);
+    fileSizer->AddStretchSpacer(1);
+    fileSizer->Add(new wxStaticText(this, wxID_STATIC, _("Global Image File Path:")), 0, wxALL, 5);
+    fileSizer->Add(filePicker, 0, wxALL | wxEXPAND, 5);
     
+    wxStaticBoxSizer *operationBoxSizer = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Target operation"));
+    operationBoxSizer->Add(download, 0, wxALL | wxEXPAND, 5);
+    operationBoxSizer->Add(radioSizer, 0, wxALL | wxEXPAND, 5);
+    operationBoxSizer->Add(fileSizer, 1, wxALL | wxEXPAND, 5);
+
     wxBoxSizer *bgSizer = new wxBoxSizer(wxVERTICAL);
     bgSizer->Add(listBoxSizer, 1, wxALL | wxEXPAND, 5);
     bgSizer->Add(operationBoxSizer, 0, wxALL | wxEXPAND, 5);
