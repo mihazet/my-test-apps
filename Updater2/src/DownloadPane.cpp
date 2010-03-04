@@ -6,6 +6,7 @@
 #include <wx/dataview.h>
 #include <wx/renderer.h>
 #include <wx/filepicker.h>
+#include <wx/hyperlink.h>
 #ifdef __WXMSW__
 #include <iphlpapi.h>
 #endif
@@ -149,6 +150,17 @@ private:
     void OnItemValueChanged(wxDataViewEvent &event);
 };
 
+class MyLinkAction : public wxHyperlinkCtrl
+{
+public:
+    MyLinkAction(wxWindow *parent, wxWindowID id, const wxString &text)
+        : wxHyperlinkCtrl(parent, id, text, wxEmptyString, wxDefaultPosition,
+            wxDefaultSize, wxBORDER_NONE | wxHL_ALIGN_CENTRE)
+    {
+        SetVisitedColour(GetNormalColour());
+    }
+};
+
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
@@ -188,6 +200,9 @@ BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_BUTTON(myID_DOWNLOAD_SELECTED_BTN, DownloadPane::OnUpdateButtonClicked)
     EVT_THREAD(myID_SEARCH_THREAD, DownloadPane::OnSearchThread)
     EVT_THREAD(myID_UPDATE_THREAD, DownloadPane::OnUpdateThread)
+    EVT_HYPERLINK(myID_TARGET_CHECK_ALL, DownloadPane::OnTargetCheckAll)
+    EVT_HYPERLINK(myID_TARGET_UNCHECK_ALL, DownloadPane::OnTargetUncheckAll)
+    EVT_HYPERLINK(myID_DOWNLOAD_TARGET_LIST_SELECT_NONE, DownloadPane::OnTargetListSelectNone)
 END_EVENT_TABLE()
 
 DownloadPane::DownloadPane()
@@ -229,6 +244,12 @@ void DownloadPane::CreateControls()
 
     /* target search */
     listBoxSizer->Add(new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search")), 0, wxALL, 5);
+
+    wxBoxSizer *selectSizer = new wxBoxSizer(wxHORIZONTAL);
+    selectSizer->Add(new MyLinkAction(this, myID_TARGET_CHECK_ALL, _("Check All")), 0, wxLEFT, 5);
+    selectSizer->Add(new MyLinkAction(this, myID_TARGET_UNCHECK_ALL, _("Uncheck All")), 0, wxLEFT | wxRIGHT, 5);
+    selectSizer->Add(new MyLinkAction(this, myID_DOWNLOAD_TARGET_LIST_SELECT_NONE, _("Select None")), 0, wxLEFT, 5);
+    listBoxSizer->Add(selectSizer, 0, wxALL, 0);
 
     /* target list */
     TargetList *tl = new TargetList(this, myID_DOWNLOAD_TARGET_LIST);
@@ -424,4 +445,58 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
     default:
         break;
     }
+}
+
+void DownloadPane::OnTargetCheckAll(wxHyperlinkEvent &WXUNUSED(event))
+{
+    wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
+    wxDataViewListStore *store;
+    wxVariant data = true;
+
+    if (lc)
+    {
+        if ((store = lc->GetStore()) != NULL)
+        {
+            unsigned int row, nRow = store->GetCount();
+            for (row = 0; row < nRow; row++)
+            {
+                store->SetValueByRow(data, row, 0);
+            }
+
+            /* this cause list refresh */
+            if (nRow != 0)
+                store->RowChanged(row - 1);
+        }
+    }
+}
+
+void DownloadPane::OnTargetUncheckAll(wxHyperlinkEvent &WXUNUSED(event))
+{
+    wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
+    wxDataViewListStore *store;
+    wxVariant data = false;
+
+    if (lc)
+    {
+        if ((store = lc->GetStore()) != NULL)
+        {
+            unsigned int row, nRow = store->GetCount();
+            for (row = 0; row < nRow; row++)
+            {
+                store->SetValueByRow(data, row, 0);
+            }
+
+            /* this cause list refresh */
+            if (nRow != 0)
+                store->RowChanged(row - 1);
+        }
+    }
+}
+
+void DownloadPane::OnTargetListSelectNone(wxHyperlinkEvent &WXUNUSED(event))
+{
+    wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
+
+    if (lc)
+        lc->UnselectAll();
 }

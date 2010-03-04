@@ -2,6 +2,8 @@
 #define _DOWNLOAD_PANE_H_
 
 #include <wx/wx.h>
+#include <wx/thread.h>
+#include <wx/hyperlink.h>
 
 class DownloadPane : public wxPanel
 {
@@ -30,6 +32,9 @@ private:
     void OnUpdateButtonClicked(wxCommandEvent &event);
     void OnSearchThread(wxThreadEvent &event);
     void OnUpdateThread(wxThreadEvent &event);
+    void OnTargetCheckAll(wxHyperlinkEvent &event);
+    void OnTargetUncheckAll(wxHyperlinkEvent &event);
+    void OnTargetListSelectNone(wxHyperlinkEvent &event);
 
     int _updateThreadCount;
 
