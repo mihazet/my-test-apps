@@ -19,6 +19,8 @@
 // ------------------------------------------------------------------------
 // Resources
 // ------------------------------------------------------------------------
+#include "img/search_32.xpm"
+#include "img/download_to_chip2_64.xpm"
 
 // ------------------------------------------------------------------------
 // Declaration
@@ -243,7 +245,9 @@ void DownloadPane::CreateControls()
     wxStaticBoxSizer *listBoxSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Target list"));
 
     /* target search */
-    listBoxSizer->Add(new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search")), 0, wxALL, 5);
+    wxButton *search = new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    search->SetBitmap(wxBitmap(search_32_xpm));
+    listBoxSizer->Add(search, 0, wxALL, 5);
 
     wxBoxSizer *selectSizer = new wxBoxSizer(wxHORIZONTAL);
     selectSizer->Add(new MyLinkAction(this, myID_TARGET_CHECK_ALL, _("Check All")), 0, wxLEFT, 5);
@@ -261,7 +265,9 @@ void DownloadPane::CreateControls()
     wxBoxSizer *op1Sizer = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *op2Sizer = new wxBoxSizer(wxVERTICAL);
     
-    op1Sizer->Add(new wxButton(this, myID_DOWNLOAD_SELECTED_BTN, _("Update Selected")), 1, wxALL | wxEXPAND, 5);
+    wxButton *download = new wxButton(this, myID_DOWNLOAD_SELECTED_BTN, _("Update selected"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    download->SetBitmap(wxBitmap(download_to_chip2_64_xpm));
+    op1Sizer->Add(download, 1, wxALL | wxEXPAND, 5);
     
     op2Sizer->Add(new wxCheckBox(this, myID_DOWNLOAD_SPECIFIC_CB, _("Use Target-specific image?")), 0, wxALL, 5);
     op2Sizer->Add(new wxStaticText(this, wxID_STATIC, _("Global Image File Path: ")), 0, wxALL, 5);
