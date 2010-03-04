@@ -4,6 +4,7 @@
 #include <wx/wx.h>
 #include <wx/thread.h>
 #include <wx/hyperlink.h>
+#include <wx/infobar.h>
 
 class DownloadPane : public wxPanel
 {
@@ -38,6 +39,7 @@ private:
     void OnTargetListSelectNone(wxHyperlinkEvent &event);
 
     int _updateThreadCount;
+    wxInfoBar *_infobar;
 
     DECLARE_EVENT_TABLE()
 };

@@ -243,6 +243,8 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
 
 void DownloadPane::CreateControls()
 {
+    _infobar = new wxInfoBar(this);
+
     wxStaticBoxSizer *listBoxSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Target list"));
 
     /* target list box */
@@ -284,6 +286,7 @@ void DownloadPane::CreateControls()
     operationBoxSizer->Add(fileSizer, 1, wxALL | wxEXPAND, 5);
 
     wxBoxSizer *bgSizer = new wxBoxSizer(wxVERTICAL);
+    bgSizer->Add(_infobar, wxSizerFlags().Expand());
     bgSizer->Add(listBoxSizer, 1, wxALL | wxEXPAND, 5);
     bgSizer->Add(operationBoxSizer, 0, wxALL | wxEXPAND, 5);
 
@@ -444,6 +447,14 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
                 data.push_back(0);
                 data.push_back(wxEmptyString);
                 lc->AppendItem(data);
+
+                if (!msg.mac.Cmp(wxT("00:1D:72:9C:94:E5"))) // replace to invalid mac address
+                {
+                    wxString invalid_mac_message;
+                    invalid_mac_message << wxT("Target ") << msg.name << wxT(" with invalid MAC address!")
+                        << wxT(" Would you like to reprogram it?");
+                    _infobar->ShowMessage(invalid_mac_message);
+                }
             }
         }
         break;
