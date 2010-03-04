@@ -199,7 +199,8 @@ void TargetList::OnItemValueChanged(wxDataViewEvent &WXUNUSED(event))
 
 BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_BUTTON(myID_DOWNLOAD_SEARCH_BTN, DownloadPane::OnSearchButtonClicked)
-    EVT_BUTTON(myID_DOWNLOAD_SELECTED_BTN, DownloadPane::OnUpdateButtonClicked)
+    EVT_BUTTON(myID_DOWNLOAD_SELECTED_BTN, DownloadPane::OnDownloadButtonClicked)
+    EVT_UPDATE_UI(myID_DOWNLOAD_SELECTED_BTN, DownloadPane::OnUpdateDownloadButton)
     EVT_THREAD(myID_SEARCH_THREAD, DownloadPane::OnSearchThread)
     EVT_THREAD(myID_UPDATE_THREAD, DownloadPane::OnUpdateThread)
     EVT_HYPERLINK(myID_TARGET_CHECK_ALL, DownloadPane::OnTargetCheckAll)
@@ -247,6 +248,7 @@ void DownloadPane::CreateControls()
     /* target list box */
     wxButton *search = new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     search->SetBitmap(wxBitmap(search_32_xpm));
+    search->SetBitmapDisabled(wxBitmap(wxImage(search_32_xpm).ConvertToGreyscale()));
     listBoxSizer->Add(search, 0, wxALL, 5);
 
     wxBoxSizer *selectSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -261,6 +263,7 @@ void DownloadPane::CreateControls()
     /* target operation box */
     wxButton *download = new wxButton(this, myID_DOWNLOAD_SELECTED_BTN, _("Update selected"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     download->SetBitmap(wxBitmap(download_to_chip2_64_xpm));
+    download->SetBitmapDisabled(wxBitmap(wxImage(download_to_chip2_64_xpm).ConvertToGreyscale()));
     
     wxRadioButton *rb1 = new wxRadioButton(this, myID_DOWNLOAD_SPECIFIC_RB, _("Use Target-specific Image File"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
     wxRadioButton *rb2 = new wxRadioButton(this, myID_DOWNLOAD_GLOBAL_RB, _("Use Global Image File"));
@@ -311,7 +314,7 @@ void DownloadPane::OnSearchButtonClicked(wxCommandEvent &event)
     }
 }
 
-void DownloadPane::OnUpdateButtonClicked(wxCommandEvent &event)
+void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
 {
     wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
 
@@ -343,6 +346,8 @@ void DownloadPane::OnUpdateButtonClicked(wxCommandEvent &event)
 
             if (_updateThreadCount)
             {
+                /* Besides disable button in update ui event handler, we also disable button here 
+                   right away to avoid this click action re-enter again */
                 wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
                 if (btn)
                     btn->Enable(false);
@@ -357,6 +362,36 @@ void DownloadPane::OnUpdateButtonClicked(wxCommandEvent &event)
     }
     else
         wxLogError(wxT("Can not find wxDataViewListCtrl instance to validate required information!"));
+}
+
+void DownloadPane::OnUpdateDownloadButton(wxUpdateUIEvent &event)
+{
+    wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
+    wxDataViewListStore *store;
+    bool at_least_one_is_checked = false;
+    unsigned int row, nRow;
+    wxVariant data;
+
+    if (lc)
+    {
+        store = lc->GetStore();
+        nRow = store->GetCount();
+        for (row = 0; row < nRow; row++)
+        {
+            store->GetValueByRow(data, row, 0);
+            if (data.GetBool())
+            {
+                at_least_one_is_checked = true;
+                break;
+            }
+        }
+    }
+
+    if ((_updateThreadCount == 0)
+        && at_least_one_is_checked)
+        event.Enable(true);
+    else
+        event.Enable(false);
 }
 
 void DownloadPane::OnSearchThread(wxThreadEvent &event)

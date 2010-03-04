@@ -29,7 +29,8 @@ private:
 
     // event handlers
     void OnSearchButtonClicked(wxCommandEvent &event);
-    void OnUpdateButtonClicked(wxCommandEvent &event);
+    void OnDownloadButtonClicked(wxCommandEvent &event);
+    void OnUpdateDownloadButton(wxUpdateUIEvent &event);
     void OnSearchThread(wxThreadEvent &event);
     void OnUpdateThread(wxThreadEvent &event);
     void OnTargetCheckAll(wxHyperlinkEvent &event);
