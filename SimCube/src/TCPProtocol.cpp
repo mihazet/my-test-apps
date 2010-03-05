@@ -365,6 +365,8 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
                             st_response_load_packet.stp_load_header->u32Chksum +=
                                 *(pst_buffer_load->byp_load_buffer + u32TotalLoad);
                         }
+                        st_response_load_packet.stp_load_header->u32Chksum 
+                            = wxUINT32_SWAP_ON_LE(st_response_load_packet.stp_load_header->u32Chksum);
                         u16Err = 0;
 
                         /* in this simulated application, we save the whole image to a file */
