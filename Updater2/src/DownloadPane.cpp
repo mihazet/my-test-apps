@@ -243,7 +243,15 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
 
 void DownloadPane::CreateControls()
 {
-    _infobar = new wxInfoBar(this);
+    _promptForModifyMAC = new wxInfoBar(this);
+    _promptForModifyMAC->AddButton(myID_MODIFY_MAC_BTN, _("Start to modify..."));
+    // Must use dynamic event handler here, use static event table is not working here.
+    // Becuase the button clicked event is handled in the wxInfoBar itself and don't propagate to it parent...
+    _promptForModifyMAC->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &DownloadPane::OnModifyMACButtonClicked, this, myID_MODIFY_MAC_BTN);
+    _promptForModifyMAC->AddButton(wxID_ANY, _("Ignore"));
+    _promptForModifyMAC->SetFont(GetFont().Bold().Larger());
+    _promptForUpdateError = new wxInfoBar(this);
+    _promptForUpdateError->SetFont(GetFont().Bold().Larger());
 
     wxStaticBoxSizer *listBoxSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Target list"));
 
@@ -286,11 +294,22 @@ void DownloadPane::CreateControls()
     operationBoxSizer->Add(fileSizer, 1, wxALL | wxEXPAND, 5);
 
     wxBoxSizer *bgSizer = new wxBoxSizer(wxVERTICAL);
-    bgSizer->Add(_infobar, wxSizerFlags().Expand());
+    bgSizer->Add(_promptForModifyMAC, wxSizerFlags().Expand());
+    bgSizer->Add(_promptForUpdateError, wxSizerFlags().Expand());
     bgSizer->Add(listBoxSizer, 1, wxALL | wxEXPAND, 5);
     bgSizer->Add(operationBoxSizer, 0, wxALL | wxEXPAND, 5);
 
     SetSizer(bgSizer);
+}
+
+bool DownloadPane::IsMACAddressInvalid(const wxString &mac_address)
+{
+    bool invalid = false;
+
+    if (!mac_address.Cmp(wxT("00:1D:72:9C:94:E5")))
+        invalid = true;
+
+    return invalid;
 }
 
 //
@@ -365,6 +384,14 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
     }
     else
         wxLogError(wxT("Can not find wxDataViewListCtrl instance to validate required information!"));
+}
+
+void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
+{
+    wxLogMessage(wxT("User press modify MAC address button!"));
+
+    // just call skip here, so this event will be handled by the wxInfoBarBase, which will hide the infobar.
+    event.Skip();
 }
 
 void DownloadPane::OnUpdateDownloadButton(wxUpdateUIEvent &event)
@@ -448,12 +475,13 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
                 data.push_back(wxEmptyString);
                 lc->AppendItem(data);
 
-                if (!msg.mac.Cmp(wxT("00:1D:72:9C:94:E5"))) // replace to invalid mac address
+                if (IsMACAddressInvalid(msg.mac)) // replace to invalid mac address
                 {
-                    wxString invalid_mac_message;
-                    invalid_mac_message << wxT("Target ") << msg.name << wxT(" with invalid MAC address!")
-                        << wxT(" Would you like to reprogram it?");
-                    _infobar->ShowMessage(invalid_mac_message);
+                    wxString msg_to_modify_invalid_mac;
+                    msg_to_modify_invalid_mac 
+                        << wxT("Target ") << msg.name << wxT(" with invalid MAC address!")
+                        << wxT(" Would you like to modify it?");
+                    _promptForModifyMAC->ShowMessage(msg_to_modify_invalid_mac, wxICON_WARNING);
                 }
             }
         }
@@ -473,12 +501,17 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
     switch (msg.type)
     {
     case UPDATE_THREAD_COMPLETED:
+
         wxLogMessage(wxT("UpdateThread is completed with error code = %d"), msg.error);
-        if (--_updateThreadCount == 0)
+
+        _updateThreadCount--;
+        if (msg.error)
         {
-            if ((btn = wxDynamicCast(FindWindow(myID_DOWNLOAD_SELECTED_BTN), wxButton)) != NULL)
-                btn->Enable();
+            wxString msg_for_update_error;
+            msg_for_update_error << wxT("Error = ") << msg.error;
+            _promptForUpdateError->ShowMessage(msg_for_update_error, wxICON_ERROR);
         }
+
         break;
     case UPDATE_THREAD_PROGRESS:
         if ((lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl)) != NULL)

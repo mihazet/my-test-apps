@@ -25,21 +25,26 @@ public:
         long style = wxTAB_TRAVERSAL);
 
 private:
+    // helper methods
     void Init();
     void CreateControls();
+    bool IsMACAddressInvalid(const wxString & mac_address);
 
     // event handlers
     void OnSearchButtonClicked(wxCommandEvent &event);
     void OnDownloadButtonClicked(wxCommandEvent &event);
+    void OnModifyMACButtonClicked(wxCommandEvent &event);
     void OnUpdateDownloadButton(wxUpdateUIEvent &event);
     void OnSearchThread(wxThreadEvent &event);
     void OnUpdateThread(wxThreadEvent &event);
     void OnTargetCheckAll(wxHyperlinkEvent &event);
     void OnTargetUncheckAll(wxHyperlinkEvent &event);
     void OnTargetListSelectNone(wxHyperlinkEvent &event);
-
+    
+    // data member
     int _updateThreadCount;
-    wxInfoBar *_infobar;
+    wxInfoBar *_promptForModifyMAC;
+    wxInfoBar *_promptForUpdateError;
 
     DECLARE_EVENT_TABLE()
 };

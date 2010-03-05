@@ -35,6 +35,7 @@ enum
     myID_DOWNLOAD_GLOBAL_RB,
     myID_DOWNLOAD_GLOBAL_FILE,
     myID_DOWNLOAD_SELECTED_BTN,
+    myID_MODIFY_MAC_BTN,
 
     /* log */
 
