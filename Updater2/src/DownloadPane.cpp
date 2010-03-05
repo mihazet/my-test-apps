@@ -339,11 +339,13 @@ void DownloadPane::OnSearchButtonClicked(wxCommandEvent &event)
 void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
 {
     wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
+    wxFilePickerCtrl *filePicker = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_FILE), wxFilePickerCtrl);
 
-    if (lc)
+    if (lc && filePicker)
     {
+        wxString file = filePicker->GetPath();
         wxDataViewListStore *store = lc->GetStore();
-        if (store)
+        if (store && !file.empty())
         {
             unsigned int row, nRow = store->GetCount();
             _updateThreadCount = 0;
@@ -356,7 +358,7 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                     store->GetValueByRow(data, row, 2);
                     wxString ip = data.GetString();
 
-                    UpdateThread *thread = new UpdateThread(this, ip, row);
+                    UpdateThread *thread = new UpdateThread(this, ip, row, file);
                     if (thread
                         && (thread->Create() == wxTHREAD_NO_ERROR)
                         && (thread->Run() == wxTHREAD_NO_ERROR))

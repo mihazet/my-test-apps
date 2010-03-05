@@ -8,7 +8,7 @@
 class UpdateThread : public wxThread
 {
 public:
-    UpdateThread(wxEvtHandler *handler, const wxString &remote, const int row);
+    UpdateThread(wxEvtHandler *handler, const wxString &remote, const int row, const wxString &image);
     ~UpdateThread();
     virtual wxThread::ExitCode Entry();
 
@@ -17,6 +17,7 @@ private:
     wxString _targetIpAddress;
     wxString _localIpAddress;
     int _row;
+    wxString _imageFilePath;
     wxSocketClient *_tcp;
     unsigned char *_recvBuf;
 };
@@ -64,7 +65,12 @@ public:
 
 /* error code use by ourself */
 #define UTERROR_SOCKET_INIT         -1
-#define UTERROR_CONNECT             -2
-
+#define UTERROR_SOCKET_CONNECT      -2
+#define UTERROR_CONNECT             -3
+#define UTERROR_TRANSMIT            -4
+#define UTERROR_RECEIVE             -5
+#define UTERROR_FILE_STREAM         -6
+#define UTERROR_SOCKET_WRITE        -7
+#define UTERROR_SOCKET_READ         -8
 
 #endif /* _UPDATE_THREAD_H_ */
