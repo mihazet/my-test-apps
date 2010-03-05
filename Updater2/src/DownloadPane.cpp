@@ -110,8 +110,8 @@ public:
         return true;
     }
 
-    virtual bool Activate(wxRect WXUNUSED(cell), wxDataViewModel *model,
-        const wxDataViewItem &item, unsigned int col)
+    virtual bool Activate(wxRect WXUNUSED(cell), wxDataViewModel *WXUNUSED(model),
+        const wxDataViewItem &WXUNUSED(item), unsigned int WXUNUSED(col))
     {
         wxLogMessage(wxT("MyCustomFilePathRenderer activate"));
         return false;
@@ -496,7 +496,6 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
 void DownloadPane::OnUpdateThread(wxThreadEvent &event)
 {
     UpdateThreadMessage msg = event.GetPayload<UpdateThreadMessage>();
-    wxButton *btn;
     wxDataViewListCtrl *lc;
     wxDataViewListStore *store;
 
