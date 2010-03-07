@@ -535,6 +535,30 @@
         <long name="title-mode">0</long>
         <long name="locked">1</long>
         <document>
+          <string name="title">"AppOptions.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/AppOptions.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"6/3/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"AppOptions.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/AppOptions.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"6/3/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"DownloadPane.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/DownloadPane.cpp"</string>
@@ -736,6 +760,78 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"25/2/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"sqlite3.c"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/sqlite3.c"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"7/3/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"sqlite3.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/sqlite3.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"7/3/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wxsqlite3.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wxsqlite3.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"7/3/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wxsqlite3.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wxsqlite3.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"7/3/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wxsqlite3def.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wxsqlite3def.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"7/3/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wxsqlite3opt.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wxsqlite3opt.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"7/3/2010"</string>
           <string name="language">""</string>
         </document>
       </document>
