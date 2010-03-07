@@ -507,7 +507,7 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
     wxDataViewListCtrl *lc;
     wxDataViewListStore *store;
     wxStringTokenizer tokenizer;
-    int loop = 0, row, error, progress;
+    int loop = 0, row = -1, error = UTERROR_UNKNOWN, progress = 0;
     long longValue;
     wxString name, ip;
 
@@ -539,7 +539,6 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
                 }
                 else
                 {
-                    error = UTERROR_UNKNOWN;
                     wxLogError(_("UpdateThread is completed with unknown error code"));
                 }
                 break;
@@ -571,8 +570,6 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
             case 0: // row
                 if (token.ToLong(&longValue))
                     row = (int)longValue;
-                else
-                    row = -1;
                 break;
             case 1: // name
                 name = token;
@@ -585,15 +582,13 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
             case 4: // progress
                 if (token.ToLong(&longValue))
                     progress = (int)longValue;
-                else
-                    progress = 0;
                 break;
             default:
                 break;
             }
         }
 
-        if ((lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl)) != NULL)
+        if (((lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl)) != NULL) && (row != -1))
         {
             if ((store = lc->GetStore()) != NULL)
             {
