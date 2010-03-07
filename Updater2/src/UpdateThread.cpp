@@ -171,8 +171,9 @@ wxThread::ExitCode UpdateThread::Entry()
                 if (imageStream.IsOk())
                 {
                     long streamLength = imageStream.GetLength();
-                    long transmitCount, q, r;
+                    long transmitCount, transmitDataSize, q, r;
                     unsigned int checkSum = 0;
+                    int transmitCurrentProgress = 0, transmitStep;
 
                     q = streamLength / (txSize - 16);
                     r = streamLength % (txSize - 16);
@@ -184,14 +185,20 @@ wxThread::ExitCode UpdateThread::Entry()
                         r = txSize - 16;
                     }
 
+                    transmitStep = 100 / transmitCount;
+
                     // to here: transmitCount is the number of transmit, and r is last transmition size.
+                    transmitDataSize = txSize - 16;
 
                     while (transmitCount--)
                     {
                         size_t readIndex, leftForRead, lastRead, sumIndex;
 
+                        if (transmitCount == 0)
+                            transmitDataSize = r;
+
                         readIndex = 16;
-                        leftForRead = transmitCount ? txSize - 16 : r;
+                        leftForRead = transmitDataSize;
 
                         /* read required data length from stream */
                         do
@@ -216,10 +223,6 @@ wxThread::ExitCode UpdateThread::Entry()
                         if (transmitCount == 0)
                         {
                             txBuf[6] = txBuf[7] = 0xff;
-                            txBuf[8] = (r >> 24) & 0xFF;
-                            txBuf[9] = (r >> 16) & 0xFF;
-                            txBuf[10] = (r >> 8) & 0xFF;
-                            txBuf[11] = r & 0xFF;
                             txBuf[12] = (checkSum >> 24) & 0xFF;
                             txBuf[13] = (checkSum >> 16) & 0xFF;
                             txBuf[14] = (checkSum >> 8) & 0xFF;
@@ -228,18 +231,15 @@ wxThread::ExitCode UpdateThread::Entry()
                         else
                         {
                             txBuf[6] = txBuf[7] = 0;
-                            txBuf[8] = ((txSize - 16) >> 24) & 0xFF;
-                            txBuf[9] = ((txSize - 16) >> 16) & 0xFF;
-                            txBuf[10] = ((txSize - 16) >> 8) & 0xFF;
-                            txBuf[11] = (txSize - 16) & 0xFF;
                             txBuf[12] = txBuf[13] = txBuf[14] = txBuf[15] = 0;
                         }
+                        txBuf[8] = (transmitDataSize >> 24) & 0xFF;
+                        txBuf[9] = (transmitDataSize >> 16) & 0xFF;
+                        txBuf[10] = (transmitDataSize >> 8) & 0xFF;
+                        txBuf[11] = transmitDataSize & 0xFF;  
                         
-                        /* transmit date */
-                        if (transmitCount == 0)
-                            _tcp->Write(&txBuf[0], r + 16);
-                        else
-                            _tcp->Write(&txBuf[0], txSize);
+                        /* transmit data */
+                        _tcp->Write(&txBuf[0], transmitDataSize + 16);
                         if (_tcp->LastError() != wxSOCKET_NOERROR)
                         {
                             error_code = UTERROR_SOCKET_WRITE;
@@ -268,7 +268,11 @@ wxThread::ExitCode UpdateThread::Entry()
                         }
 
                         /* notify progress */
-                        SendNotification(UPDATE_THREAD_PROGRESS, 50);
+                        if (transmitCount == 0)
+                            transmitCurrentProgress = 100;
+                        else
+                            transmitCurrentProgress += transmitStep;
+                        SendNotification(UPDATE_THREAD_PROGRESS, transmitCurrentProgress);
                     }
                 }
                 else
