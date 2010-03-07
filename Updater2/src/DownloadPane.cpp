@@ -7,6 +7,7 @@
 #include <wx/renderer.h>
 #include <wx/filepicker.h>
 #include <wx/hyperlink.h>
+#include <wx/tokenzr.h>
 #ifdef __WXMSW__
 #include <iphlpapi.h>
 #endif
@@ -351,14 +352,21 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
             _updateThreadCount = 0;
             for (row = 0; row < nRow; row++)
             {
+                wxString threadCodedWord;
                 wxVariant data;
                 store->GetValueByRow(data, row, 0);
                 if (data.GetBool())
                 {
+                    store->GetValueByRow(data, row, 1);
+                    wxString name = data.GetString();
                     store->GetValueByRow(data, row, 2);
                     wxString ip = data.GetString();
+                    store->GetValueByRow(data, row, 3);
+                    wxString mac = data.GetString();
+                    threadCodedWord.clear();
+                    threadCodedWord << row << DELIMIT_WORD << name << DELIMIT_WORD << ip << DELIMIT_WORD << mac;
 
-                    UpdateThread *thread = new UpdateThread(this, ip, row, file);
+                    UpdateThread *thread = new UpdateThread(this, threadCodedWord, file);
                     if (thread
                         && (thread->Create() == wxTHREAD_NO_ERROR)
                         && (thread->Run() == wxTHREAD_NO_ERROR))
@@ -498,36 +506,106 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
     UpdateThreadMessage msg = event.GetPayload<UpdateThreadMessage>();
     wxDataViewListCtrl *lc;
     wxDataViewListStore *store;
+    wxStringTokenizer tokenizer;
+    int loop = 0, row, error, progress;
+    long longValue;
+    wxString name, ip;
 
     switch (msg.type)
     {
     case UPDATE_THREAD_COMPLETED:
 
-        wxLogMessage(wxT("UpdateThread is completed with error code = %d"), msg.error);
+        tokenizer.SetString(msg.payload, DELIMIT_WORD);
+        while (tokenizer.HasMoreTokens())
+        {
+            wxString token = tokenizer.GetNextToken();
+            switch (loop++)
+            {
+            case 0: // row
+                break;
+            case 1: // name
+                name = token;
+                break;
+            case 2: // ip
+                ip = token;
+                break;
+            case 3: // mac
+                break;
+            case 4: // error
+                if (token.ToLong(&longValue))
+                {
+                    error = (int)longValue;
+                    wxLogVerbose(_("UpdateThread is completed with error code = %d"), error);
+                }
+                else
+                {
+                    error = UTERROR_UNKNOWN;
+                    wxLogError(_("UpdateThread is completed with unknown error code"));
+                }
+                break;
+            default:
+                break;
+            }
+        }
 
         _updateThreadCount--;
-        if (msg.error)
+
+        if (error)
         {
             wxString msg_for_update_error;
-            msg_for_update_error << wxT("Error = ") << msg.error;
+            msg_for_update_error << _("Device") << wxT(" ") << name << wxT("(") << ip << wxT(") ")
+                << _("update procedure is failed, error code = ") << error;
             _promptForUpdateError->ShowMessage(msg_for_update_error, wxICON_ERROR);
         }
 
         break;
+
     case UPDATE_THREAD_PROGRESS:
+
+        tokenizer.SetString(msg.payload, DELIMIT_WORD);
+        while (tokenizer.HasMoreTokens())
+        {
+            wxString token = tokenizer.GetNextToken();
+            switch (loop++)
+            {
+            case 0: // row
+                if (token.ToLong(&longValue))
+                    row = (int)longValue;
+                else
+                    row = -1;
+                break;
+            case 1: // name
+                name = token;
+                break;
+            case 2: // ip
+                ip = token;
+                break;
+            case 3: // mac
+                break;
+            case 4: // progress
+                if (token.ToLong(&longValue))
+                    progress = (int)longValue;
+                else
+                    progress = 0;
+                break;
+            default:
+                break;
+            }
+        }
+
         if ((lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl)) != NULL)
         {
             if ((store = lc->GetStore()) != NULL)
             {
                 wxString ipInList;
                 wxVariant data;
-                store->GetValueByRow(data, msg.row, 2);
+                store->GetValueByRow(data, row, 2);
                 ipInList = data.GetString();
-                if (ipInList == msg.targetIpAddress)
+                if (ipInList == ip)
                 {
-                    data = (long)msg.progress;
-                    store->SetValueByRow(data, msg.row, 4);
-                    store->RowChanged(msg.row);
+                    data = (long)progress;
+                    store->SetValueByRow(data, row, 4);
+                    store->RowChanged(row);
                 }
             }
         }

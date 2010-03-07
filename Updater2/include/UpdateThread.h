@@ -5,22 +5,7 @@
 #include <wx/thread.h>
 #include <wx/socket.h>
 
-class UpdateThread : public wxThread
-{
-public:
-    UpdateThread(wxEvtHandler *handler, const wxString &remote, const int row, const wxString &image);
-    ~UpdateThread();
-    virtual wxThread::ExitCode Entry();
-
-private:
-    wxEvtHandler *_pHandler;
-    wxString _targetIpAddress;
-    wxString _localIpAddress;
-    int _row;
-    wxString _imageFilePath;
-    wxSocketClient *_tcp;
-    unsigned char *_recvBuf;
-};
+#define DELIMIT_WORD    wxT("|")
 
 typedef enum
 {
@@ -32,15 +17,34 @@ class UpdateThreadMessage
 {
 public:
     UpdateThreadMessage()
-    {
+    { 
         type = UPDATE_THREAD_COMPLETED;
-        progress = 0;
+        payload = wxEmptyString;
     }
     UTMType type;
-    wxString targetIpAddress;
-    int progress;
-    int row;
-    int error;
+    wxString payload;
+};
+
+class UpdateThread : public wxThread
+{
+public:
+    UpdateThread(wxEvtHandler *handler, const wxString &codedString,
+        const wxString &image);
+    ~UpdateThread();
+
+private:
+    void SendNotification(const UTMType type, const int data);
+    virtual wxThread::ExitCode Entry();
+
+    wxEvtHandler *_pHandler;
+    wxString _localIpAddress;
+    int _row;
+    wxString _targetName;
+    wxString _targetIpAddress;
+    wxString _targetMacAddress;
+    wxString _imageFilePath;
+    wxSocketClient *_tcp;
+    unsigned char *_recvBuf;
 };
 
 // -------------------------------------------------------------------------
@@ -72,5 +76,6 @@ public:
 #define UTERROR_FILE_STREAM         -6
 #define UTERROR_SOCKET_WRITE        -7
 #define UTERROR_SOCKET_READ         -8
+#define UTERROR_UNKNOWN             -100
 
 #endif /* _UPDATE_THREAD_H_ */

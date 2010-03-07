@@ -4,6 +4,7 @@
 #include <wx/wx.h>
 #include <wx/thread.h>
 #include <wx/wfstream.h>
+#include <wx/tokenzr.h>
 #include "UpdateThread.h"
 #include "WidgetId.h"
 #include "UpdaterApp.h"
@@ -22,26 +23,54 @@
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
-UpdateThread::UpdateThread(wxEvtHandler *handler, const wxString &remote,
-                           const int row, const wxString &image)
+UpdateThread::UpdateThread(wxEvtHandler *handler, const wxString &codedString,
+                           const wxString &image)
     : wxThread(wxTHREAD_DETACHED),
     _pHandler(handler),
-    _targetIpAddress(remote),
-    _row(row),
     _imageFilePath(image)
 {
     wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
     wxIPV4address local;
+    int loop = 0;
+    long longValue;
 
     if (!netAdapter.empty())
     {
+        wxStringTokenizer tokenizer(codedString, DELIMIT_WORD);
+        while (tokenizer.HasMoreTokens())
+        {
+            wxString token = tokenizer.GetNextToken();
+            
+            switch (loop++)
+            {
+            case 0: 
+                if (token.ToLong(&longValue))
+                    _row = (int)longValue;
+                else
+                    _row = -1;
+                break;
+            case 1:
+                _targetName = token;
+                break;
+            case 2:
+                _targetIpAddress = token;
+                break;
+            case 3:
+                _targetMacAddress = token;
+                break;
+            default:
+                break;
+            }
+        }
+
         _localIpAddress = netAdapter.at(0).GetIp();
         local.Hostname(_localIpAddress);
         _tcp = new wxSocketClient(wxSOCKET_BLOCK);
     }
     else
     {
-        _localIpAddress = wxEmptyString;
+        _row = -1;
+        _targetName = _targetIpAddress = _targetMacAddress = _localIpAddress = wxEmptyString;
         _tcp = NULL;
     }
 
@@ -52,6 +81,20 @@ UpdateThread::~UpdateThread()
 {
     delete _tcp;
     delete [] _recvBuf;
+}
+
+void UpdateThread::SendNotification(const UTMType type, const int data)
+{
+    wxThreadEvent event(wxEVT_COMMAND_THREAD, myID_UPDATE_THREAD);
+    UpdateThreadMessage msg;
+    msg.type = type;
+    msg.payload << _row << DELIMIT_WORD 
+        << _targetName << DELIMIT_WORD
+        << _targetIpAddress << DELIMIT_WORD
+        << _targetMacAddress << DELIMIT_WORD
+        << data;
+    event.SetPayload(msg);
+    wxQueueEvent(_pHandler, event.Clone());
 }
 
 wxThread::ExitCode UpdateThread::Entry()
@@ -225,12 +268,7 @@ wxThread::ExitCode UpdateThread::Entry()
                         }
 
                         /* notify progress */
-                        msg.type = UPDATE_THREAD_PROGRESS;
-                        msg.progress = transmitCount ? 50 : 100;
-                        msg.targetIpAddress = _targetIpAddress;
-                        msg.row = _row;
-                        event.SetPayload(msg);
-                        wxQueueEvent(_pHandler, event.Clone());
+                        SendNotification(UPDATE_THREAD_PROGRESS, 50);
                     }
                 }
                 else
@@ -245,10 +283,7 @@ wxThread::ExitCode UpdateThread::Entry()
     else
         error_code = UTERROR_SOCKET_INIT;
 
-    msg.type = UPDATE_THREAD_COMPLETED;
-    msg.error = error_code;
-    event.SetPayload(msg);
-    wxQueueEvent(_pHandler, event.Clone());
+    SendNotification(UPDATE_THREAD_COMPLETED, error_code);
 
     //
     // clean up
