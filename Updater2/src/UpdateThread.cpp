@@ -36,7 +36,7 @@ UpdateThread::UpdateThread(wxEvtHandler *handler, const wxString &codedString,
 
     if (!netAdapter.empty())
     {
-        wxStringTokenizer tokenizer(codedString, DELIMIT_WORD);
+        wxStringTokenizer tokenizer(codedString, UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD);
         while (tokenizer.HasMoreTokens())
         {
             wxString token = tokenizer.GetNextToken();
@@ -88,10 +88,10 @@ void UpdateThread::SendNotification(const UTMType type, const int data)
     wxThreadEvent event(wxEVT_COMMAND_THREAD, myID_UPDATE_THREAD);
     UpdateThreadMessage msg;
     msg.type = type;
-    msg.payload << _row << DELIMIT_WORD 
-        << _targetName << DELIMIT_WORD
-        << _targetIpAddress << DELIMIT_WORD
-        << _targetMacAddress << DELIMIT_WORD
+    msg.payload << _row << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD 
+        << _targetName << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
+        << _targetIpAddress << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
+        << _targetMacAddress << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
         << data;
     event.SetPayload(msg);
     wxQueueEvent(_pHandler, event.Clone());

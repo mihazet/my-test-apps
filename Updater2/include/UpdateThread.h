@@ -5,7 +5,7 @@
 #include <wx/thread.h>
 #include <wx/socket.h>
 
-#define DELIMIT_WORD    wxT("|")
+#define UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD  wxT("|")
 
 typedef enum
 {

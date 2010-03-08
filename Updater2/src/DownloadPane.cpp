@@ -456,7 +456,11 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                     store->GetValueByRow(data, row, 3);
                     wxString mac = data.GetString();
                     threadCodedWord.clear();
-                    threadCodedWord << row << DELIMIT_WORD << name << DELIMIT_WORD << ip << DELIMIT_WORD << mac;
+                    threadCodedWord 
+                        << row << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
+                        << name << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
+                        << ip << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
+                        << mac;
 
                     UpdateThread *thread = new UpdateThread(this, threadCodedWord, file);
                     if (thread
@@ -607,7 +611,7 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
     {
     case UPDATE_THREAD_COMPLETED:
 
-        tokenizer.SetString(msg.payload, DELIMIT_WORD);
+        tokenizer.SetString(msg.payload, UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD);
         while (tokenizer.HasMoreTokens())
         {
             wxString token = tokenizer.GetNextToken();
@@ -653,7 +657,7 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
 
     case UPDATE_THREAD_PROGRESS:
 
-        tokenizer.SetString(msg.payload, DELIMIT_WORD);
+        tokenizer.SetString(msg.payload, UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD);
         while (tokenizer.HasMoreTokens())
         {
             wxString token = tokenizer.GetNextToken();
