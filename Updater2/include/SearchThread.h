@@ -3,10 +3,12 @@
 
 #include <wx/wx.h>
 
+#define SEARCH_THREAD_CODEDSTRING_DELIMIT_WORD  wxT("|")
+
 class SearchThread : public wxThread
 {
 public:
-    SearchThread(wxEvtHandler *handler);
+    SearchThread(wxEvtHandler *handler, const wxString &codedString);
     ~SearchThread();
     virtual wxThread::ExitCode Entry();
 
@@ -14,6 +16,8 @@ private:
     wxString LookupRemoteMAC(const wxString &ipAddress);
     wxEvtHandler *_pHandler;
     unsigned char *_recvBuf;
+    int _broadcastCount;
+    wxString _broadcastAddress;
 };
 
 typedef enum

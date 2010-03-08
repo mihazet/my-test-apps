@@ -3,6 +3,7 @@
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
 #include <wx/thread.h>
+#include <wx/tokenzr.h>
 #ifdef __WXMSW__
 #include <iphlpapi.h>
 #endif
@@ -22,16 +23,48 @@
 // Implementation
 // ------------------------------------------------------------------------
 #define RECVBUFSIZE 128
-SearchThread::SearchThread(wxEvtHandler *handler) 
+SearchThread::SearchThread(wxEvtHandler *handler, const wxString& codedString) 
     : wxThread(wxTHREAD_DETACHED), _pHandler(handler)
 {
     wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
     wxIPV4address local;
+    wxStringTokenizer tokenizer(codedString, SEARCH_THREAD_CODEDSTRING_DELIMIT_WORD);
+    int loop = 0, opt = 1;
+    long longValue = 2;
+    bool useSubnetBroadcastAddress = true;
+
+    while (tokenizer.HasMoreTokens())
+    {
+        wxString token = tokenizer.GetNextToken();
+        switch (loop++)
+        {
+        case 0: // broadcast count
+            token.ToLong(&longValue);
+            _broadcastCount = (int)longValue;;
+            break;
+        case 1: // broadcase method
+            if (token.ToLong(&longValue))
+                useSubnetBroadcastAddress = (longValue == 0);
+            break;
+        default:
+            break;
+        }
+    }
 
     if (!netAdapter.empty())
     {
         local.Hostname(netAdapter.at(0).GetIp());
         netAdapter.at(0).udp = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
+        if (netAdapter.at(0).udp->IsOk())
+            netAdapter.at(0).udp->SetOption(SOL_SOCKET, SO_BROADCAST, &opt, sizeof(opt));
+        if (useSubnetBroadcastAddress)
+            _broadcastAddress = netAdapter.at(0).GetBroadcast();
+        else
+            _broadcastAddress = wxT("255.255.255.255");
+    }
+    else
+    {
+        _broadcastAddress = wxT("255.255.255.255");
     }
 
     _recvBuf = new unsigned char[RECVBUFSIZE];
@@ -66,13 +99,13 @@ wxThread::ExitCode SearchThread::Entry()
     };
     wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
     wxIPV4address broadcast, remote;
-    broadcast.Hostname(netAdapter.at(0).GetBroadcast());
+    broadcast.Hostname(_broadcastAddress);
     broadcast.Service(40000);
     wxDatagramSocket *udpSocket = netAdapter.at(0).udp;
 
     wxLogMessage(wxT("Target search thread is running!"));
     
-    for (loop = 0; (loop < 4) && !TestDestroy(); loop++)
+    for (loop = 0; (loop < _broadcastCount) && !TestDestroy(); loop++)
     {
         wxLogVerbose(wxT("Broadcast target discovery command!"));
         udpSocket->SendTo(broadcast, targetQueryCommand, 16);
@@ -103,7 +136,7 @@ wxThread::ExitCode SearchThread::Entry()
                             wxQueueEvent(_pHandler, event.Clone());
                         }
                     }
-                }                
+                }
             }
             current = wxDateTime::Now();
             wxTimeSpan diff = current.Subtract(start);

@@ -410,7 +410,25 @@ bool DownloadPane::IsMACAddressInvalid(const wxString &mac_address)
 //
 void DownloadPane::OnSearchButtonClicked(wxCommandEvent &event)
 {
-    SearchThread *thread = new SearchThread(this);
+    AppOptions *pOpt = wxGetApp().m_pAppOptions;
+    wxString codedString, value;
+    long longValue = 1;
+
+    /* search count */
+    if (pOpt && pOpt->GetOption(wxT("SearchCount"), value) && value.ToLong(&longValue))
+        codedString << longValue;
+    else
+        codedString << wxT("1");
+    codedString << SEARCH_THREAD_CODEDSTRING_DELIMIT_WORD;
+
+    /* broadcast address */
+    wxRadioButton *methodRB = wxDynamicCast(FindWindow(myID_SEARCH_METHOD1_RB), wxRadioButton);
+    if (methodRB && methodRB->GetValue())
+        codedString << wxT("0");
+    else
+        codedString << wxT("1");
+
+    SearchThread *thread = new SearchThread(this, codedString);
     if (thread
         && (thread->Create() == wxTHREAD_NO_ERROR)
         && (thread->Run() == wxTHREAD_NO_ERROR))
