@@ -28,6 +28,8 @@ private:
     // helper methods
     void Init();
     void CreateControls();
+    void InitOptionValue();
+    void SaveOptionValue();
     bool IsMACAddressInvalid(const wxString & mac_address);
 
     // event handlers

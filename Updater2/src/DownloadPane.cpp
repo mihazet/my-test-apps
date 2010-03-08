@@ -16,6 +16,7 @@
 #include "SearchThread.h"
 #include "UpdateThread.h"
 #include "UpdaterApp.h"
+#include "AppOptions.h"
 
 // ------------------------------------------------------------------------
 // Resources
@@ -224,7 +225,7 @@ DownloadPane::DownloadPane(wxWindow *parent, wxWindowID id,
 
 DownloadPane::~DownloadPane()
 {
-
+    SaveOptionValue();
 }
 
 void DownloadPane::Init()
@@ -238,6 +239,7 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
 {
     wxPanel::Create(parent, id, pos, size, style);
     CreateControls();
+    InitOptionValue();
     Center();
     return true;
 }
@@ -310,6 +312,83 @@ void DownloadPane::CreateControls()
     bgSizer->Add(operationBoxSizer, 0, wxALL | wxEXPAND, 5);
 
     SetSizer(bgSizer);
+}
+
+void DownloadPane::InitOptionValue()
+{
+    AppOptions *pOpt = wxGetApp().m_pAppOptions;
+    wxString value;
+    long longValue;
+
+    if (pOpt)
+    {
+        // Currently, there seems to be a strange behavior when set value on the radiobutton which
+        // is the first one in it group and only 2 radiobutton in this group.
+        // If you set the first one radiobutton to true, it works well, but if you set it to false,
+        // the other radiobutton doesn't become true.
+        // However, if we set value on the 2nd radiobutton in this group, there is no problem.
+
+        // search method
+        wxRadioButton *searchRB = wxDynamicCast(FindWindow(myID_SEARCH_METHOD2_RB), wxRadioButton);                    
+        if (searchRB && pOpt->GetOption(wxT("SearchMethod"), value))
+        {
+            if (value.ToLong(&longValue))
+                searchRB->SetValue(longValue == 1);
+        }
+
+        // use global file
+        wxRadioButton *globalRB = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_RB), wxRadioButton);
+        if (globalRB && pOpt->GetOption(wxT("UseGlobalFile"), value))
+        {
+            if (value.ToLong(&longValue))
+                globalRB->SetValue(longValue == 1);
+        }
+
+        // global file path
+        wxFilePickerCtrl *filePicker = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_FILE), wxFilePickerCtrl);
+        if (filePicker && pOpt->GetOption(wxT("GlobalFilePath"), value))
+        {
+            filePicker->SetPath(value);
+        }
+    }
+}
+
+void DownloadPane::SaveOptionValue()
+{
+    AppOptions *pOpt = wxGetApp().m_pAppOptions;
+    wxString value;
+
+    if (pOpt)
+    {
+        // search method
+        wxRadioButton *searchRB = wxDynamicCast(FindWindow(myID_SEARCH_METHOD2_RB), wxRadioButton);
+        if (searchRB)
+        {
+            if (searchRB->GetValue())
+                value = wxT("1");
+            else
+                value = wxT("0");
+            pOpt->SetOption(wxT("SearchMethod"), value);
+        }
+
+        // use global file
+        wxRadioButton *globalRB = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_RB), wxRadioButton);
+        if (globalRB)
+        {
+            if (globalRB->GetValue())
+                value = wxT("1");
+            else
+                value = wxT("0");
+            pOpt->SetOption(wxT("UseGlobalFile"), value);
+        }
+
+        // global file path
+        wxFilePickerCtrl *filePicker = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_FILE), wxFilePickerCtrl);
+        if (filePicker)
+        {
+            pOpt->SetOption(wxT("GlobalFilePath"), filePicker->GetPath());
+        }
+    }
 }
 
 bool DownloadPane::IsMACAddressInvalid(const wxString &mac_address)
