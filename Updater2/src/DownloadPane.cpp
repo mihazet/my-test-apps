@@ -694,8 +694,8 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
                 {
                     wxString msg_to_modify_invalid_mac;
                     msg_to_modify_invalid_mac
-                        << wxT("Device ") << msg.name << wxT(" with invalid MAC address!")
-                        << wxT(" Would you like to modify it?");
+                        << _("Device") << wxT(" ") << msg.name << wxT(" ") << _("with invalid MAC address")
+                        << wxT(" (") << msg.mac << wxT(")! ") << _("Would you like to modify it?");
                     _promptForModifyMAC->ShowMessage(msg_to_modify_invalid_mac, wxICON_WARNING);
                 }
             }
