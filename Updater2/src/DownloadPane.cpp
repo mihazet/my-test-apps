@@ -521,14 +521,26 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
 
 void DownloadPane::OnUpdateDownloadButton(wxUpdateUIEvent &event)
 {
+    wxRadioButton *rb = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_RB), wxRadioButton);
+    wxFilePickerCtrl *picker = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_FILE), wxFilePickerCtrl);
     wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
     wxDataViewListStore *store;
-    bool at_least_one_is_checked = false;
+    bool at_least_one_is_checked = false, use_global_file = true, all_files_are_ok = true;
     unsigned int row, nRow;
     wxVariant data;
 
-    if (lc)
+    if (lc && rb && picker)
     {
+        /* if use global file, only need to check the global file path */
+        use_global_file = rb->GetValue();
+        if (use_global_file)
+        {
+            wxFileName globalFile(picker->GetPath());
+            if (!globalFile.FileExists())
+                all_files_are_ok = false;
+        }
+
+        /* if use device-specific file, need to check file path for every checked row */
         store = lc->GetStore();
         nRow = store->GetCount();
         for (row = 0; row < nRow; row++)
@@ -537,13 +549,25 @@ void DownloadPane::OnUpdateDownloadButton(wxUpdateUIEvent &event)
             if (data.GetBool())
             {
                 at_least_one_is_checked = true;
-                break;
+                if (use_global_file)
+                    break;
+                else
+                {
+                    store->GetValueByRow(data, row, 5);
+                    wxFileName specificFile(data.GetString());
+                    if (!specificFile.FileExists())
+                    {
+                        all_files_are_ok = false;
+                        break;
+                    }
+                }
             }
         }
     }
 
     if ((_updateThreadCount == 0)
-        && at_least_one_is_checked)
+        && at_least_one_is_checked
+        && all_files_are_ok)
         event.Enable(true);
     else
         event.Enable(false);
