@@ -43,7 +43,7 @@ private:
     void OnDeviceCheckAll(wxHyperlinkEvent &event);
     void OnDeviceUncheckAll(wxHyperlinkEvent &event);
     void OnDeviceListSelectNone(wxHyperlinkEvent &event);
-    
+
     // data member
     int _updateThreadCount;
     wxInfoBar *_promptForModifyMAC;

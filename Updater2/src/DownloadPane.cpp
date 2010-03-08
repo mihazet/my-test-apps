@@ -31,7 +31,7 @@ class MyCustomToggleRenderer : public wxDataViewCustomRenderer
 {
 public:
     MyCustomToggleRenderer()
-        : wxDataViewCustomRenderer(wxT("bool"), 
+        : wxDataViewCustomRenderer(wxT("bool"),
             wxDATAVIEW_CELL_ACTIVATABLE,
             wxALIGN_CENTER)
     { m_toggle = false; }
@@ -87,7 +87,7 @@ public:
         return true;
     }
 
-    virtual bool GetValue(wxVariant &value) const 
+    virtual bool GetValue(wxVariant &value) const
     {
         value = m_toggle;
         return true;
@@ -101,7 +101,7 @@ class MyCustomFilePathRenderer : public wxDataViewCustomRenderer
 {
 public:
     MyCustomFilePathRenderer()
-        : wxDataViewCustomRenderer(wxT("string"), 
+        : wxDataViewCustomRenderer(wxT("string"),
             wxDATAVIEW_CELL_ACTIVATABLE,
             wxALIGN_LEFT)
     { m_path = wxEmptyString; }
@@ -133,7 +133,7 @@ public:
         return true;
     }
 
-    virtual bool GetValue(wxVariant &value) const 
+    virtual bool GetValue(wxVariant &value) const
     {
         value = m_path;
         return true;
@@ -216,7 +216,7 @@ DownloadPane::DownloadPane()
     Init();
 }
 
-DownloadPane::DownloadPane(wxWindow *parent, wxWindowID id, 
+DownloadPane::DownloadPane(wxWindow *parent, wxWindowID id,
                          const wxPoint &pos, const wxSize &size,
                          long style)
 {
@@ -291,7 +291,7 @@ void DownloadPane::CreateControls()
     wxButton *download = new wxButton(this, myID_DOWNLOAD_SELECTED_BTN, _("Update selected"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     download->SetBitmap(wxBitmap(download_to_chip2_64_xpm));
     download->SetBitmapDisabled(wxBitmap(wxImage(download_to_chip2_64_xpm).ConvertToGreyscale()));
-    
+
     wxRadioButton *rb1 = new wxRadioButton(this, myID_DOWNLOAD_SPECIFIC_RB, _("Use Device-specific Image File"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
     wxRadioButton *rb2 = new wxRadioButton(this, myID_DOWNLOAD_GLOBAL_RB, _("Use Global Image File"));
     wxBoxSizer *radioSizer = new wxBoxSizer(wxVERTICAL);
@@ -304,7 +304,7 @@ void DownloadPane::CreateControls()
     fileSizer->AddStretchSpacer(1);
     fileSizer->Add(new wxStaticText(this, wxID_STATIC, _("Global Image File Path:")), 0, wxALL, 5);
     fileSizer->Add(filePicker, 0, wxALL | wxEXPAND, 5);
-    
+
     wxStaticBoxSizer *operationBoxSizer = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Device operation"));
     operationBoxSizer->Add(download, 0, wxALL | wxEXPAND, 5);
     operationBoxSizer->Add(radioSizer, 0, wxALL | wxEXPAND, 5);
@@ -334,7 +334,7 @@ void DownloadPane::InitOptionValue()
         // However, if we set value on the 2nd radiobutton in this group, there is no problem.
 
         // search method
-        wxRadioButton *searchRB = wxDynamicCast(FindWindow(myID_SEARCH_METHOD2_RB), wxRadioButton);                    
+        wxRadioButton *searchRB = wxDynamicCast(FindWindow(myID_SEARCH_METHOD2_RB), wxRadioButton);
         if (searchRB && pOpt->GetOption(wxT("SearchMethod"), value))
         {
             if (value.ToLong(&longValue))
@@ -475,7 +475,7 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                     store->GetValueByRow(data, row, 3);
                     wxString mac = data.GetString();
                     threadCodedWord.clear();
-                    threadCodedWord 
+                    threadCodedWord
                         << row << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
                         << name << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
                         << ip << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
@@ -493,7 +493,7 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
 
             if (_updateThreadCount)
             {
-                /* Besides disable button in update ui event handler, we also disable button here 
+                /* Besides disable button in update ui event handler, we also disable button here
                    right away to avoid this click action re-enter again */
                 wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
                 if (btn)
@@ -636,7 +636,7 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
                 if (IsMACAddressInvalid(msg.mac)) // replace to invalid mac address
                 {
                     wxString msg_to_modify_invalid_mac;
-                    msg_to_modify_invalid_mac 
+                    msg_to_modify_invalid_mac
                         << wxT("Device ") << msg.name << wxT(" with invalid MAC address!")
                         << wxT(" Would you like to modify it?");
                     _promptForModifyMAC->ShowMessage(msg_to_modify_invalid_mac, wxICON_WARNING);

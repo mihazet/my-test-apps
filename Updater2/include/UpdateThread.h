@@ -17,7 +17,7 @@ class UpdateThreadMessage
 {
 public:
     UpdateThreadMessage()
-    { 
+    {
         type = UPDATE_THREAD_COMPLETED;
         payload = wxEmptyString;
     }

@@ -152,7 +152,7 @@ bool UpdaterApp::DetectNetAdapter(bool *changed)
         {
             name = wxString(pAdapter->Description, *wxConvCurrent);
             /* skip by adapter description */
-            if (_skipVmwareNetworkAdapter 
+            if (_skipVmwareNetworkAdapter
                 && name.Matches(wxT("VMware Virtual Ethernet Adapter*")))
                 continue;
             /* iterate ip address list */

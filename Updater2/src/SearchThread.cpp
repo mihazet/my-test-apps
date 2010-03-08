@@ -23,7 +23,7 @@
 // Implementation
 // ------------------------------------------------------------------------
 #define RECVBUFSIZE 128
-SearchThread::SearchThread(wxEvtHandler *handler, const wxString& codedString) 
+SearchThread::SearchThread(wxEvtHandler *handler, const wxString& codedString)
     : wxThread(wxTHREAD_DETACHED), _pHandler(handler)
 {
     wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
@@ -104,7 +104,7 @@ wxThread::ExitCode SearchThread::Entry()
     wxDatagramSocket *udpSocket = netAdapter.at(0).udp;
 
     wxLogMessage(wxT("Device search thread is running!"));
-    
+
     for (loop = 0; (loop < _broadcastCount) && !TestDestroy(); loop++)
     {
         wxLogVerbose(wxT("Broadcast target discovery command!"));

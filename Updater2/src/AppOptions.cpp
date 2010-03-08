@@ -64,7 +64,7 @@ bool AppOptions::SetOption(const wxString& option, const wxString& value)
     bool result = true;
     wxString sqlUpdate;
 
-    sqlUpdate << wxT("UPDATE AppOptions SET OptionValue = '") << value 
+    sqlUpdate << wxT("UPDATE AppOptions SET OptionValue = '") << value
         << wxT("' WHERE OptionName = '") << option << wxT("'");
     if (1 != _db->ExecuteUpdate(sqlUpdate))
         result = false;

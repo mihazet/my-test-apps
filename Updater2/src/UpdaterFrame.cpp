@@ -187,7 +187,7 @@ void UpdaterFrame::OnAbout(wxCommandEvent &WXUNUSED(event))
 {
     wxAboutDialogInfo info;
     wxString copyright, description, version, longVersion;
-        
+
     copyright
         << wxT("Copyright 2010 (c), Delta Electronics, Inc. All Rights Reserved.");
     description
@@ -196,7 +196,7 @@ void UpdaterFrame::OnAbout(wxCommandEvent &WXUNUSED(event))
         << wxT("And it also helps user to manage the MAC address management.\n");
     version
         << VER_MAJOR_STRING << "." << VER_MINOR_STRING << "." << VER_RELEASE_STRING;
-    longVersion = version + "." + VER_BUILD_STRING;        
+    longVersion = version + "." + VER_BUILD_STRING;
 
     info.SetDescription(description);
     info.SetCopyright(copyright);

@@ -40,10 +40,10 @@ UpdateThread::UpdateThread(wxEvtHandler *handler, const wxString &codedString,
         while (tokenizer.HasMoreTokens())
         {
             wxString token = tokenizer.GetNextToken();
-            
+
             switch (loop++)
             {
-            case 0: 
+            case 0:
                 if (token.ToLong(&longValue))
                     _row = (int)longValue;
                 else
@@ -88,7 +88,7 @@ void UpdateThread::SendNotification(const UTMType type, const int data)
     wxThreadEvent event(wxEVT_COMMAND_THREAD, myID_UPDATE_THREAD);
     UpdateThreadMessage msg;
     msg.type = type;
-    msg.payload << _row << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD 
+    msg.payload << _row << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
         << _targetName << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
         << _targetIpAddress << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
         << _targetMacAddress << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
@@ -111,7 +111,7 @@ wxThread::ExitCode UpdateThread::Entry()
     //    sequence number ----+         |            |
     //    length follow this header ----+            |
     //    check sum ---------------------------------+
-    // 
+    //
     //    action:
     //     01 - download firmware image to flash
     //     05 - download bootloader image to flash
@@ -123,7 +123,7 @@ wxThread::ExitCode UpdateThread::Entry()
     //     sum of every byte in payload (don't count the header itself)
     //
     // [Device -> Updater] change the first byte 54 to 74.
-    //   
+    //
 
     wxThreadEvent event(wxEVT_COMMAND_THREAD, myID_UPDATE_THREAD);
     UpdateThreadMessage msg;
@@ -136,7 +136,7 @@ wxThread::ExitCode UpdateThread::Entry()
         0x53, 0x43, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
-    
+
     wxLogMessage(wxT("TCP udpate thread connect to %s"), _targetIpAddress);
 
     if (_tcp)
@@ -152,7 +152,7 @@ wxThread::ExitCode UpdateThread::Entry()
             /* send connection request and wait for reply to know the preferred resource requirement */
             _tcp->Write(&connectMessage[0], sizeof(connectMessage));
             _tcp->Read(_recvBuf, RECVBUFSIZE);
-            if ((_tcp->LastError() == wxSOCKET_NOERROR) 
+            if ((_tcp->LastError() == wxSOCKET_NOERROR)
                 && (_tcp->LastCount() == 16)
                 && (_recvBuf[0] == 's')
                 && (_recvBuf[1] == 'c')
@@ -236,8 +236,8 @@ wxThread::ExitCode UpdateThread::Entry()
                         txBuf[8] = (transmitDataSize >> 24) & 0xFF;
                         txBuf[9] = (transmitDataSize >> 16) & 0xFF;
                         txBuf[10] = (transmitDataSize >> 8) & 0xFF;
-                        txBuf[11] = transmitDataSize & 0xFF;  
-                        
+                        txBuf[11] = transmitDataSize & 0xFF;
+
                         /* transmit data */
                         _tcp->Write(&txBuf[0], transmitDataSize + 16);
                         if (_tcp->LastError() != wxSOCKET_NOERROR)
