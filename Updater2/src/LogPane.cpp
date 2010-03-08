@@ -2,6 +2,7 @@
 // Headers
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
+#include <wx/stdpaths.h>
 #include "UpdaterApp.h"
 #include "LogPane.h"
 #include "WidgetId.h"
@@ -12,7 +13,6 @@
 #include "img/save_16.xpm"
 #include "img/delete_16.xpm"
 #include "img/speaker_16.xpm"
-#include "img/cfg_16.xpm"
 
 // ------------------------------------------------------------------------
 // Implementation
@@ -58,7 +58,7 @@ void LogPane::CreateControls()
     /* log text ctrl */
     _logTextCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
         wxDefaultPosition, wxDefaultSize,
-        wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH2);
+        wxTE_MULTILINE|wxTE_READONLY);
     allSizer->Add(_logTextCtrl, 1, wxTOP|wxBOTTOM|wxLEFT|wxEXPAND, 5);
 
     /* ctrl buttons */
@@ -66,8 +66,10 @@ void LogPane::CreateControls()
     allSizer->Add(ctrlSizer, 0, wxALL|wxEXPAND, 0);
     wxBitmapButton *save = new wxBitmapButton(this, wxID_ANY, wxBitmap(save_16_xpm));
     save->SetToolTip(_("Save log text to file"));
+    save->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &LogPane::OnSave, this);
     wxBitmapButton *erase = new wxBitmapButton(this, wxID_ANY, wxBitmap(delete_16_xpm));
     erase->SetToolTip(_("Erase all log text"));
+    erase->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &LogPane::OnErase, this);
 
     wxBitmapButton *verbose;
     if (IsVerbose())
@@ -83,12 +85,9 @@ void LogPane::CreateControls()
         wxLog::SetVerbose(false);
     }
     verbose->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &LogPane::OnVerbose, this);
-    wxBitmapButton *config = new wxBitmapButton(this, wxID_ANY, wxBitmap(cfg_16_xpm));
-    config->SetToolTip(_("Config"));
     ctrlSizer->Add(save, 0, wxTOP, 5);
     ctrlSizer->Add(erase, 0, wxALL, 0);
     ctrlSizer->Add(verbose, 0, wxTOP, 5);
-    ctrlSizer->Add(config, 0, wxTOP|wxBOTTOM, 5);
     SetSizer(allSizer);
 }
 
@@ -120,4 +119,23 @@ void LogPane::OnVerbose(wxCommandEvent &event)
         btn->SetBitmap(wxBitmap(*_verboseImg));
         btn->SetToolTip(_("Disable verbose message"));
     }
+}
+
+void LogPane::OnSave(wxCommandEvent &event)
+{
+    wxStandardPathsBase &stdPaths = wxStandardPaths::Get();
+    wxString defaultDir = stdPaths.GetDocumentsDir();
+    wxFileDialog dlg(this);
+    dlg.SetDirectory(defaultDir);
+    dlg.SetWildcard(_("Log files (*.log)|*.log"));
+    dlg.SetWindowStyle(wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+    if (dlg.ShowModal() == wxID_OK)
+    {
+        _logTextCtrl->SaveFile(dlg.GetPath());
+    }
+}
+
+void LogPane::OnErase(wxCommandEvent &event)
+{
+    _logTextCtrl->Clear();
 }

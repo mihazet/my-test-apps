@@ -32,6 +32,8 @@ private:
 
     // event handlers
     void OnVerbose(wxCommandEvent &event);
+    void OnSave(wxCommandEvent &event);
+    void OnErase(wxCommandEvent &event);
 
 private:
     wxTextCtrl *_logTextCtrl;
