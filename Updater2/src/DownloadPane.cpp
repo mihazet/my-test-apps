@@ -262,8 +262,12 @@ void DownloadPane::CreateControls()
     wxButton *search = new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     search->SetBitmap(wxBitmap(search_32_xpm));
     search->SetBitmapDisabled(wxBitmap(wxImage(search_32_xpm).ConvertToGreyscale()));
-    wxRadioButton *searchMethod1 = new wxRadioButton(this, myID_SEARCH_METHOD1_RB, _("Method 1"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
-    wxRadioButton *searchMethod2 = new wxRadioButton(this, myID_SEARCH_METHOD2_RB, _("Method 2"));
+    wxVector<NetAdapter> &adapter = wxGetApp().m_Adapters;
+    wxString addr = _("Method 1");
+    if (!adapter.empty())
+        addr << wxT(": ") + adapter.at(0).GetBroadcast();
+    wxRadioButton *searchMethod1 = new wxRadioButton(this, myID_SEARCH_METHOD1_RB, addr, wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    wxRadioButton *searchMethod2 = new wxRadioButton(this, myID_SEARCH_METHOD2_RB, _("Method 2: 255.255.255.255"));
     wxBoxSizer *methodSizer = new wxBoxSizer(wxVERTICAL);
     methodSizer->Add(searchMethod1, 0, wxALL, 5);
     methodSizer->Add(searchMethod2, 0, wxALL, 5);
