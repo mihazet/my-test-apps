@@ -40,9 +40,9 @@ private:
     void OnUpdateGlobalFilePath(wxUpdateUIEvent &event);
     void OnSearchThread(wxThreadEvent &event);
     void OnUpdateThread(wxThreadEvent &event);
-    void OnTargetCheckAll(wxHyperlinkEvent &event);
-    void OnTargetUncheckAll(wxHyperlinkEvent &event);
-    void OnTargetListSelectNone(wxHyperlinkEvent &event);
+    void OnDeviceCheckAll(wxHyperlinkEvent &event);
+    void OnDeviceUncheckAll(wxHyperlinkEvent &event);
+    void OnDeviceListSelectNone(wxHyperlinkEvent &event);
     
     // data member
     int _updateThreadCount;

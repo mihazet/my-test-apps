@@ -143,10 +143,10 @@ private:
     wxString m_path;
 };
 
-class TargetList : public wxDataViewListCtrl
+class DeviceList : public wxDataViewListCtrl
 {
 public:
-    TargetList(wxWindow *parent, wxWindowID id = wxID_ANY);
+    DeviceList(wxWindow *parent, wxWindowID id = wxID_ANY);
 
 private:
     void OnSelectionChanged(wxDataViewEvent &event);
@@ -168,7 +168,7 @@ public:
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
-TargetList::TargetList(wxWindow *parent, wxWindowID id)
+DeviceList::DeviceList(wxWindow *parent, wxWindowID id)
     : wxDataViewListCtrl(parent, id, wxDefaultPosition, wxDefaultSize,
     wxDV_SINGLE | wxDV_HORIZ_RULES | wxDV_VERT_RULES)
 {
@@ -177,24 +177,24 @@ TargetList::TargetList(wxWindow *parent, wxWindowID id)
     AppendTextColumn(_("IP Address"), wxDATAVIEW_CELL_INERT, 120);
     AppendTextColumn(_("MAC Address"), wxDATAVIEW_CELL_INERT, 120);
     AppendProgressColumn(_("Progress"), wxDATAVIEW_CELL_INERT, 200);
-    AppendColumn(new wxDataViewColumn(_("Target-specific Image File Path"), new MyCustomFilePathRenderer, 5, 250, wxALIGN_LEFT));
+    AppendColumn(new wxDataViewColumn(_("Device-specific Image File Path"), new MyCustomFilePathRenderer, 5, 250, wxALIGN_LEFT));
 
-    //Bind(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, &TargetList::OnSelectionChanged, this);
-    //Bind(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, &TargetList::OnItemActivated, this);
-    //Bind(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, &TargetList::OnItemValueChanged, this);
+    //Bind(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, &DeviceList::OnSelectionChanged, this);
+    //Bind(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, &DeviceList::OnItemActivated, this);
+    //Bind(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, &DeviceList::OnItemValueChanged, this);
 }
 
-void TargetList::OnSelectionChanged(wxDataViewEvent &WXUNUSED(event))
+void DeviceList::OnSelectionChanged(wxDataViewEvent &WXUNUSED(event))
 {
     wxLogMessage(wxT("Selection changed"));
 }
 
-void TargetList::OnItemActivated(wxDataViewEvent &WXUNUSED(event))
+void DeviceList::OnItemActivated(wxDataViewEvent &WXUNUSED(event))
 {
     wxLogMessage(wxT("Item activated"));
 }
 
-void TargetList::OnItemValueChanged(wxDataViewEvent &WXUNUSED(event))
+void DeviceList::OnItemValueChanged(wxDataViewEvent &WXUNUSED(event))
 {
     wxLogMessage(wxT("Item value changed"));
 }
@@ -206,9 +206,9 @@ BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_UPDATE_UI(myID_DOWNLOAD_GLOBAL_FILE, DownloadPane::OnUpdateGlobalFilePath)
     EVT_THREAD(myID_SEARCH_THREAD, DownloadPane::OnSearchThread)
     EVT_THREAD(myID_UPDATE_THREAD, DownloadPane::OnUpdateThread)
-    EVT_HYPERLINK(myID_TARGET_CHECK_ALL, DownloadPane::OnTargetCheckAll)
-    EVT_HYPERLINK(myID_TARGET_UNCHECK_ALL, DownloadPane::OnTargetUncheckAll)
-    EVT_HYPERLINK(myID_DOWNLOAD_TARGET_LIST_SELECT_NONE, DownloadPane::OnTargetListSelectNone)
+    EVT_HYPERLINK(myID_TARGET_CHECK_ALL, DownloadPane::OnDeviceCheckAll)
+    EVT_HYPERLINK(myID_TARGET_UNCHECK_ALL, DownloadPane::OnDeviceUncheckAll)
+    EVT_HYPERLINK(myID_DOWNLOAD_TARGET_LIST_SELECT_NONE, DownloadPane::OnDeviceListSelectNone)
 END_EVENT_TABLE()
 
 DownloadPane::DownloadPane()
@@ -257,7 +257,7 @@ void DownloadPane::CreateControls()
     _promptForUpdateError = new wxInfoBar(this);
     _promptForUpdateError->SetFont(GetFont().Bold().Larger());
 
-    wxStaticBoxSizer *listBoxSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Target list"));
+    wxStaticBoxSizer *listBoxSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Device list"));
 
     /* target list box */
     wxButton *search = new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
@@ -284,7 +284,7 @@ void DownloadPane::CreateControls()
     selectSizer->Add(new MyLinkAction(this, myID_DOWNLOAD_TARGET_LIST_SELECT_NONE, _("Select None")), 0, wxLEFT, 5);
     listBoxSizer->Add(selectSizer, 0, wxALL, 0);
 
-    TargetList *tl = new TargetList(this, myID_DOWNLOAD_TARGET_LIST);
+    DeviceList *tl = new DeviceList(this, myID_DOWNLOAD_TARGET_LIST);
     listBoxSizer->Add(tl, 1, wxALL | wxEXPAND, 5);
 
     /* target operation box */
@@ -292,7 +292,7 @@ void DownloadPane::CreateControls()
     download->SetBitmap(wxBitmap(download_to_chip2_64_xpm));
     download->SetBitmapDisabled(wxBitmap(wxImage(download_to_chip2_64_xpm).ConvertToGreyscale()));
     
-    wxRadioButton *rb1 = new wxRadioButton(this, myID_DOWNLOAD_SPECIFIC_RB, _("Use Target-specific Image File"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    wxRadioButton *rb1 = new wxRadioButton(this, myID_DOWNLOAD_SPECIFIC_RB, _("Use Device-specific Image File"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
     wxRadioButton *rb2 = new wxRadioButton(this, myID_DOWNLOAD_GLOBAL_RB, _("Use Global Image File"));
     wxBoxSizer *radioSizer = new wxBoxSizer(wxVERTICAL);
     radioSizer->AddStretchSpacer(1);
@@ -305,7 +305,7 @@ void DownloadPane::CreateControls()
     fileSizer->Add(new wxStaticText(this, wxID_STATIC, _("Global Image File Path:")), 0, wxALL, 5);
     fileSizer->Add(filePicker, 0, wxALL | wxEXPAND, 5);
     
-    wxStaticBoxSizer *operationBoxSizer = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Target operation"));
+    wxStaticBoxSizer *operationBoxSizer = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Device operation"));
     operationBoxSizer->Add(download, 0, wxALL | wxEXPAND, 5);
     operationBoxSizer->Add(radioSizer, 0, wxALL | wxEXPAND, 5);
     operationBoxSizer->Add(fileSizer, 1, wxALL | wxEXPAND, 5);
@@ -597,7 +597,7 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
     switch (msg.type)
     {
     case SEARCH_THREAD_COMPLETED:
-        wxLogMessage(wxT("Target search thread is completed!"));
+        wxLogMessage(wxT("Device search thread is completed!"));
         btn = wxDynamicCast(FindWindow(myID_DOWNLOAD_SEARCH_BTN), wxButton);
         if (btn) btn->Enable(true);
         break;
@@ -637,7 +637,7 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
                 {
                     wxString msg_to_modify_invalid_mac;
                     msg_to_modify_invalid_mac 
-                        << wxT("Target ") << msg.name << wxT(" with invalid MAC address!")
+                        << wxT("Device ") << msg.name << wxT(" with invalid MAC address!")
                         << wxT(" Would you like to modify it?");
                     _promptForModifyMAC->ShowMessage(msg_to_modify_invalid_mac, wxICON_WARNING);
                 }
@@ -758,7 +758,7 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
     }
 }
 
-void DownloadPane::OnTargetCheckAll(wxHyperlinkEvent &WXUNUSED(event))
+void DownloadPane::OnDeviceCheckAll(wxHyperlinkEvent &WXUNUSED(event))
 {
     wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
     wxDataViewListStore *store;
@@ -781,7 +781,7 @@ void DownloadPane::OnTargetCheckAll(wxHyperlinkEvent &WXUNUSED(event))
     }
 }
 
-void DownloadPane::OnTargetUncheckAll(wxHyperlinkEvent &WXUNUSED(event))
+void DownloadPane::OnDeviceUncheckAll(wxHyperlinkEvent &WXUNUSED(event))
 {
     wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
     wxDataViewListStore *store;
@@ -804,7 +804,7 @@ void DownloadPane::OnTargetUncheckAll(wxHyperlinkEvent &WXUNUSED(event))
     }
 }
 
-void DownloadPane::OnTargetListSelectNone(wxHyperlinkEvent &WXUNUSED(event))
+void DownloadPane::OnDeviceListSelectNone(wxHyperlinkEvent &WXUNUSED(event))
 {
     wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
 

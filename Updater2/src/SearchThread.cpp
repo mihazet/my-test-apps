@@ -103,7 +103,7 @@ wxThread::ExitCode SearchThread::Entry()
     broadcast.Service(40000);
     wxDatagramSocket *udpSocket = netAdapter.at(0).udp;
 
-    wxLogMessage(wxT("Target search thread is running!"));
+    wxLogMessage(wxT("Device search thread is running!"));
     
     for (loop = 0; (loop < _broadcastCount) && !TestDestroy(); loop++)
     {

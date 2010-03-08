@@ -102,7 +102,7 @@ wxThread::ExitCode UpdateThread::Entry()
     //
     // Load header definition  (all value are hex, and use big endian)
     // ---------------------------------------------------------------
-    // [Updater -> Target]
+    // [Updater -> Device]
     //   54 42 ff 01  00 00 00 00  00 0f ff f0  00 00 00 00
     //            ^^  ^^^^^ ^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^
     //             |    |     |         |            |
@@ -122,7 +122,7 @@ wxThread::ExitCode UpdateThread::Entry()
     //    check sum:
     //     sum of every byte in payload (don't count the header itself)
     //
-    // [Target -> Updater] change the first byte 54 to 74.
+    // [Device -> Updater] change the first byte 54 to 74.
     //   
 
     wxThreadEvent event(wxEVT_COMMAND_THREAD, myID_UPDATE_THREAD);
