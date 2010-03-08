@@ -260,7 +260,16 @@ void DownloadPane::CreateControls()
     wxButton *search = new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     search->SetBitmap(wxBitmap(search_32_xpm));
     search->SetBitmapDisabled(wxBitmap(wxImage(search_32_xpm).ConvertToGreyscale()));
-    listBoxSizer->Add(search, 0, wxALL, 5);
+    wxRadioButton *searchMethod1 = new wxRadioButton(this, myID_SEARCH_METHOD1_RB, _("Method 1"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    wxRadioButton *searchMethod2 = new wxRadioButton(this, myID_SEARCH_METHOD2_RB, _("Method 2"));
+    wxBoxSizer *methodSizer = new wxBoxSizer(wxVERTICAL);
+    methodSizer->Add(searchMethod1, 0, wxALL, 5);
+    methodSizer->Add(searchMethod2, 0, wxALL, 5);
+    //methodSizer->AddStretchSpacer(1);
+    wxBoxSizer *searchSizer = new wxBoxSizer(wxHORIZONTAL);
+    searchSizer->Add(search, 0, wxALL | wxEXPAND, 5);
+    searchSizer->Add(methodSizer, 0, wxALL, 5);
+    listBoxSizer->Add(searchSizer, 0, wxALL, 5);
 
     wxBoxSizer *selectSizer = new wxBoxSizer(wxHORIZONTAL);
     selectSizer->Add(new MyLinkAction(this, myID_TARGET_CHECK_ALL, _("Check All")), 0, wxLEFT, 5);
