@@ -148,6 +148,18 @@ class DeviceList : public wxDataViewListCtrl
 public:
     DeviceList(wxWindow *parent, wxWindowID id = wxID_ANY);
 
+    enum
+    {
+        COLUMN_DEVICE_UPDATE,
+        COLUMN_DEVICE_NAME,
+        COLUMN_DEVICE_IPADDRESS,
+        COLUMN_DEVICE_MACADDRESS,
+        COLUMN_DEVICE_UPDATE_PROGRESS,
+        COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH,       
+
+        COLUMN_DEVICE_LIST_MAX
+    };
+
 private:
     void OnSelectionChanged(wxDataViewEvent &event);
     void OnItemActivated(wxDataViewEvent &event);
@@ -172,12 +184,34 @@ DeviceList::DeviceList(wxWindow *parent, wxWindowID id)
     : wxDataViewListCtrl(parent, id, wxDefaultPosition, wxDefaultSize,
     wxDV_SINGLE | wxDV_HORIZ_RULES | wxDV_VERT_RULES)
 {
-    AppendColumn(new wxDataViewColumn(_("Update?"), new MyCustomToggleRenderer, 0, 60, wxALIGN_CENTER, wxDATAVIEW_COL_RESIZABLE));
-    AppendTextColumn(_("Name"), wxDATAVIEW_CELL_INERT, 120);
-    AppendTextColumn(_("IP Address"), wxDATAVIEW_CELL_INERT, 120);
-    AppendTextColumn(_("MAC Address"), wxDATAVIEW_CELL_INERT, 120);
-    AppendProgressColumn(_("Progress"), wxDATAVIEW_CELL_INERT, 200);
-    AppendColumn(new wxDataViewColumn(_("Device-specific Image File Path"), new MyCustomFilePathRenderer, 5, 250, wxALIGN_LEFT));
+    int column;
+
+    for (column = 0; column < COLUMN_DEVICE_LIST_MAX; column++)
+    {
+        switch (column)
+        {
+        case COLUMN_DEVICE_UPDATE:
+            AppendColumn(new wxDataViewColumn(_("Update?"), new MyCustomToggleRenderer, column, 60));
+            break;
+        case COLUMN_DEVICE_NAME:
+            AppendColumn(new wxDataViewColumn(_("Name"), new wxDataViewTextRenderer, column, 120, wxALIGN_LEFT));
+            break;
+        case COLUMN_DEVICE_IPADDRESS:
+            AppendColumn(new wxDataViewColumn(_("IP Address"), new wxDataViewTextRenderer, column, 120, wxALIGN_LEFT));
+            break;
+        case COLUMN_DEVICE_MACADDRESS:
+            AppendColumn(new wxDataViewColumn(_("MAC Address"), new wxDataViewTextRenderer, column, 120, wxALIGN_LEFT));
+            break;
+        case COLUMN_DEVICE_UPDATE_PROGRESS:
+            AppendColumn(new wxDataViewColumn(_("Progress"), new wxDataViewProgressRenderer, column, 200, wxALIGN_LEFT));
+            break;
+        case COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH:
+            AppendColumn(new wxDataViewColumn(_("Device-specific Image File Path"), new MyCustomFilePathRenderer, column, 250, wxALIGN_LEFT));
+            break;
+        default:
+            break;
+        }
+    }
 
     //Bind(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, &DeviceList::OnSelectionChanged, this);
     //Bind(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, &DeviceList::OnItemActivated, this);
@@ -465,14 +499,14 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
             {
                 wxString threadCodedWord;
                 wxVariant data;
-                store->GetValueByRow(data, row, 0);
+                store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE);
                 if (data.GetBool())
                 {
-                    store->GetValueByRow(data, row, 1);
+                    store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_NAME);
                     wxString name = data.GetString();
-                    store->GetValueByRow(data, row, 2);
+                    store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_IPADDRESS);
                     wxString ip = data.GetString();
-                    store->GetValueByRow(data, row, 3);
+                    store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_MACADDRESS);
                     wxString mac = data.GetString();
                     threadCodedWord.clear();
                     threadCodedWord
@@ -545,7 +579,7 @@ void DownloadPane::OnUpdateDownloadButton(wxUpdateUIEvent &event)
         nRow = store->GetCount();
         for (row = 0; row < nRow; row++)
         {
-            store->GetValueByRow(data, row, 0);
+            store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE);
             if (data.GetBool())
             {
                 at_least_one_is_checked = true;
@@ -553,7 +587,7 @@ void DownloadPane::OnUpdateDownloadButton(wxUpdateUIEvent &event)
                     break;
                 else
                 {
-                    store->GetValueByRow(data, row, 5);
+                    store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH);
                     wxFileName specificFile(data.GetString());
                     if (!specificFile.FileExists())
                     {
@@ -593,6 +627,7 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
     unsigned int nRow, row;
     bool found = false;
     wxVariant variant;
+    int column;
 
     switch (msg.type)
     {
@@ -610,11 +645,11 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
             nRow = model->GetCount();
             for (row = 0; row < nRow; row++)
             {
-                model->GetValueByRow(variant, row, 1);
+                model->GetValueByRow(variant, row, DeviceList::COLUMN_DEVICE_NAME);
                 name = variant.GetString();
-                model->GetValueByRow(variant, row, 2);
+                model->GetValueByRow(variant, row, DeviceList::COLUMN_DEVICE_IPADDRESS);
                 ip = variant.GetString();
-                model->GetValueByRow(variant, row, 3);
+                model->GetValueByRow(variant, row, DeviceList::COLUMN_DEVICE_MACADDRESS);
                 mac = variant.GetString();
                 if ((name == msg.name) && (ip == msg.ip) && (mac == msg.mac))
                 {
@@ -625,12 +660,34 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
 
             if (!found)
             {
-                data.push_back(false);
-                data.push_back(msg.name);
-                data.push_back(msg.ip);
-                data.push_back(msg.mac);
-                data.push_back(0);
-                data.push_back(wxEmptyString);
+                for (column = 0; column < DeviceList::COLUMN_DEVICE_LIST_MAX; column++)
+                {
+                    switch (column)
+                    {
+                    case DeviceList::COLUMN_DEVICE_UPDATE:
+                        data.push_back(false);
+                        break;
+                    case DeviceList::COLUMN_DEVICE_NAME:
+                        data.push_back(msg.name);
+                        break;
+                    case DeviceList::COLUMN_DEVICE_IPADDRESS:
+                        data.push_back(msg.ip);
+                        break;
+                    case DeviceList::COLUMN_DEVICE_MACADDRESS:
+                        data.push_back(msg.mac);
+                        break;
+                    case DeviceList::COLUMN_DEVICE_UPDATE_PROGRESS:
+                        data.push_back(0);
+                        break;
+                    case DeviceList::COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH:
+                        data.push_back(wxEmptyString);
+                        break;
+                    default:
+                        // FIXME
+                        data.push_back(0);
+                        break;
+                    }
+                }
                 lc->AppendItem(data);
 
                 if (IsMACAddressInvalid(msg.mac)) // replace to invalid mac address
@@ -742,12 +799,12 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
             {
                 wxString ipInList;
                 wxVariant data;
-                store->GetValueByRow(data, row, 2);
+                store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_IPADDRESS);
                 ipInList = data.GetString();
                 if (ipInList == ip)
                 {
                     data = (long)progress;
-                    store->SetValueByRow(data, row, 4);
+                    store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE_PROGRESS);
                     store->RowChanged(row);
                 }
             }
@@ -771,7 +828,7 @@ void DownloadPane::OnDeviceCheckAll(wxHyperlinkEvent &WXUNUSED(event))
             unsigned int row, nRow = store->GetCount();
             for (row = 0; row < nRow; row++)
             {
-                store->SetValueByRow(data, row, 0);
+                store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE);
             }
 
             /* this cause list refresh */
@@ -794,7 +851,7 @@ void DownloadPane::OnDeviceUncheckAll(wxHyperlinkEvent &WXUNUSED(event))
             unsigned int row, nRow = store->GetCount();
             for (row = 0; row < nRow; row++)
             {
-                store->SetValueByRow(data, row, 0);
+                store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE);
             }
 
             /* this cause list refresh */
