@@ -1,3 +1,6 @@
+#ifdef _MSC_VER
+# pragma warning(disable: 4127)
+#endif
 /******************************************************************************
 ** This file is an amalgamation of many separate C source files from SQLite
 ** version 3.6.22.  By combining all the individual C code files into this 
@@ -110858,3 +110861,6 @@ SQLITE_PRIVATE void sqlite3Fts3IcuTokenizerModule(
 #endif /* !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_FTS3) */
 
 /************** End of fts3_icu.c ********************************************/
+#ifdef _MSC_VER
+# pragma warning(default: 4127)
+#endif
