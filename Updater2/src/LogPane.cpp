@@ -6,6 +6,7 @@
 #include "UpdaterApp.h"
 #include "LogPane.h"
 #include "WidgetId.h"
+#include "AppOptions.h"
 
 // ------------------------------------------------------------------------
 // Resources
@@ -93,12 +94,27 @@ void LogPane::CreateControls()
 
 bool LogPane::IsVerbose()
 {
-    return true;
+    bool result = false;
+    wxString strValue;
+    long longValue;
+    AppOptions *pOpt = wxGetApp().m_pAppOptions;
+
+    if (pOpt && pOpt->GetOption(wxT("LogVerbose"), strValue))
+    {
+        if (strValue.ToLong(&longValue))
+            result = (longValue == 1);
+    }
+
+    return result;
 }
 
 void LogPane::SetVerbose(bool verbose)
 {
-    wxLog::SetVerbose(verbose);
+    wxString strValue = verbose ? wxT("1") : wxT("0");
+    AppOptions *pOpt = wxGetApp().m_pAppOptions;
+
+    if (pOpt && pOpt->SetOption(wxT("LogVerbose"), strValue))
+        wxLog::SetVerbose(verbose);
 }
 
 //
@@ -121,7 +137,7 @@ void LogPane::OnVerbose(wxCommandEvent &event)
     }
 }
 
-void LogPane::OnSave(wxCommandEvent &event)
+void LogPane::OnSave(wxCommandEvent &WXUNUSED(event))
 {
     wxStandardPathsBase &stdPaths = wxStandardPaths::Get();
     wxString defaultDir = stdPaths.GetDocumentsDir();
@@ -135,7 +151,7 @@ void LogPane::OnSave(wxCommandEvent &event)
     }
 }
 
-void LogPane::OnErase(wxCommandEvent &event)
+void LogPane::OnErase(wxCommandEvent &WXUNUSED(event))
 {
     _logTextCtrl->Clear();
 }
