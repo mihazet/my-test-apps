@@ -31,11 +31,13 @@ UpdaterApp::UpdaterApp()
 
 UpdaterApp::~UpdaterApp()
 {
-
+    if (m_pAppOptions)
+        delete m_pAppOptions;
 }
 
 void UpdaterApp::Init()
 {
+    m_pAppOptions = new AppOptions();
     _locale = NULL;
     _onlyMe = NULL;
     m_Adapters.clear();

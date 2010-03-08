@@ -18,6 +18,7 @@
 #include <netinet/in.h>
 #endif
 #include "NetAdapter.h"
+#include "AppOptions.h"
 
 ////////////////////////////////////////////////////////////////////////////
 class UpdaterApp : public wxApp
@@ -30,6 +31,7 @@ public:
     virtual int OnExit();
 
     wxVector<NetAdapter> m_Adapters;
+    AppOptions *m_pAppOptions;
 
 private:
     // event handlers
