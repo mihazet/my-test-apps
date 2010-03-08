@@ -83,12 +83,13 @@ void UpdaterFrame::CreateControls()
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_EXIT, _("&Quit"), _("Quit this program"));
     wxMenu *view_menu = new wxMenu;
-    view_menu->AppendCheckItem(myID_VIEW_MAC_SETUP_PANE, _("MAC Setup\tCTRL+F1"),
-        _("Show or hide the MAC address setup pane."));
-    view_menu->AppendCheckItem(myID_VIEW_MAC_USAGE_PANE, _("MAC Usage\tCTRL+F2"),
+    view_menu->AppendCheckItem(myID_VIEW_MAC_ADDR_DEFINE_PANE, _("MAC Address Define Window\tCTRL+F1"),
+        _("Show or hide the MAC address definition pane."));
+    view_menu->AppendCheckItem(myID_VIEW_MAC_ADDR_USAGE_PANE, _("MAC Address Usage Window\tCTRL+F2"),
         _("Show or hide the MAC usage pane."));
-    view_menu->AppendCheckItem(myID_VIEW_MAC_UPDATE_PANE, _("MAC Update\tCTRL+F3"),
+    view_menu->AppendCheckItem(myID_VIEW_DOWNLOAD_PANE, _("Device Download Window\tCTRL+F3"),
         _("Show or hide the MAC update pane."));
+    view_menu->AppendSeparator();
     view_menu->AppendCheckItem(myID_VIEW_LOG_PANE, _("Log Window\tCTRL+F4"),
         _("Show or hide the log window."));
     view_menu->AppendCheckItem(myID_VIEW_OPTION_PANE, _("Preference\tCTRL+F5"),
@@ -117,7 +118,7 @@ void UpdaterFrame::CreateControls()
         DestroyOnClose(false).MaximizeButton(true).MinSize(-1, 150));
 
     _auiManager.AddPane(new DownloadPane(this), wxAuiPaneInfo().
-        Name(wxT("DownloadPane")).Caption(_("Download Window")).Center().
+        Name(wxT("DownloadPane")).Caption(_("Device Download Window")).Center().
         CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
         MinSize(300, -1));
 
