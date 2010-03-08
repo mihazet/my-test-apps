@@ -203,6 +203,7 @@ BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_BUTTON(myID_DOWNLOAD_SEARCH_BTN, DownloadPane::OnSearchButtonClicked)
     EVT_BUTTON(myID_DOWNLOAD_SELECTED_BTN, DownloadPane::OnDownloadButtonClicked)
     EVT_UPDATE_UI(myID_DOWNLOAD_SELECTED_BTN, DownloadPane::OnUpdateDownloadButton)
+    EVT_UPDATE_UI(myID_DOWNLOAD_GLOBAL_FILE, DownloadPane::OnUpdateGlobalFilePath)
     EVT_THREAD(myID_SEARCH_THREAD, DownloadPane::OnSearchThread)
     EVT_THREAD(myID_UPDATE_THREAD, DownloadPane::OnUpdateThread)
     EVT_HYPERLINK(myID_TARGET_CHECK_ALL, DownloadPane::OnTargetCheckAll)
@@ -543,6 +544,15 @@ void DownloadPane::OnUpdateDownloadButton(wxUpdateUIEvent &event)
 
     if ((_updateThreadCount == 0)
         && at_least_one_is_checked)
+        event.Enable(true);
+    else
+        event.Enable(false);
+}
+
+void DownloadPane::OnUpdateGlobalFilePath(wxUpdateUIEvent &event)
+{
+    wxRadioButton *useGlobalFile = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_RB), wxRadioButton);
+    if (useGlobalFile && useGlobalFile->GetValue())
         event.Enable(true);
     else
         event.Enable(false);

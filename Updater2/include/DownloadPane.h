@@ -37,6 +37,7 @@ private:
     void OnDownloadButtonClicked(wxCommandEvent &event);
     void OnModifyMACButtonClicked(wxCommandEvent &event);
     void OnUpdateDownloadButton(wxUpdateUIEvent &event);
+    void OnUpdateGlobalFilePath(wxUpdateUIEvent &event);
     void OnSearchThread(wxThreadEvent &event);
     void OnUpdateThread(wxThreadEvent &event);
     void OnTargetCheckAll(wxHyperlinkEvent &event);
