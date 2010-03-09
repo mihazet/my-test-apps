@@ -11,6 +11,7 @@
 #include "MacAddrDefinePane.h"
 #include "MacAddrUpdatePane.h"
 #include "MacAddrUsagePane.h"
+#include "AppPreferencePane.h"
 #include "WidgetId.h"
 #include "Version.h"
 
@@ -115,10 +116,8 @@ void UpdaterFrame::CreateControls()
     view_menu->AppendSeparator();
     view_menu->AppendCheckItem(myID_VIEW_LOG_PANE, _("Log Window\tCTRL+F4"),
         _("Show or hide the log window."));
-#if 0
     view_menu->AppendCheckItem(myID_VIEW_OPTION_PANE, _("Preference\tCTRL+F5"),
         _("Show or hide the preference."));
-#endif
     view_menu->AppendSeparator();
     view_menu->Append(myID_VIEW_RESET_LAYOUT, _("Reset layout"),
         _("Reset all panes to the default position and size."));
@@ -161,6 +160,11 @@ void UpdaterFrame::CreateControls()
         Name(PANE_NAME_MAC_USAGE).Caption(_("MAC Address Usage Window")).Center().
         CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
         MinSize(300, 300).Hide());
+
+    _auiManager.AddPane(new AppPreferencePane(this), wxAuiPaneInfo().
+        Name(PANE_NAME_PREFERENCE).Caption(_("Preference")).Float().Dockable(false).
+        CloseButton(true).DestroyOnClose(false).MaximizeButton(false).
+        MinSize(450, 400).Hide());
 
     /* status bar */
 
