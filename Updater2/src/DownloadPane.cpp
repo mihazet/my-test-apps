@@ -8,6 +8,7 @@
 #include <wx/filepicker.h>
 #include <wx/hyperlink.h>
 #include <wx/tokenzr.h>
+#include <wx/filedlg.h>
 #ifdef __WXMSW__
 #include <iphlpapi.h>
 #endif
@@ -27,6 +28,8 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
+#define IMAGE_FILE_WILDCARD wxT("Bootloader or Firmware Binary Files(*.brec)|*.brec|All Files(*.*)|*.*")
+
 class MyCustomToggleRenderer : public wxDataViewCustomRenderer
 {
 public:
@@ -364,7 +367,7 @@ void DownloadPane::CreateControls()
     radioSizer->Add(rb1, 0, wxALL, 5);
     radioSizer->Add(rb2, 0, wxALL, 5);
 
-    wxFilePickerCtrl *filePicker = new wxFilePickerCtrl(this, myID_DOWNLOAD_GLOBAL_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("Bootloader or Firmware Binary Files(*.brec)|*.brec|All Files(*.*)|*.*"));
+    wxFilePickerCtrl *filePicker = new wxFilePickerCtrl(this, myID_DOWNLOAD_GLOBAL_FILE, wxEmptyString, wxFileSelectorPromptStr, IMAGE_FILE_WILDCARD);
     wxBoxSizer *fileSizer = new wxBoxSizer(wxVERTICAL);
     fileSizer->AddStretchSpacer(1);
     fileSizer->Add(new wxStaticText(this, wxID_STATIC, _("Global Image File Path:")), 0, wxALL, 5);
@@ -902,5 +905,36 @@ void DownloadPane::OnDeviceListSelectNone(wxHyperlinkEvent &WXUNUSED(event))
 
 void DownloadPane::OnDeviceSpecificFileActivated(wxCommandEvent &event)
 {
-    wxLogMessage(wxT("Activated! row = %d"), event.GetInt());
+    wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
+    wxDataViewListStore *store;
+    int row = event.GetInt();
+    wxString deviceName, msg;
+    wxVariant data;
+    
+    if (lc)
+    {
+        if ((store = lc->GetStore()) != NULL)
+        {
+            store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_NAME);
+            deviceName = data.GetString();
+            msg << _("Select image file for device") << wxT(" ") << deviceName;
+
+            wxFileDialog dlg(this, msg, wxEmptyString, wxEmptyString, IMAGE_FILE_WILDCARD,
+                wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+            if (dlg.ShowModal() == wxID_OK)
+            {
+                data = dlg.GetPath();
+                store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH);
+                wxDataViewColumn *column = lc->GetColumn(DeviceList::COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH);
+                if (column)
+                {
+                    wxDataViewRenderer *render = column->GetRenderer();
+                    if (render)
+                    {
+                        render->EnableEllipsize();
+                    }
+                }
+            }
+        }
+    }
 }
