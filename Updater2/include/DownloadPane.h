@@ -43,6 +43,7 @@ private:
     void OnDeviceCheckAll(wxHyperlinkEvent &event);
     void OnDeviceUncheckAll(wxHyperlinkEvent &event);
     void OnDeviceListSelectNone(wxHyperlinkEvent &event);
+    void OnDeviceSpecificFileActivated(wxCommandEvent &event);
 
     // data member
     int _updateThreadCount;
