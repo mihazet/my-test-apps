@@ -8,6 +8,9 @@
 #include "UpdaterApp.h"
 #include "LogPane.h"
 #include "DownloadPane.h"
+#include "MacAddrDefinePane.h"
+#include "MacAddrUpdatePane.h"
+#include "MacAddrUsagePane.h"
 #include "WidgetId.h"
 #include "Version.h"
 
@@ -19,9 +22,21 @@
 #include "img/update_48.xpm"
 
 // ------------------------------------------------------------------------
+// Declaration
+// ------------------------------------------------------------------------
+#define PANE_NAME_LOG               wxT("LogPane")
+#define PANE_NAME_IMAGE_UPDATE      wxT("DownloadPane")
+#define PANE_NAME_MAC_DEFINE        wxT("MacAddrDefinePane")
+#define PANE_NAME_MAC_UPDATE        wxT("MacAddrUpdatePane")
+#define PANE_NAME_MAC_USAGE         wxT("MacAddrUsagePane")
+#define PANE_NAME_PREFERENCE        wxT("PreferencePane")
+
+// ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(UpdaterFrame, wxFrame)
+    EVT_MENU_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, UpdaterFrame::OnViewPane)
+    EVT_UPDATE_UI_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, UpdaterFrame::OnUpdatePane)
     EVT_ERASE_BACKGROUND(UpdaterFrame::OnEraseBackground)
     EVT_SIZE(UpdaterFrame::OnSize)
     EVT_CLOSE(UpdaterFrame::OnClose)
@@ -83,11 +98,11 @@ void UpdaterFrame::CreateControls()
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_EXIT, _("&Quit"), _("Quit this program"));
     wxMenu *view_menu = new wxMenu;
-    view_menu->AppendCheckItem(myID_VIEW_MAC_ADDR_DEFINE_PANE, _("MAC Address Define Window\tCTRL+F1"),
+    view_menu->AppendRadioItem(myID_VIEW_MAC_ADDR_DEFINE_PANE, _("MAC Address Define Window\tCTRL+F1"),
         _("Show or hide the MAC address definition pane."));
-    view_menu->AppendCheckItem(myID_VIEW_MAC_ADDR_USAGE_PANE, _("MAC Address Usage Window\tCTRL+F2"),
+    view_menu->AppendRadioItem(myID_VIEW_MAC_ADDR_USAGE_PANE, _("MAC Address Usage Window\tCTRL+F2"),
         _("Show or hide the MAC usage pane."));
-    view_menu->AppendCheckItem(myID_VIEW_DOWNLOAD_PANE, _("Device Download Window\tCTRL+F3"),
+    view_menu->AppendRadioItem(myID_VIEW_DOWNLOAD_PANE, _("Device Download Window\tCTRL+F3"),
         _("Show or hide the MAC update pane."));
     view_menu->AppendSeparator();
     view_menu->AppendCheckItem(myID_VIEW_LOG_PANE, _("Log Window\tCTRL+F4"),
@@ -113,14 +128,29 @@ void UpdaterFrame::CreateControls()
     wxLog *logger = new wxLogTextCtrl(dbgWin->GetLogTextCtrl());
     delete wxLog::SetActiveTarget(logger);
     wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S]"));
-    _auiManager.AddPane(dbgWin, wxAuiPaneInfo().Name(wxT("LogPane")).
+    _auiManager.AddPane(dbgWin, wxAuiPaneInfo().Name(PANE_NAME_LOG).
         Caption(_("Log Window")).Bottom().CloseButton(true).
         DestroyOnClose(false).MaximizeButton(true).MinSize(-1, 150));
 
     _auiManager.AddPane(new DownloadPane(this), wxAuiPaneInfo().
-        Name(wxT("DownloadPane")).Caption(_("Device Download Window")).Center().
-        CloseButton(true).DestroyOnClose(false).MaximizeButton(true).
+        Name(PANE_NAME_IMAGE_UPDATE).Caption(_("Device Download Window")).Center().
+        CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
         MinSize(300, -1));
+
+    _auiManager.AddPane(new MacAddrDefinePane(this), wxAuiPaneInfo().
+        Name(PANE_NAME_MAC_DEFINE).Caption(_("MAC Address Define Window")).Center().
+        CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
+        MinSize(300, 300).Hide());
+
+    _auiManager.AddPane(new MacAddrUpdatePane(this), wxAuiPaneInfo().
+        Name(PANE_NAME_MAC_UPDATE).Caption(_("MAC Address Update Window")).Center().
+        CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
+        MinSize(300, 300).Hide());
+
+    _auiManager.AddPane(new MacAddrUsagePane(this), wxAuiPaneInfo().
+        Name(PANE_NAME_MAC_USAGE).Caption(_("MAC Address Usage Window")).Center().
+        CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
+        MinSize(300, 300).Hide());
 
     /* status bar */
 
@@ -156,13 +186,78 @@ void UpdaterFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
 //////////////////////////////////////////////////////////////////////////////
 // Event handlers
 //////////////////////////////////////////////////////////////////////////////
-void UpdaterFrame::OnViewPane(wxCommandEvent &WXUNUSED(event))
+void UpdaterFrame::OnViewPane(wxCommandEvent &event)
 {
+    int evtId = event.GetId(), paneId;
+    wxString paneName;
 
+    if ((evtId > myID_VIEW_RADIO_PANE_START) && (evtId < myID_VIEW_RADIO_PANE_END))
+    {
+        for (paneId = myID_VIEW_RADIO_PANE_START;
+            paneId < myID_VIEW_RADIO_PANE_END;
+            paneId++)
+        {
+            switch (paneId)
+            {
+            case myID_VIEW_MAC_ADDR_DEFINE_PANE:
+                paneName = PANE_NAME_MAC_DEFINE;
+                break;
+            case myID_VIEW_MAC_ADDR_USAGE_PANE:
+                paneName = PANE_NAME_MAC_USAGE;
+                break;
+            case myID_VIEW_DOWNLOAD_PANE:
+                paneName = PANE_NAME_IMAGE_UPDATE;
+                break;
+            default:
+                continue;
+            }
+            _auiManager.GetPane(paneName).Show((evtId == paneId) ? true : false);
+        }
+    }
+    else if ((evtId > myID_VIEW_CHECK_PANE_START) && (evtId < myID_VIEW_CHECK_PANE_END))
+    {
+        switch (evtId)
+        {
+        case myID_VIEW_LOG_PANE:
+            paneName = PANE_NAME_LOG;
+            break;
+        case myID_VIEW_OPTION_PANE:
+            paneName = PANE_NAME_PREFERENCE;
+            break;
+        default:
+            return;
+        }
+        _auiManager.GetPane(paneName).Show(event.IsChecked());
+    }
+    _auiManager.Update();
 }
 
-void UpdaterFrame::OnUpdatePane(wxUpdateUIEvent &WXUNUSED(event))
+void UpdaterFrame::OnUpdatePane(wxUpdateUIEvent &event)
 {
+    int evtId = event.GetId();
+    wxString paneName;
+
+    switch (evtId)
+    {
+    case myID_VIEW_MAC_ADDR_DEFINE_PANE:
+        paneName = PANE_NAME_MAC_DEFINE;
+        break;
+    case myID_VIEW_MAC_ADDR_USAGE_PANE:
+        paneName = PANE_NAME_MAC_USAGE;
+        break;
+    case myID_VIEW_DOWNLOAD_PANE:
+        paneName = PANE_NAME_IMAGE_UPDATE;
+        break;
+    case myID_VIEW_LOG_PANE:
+        paneName = PANE_NAME_LOG;
+        break;
+    case myID_VIEW_OPTION_PANE:
+        paneName = PANE_NAME_PREFERENCE;
+        break;
+    default:
+        return;
+    }
+    event.Check(_auiManager.GetPane(paneName).IsShown());
 }
 
 void UpdaterFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
