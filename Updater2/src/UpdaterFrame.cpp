@@ -37,6 +37,7 @@
 BEGIN_EVENT_TABLE(UpdaterFrame, wxFrame)
     EVT_MENU_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, UpdaterFrame::OnViewPane)
     EVT_UPDATE_UI_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, UpdaterFrame::OnUpdatePane)
+    EVT_MENU(myID_VIEW_RESET_LAYOUT, UpdaterFrame::OnResetLayout)
     EVT_ERASE_BACKGROUND(UpdaterFrame::OnEraseBackground)
     EVT_SIZE(UpdaterFrame::OnSize)
     EVT_CLOSE(UpdaterFrame::OnClose)
@@ -136,7 +137,7 @@ void UpdaterFrame::CreateControls()
     wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S]"));
     _auiManager.AddPane(dbgWin, wxAuiPaneInfo().Name(PANE_NAME_LOG).
         Caption(_("Log Window")).Bottom().CloseButton(true).
-        DestroyOnClose(false).MaximizeButton(true).MinSize(-1, 150));
+        DestroyOnClose(false).MaximizeButton(false).MinSize(300, 150));
 
     _auiManager.AddPane(new DownloadPane(this), wxAuiPaneInfo().
         Name(PANE_NAME_IMAGE_UPDATE).Caption(_("Device Download Window")).Center().
@@ -287,6 +288,16 @@ void UpdaterFrame::OnUpdatePane(wxUpdateUIEvent &event)
 
 void UpdaterFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
 {
+    wxString defaultLayout;
+    AppOptions *pOpt = wxGetApp().m_pAppOptions;
+
+    if (pOpt)
+    {
+        pOpt->SetOption(wxT("ActivePerspective"), wxEmptyString);
+        if (pOpt->GetOption(wxT("DefaultPerspective"), defaultLayout)
+            && !defaultLayout.empty())
+            _auiManager.LoadPerspective(defaultLayout);
+    }
 }
 
 void UpdaterFrame::OnEraseBackground(wxEraseEvent &event)
