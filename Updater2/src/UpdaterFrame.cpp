@@ -75,6 +75,12 @@ bool UpdaterFrame::Create(wxWindow *parent, wxWindowID id,
 
 UpdaterFrame::~UpdaterFrame()
 {
+    AppOptions *pOpt = wxGetApp().m_pAppOptions;
+    wxString perspective;
+
+    if (pOpt)
+        pOpt->SetOption(wxT("ActivePerspective"), _auiManager.SavePerspective());
+
     _auiManager.UnInit();
 }
 
@@ -154,7 +160,26 @@ void UpdaterFrame::CreateControls()
 
     /* status bar */
 
-    _auiManager.Update();
+    /* update default perspective (use above layout code) */
+    wxString perspective;
+    bool useLastLayout = false;
+    AppOptions *pOpt = wxGetApp().m_pAppOptions;
+    if (pOpt)
+    {
+        pOpt->SetOption(wxT("DefaultPerspective"), _auiManager.SavePerspective());
+        if (pOpt->GetOption(wxT("ActivePerspective"), perspective))
+        {
+            if (perspective.empty())
+                useLastLayout = false;
+            else
+                useLastLayout = true;
+        }
+    }
+
+    if (useLastLayout)
+        _auiManager.LoadPerspective(perspective);
+    else
+        _auiManager.Update();
 }
 
 void UpdaterFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
