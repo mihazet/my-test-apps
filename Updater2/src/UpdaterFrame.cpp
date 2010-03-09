@@ -93,6 +93,7 @@ void UpdaterFrame::CreateControls()
 {
     /* tell wxAuiManager to manage this frame */
     _auiManager.SetManagedWindow(this);
+    _auiManager.SetFlags(_auiManager.GetFlags() | wxAUI_MGR_LIVE_RESIZE);
 
     /* setup icon for window title bar, taskbar and task switching bar */
     wxIconBundle icons;
@@ -114,8 +115,10 @@ void UpdaterFrame::CreateControls()
     view_menu->AppendSeparator();
     view_menu->AppendCheckItem(myID_VIEW_LOG_PANE, _("Log Window\tCTRL+F4"),
         _("Show or hide the log window."));
+#if 0
     view_menu->AppendCheckItem(myID_VIEW_OPTION_PANE, _("Preference\tCTRL+F5"),
         _("Show or hide the preference."));
+#endif
     view_menu->AppendSeparator();
     view_menu->Append(myID_VIEW_RESET_LAYOUT, _("Reset layout"),
         _("Reset all panes to the default position and size."));
