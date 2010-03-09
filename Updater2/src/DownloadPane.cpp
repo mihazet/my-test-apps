@@ -109,7 +109,7 @@ public:
             wxALIGN_CENTER)
     {
         m_path = wxEmptyString;
-        m_emptyText = _("Double click to setup file");
+        m_emptyText = _("Double click to browse...");
         DisableEllipsize();
     }
 
@@ -905,13 +905,14 @@ void DownloadPane::OnDeviceListSelectNone(wxHyperlinkEvent &WXUNUSED(event))
 
 void DownloadPane::OnDeviceSpecificFileActivated(wxCommandEvent &event)
 {
+    wxRadioButton *useGlobalFile = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_RB), wxRadioButton);
     wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
     wxDataViewListStore *store;
     int row = event.GetInt();
     wxString deviceName, msg;
     wxVariant data;
     
-    if (lc)
+    if (useGlobalFile && !useGlobalFile->GetValue() && lc)
     {
         if ((store = lc->GetStore()) != NULL)
         {
