@@ -309,7 +309,55 @@ wxThread::ExitCode UpdateThread::Entry()
                 }
                 else if (!_newMACAddress.empty()) // update MAC address
                 {
+                    wxStringTokenizer tokenzr(_newMACAddress, wxT(":"));
+                    wxString token;
+                    long longValue, macIndex = 16, macChkSum = 0;
 
+                    /* prepare payload data for updating MAC address */
+                    while (tokenzr.HasMoreTokens())
+                    {
+                        token = tokenzr.GetNextToken();
+                        token.ToLong(&longValue, 16);
+                        macChkSum += longValue;
+                        txBuf[macIndex++] = longValue & 0xFF;
+                    }
+                    txBuf[macIndex++] = macChkSum & 0xFF;
+
+                    /* prepare command for updating MAC address */
+                    txBuf[0] = 'T';
+                    txBuf[1] = 'B';
+                    txBuf[2] = 0xff;
+                    txBuf[3] = ACTION_UPDATE_MAC_ADDRESS;
+                    txBuf[4] = txBuf[5] = 0x0;
+                    txBuf[6] = txBuf[7] = 0xff;
+                    txBuf[8] = txBuf[9] = txBuf[10] = 0;
+                    txBuf[11] = 7; // data lenght following header
+                    txBuf[12] = txBuf[13] = txBuf[14] = txBuf[15] = 0;
+
+                    /* transmit it */
+                    _tcp->Write(&txBuf[0], macIndex);
+                    if ((_tcp->LastError() == wxSOCKET_NOERROR)
+                        && (_tcp->LastCount() == (unsigned long)macIndex))
+                    {
+                        /* wait for response and verify it */
+                        _tcp->Read(_recvBuf, RECVBUFSIZE);
+                        if ((_tcp->LastError() == wxSOCKET_NOERROR)
+                            && (_tcp->LastCount() == 16))
+                        {
+                            if ((_recvBuf[4] != 0) || (_recvBuf[5] != 0))
+                            {
+                                error_code = (_recvBuf[4] << 8) + _recvBuf[5];
+                            }
+                        }
+                        else
+                        {
+                            error_code = UTERROR_SOCKET_READ;
+                        }
+                    }
+                    else
+                    {
+                        error_code = UTERROR_SOCKET_WRITE;
+                    }
                 }
                 else // erase management block
                 {
