@@ -516,13 +516,14 @@ void DownloadPane::OnSearchButtonClicked(wxCommandEvent &event)
 void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
 {
     wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
+    wxRadioButton *rb = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_RB), wxRadioButton);
     wxFilePickerCtrl *filePicker = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_FILE), wxFilePickerCtrl);
 
-    if (lc && filePicker)
+    if (lc && rb)
     {
-        wxString file = filePicker->GetPath();
+        wxString globalFile = filePicker->GetPath();
         wxDataViewListStore *store = lc->GetStore();
-        if (store && !file.empty())
+        if (store && ((rb->GetValue() && !globalFile.empty()) || !rb->GetValue()))
         {
             unsigned int row, nRow = store->GetCount();
             _updateThreadCount = 0;
@@ -539,6 +540,17 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                     wxString ip = data.GetString();
                     store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_MACADDRESS);
                     wxString mac = data.GetString();
+                    store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH);
+                    wxString specificFile = data.GetString();
+                    if (!rb->GetValue() && specificFile.empty())
+                    {
+                        wxString noSpecificFileMsg;
+                        noSpecificFileMsg << wxT("Skip to update device") << wxT(" ") << name << wxT(", because of lack of device-specific image file path.");
+                        _promptForUpdateError->ShowMessage(noSpecificFileMsg, wxICON_INFORMATION);
+                        data = false;
+                        store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE);
+                        continue;
+                    }
                     threadCodedWord.clear();
                     threadCodedWord
                         << row << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
@@ -546,7 +558,7 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                         << ip << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
                         << mac;
 
-                    UpdateThread *thread = new UpdateThread(this, threadCodedWord, file);
+                    UpdateThread *thread = new UpdateThread(this, threadCodedWord, rb->GetValue() ? globalFile : specificFile);
                     if (thread
                         && (thread->Create() == wxTHREAD_NO_ERROR)
                         && (thread->Run() == wxTHREAD_NO_ERROR))
@@ -555,25 +567,30 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                     }
                 }
             }
-
-            if (_updateThreadCount)
-            {
-                /* Besides disable button in update ui event handler, we also disable button here
-                   right away to avoid this click action re-enter again */
-                wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
-                if (btn)
-                    btn->Enable(false);
-            }
-            else
-                wxLogVerbose(wxT("No target is selected! Please make sure the first column is checked if you want to update it."));
+            lc->UnselectAll();
         }
-        else
+        else if (!store)
             wxLogError(wxT("Can not find store in wxDataViewListCtrl instance to validate required information!"));
-
-        lc->UnselectAll();
+        else if (rb->GetValue() && globalFile.empty())
+        {
+            wxString noGlobalFileMsg;
+            noGlobalFileMsg << wxT("Update procedure is skipped because of lack of global image file path.");
+            _promptForUpdateError->ShowMessage(noGlobalFileMsg, wxICON_INFORMATION);
+        }
     }
-    else
+    else if (!lc)
         wxLogError(wxT("Can not find wxDataViewListCtrl instance to validate required information!"));
+    else if (!rb)
+        wxLogError(wxT("Can not find wxRadioButton instance to validate required information!"));
+
+    if (_updateThreadCount)
+    {
+        /* Besides disable button in update ui event handler, we also disable button here
+           right away to avoid this click action re-enter again */
+        wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
+        if (btn)
+            btn->Enable(false);
+    }
 }
 
 void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
