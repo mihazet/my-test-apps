@@ -35,8 +35,7 @@ class MyCustomToggleRenderer : public wxDataViewCustomRenderer
 public:
     MyCustomToggleRenderer()
         : wxDataViewCustomRenderer(wxT("bool"),
-            wxDATAVIEW_CELL_ACTIVATABLE,
-            wxALIGN_CENTER)
+            wxDATAVIEW_CELL_ACTIVATABLE)
     { m_toggle = false; }
 
     virtual bool Render(wxRect cell, wxDC *dc, int WXUNUSED(state))
@@ -91,6 +90,8 @@ public:
     }
 
     virtual bool GetValue(wxVariant &WXUNUSED(value)) const { return true; }
+
+    virtual int GetAlignment() const { return wxALIGN_CENTER; };
 
 private:
     bool m_toggle;
