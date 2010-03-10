@@ -134,7 +134,7 @@ wxThread::ExitCode UpdateThread::Entry()
     wxThreadEvent event(wxEVT_COMMAND_THREAD, myID_UPDATE_THREAD);
     UpdateThreadMessage msg;
     wxIPV4address remote, local;
-    int error_code = 0;
+    int error_code = UTERROR_NOERROR;
     unsigned int txSize = 0;
     unsigned char *txBuf = NULL;
     unsigned char connectMessage[] =
@@ -313,7 +313,39 @@ wxThread::ExitCode UpdateThread::Entry()
                 }
                 else // erase management block
                 {
+                    /* prepare command for erasing management block */
+                    txBuf[0] = 'T';
+                    txBuf[1] = 'B';
+                    txBuf[2] = 0xff;
+                    txBuf[3] = ACTION_ERASE_MANAGEMENT_BLOCK;
+                    txBuf[4] = txBuf[5] = 0x0;
+                    txBuf[6] = txBuf[7] = 0xff;
+                    txBuf[8] = txBuf[9] = txBuf[10] = txBuf[11] = txBuf[12] = txBuf[13] = txBuf[14] = txBuf[15] = 0x0;
 
+                    /* transmit it */
+                    _tcp->Write(&txBuf[0], 16);
+                    if ((_tcp->LastError() == wxSOCKET_NOERROR)
+                        && (_tcp->LastCount() == 16))
+                    {
+                        /* wait for response and verify it */
+                        _tcp->Read(_recvBuf, RECVBUFSIZE);
+                        if ((_tcp->LastError() == wxSOCKET_NOERROR)
+                            && (_tcp->LastCount() == 16))
+                        {
+                            if ((_recvBuf[4] != 0) || (_recvBuf[5] != 0))
+                            {
+                                error_code = (_recvBuf[4] << 8) + _recvBuf[5];
+                            }
+                        }
+                        else
+                        {
+                            error_code = UTERROR_SOCKET_READ;
+                        }
+                    }
+                    else
+                    {
+                        error_code = UTERROR_SOCKET_WRITE;
+                    }
                 }
             }
             else
