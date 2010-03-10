@@ -29,7 +29,7 @@ class UpdateThread : public wxThread
 {
 public:
     UpdateThread(wxEvtHandler *handler, const wxString &codedString,
-        const wxString &image);
+        const wxString &image, const wxString &newMACAddress = wxEmptyString);
     ~UpdateThread();
 
 private:
@@ -43,6 +43,7 @@ private:
     wxString _targetIpAddress;
     wxString _targetMacAddress;
     wxString _imageFilePath;
+    wxString _newMACAddress;
     wxSocketClient *_tcp;
     unsigned char *_recvBuf;
 };
@@ -76,6 +77,7 @@ private:
 #define UTERROR_FILE_STREAM         -6
 #define UTERROR_SOCKET_WRITE        -7
 #define UTERROR_SOCKET_READ         -8
+#define UTERROR_BREC_SYNTAX         -9
 #define UTERROR_UNKNOWN             -100
 
 #endif /* _UPDATE_THREAD_H_ */
