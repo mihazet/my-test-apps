@@ -378,7 +378,7 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
                             fileName << wxT("BTL-");
                         else
                             fileName << wxT("WHAT-");
-                        fileName << now.Format(wxT("FW-%y%m%d-%H%M%S")) << wxT(".brec");
+                        fileName << now.Format(wxT("%y%m%d-%H%M%S")) << wxT(".brec");
                         wxFFileOutputStream ofs(fileName);
                         if (ofs.IsOk())
                         {
