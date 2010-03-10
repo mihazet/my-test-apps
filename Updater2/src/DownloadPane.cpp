@@ -105,12 +105,10 @@ class MyCustomFilePathRenderer : public wxDataViewCustomRenderer
 public:
     MyCustomFilePathRenderer()
         : wxDataViewCustomRenderer(wxT("string"),
-            wxDATAVIEW_CELL_ACTIVATABLE,
-            wxALIGN_CENTER)
+            wxDATAVIEW_CELL_ACTIVATABLE)
     {
         m_path = wxEmptyString;
         m_emptyText = _("Double click to browse...");
-        DisableEllipsize();
     }
 
     virtual bool Render(wxRect cell, wxDC *dc, int state)
@@ -159,7 +157,6 @@ public:
     {
         const wxDataViewCtrl *view = GetView();
         wxSize s = view->wxWindowBase::GetTextExtent(m_path.empty() ? m_emptyText : m_path);
-        s.IncBy(20, 10);
         return s;
     }
 
@@ -926,15 +923,6 @@ void DownloadPane::OnDeviceSpecificFileActivated(wxCommandEvent &event)
             {
                 data = dlg.GetPath();
                 store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH);
-                wxDataViewColumn *column = lc->GetColumn(DeviceList::COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH);
-                if (column)
-                {
-                    wxDataViewRenderer *render = column->GetRenderer();
-                    if (render)
-                    {
-                        render->EnableEllipsize();
-                    }
-                }
             }
         }
     }
