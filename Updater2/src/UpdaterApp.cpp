@@ -212,6 +212,9 @@ bool UpdaterApp::DetectNetAdapter(bool *changed)
 
         /* name */
         name = wxString(ifr->ifr_name, *wxConvCurrent);
+        
+        if (!name.Cmp(wxT("lo")))
+            continue;
 
         /* ip */
         memset(ipBuf, 0, INET_ADDRSTRLEN);
