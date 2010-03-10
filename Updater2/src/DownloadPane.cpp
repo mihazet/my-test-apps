@@ -595,7 +595,34 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
 
 void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
 {
-    wxLogMessage(wxT("User press modify MAC address button!"));
+    wxStringTokenizer tokenzr(_preparedUpdateThreadCodedString, UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD);
+    wxString name, ip, mac, token;
+    long row, loop = 0;
+
+    while (tokenzr.HasMoreTokens())
+    {
+        token = tokenzr.GetNextToken();
+        switch (loop++)
+        {
+        case 0:
+            if (!token.ToLong(&row))
+                row = -1;
+            break;
+        case 1:
+            name = token;
+            break;
+        case 2:
+            ip = token;
+            break;
+        case 3:
+            mac = token;
+            break;
+        default:
+            break;
+        }
+    }
+
+    wxLogMessage(wxT("Name %s, Row %d, Ip %s, Mac %s"), name, row, ip, mac);
 
     // just call skip here, so this event will be handled by the wxInfoBarBase, which will hide the infobar.
     event.Skip();
@@ -741,6 +768,15 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
                 if (IsMACAddressInvalid(msg.mac)) // replace to invalid mac address
                 {
                     wxString msg_to_modify_invalid_mac;
+
+                    /* prepare update thread coded string for later button (on infobar) event handler */
+                    _preparedUpdateThreadCodedString.clear();
+                    _preparedUpdateThreadCodedString
+                        << nRow << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
+                        << msg.name << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
+                        << msg.ip << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
+                        << msg.mac;
+
                     msg_to_modify_invalid_mac
                         << _("Device") << wxT(" ") << msg.name << wxT(" ") << _("with invalid MAC address")
                         << wxT(" (") << msg.mac << wxT(")! ") << _("Would you like to modify it?");
