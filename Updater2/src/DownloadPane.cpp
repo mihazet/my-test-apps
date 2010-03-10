@@ -580,9 +580,13 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
         }
     }
     else if (!lc)
+    {
         wxLogError(wxT("Can not find wxDataViewListCtrl instance to validate required information!"));
+    }
     else if (!rb)
+    {
         wxLogError(wxT("Can not find wxRadioButton instance to validate required information!"));
+    }
 
     if (_updateThreadCount)
     {
