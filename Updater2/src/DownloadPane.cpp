@@ -174,6 +174,65 @@ private:
     wxString m_emptyText;
 };
 
+class MyCustomUpdateResultRenderer : public wxDataViewCustomRenderer
+{
+public:
+    MyCustomUpdateResultRenderer()
+        : wxDataViewCustomRenderer(wxT("string"),
+            wxDATAVIEW_CELL_INERT)
+    {
+        m_result = wxEmptyString;
+        m_ok = wxT("OK");
+        m_error = wxT("ERROR");
+        m_empty = true;
+    }
+
+    virtual bool Render(wxRect cell, wxDC *dc, int state)
+    {
+        long longValue = 0;
+
+        if (!m_empty && m_result.ToLong(&longValue))
+        {
+            if (longValue)
+                dc->SetBrush(*wxRED_BRUSH);
+            else
+                dc->SetBrush(*wxGREEN_BRUSH);
+            dc->SetPen(*wxTRANSPARENT_PEN);
+
+            cell.Deflate(2);
+            dc->DrawRoundedRectangle(cell, 5);
+            RenderText(longValue ? m_error : m_ok,
+                0,
+                wxRect(dc->GetTextExtent(longValue ? m_error : m_ok)).CenterIn(cell),
+                dc,
+                state);
+        }
+        else
+        {
+            RenderText(wxEmptyString, 0, cell, dc, state);
+        }
+        return true;
+    }
+
+    virtual wxSize GetSize() const
+    {
+        return wxSize(50, 20);
+    }
+
+    virtual bool SetValue(const wxVariant &value)
+    {
+        m_result = value.GetString();
+        m_empty = m_result.empty();
+        return true;
+    }
+
+    virtual bool GetValue(wxVariant &WXUNUSED(value)) const { return true; }
+
+private:
+    wxString m_result, m_ok, m_error;
+    bool m_empty;
+};
+
 class DeviceList : public wxDataViewListCtrl
 {
 public:
@@ -186,7 +245,8 @@ public:
         COLUMN_DEVICE_IPADDRESS,
         COLUMN_DEVICE_MACADDRESS,
         COLUMN_DEVICE_UPDATE_PROGRESS,
-        COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH,       
+        COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH,
+        COLUMN_DEVICE_UPDATE_RESULT,
 
         COLUMN_DEVICE_LIST_MAX
     };
@@ -238,6 +298,9 @@ DeviceList::DeviceList(wxWindow *parent, wxWindowID id)
             break;
         case COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH:
             AppendColumn(new wxDataViewColumn(_("Device-specific Image File Path"), new MyCustomFilePathRenderer, column, 250, wxALIGN_LEFT));
+            break;
+        case COLUMN_DEVICE_UPDATE_RESULT:
+            AppendColumn(new wxDataViewColumn(_("Result"), new MyCustomUpdateResultRenderer, column, 80, wxALIGN_LEFT));
             break;
         default:
             break;
@@ -762,6 +825,9 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
                     case DeviceList::COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH:
                         data.push_back(wxEmptyString);
                         break;
+                    case DeviceList::COLUMN_DEVICE_UPDATE_RESULT:
+                        data.push_back(wxEmptyString);
+                        break;
                     default:
                         // FIXME
                         data.push_back(0);
@@ -816,6 +882,8 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
             switch (loop++)
             {
             case 0: // row
+                if (token.ToLong(&longValue))
+                    row = (int)longValue;
                 break;
             case 1: // name
                 name = token;
@@ -849,6 +917,25 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
             msg_for_update_error << _("Device") << wxT(" ") << name << wxT("(") << ip << wxT(") ")
                 << _("update procedure is failed, error code = ") << error;
             _promptForUpdateError->ShowMessage(msg_for_update_error, wxICON_ERROR);
+        }
+
+        if (((lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl)) != NULL) && (row != -1))
+        {
+            if ((store = lc->GetStore()) != NULL)
+            {
+                wxString nameInList, ipInList;
+                wxVariant data;
+                store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_NAME);
+                nameInList = data.GetString();
+                store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_IPADDRESS);
+                ipInList = data.GetString();
+                if ((name == nameInList) && (ip == ipInList))
+                {
+                    data = wxString::Format(wxT("%d"), error);
+                    store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE_RESULT);
+                    store->RowChanged(row);
+                }
+            }
         }
 
         break;
@@ -886,11 +973,13 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
         {
             if ((store = lc->GetStore()) != NULL)
             {
-                wxString ipInList;
+                wxString nameInList, ipInList;
                 wxVariant data;
+                store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_NAME);
+                nameInList = data.GetString();
                 store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_IPADDRESS);
                 ipInList = data.GetString();
-                if (ipInList == ip)
+                if ((name == nameInList) && (ip == ipInList))
                 {
                     data = (long)progress;
                     store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE_PROGRESS);
