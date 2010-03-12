@@ -25,6 +25,7 @@ UDPProtocol::UDPProtocol() :
 {
     size_t socketId = 0;
     wxIPV4address local;
+    int opt = 1;
 
     /* init function pointer */
     _normalHandler = new NormalHandler[3];
@@ -47,6 +48,7 @@ UDPProtocol::UDPProtocol() :
         it->udp = new UDPSocket(local);
         if (it->udp->Ok())
         {
+            it->udp->SetOption(SOL_SOCKET, SO_BROADCAST, &opt, sizeof(opt));
             it->udp->SetEventHandler(*this, socketId);
             it->udp->SetNotify(wxSOCKET_INPUT_FLAG);
             it->udp->Notify(true);
