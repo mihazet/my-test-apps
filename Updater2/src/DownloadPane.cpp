@@ -9,6 +9,7 @@
 #include <wx/hyperlink.h>
 #include <wx/tokenzr.h>
 #include <wx/filedlg.h>
+#include <wx/textdlg.h>
 #ifdef __WXMSW__
 #include <iphlpapi.h>
 #endif
@@ -529,7 +530,9 @@ bool DownloadPane::IsMACAddressInvalid(const wxString &mac_address)
 {
     bool invalid = false;
 
-    if (!mac_address.Cmp(wxT("00:1D:72:9C:94:E5")))
+    //if (!mac_address.Cmp(wxT("00:1D:72:9C:94:E5")))
+    if (!mac_address.Cmp(wxT("00:18:23:01:02:03")))
+    //if (!mac_address.Cmp(wxT("00:23:18:AB:CD:EF")))
         invalid = true;
 
     return invalid;
@@ -696,32 +699,36 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
 {
     wxStringTokenizer tokenzr(_preparedUpdateThreadCodedString, UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD);
     wxString name, ip, mac, token;
-    long row, loop = 0;
+    long row = -1, loop = 0;
 
     while (tokenzr.HasMoreTokens())
     {
         token = tokenzr.GetNextToken();
         switch (loop++)
         {
-        case 0:
-            if (!token.ToLong(&row))
-                row = -1;
-            break;
-        case 1:
-            name = token;
-            break;
-        case 2:
-            ip = token;
-            break;
-        case 3:
-            mac = token;
-            break;
-        default:
-            break;
+        case 0: token.ToLong(&row); break;
+        case 1: name = token; break;
+        case 2: ip = token; break;
+        case 3: mac = token; break;
+        default: break;
         }
     }
 
-    wxLogMessage(wxT("Name %s, Row %d, Ip %s, Mac %s"), name, row, ip, mac);
+    /* do nothing if there is update thread activity */
+    if (_updateThreadCount)
+    {
+        _promptForUpdateError->ShowMessage(_("System busying now! Try later..."), wxICON_EXCLAMATION);
+        /* don't skip at here, so the button on infobar will not leave */
+        return;
+    }
+
+    wxTextEntryDialog textDlg(this, _("Please assign new MAC address"));
+    if (textDlg.ShowModal() == wxID_OK)
+    {
+        UpdateThread *thread = new UpdateThread(this, _preparedUpdateThreadCodedString, wxEmptyString, textDlg.GetValue());
+        if (thread && (thread->Create() == wxTHREAD_NO_ERROR) && (thread->Run() == wxTHREAD_NO_ERROR))
+            _updateThreadCount++;
+    }
 
     // just call skip here, so this event will be handled by the wxInfoBarBase, which will hide the infobar.
     event.Skip();
@@ -972,11 +979,11 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
                 wxString nameInList, ipInList;
                 wxVariant data;
 
-                if (msg.type == UPDATE_THREAD_MODIFY_MAC_ADDRESS_COMPLETED)
-                {
+                //if (msg.type == UPDATE_THREAD_MODIFY_MAC_ADDRESS_COMPLETED)
+                //{
                     /* update mac in list? */
-                }
-                else
+                //}
+                //else
                 {
                     store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_NAME);
                     nameInList = data.GetString();
