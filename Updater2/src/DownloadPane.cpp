@@ -535,6 +535,37 @@ bool DownloadPane::IsMACAddressInvalid(const wxString &mac_address)
     return invalid;
 }
 
+wxString DownloadPane::ExplainUpdateThreadErrorCode(const int error)
+{
+    wxString msg;
+
+    switch (error)
+    {
+    case UTERROR_BREC_SYNTAX:    
+    case UTERROR_BAD_IMAGE_SYNTAX: msg = _("Wrong image file syntax"); break;
+    case UTERROR_RAM_CHECKSUM: msg = _("Calculated checksum mismatched"); break;
+    case UTERROR_BREC_CHECKSUM: msg = _("Wrong image file checksum"); break;
+    case UTERROR_LOAD_MODE: msg = _("Unrecognize operation mode"); break;
+    case UTERROR_VER: msg = _("Wrong version"); break;
+    case UTERROR_MALLOC: msg = _("Memory allocation failed"); break;
+    case UTERROR_ERASH_FLASH: msg = _("Can't erase flash memory"); break;
+    case UTERROR_READ_FLASH: msg = _("Can't read flash memory"); break;
+    case UTERROR_WRITE_FLASH: msg = _("Can't write flash memory"); break;
+    case UTERROR_FW_SIZE: msg = _("Wrong firmware image size"); break;
+    case UTERROR_BTL_SIZE: msg = _("Wrong bootloader image size"); break;
+    case UTERROR_SOCKET_INIT: msg = _("Can't init socket"); break;
+    case UTERROR_SOCKET_CONNECT: msg = _("Can't connect to remote"); break;
+    case UTERROR_CONNECT: msg = _("Remote doesn't understand my protocol"); break;
+    case UTERROR_FILE_STREAM: msg = _("Fail to read iamge file"); break;
+    case UTERROR_SOCKET_WRITE: msg = _("Socket write error"); break;
+    case UTERROR_SOCKET_READ: msg = _("Socket read error"); break;
+    case UTERROR_UNKNOWN: msg = _("Unknown error"); break;
+    default: msg = wxT("???"); break;
+    }
+
+    return msg;
+}
+
 //
 // event handlers
 //
@@ -873,7 +904,11 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
 
     switch (msg.type)
     {
-    case UPDATE_THREAD_COMPLETED:
+    case UPDATE_THREAD_DOWNLOAD_FIRMWARE_COMPLETED:
+    case UPDATE_THREAD_DOWNLOAD_BOOTLOADER_COMPLETED:
+    case UPDATE_THREAD_MODIFY_MAC_ADDRESS_COMPLETED:
+    case UPDATE_THREAD_ERASE_MANAGEMENT_DATA_COMPLETED:
+    case UPDATE_THREAD_DO_NOTHING_COMPLETED:
 
         tokenizer.SetString(msg.payload, UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD);
         while (tokenizer.HasMoreTokens())
@@ -909,14 +944,25 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
             }
         }
 
-        _updateThreadCount--;
-
         if (error)
         {
             wxString msg_for_update_error;
-            msg_for_update_error << _("Device") << wxT(" ") << name << wxT("(") << ip << wxT(") ")
-                << _("update procedure is failed, error code = ") << error;
-            _promptForUpdateError->ShowMessage(msg_for_update_error, wxICON_ERROR);
+
+            /* infobar don't show error message for modifying MAC or erasing management block */
+            if ((msg.type != UPDATE_THREAD_MODIFY_MAC_ADDRESS_COMPLETED)
+                && (msg.type != UPDATE_THREAD_ERASE_MANAGEMENT_DATA_COMPLETED))
+            {
+                msg_for_update_error << name << wxT(": ") << _("Can not download") << wxT(" ");
+                if (msg.type == UPDATE_THREAD_DOWNLOAD_FIRMWARE_COMPLETED)
+                    msg_for_update_error << _("firmware");
+                else if (msg.type == UPDATE_THREAD_DOWNLOAD_BOOTLOADER_COMPLETED)
+                    msg_for_update_error << _("Bootloader");
+                else
+                    msg_for_update_error << _("Image");
+                msg_for_update_error << wxT("! ") << _("Reason") << wxT(" = ")
+                    << ExplainUpdateThreadErrorCode(error) << wxT("!");
+                _promptForUpdateError->ShowMessage(msg_for_update_error, wxICON_ERROR);
+            }
         }
 
         if (((lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl)) != NULL) && (row != -1))
@@ -925,19 +971,28 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
             {
                 wxString nameInList, ipInList;
                 wxVariant data;
-                store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_NAME);
-                nameInList = data.GetString();
-                store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_IPADDRESS);
-                ipInList = data.GetString();
-                if ((name == nameInList) && (ip == ipInList))
+
+                if (msg.type == UPDATE_THREAD_MODIFY_MAC_ADDRESS_COMPLETED)
                 {
-                    data = wxString::Format(wxT("%d"), error);
-                    store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE_RESULT);
-                    store->RowChanged(row);
+                    /* update mac in list? */
+                }
+                else
+                {
+                    store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_NAME);
+                    nameInList = data.GetString();
+                    store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_IPADDRESS);
+                    ipInList = data.GetString();
+                    if ((name == nameInList) && (ip == ipInList))
+                    {
+                        data = wxString::Format(wxT("%d"), error);
+                        store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE_RESULT);
+                        store->RowChanged(row);
+                    }
                 }
             }
         }
 
+        _updateThreadCount--;
         break;
 
     case UPDATE_THREAD_PROGRESS:

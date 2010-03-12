@@ -143,6 +143,7 @@ wxThread::ExitCode UpdateThread::Entry()
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
     bool updateFirmware = true, isImageFileFirstBlock = true;
+    UTMType actionType = UPDATE_THREAD_DO_NOTHING_COMPLETED;
 
     wxLogMessage(wxT("TCP udpate thread connect to %s"), _targetIpAddress);
 
@@ -224,10 +225,11 @@ wxThread::ExitCode UpdateThread::Entry()
                                 leftForRead -= lastRead;
                             } while (leftForRead != 0);
 
-                            /* check image content to verify brec correctness */
+                            /* check image content to verify brec correctness - only check one time */
                             if (isImageFileFirstBlock)
                             {
                                 isImageFileFirstBlock = false;
+
                                 if ((txBuf[16] != 'S') || (txBuf[17] != 'x'))
                                 {
                                     error_code = UTERROR_BREC_SYNTAX;
@@ -235,7 +237,14 @@ wxThread::ExitCode UpdateThread::Entry()
                                 }
 
                                 if (transmitCount == 0) // assume bootloader's size is never over one load payload size, and firmware does.
+                                {
                                     updateFirmware = false;
+                                    actionType = UPDATE_THREAD_DOWNLOAD_BOOTLOADER_COMPLETED;
+                                }
+                                else
+                                {
+                                    actionType = UPDATE_THREAD_DOWNLOAD_FIRMWARE_COMPLETED;
+                                }
                             }
 
                             /* update the calculated checksum */
@@ -313,6 +322,8 @@ wxThread::ExitCode UpdateThread::Entry()
                     wxString token;
                     long longValue, macIndex = 16, macChkSum = 0;
 
+                    actionType = UPDATE_THREAD_MODIFY_MAC_ADDRESS_COMPLETED;
+
                     /* prepare payload data for updating MAC address */
                     while (tokenzr.HasMoreTokens())
                     {
@@ -361,6 +372,8 @@ wxThread::ExitCode UpdateThread::Entry()
                 }
                 else // erase management block
                 {
+                    actionType = UPDATE_THREAD_ERASE_MANAGEMENT_DATA_COMPLETED;
+
                     /* prepare command for erasing management block */
                     txBuf[0] = 'T';
                     txBuf[1] = 'B';
@@ -405,7 +418,7 @@ wxThread::ExitCode UpdateThread::Entry()
     else
         error_code = UTERROR_SOCKET_INIT;
 
-    SendNotification(UPDATE_THREAD_COMPLETED, error_code);
+    SendNotification(actionType, error_code);
 
     //
     // clean up

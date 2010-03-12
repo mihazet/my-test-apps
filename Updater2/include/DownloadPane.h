@@ -31,6 +31,7 @@ private:
     void InitOptionValue();
     void SaveOptionValue();
     bool IsMACAddressInvalid(const wxString & mac_address);
+    wxString ExplainUpdateThreadErrorCode(const int error);
 
     // event handlers
     void OnSearchButtonClicked(wxCommandEvent &event);

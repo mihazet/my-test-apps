@@ -9,7 +9,11 @@
 
 typedef enum
 {
-    UPDATE_THREAD_COMPLETED,
+    UPDATE_THREAD_DOWNLOAD_FIRMWARE_COMPLETED,
+    UPDATE_THREAD_DOWNLOAD_BOOTLOADER_COMPLETED,
+    UPDATE_THREAD_ERASE_MANAGEMENT_DATA_COMPLETED,
+    UPDATE_THREAD_MODIFY_MAC_ADDRESS_COMPLETED,
+    UPDATE_THREAD_DO_NOTHING_COMPLETED,
     UPDATE_THREAD_PROGRESS,
 } UTMType;
 
@@ -18,7 +22,7 @@ class UpdateThreadMessage
 public:
     UpdateThreadMessage()
     {
-        type = UPDATE_THREAD_COMPLETED;
+        type = UPDATE_THREAD_DO_NOTHING_COMPLETED;
         payload = wxEmptyString;
     }
     UTMType type;
@@ -72,12 +76,10 @@ private:
 #define UTERROR_SOCKET_INIT         -1
 #define UTERROR_SOCKET_CONNECT      -2
 #define UTERROR_CONNECT             -3
-#define UTERROR_TRANSMIT            -4
-#define UTERROR_RECEIVE             -5
-#define UTERROR_FILE_STREAM         -6
-#define UTERROR_SOCKET_WRITE        -7
-#define UTERROR_SOCKET_READ         -8
-#define UTERROR_BREC_SYNTAX         -9
+#define UTERROR_FILE_STREAM         -4
+#define UTERROR_SOCKET_WRITE        -5
+#define UTERROR_SOCKET_READ         -6
+#define UTERROR_BREC_SYNTAX         -7
 #define UTERROR_UNKNOWN             -100
 
 #endif /* _UPDATE_THREAD_H_ */
