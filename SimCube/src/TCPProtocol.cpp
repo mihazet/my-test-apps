@@ -25,6 +25,7 @@ enum
     MODE_RUN_FW_FROM_RAM = 4,
     MODE_DOWNLOAD_BOOTLOADER_TO_FLASH = 5,
     MODE_RESET_RESERVED_FLASH = 6,
+    MODE_UPDATE_MAC_ADDRESS = 0xF,
 };
 
 enum
@@ -316,6 +317,24 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
             case MODE_RUN_FW_FROM_RAM:
                 wxLogMessage(_("Run FW from ram"));
                 u16Err = 0;
+                break;
+
+            case MODE_UPDATE_MAC_ADDRESS:
+                if (((bypPayload[0] + bypPayload[1] + bypPayload[2] + bypPayload[3] 
+                    + bypPayload[4] + bypPayload[5]) & 0xFF) == bypPayload[6])
+                {
+                    u16Err = 0;
+                    wxLogMessage(wxT("New MAC = %02X:%02X:%02X:%02X:%02X:%02X"),
+                        bypPayload[0], bypPayload[1], bypPayload[2],
+                        bypPayload[3], bypPayload[4], bypPayload[5]);
+                }
+                else
+                {
+                    wxLogError(wxT("%02X %02X %02X %02X %02X %02X %02X"),
+                        bypPayload[0], bypPayload[1], bypPayload[2], bypPayload[3],
+                        bypPayload[4], bypPayload[5], bypPayload[6]);
+                    u16Err = 0;
+                }
                 break;
 
             case MODE_DOWNLOAD_FW_TO_FLASH:
