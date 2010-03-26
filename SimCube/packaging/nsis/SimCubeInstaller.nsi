@@ -34,9 +34,13 @@
 ;Language Selection Dialog Settings
 
   ;Remember the installer language
-  ;!define MUI_LANGDLL_REGISTRY_ROOT "HKCU" 
-  ;!define MUI_LANGDLL_REGISTRY_KEY "Software\Delta Electronics, Inc.\SimCube" 
-  ;!define MUI_LANGDLL_REGISTRY_VALUENAME "InstallerLanguage"
+  !define MUI_LANGDLL_REGISTRY_ROOT "HKCU" 
+  !define MUI_LANGDLL_REGISTRY_KEY "Software\Delta Electronics, Inc.\SimCube" 
+  !define MUI_LANGDLL_REGISTRY_VALUENAME "InstallerLanguage"
+  !define MUI_LANGDLL_WINDOWTITLE "Select preferred language"
+  !define MUI_LANGDLL_INFO "Please select language used during installing procedure"
+  !define MUI_LANGDLL_ALWAYSSHOW
+  !define MUI_LANGDLL_ALLLANGUAGES
   
 ;--------------------------------
 ;Pages
