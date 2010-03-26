@@ -100,9 +100,9 @@ FunctionEnd
 
   ;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGAUGE SPECIFIC
   ;Language strings
-  LangString DESC_SecDummy ${LANG_ENGLISH} "A test section."
-  LangString DESC_SecDummy ${LANG_SIMPCHINESE} "?"
-  LangString DESC_SecDummy ${LANG_TRADCHINESE} "Ác¤¤´ú¸Õ"
+  !include "lang-english.nsh"
+  !include "lang-simpchinese.nsh"
+  !include "lang-tradchinese.nsh"
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
