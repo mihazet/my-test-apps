@@ -13,14 +13,14 @@
 ; General
 
     ; name and file
-    Name "SimCube Test Name"
+    Name "SimCube"
     OutFile "SimCube-Installer.exe"
 
     ; default installation directory
     InstallDir "$LOCALAPPDATA\SimCube"
     
     ;Get installation folder from registry if available
-    InstallDirRegKey HKCU "Software\SimCube" ""
+    InstallDirRegKey HKCU "Software\Delta Electronics, Inc.\SimCube" ""
 
     ;Request application privileges for Windows Vista
     RequestExecutionLevel user
@@ -30,6 +30,14 @@
 
   !define MUI_ABORTWARNING
 
+;--------------------------------
+;Language Selection Dialog Settings
+
+  ;Remember the installer language
+  ;!define MUI_LANGDLL_REGISTRY_ROOT "HKCU" 
+  ;!define MUI_LANGDLL_REGISTRY_KEY "Software\Delta Electronics, Inc.\SimCube" 
+  ;!define MUI_LANGDLL_REGISTRY_VALUENAME "InstallerLanguage"
+  
 ;--------------------------------
 ;Pages
 
@@ -45,6 +53,17 @@
 ;Languages
  
   !insertmacro MUI_LANGUAGE "English"
+  !insertmacro MUI_LANGUAGE "SimpChinese"
+  !insertmacro MUI_LANGUAGE "TradChinese"
+
+;--------------------------------
+;Reserve Files
+  
+  ;If you are using solid compression, files that are required before
+  ;the actual installation should be stored first in the data block,
+  ;because this will make your installer start faster.
+  
+  !insertmacro MUI_RESERVEFILE_LANGDLL
 
 ;--------------------------------
 ;Installer Sections
@@ -56,7 +75,7 @@ Section "Dummy Section" SecDummy
   ;ADD YOUR OWN FILES HERE...
   
   ;Store installation folder
-  WriteRegStr HKCU "Software\SimCube" "" $INSTDIR
+  WriteRegStr HKCU "Software\Delta Electronics, Inc.\SimCube" "" $INSTDIR
   
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -64,10 +83,22 @@ Section "Dummy Section" SecDummy
 SectionEnd
 
 ;--------------------------------
+;Installer Functions
+
+Function .onInit
+
+  !insertmacro MUI_LANGDLL_DISPLAY
+
+FunctionEnd
+
+;--------------------------------
 ;Descriptions
 
+  ;USE A LANGUAGE STRING IF YOU WANT YOUR DESCRIPTIONS TO BE LANGAUGE SPECIFIC
   ;Language strings
   LangString DESC_SecDummy ${LANG_ENGLISH} "A test section."
+  LangString DESC_SecDummy ${LANG_SIMPCHINESE} "?"
+  LangString DESC_SecDummy ${LANG_TRADCHINESE} "Ác¤¤´ú¸Õ"
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -85,6 +116,15 @@ Section "Uninstall"
 
   RMDir "$INSTDIR"
 
-  DeleteRegKey /ifempty HKCU "Software\SimCube"
+  DeleteRegKey /ifempty HKCU "Software\Delta Electronics, Inc.\SimCube"
 
 SectionEnd
+
+;--------------------------------
+;Uninstaller Functions
+
+Function un.onInit
+
+  !insertmacro MUI_UNGETLANGUAGE
+  
+FunctionEnd
