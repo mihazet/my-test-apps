@@ -8,8 +8,6 @@
 #include "UpdaterApp.h"
 #include "LogPane.h"
 #include "DownloadPane.h"
-#include "MacAddrDefinePane.h"
-#include "MacAddrUpdatePane.h"
 #include "MacAddrUsagePane.h"
 #include "AppPreferencePane.h"
 #include "WidgetId.h"
@@ -27,8 +25,6 @@
 // ------------------------------------------------------------------------
 #define PANE_NAME_LOG               wxT("LogPane")
 #define PANE_NAME_IMAGE_UPDATE      wxT("DownloadPane")
-#define PANE_NAME_MAC_DEFINE        wxT("MacAddrDefinePane")
-#define PANE_NAME_MAC_UPDATE        wxT("MacAddrUpdatePane")
 #define PANE_NAME_MAC_USAGE         wxT("MacAddrUsagePane")
 #define PANE_NAME_PREFERENCE        wxT("PreferencePane")
 
@@ -107,8 +103,6 @@ void UpdaterFrame::CreateControls()
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_EXIT, _("&Quit"), _("Quit this program"));
     wxMenu *view_menu = new wxMenu;
-    view_menu->AppendRadioItem(myID_VIEW_MAC_ADDR_DEFINE_PANE, _("MAC Address Define Window\tCTRL+F1"),
-        _("Show or hide the MAC address definition pane."));
     view_menu->AppendRadioItem(myID_VIEW_MAC_ADDR_USAGE_PANE, _("MAC Address Usage Window\tCTRL+F2"),
         _("Show or hide the MAC usage pane."));
     view_menu->AppendRadioItem(myID_VIEW_DOWNLOAD_PANE, _("Device Download Window\tCTRL+F3"),
@@ -145,16 +139,6 @@ void UpdaterFrame::CreateControls()
         Name(PANE_NAME_IMAGE_UPDATE).Caption(_("Device Download Window")).Center().
         CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
         MinSize(300, -1));
-
-    _auiManager.AddPane(new MacAddrDefinePane(this), wxAuiPaneInfo().
-        Name(PANE_NAME_MAC_DEFINE).Caption(_("MAC Address Define Window")).Center().
-        CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
-        MinSize(300, 300).Hide());
-
-    _auiManager.AddPane(new MacAddrUpdatePane(this), wxAuiPaneInfo().
-        Name(PANE_NAME_MAC_UPDATE).Caption(_("MAC Address Update Window")).Center().
-        CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
-        MinSize(300, 300).Hide());
 
     _auiManager.AddPane(new MacAddrUsagePane(this), wxAuiPaneInfo().
         Name(PANE_NAME_MAC_USAGE).Caption(_("MAC Address Usage Window")).Center().
@@ -232,9 +216,6 @@ void UpdaterFrame::OnViewPane(wxCommandEvent &event)
         {
             switch (paneId)
             {
-            case myID_VIEW_MAC_ADDR_DEFINE_PANE:
-                paneName = PANE_NAME_MAC_DEFINE;
-                break;
             case myID_VIEW_MAC_ADDR_USAGE_PANE:
                 paneName = PANE_NAME_MAC_USAGE;
                 break;
@@ -272,9 +253,6 @@ void UpdaterFrame::OnUpdatePane(wxUpdateUIEvent &event)
 
     switch (evtId)
     {
-    case myID_VIEW_MAC_ADDR_DEFINE_PANE:
-        paneName = PANE_NAME_MAC_DEFINE;
-        break;
     case myID_VIEW_MAC_ADDR_USAGE_PANE:
         paneName = PANE_NAME_MAC_USAGE;
         break;
