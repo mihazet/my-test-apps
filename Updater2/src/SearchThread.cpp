@@ -101,7 +101,6 @@ wxThread::ExitCode SearchThread::Entry()
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         /* above is string len */
     };
-    wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
     wxIPV4address broadcast, remote;
     broadcast.Hostname(_broadcastAddress);
     broadcast.Service(40000);
