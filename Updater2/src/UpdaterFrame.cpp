@@ -103,14 +103,14 @@ void UpdaterFrame::CreateControls()
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_EXIT, _("&Quit"), _("Quit this program"));
     wxMenu *view_menu = new wxMenu;
-    view_menu->AppendRadioItem(myID_VIEW_MAC_ADDR_USAGE_PANE, _("MAC Address Usage Window\tCTRL+F2"),
+    view_menu->AppendRadioItem(myID_VIEW_MAC_ADDR_USAGE_PANE, _("MAC Address Usage Window\tCTRL+U"),
         _("Show or hide the MAC usage pane."));
-    view_menu->AppendRadioItem(myID_VIEW_DOWNLOAD_PANE, _("Device Download Window\tCTRL+F3"),
+    view_menu->AppendRadioItem(myID_VIEW_DOWNLOAD_PANE, _("Device Download Window\tCTRL+D"),
         _("Show or hide the MAC update pane."));
     view_menu->AppendSeparator();
-    view_menu->AppendCheckItem(myID_VIEW_LOG_PANE, _("Log Window\tCTRL+F4"),
+    view_menu->AppendCheckItem(myID_VIEW_LOG_PANE, _("Log Window\tCTRL+L"),
         _("Show or hide the log window."));
-    view_menu->AppendCheckItem(myID_VIEW_OPTION_PANE, _("Preference\tCTRL+F5"),
+    view_menu->AppendCheckItem(myID_VIEW_OPTION_PANE, _("Preference\tCTRL+P"),
         _("Show or hide the preference."));
     view_menu->AppendSeparator();
     view_menu->Append(myID_VIEW_RESET_LAYOUT, _("Reset layout"),
