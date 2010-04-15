@@ -28,10 +28,14 @@ private:
     // helper methods
     void Init();
     void CreateControls();
+    void OnUpdateSearchMethod(const int method);
 
     // event handlers
     void OnUpdateActivedInterface(wxCommandEvent& event);
     void OnUpdateSkipVMInterface(wxCommandEvent& event);
+    void OnUseSearchMethod1(wxCommandEvent& event);
+    void OnUseSearchMethod2(wxCommandEvent& event);
+    void OnUpdateNumberOfSearch(wxCommandEvent& event);
     
     // private data members
 };

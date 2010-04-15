@@ -3,6 +3,7 @@
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
 #include <wx/notebook.h>
+#include <wx/spinctrl.h>
 #include "UpdaterApp.h"
 #include "AppPreferencePane.h"
 
@@ -83,8 +84,38 @@ void AppPreferencePane::CreateControls()
     skipVMif->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &AppPreferencePane::OnUpdateSkipVMInterface, this);
     actIfSizer->Add(skipVMif, 0, wxALL | wxEXPAND, 5);
 
+    wxStaticBoxSizer *searchSizer = new wxStaticBoxSizer(wxVERTICAL, networkPage, _("Search Method"));
+    searchSizer->Add(new wxStaticText(networkPage, wxID_STATIC, _("Broadcast address:")), 0, wxLEFT | wxRIGHT | wxTOP, 5);
+    wxRadioButton *searchMethod1 = new wxRadioButton(networkPage, wxID_ANY, _("Use subnet broadcast address"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    wxRadioButton *searchMethod2 = new wxRadioButton(networkPage, wxID_ANY, _("Use 255.255.255.255"));
+    bool useMethod1 = true;
+    long lMethod;
+    if (wxGetApp().m_pAppOptions->GetOption(wxT("SearchMethod")).ToLong(&lMethod))
+    {
+        if (lMethod == 0)
+            useMethod1 = true;
+        else
+            useMethod1 = false;
+    }
+    searchMethod1->SetValue(useMethod1 ? true : false);
+    searchMethod2->SetValue(useMethod1 ? false : true);
+    searchMethod1->Bind(wxEVT_COMMAND_RADIOBUTTON_SELECTED, &AppPreferencePane::OnUseSearchMethod1, this);
+    searchMethod2->Bind(wxEVT_COMMAND_RADIOBUTTON_SELECTED, &AppPreferencePane::OnUseSearchMethod2, this);
+    searchSizer->Add(searchMethod1, 0, wxLEFT | wxRIGHT | wxTOP, 5);
+    searchSizer->Add(searchMethod2, 0, wxALL, 5);
+    wxBoxSizer *numSearchSizer = new wxBoxSizer(wxHORIZONTAL);
+    numSearchSizer->Add(new wxStaticText(networkPage, wxID_STATIC, _("Number of sending broadcast packet:")), 0, wxALL | wxALIGN_CENTER, 0);
+    long lNumSearch = 3;
+    wxGetApp().m_pAppOptions->GetOption(wxT("SearchCount")).ToLong(&lNumSearch);
+    wxSpinCtrl *numSearch = new wxSpinCtrl(networkPage, wxID_ANY, wxString::Format(wxT("%d"), lNumSearch), wxDefaultPosition, wxSize(50, -1));
+    numSearch->Bind(wxEVT_COMMAND_SPINCTRL_UPDATED, &AppPreferencePane::OnUpdateNumberOfSearch, this);
+    numSearch->SetRange(1, 10);
+    numSearchSizer->Add(numSearch, 0, wxLEFT, 5);
+    searchSizer->Add(numSearchSizer, 0, wxLEFT, 5);
+
     wxBoxSizer *netSizer = new wxBoxSizer(wxVERTICAL);
     netSizer->Add(actIfSizer, 0, wxALL | wxEXPAND, 5);
+    netSizer->Add(searchSizer, 0, wxALL | wxEXPAND, 5);
     networkPage->SetSizer(netSizer);
 
     //
@@ -98,6 +129,12 @@ void AppPreferencePane::CreateControls()
     wxBoxSizer *paneSizer = new wxBoxSizer(wxVERTICAL);
     paneSizer->Add(prefNB, 1, wxALL | wxEXPAND, 5);
     SetSizer(paneSizer);
+}
+
+void AppPreferencePane::OnUpdateSearchMethod(const int method)
+{
+    if ((method >= 0) && (method <= 1))
+        wxGetApp().m_pAppOptions->SetOption(wxT("SearchMethod"), wxString::Format(wxT("%d"), method));
 }
 
 // event handlers
@@ -117,4 +154,19 @@ void AppPreferencePane::OnUpdateActivedInterface(wxCommandEvent &event)
 void AppPreferencePane::OnUpdateSkipVMInterface(wxCommandEvent &event)
 {
     wxGetApp().m_pAppOptions->SetOption(wxT("SkipVMInterface"), event.IsChecked() ? wxT("Yes") : wxT("No"));
+}
+
+void AppPreferencePane::OnUseSearchMethod1(wxCommandEvent &WXUNUSED(event))
+{
+    OnUpdateSearchMethod(0);
+}
+
+void AppPreferencePane::OnUseSearchMethod2(wxCommandEvent &WXUNUSED(event))
+{
+    OnUpdateSearchMethod(1);
+}
+
+void AppPreferencePane::OnUpdateNumberOfSearch(wxCommandEvent &event)
+{
+    wxGetApp().m_pAppOptions->SetOption(wxT("SearchCount"), wxString::Format(wxT("%d"), event.GetInt()));
 }

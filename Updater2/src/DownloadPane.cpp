@@ -393,26 +393,8 @@ void DownloadPane::CreateControls()
     wxButton *search = new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     search->SetBitmap(wxBitmap(search_32_xpm));
     search->SetBitmapDisabled(wxBitmap(wxImage(search_32_xpm).ConvertToGreyscale()));
-    wxVector<NetAdapter> &adapter = wxGetApp().m_Adapters;
-    wxString activeIfName = wxGetApp().m_pAppOptions->GetOption(wxT("ActivedInterface"));
-    wxVector<NetAdapter>::iterator it;
-    for (it = adapter.begin(); it != adapter.end(); ++it)
-    {
-        if (it->GetName() == activeIfName)
-            break;
-    }
-    wxString addr = _("Method 1");
-    if (!adapter.empty())
-        addr << wxT(": ") + it->GetBroadcast();
-    wxRadioButton *searchMethod1 = new wxRadioButton(this, myID_SEARCH_METHOD1_RB, addr, wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
-    wxRadioButton *searchMethod2 = new wxRadioButton(this, myID_SEARCH_METHOD2_RB, _("Method 2: 255.255.255.255"));
-    wxBoxSizer *methodSizer = new wxBoxSizer(wxVERTICAL);
-    methodSizer->Add(searchMethod1, 0, wxALL, 5);
-    methodSizer->Add(searchMethod2, 0, wxALL, 5);
-    //methodSizer->AddStretchSpacer(1);
     wxBoxSizer *searchSizer = new wxBoxSizer(wxHORIZONTAL);
     searchSizer->Add(search, 0, wxALL | wxEXPAND, 5);
-    searchSizer->Add(methodSizer, 0, wxALL, 5);
     listBoxSizer->Add(searchSizer, 0, wxALL, 5);
 
     wxBoxSizer *selectSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -464,20 +446,6 @@ void DownloadPane::InitOptionValue()
 
     if (pOpt)
     {
-        // Currently, there seems to be a strange behavior when set value on the radiobutton which
-        // is the first one in it group and only 2 radiobutton in this group.
-        // If you set the first one radiobutton to true, it works well, but if you set it to false,
-        // the other radiobutton doesn't become true.
-        // However, if we set value on the 2nd radiobutton in this group, there is no problem.
-
-        // search method
-        wxRadioButton *searchRB = wxDynamicCast(FindWindow(myID_SEARCH_METHOD2_RB), wxRadioButton);
-        if (searchRB && pOpt->GetOption(wxT("SearchMethod"), value))
-        {
-            if (value.ToLong(&longValue))
-                searchRB->SetValue(longValue == 1);
-        }
-
         // use global file
         wxRadioButton *globalRB = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_RB), wxRadioButton);
         if (globalRB && pOpt->GetOption(wxT("UseGlobalFile"), value))
@@ -502,17 +470,6 @@ void DownloadPane::SaveOptionValue()
 
     if (pOpt)
     {
-        // search method
-        wxRadioButton *searchRB = wxDynamicCast(FindWindow(myID_SEARCH_METHOD2_RB), wxRadioButton);
-        if (searchRB)
-        {
-            if (searchRB->GetValue())
-                value = wxT("1");
-            else
-                value = wxT("0");
-            pOpt->SetOption(wxT("SearchMethod"), value);
-        }
-
         // use global file
         wxRadioButton *globalRB = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_RB), wxRadioButton);
         if (globalRB)
@@ -592,15 +549,14 @@ void DownloadPane::OnSearchButtonClicked(wxCommandEvent &event)
         codedString << wxT("1");
     /* broadcast method */
     codedString << SEARCH_THREAD_CODEDSTRING_DELIMIT_WORD;
-    wxRadioButton *methodRB = wxDynamicCast(FindWindow(myID_SEARCH_METHOD1_RB), wxRadioButton);
-    if (methodRB && methodRB->GetValue())
-        codedString << wxT("0");
+    if (pOpt && pOpt->GetOption(wxT("SearchMethod"), value) && value.ToLong(&longValue))
+        codedString << longValue;
     else
-        codedString << wxT("1");
+        codedString << wxT("0");
 
     /* active interface name */
     codedString << SEARCH_THREAD_CODEDSTRING_DELIMIT_WORD;
-    codedString << wxGetApp().m_pAppOptions->GetOption(wxT("ActivedInterface"));
+    codedString << pOpt->GetOption(wxT("ActivedInterface"));
 
     SearchThread *thread = new SearchThread(this, codedString);
     if (thread
