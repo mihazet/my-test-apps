@@ -151,6 +151,13 @@ void UpdaterFrame::CreateControls()
         MinSize(450, 400).Hide());
 
     /* status bar */
+    wxStatusBar *sBar = new wxStatusBar(this, myID_SBAR);
+    int fieldWidth[SBAR_FIELD_MAX], field;
+    for (field = 0; field < SBAR_FIELD_MAX; field++)
+        fieldWidth[field] = -1;
+    fieldWidth[SBAR_FIELD_ACTIVE_INTERFACE] = 200;
+    sBar->SetFieldsCount(SBAR_FIELD_MAX, &fieldWidth[0]);
+    SetStatusBar(sBar);
 
     /* update default perspective (use above layout code) */
     wxString perspective;

@@ -14,7 +14,7 @@ enum
     myID_CXTMENU_ADAPTER_LAST,
     myID_CXTMENU_ADAPTER_DUMMY = myID_CXTMENU_ADAPTER_FIRST + (myID_CXTMENU_ADAPTER_LAST - myID_CXTMENU_ADAPTER_FIRST) * 10,
 
-    /* frame */
+    /* frame - menu bar */
     myID_VIEW_PANE_START,
     myID_VIEW_RADIO_PANE_START,
     myID_VIEW_MAC_ADDR_USAGE_PANE,
@@ -27,6 +27,9 @@ enum
     myID_VIEW_PANE_END,
     myID_VIEW_RESET_LAYOUT,
     myID_HELP_DOC,
+
+    /* frame - status bar */
+    myID_SBAR,
 
     /* download */
     myID_TARGET_CHECK_ALL,

@@ -5,6 +5,14 @@
 #include <wx/frame.h>
 #include <wx/aui/framemanager.h>
 
+// status bar fields
+enum
+{
+    SBAR_FIELD_MESSAGE,
+    SBAR_FIELD_ACTIVE_INTERFACE,
+    SBAR_FIELD_MAX
+};
+
 class UpdaterFrame : public wxFrame
 {
 public:
