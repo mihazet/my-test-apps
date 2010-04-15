@@ -31,6 +31,7 @@ UpdateThread::UpdateThread(wxEvtHandler *handler, const wxString &codedString,
     _newMACAddress(newMACAddress)
 {
     wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
+    wxVector<NetAdapter>::iterator it;
     wxIPV4address local;
     int loop = 0;
     long longValue;
@@ -44,27 +45,36 @@ UpdateThread::UpdateThread(wxEvtHandler *handler, const wxString &codedString,
 
             switch (loop++)
             {
-            case 0:
+            case 0: // row
                 if (token.ToLong(&longValue))
                     _row = (int)longValue;
                 else
                     _row = -1;
                 break;
-            case 1:
+            case 1: // target name
                 _targetName = token;
                 break;
-            case 2:
+            case 2: // target ip address
                 _targetIpAddress = token;
                 break;
-            case 3:
+            case 3: // target MAC address
                 _targetMacAddress = token;
+                break;
+            case 4: // active interface name
+                _activedInterfaceName = token;
                 break;
             default:
                 break;
             }
         }
 
-        _localIpAddress = netAdapter.at(0).GetIp();
+        for (it = netAdapter.begin(); it != netAdapter.end(); ++it)
+        {
+            if (it->GetName() == _activedInterfaceName)
+                break;
+        }
+
+        _localIpAddress = it->GetIp();
         local.Hostname(_localIpAddress);
         _tcp = new wxSocketClient(wxSOCKET_BLOCK);
     }

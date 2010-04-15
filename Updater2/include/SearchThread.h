@@ -2,6 +2,7 @@
 #define _SEARCH_THREAD_H_
 
 #include <wx/wx.h>
+#include <wx/socket.h>
 
 #define SEARCH_THREAD_CODEDSTRING_DELIMIT_WORD  wxT("|")
 
@@ -18,6 +19,8 @@ private:
     unsigned char *_recvBuf;
     int _broadcastCount;
     wxString _broadcastAddress;
+    wxString _activedInterfaceName;
+    wxDatagramSocket *_udp;
 };
 
 typedef enum

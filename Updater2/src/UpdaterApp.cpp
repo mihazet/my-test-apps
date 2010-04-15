@@ -2,6 +2,7 @@
 // Headers
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
+#include <wx/socket.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
 #include <wx/tipwin.h>

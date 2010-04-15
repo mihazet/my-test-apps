@@ -27,6 +27,7 @@ SearchThread::SearchThread(wxEvtHandler *handler, const wxString& codedString)
     : wxThread(wxTHREAD_DETACHED), _pHandler(handler)
 {
     wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
+    wxVector<NetAdapter>::iterator it;
     wxIPV4address local;
     wxStringTokenizer tokenizer(codedString, SEARCH_THREAD_CODEDSTRING_DELIMIT_WORD);
     int loop = 0, opt = 1;
@@ -42,9 +43,12 @@ SearchThread::SearchThread(wxEvtHandler *handler, const wxString& codedString)
             token.ToLong(&longValue);
             _broadcastCount = (int)longValue;;
             break;
-        case 1: // broadcase method
+        case 1: // broadcast method
             if (token.ToLong(&longValue))
                 useSubnetBroadcastAddress = (longValue == 0);
+            break;
+        case 2: // actived interface name
+            _activedInterfaceName = token;
             break;
         default:
             break;
@@ -53,12 +57,17 @@ SearchThread::SearchThread(wxEvtHandler *handler, const wxString& codedString)
 
     if (!netAdapter.empty())
     {
-        local.Hostname(netAdapter.at(0).GetIp());
-        netAdapter.at(0).udp = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
-        if (netAdapter.at(0).udp->IsOk())
-            netAdapter.at(0).udp->SetOption(SOL_SOCKET, SO_BROADCAST, &opt, sizeof(opt));
+        for (it = netAdapter.begin(); it != netAdapter.end(); ++it)
+        {
+            if (it->GetName() == _activedInterfaceName)
+                break;
+        }
+        local.Hostname(it->GetIp());
+        _udp = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
+        if (_udp->IsOk())
+            _udp->SetOption(SOL_SOCKET, SO_BROADCAST, &opt, sizeof(opt));
         if (useSubnetBroadcastAddress)
-            _broadcastAddress = netAdapter.at(0).GetBroadcast();
+            _broadcastAddress = it->GetBroadcast();
         else
             _broadcastAddress = wxT("255.255.255.255");
     }
@@ -72,12 +81,7 @@ SearchThread::SearchThread(wxEvtHandler *handler, const wxString& codedString)
 
 SearchThread::~SearchThread()
 {
-    wxVector<NetAdapter> &netAdapter = wxGetApp().m_Adapters;
-    if (!netAdapter.empty())
-    {
-        wxDELETE(netAdapter.at(0).udp);
-    }
-
+    wxDELETE(_udp);
     wxDELETE(_recvBuf);
 }
 
@@ -101,7 +105,7 @@ wxThread::ExitCode SearchThread::Entry()
     wxIPV4address broadcast, remote;
     broadcast.Hostname(_broadcastAddress);
     broadcast.Service(40000);
-    wxDatagramSocket *udpSocket = netAdapter.at(0).udp;
+    wxDatagramSocket *udpSocket = _udp;
 
     wxLogMessage(wxT("Device search thread is running!"));
 

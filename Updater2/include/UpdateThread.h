@@ -48,6 +48,7 @@ private:
     wxString _targetMacAddress;
     wxString _imageFilePath;
     wxString _newMACAddress;
+    wxString _activedInterfaceName;
     wxSocketClient *_tcp;
     unsigned char *_recvBuf;
 };

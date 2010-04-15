@@ -394,9 +394,16 @@ void DownloadPane::CreateControls()
     search->SetBitmap(wxBitmap(search_32_xpm));
     search->SetBitmapDisabled(wxBitmap(wxImage(search_32_xpm).ConvertToGreyscale()));
     wxVector<NetAdapter> &adapter = wxGetApp().m_Adapters;
+    wxString activeIfName = wxGetApp().m_pAppOptions->GetOption(wxT("ActivedInterface"));
+    wxVector<NetAdapter>::iterator it;
+    for (it = adapter.begin(); it != adapter.end(); ++it)
+    {
+        if (it->GetName() == activeIfName)
+            break;
+    }
     wxString addr = _("Method 1");
     if (!adapter.empty())
-        addr << wxT(": ") + adapter.at(0).GetBroadcast();
+        addr << wxT(": ") + it->GetBroadcast();
     wxRadioButton *searchMethod1 = new wxRadioButton(this, myID_SEARCH_METHOD1_RB, addr, wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
     wxRadioButton *searchMethod2 = new wxRadioButton(this, myID_SEARCH_METHOD2_RB, _("Method 2: 255.255.255.255"));
     wxBoxSizer *methodSizer = new wxBoxSizer(wxVERTICAL);
@@ -583,14 +590,17 @@ void DownloadPane::OnSearchButtonClicked(wxCommandEvent &event)
         codedString << longValue;
     else
         codedString << wxT("1");
+    /* broadcast method */
     codedString << SEARCH_THREAD_CODEDSTRING_DELIMIT_WORD;
-
-    /* broadcast address */
     wxRadioButton *methodRB = wxDynamicCast(FindWindow(myID_SEARCH_METHOD1_RB), wxRadioButton);
     if (methodRB && methodRB->GetValue())
         codedString << wxT("0");
     else
         codedString << wxT("1");
+
+    /* active interface name */
+    codedString << SEARCH_THREAD_CODEDSTRING_DELIMIT_WORD;
+    codedString << wxGetApp().m_pAppOptions->GetOption(wxT("ActivedInterface"));
 
     SearchThread *thread = new SearchThread(this, codedString);
     if (thread
@@ -654,7 +664,8 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                         << row << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
                         << name << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
                         << ip << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
-                        << mac;
+                        << mac << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
+                        << wxGetApp().m_pAppOptions->GetOption(wxT("ActivedInterface"));
 
                     UpdateThread *thread = new UpdateThread(this, threadCodedWord, rb->GetValue() ? globalFile : specificFile);
                     if (thread
@@ -884,7 +895,8 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
                         << nRow << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
                         << msg.name << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
                         << msg.ip << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
-                        << msg.mac;
+                        << msg.mac << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
+                        << wxGetApp().m_pAppOptions->GetOption(wxT("ActivedInterface"));
 
                     msg_to_modify_invalid_mac
                         << _("Device") << wxT(" ") << msg.name << wxT(" ") << _("with invalid MAC address")
