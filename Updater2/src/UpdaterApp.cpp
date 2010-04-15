@@ -42,7 +42,10 @@ void UpdaterApp::Init()
     _onlyMe = NULL;
     m_Adapters.clear();
     _adapterInfo = NULL;
-    _skipVmwareNetworkAdapter = true;
+    if (!m_pAppOptions->GetOption(wxT("SkipVMInterface")).Cmp(wxT("Yes")))
+        _skipVmwareNetworkAdapter = true;
+    else
+        _skipVmwareNetworkAdapter = false;
 }
 
 bool UpdaterApp::OnInit()
@@ -71,6 +74,30 @@ bool UpdaterApp::OnInit()
         wxLogError(_("Failed to detect network adapters information, this application will be terminated!"));
         return false;
     }
+
+    /* 
+       use default (the first) active interface when 
+       (1) database is new created, or
+       (2) interface store in database doesn't exist now
+     */
+    bool useDefaultInterface = false;
+    wxString ifName = m_pAppOptions->GetOption(wxT("ActivedInterface"));
+    if (ifName.IsEmpty())
+        useDefaultInterface = true;
+    else
+    {
+        wxVector<NetAdapter>::iterator it;
+        for (it = m_Adapters.begin(); it != m_Adapters.end(); ++it)
+        {
+            if (ifName == it->GetName())
+                break;
+        }
+
+        if (it == m_Adapters.end())
+            useDefaultInterface = true;
+    }
+    if (useDefaultInterface)
+        m_pAppOptions->SetOption(wxT("ActivedInterface"), m_Adapters.at(0).GetName());
 
     /* For socket works in secondary thread, we need to do this */
     wxSocketBase::Initialize();

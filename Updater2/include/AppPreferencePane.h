@@ -30,7 +30,8 @@ private:
     void CreateControls();
 
     // event handlers
-
+    void OnUpdateActivedInterface(wxCommandEvent& event);
+    void OnUpdateSkipVMInterface(wxCommandEvent& event);
     
     // private data members
 };

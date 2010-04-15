@@ -54,6 +54,8 @@ void AppOptions::Init()
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"SearchCount\", \"3\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"UseGlobalFile\", \"1\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"GlobalFilePath\", \"\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"ActivedInterface\", \"\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"SkipVMInterface\", \"No\");")
         << wxT("COMMIT TRANSACTION;");
 
     _db->ExecuteUpdate(sql);
