@@ -4,6 +4,7 @@
 #include <wx/wx.h>
 #include <wx/notebook.h>
 #include <wx/spinctrl.h>
+#include <wx/filepicker.h>
 #include "UpdaterApp.h"
 #include "AppPreferencePane.h"
 
@@ -122,6 +123,54 @@ void AppPreferencePane::CreateControls()
     // MAC address page
     //
     wxPanel *macPage = new wxPanel(prefNB, wxID_ANY);
+    wxStaticBoxSizer *macPoolSizer = new wxStaticBoxSizer(wxVERTICAL, macPage, _("Pool Range"));
+    wxBoxSizer *vendorMACSizer = new wxBoxSizer(wxHORIZONTAL);
+    vendorMACSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Default MAC Vendor code:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
+    wxTextCtrl *vendorMAC = new wxTextCtrl(macPage, wxID_ANY); // TODO: replace me
+    vendorMACSizer->Add(vendorMAC, 0, wxLEFT, 5);
+    macPoolSizer->Add(vendorMACSizer, 0, wxALL, 5);
+    wxBoxSizer *startProductMACSizer = new wxBoxSizer(wxHORIZONTAL);
+    startProductMACSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("MAC Product code begin at:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
+    wxTextCtrl *startProductMAC = new wxTextCtrl(macPage, wxID_ANY); // TODO: replace me
+    startProductMACSizer->Add(startProductMAC, 0, wxLEFT, 5);
+    macPoolSizer->Add(startProductMACSizer, 0, wxALL, 5);
+    wxBoxSizer *endProductMACSizer = new wxBoxSizer(wxHORIZONTAL);
+    endProductMACSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("MAC Product code end at:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
+    wxTextCtrl *endProductMAC = new wxTextCtrl(macPage, wxID_ANY); // TODO: replace me
+    endProductMACSizer->Add(endProductMAC, 0, wxLEFT, 5);
+    macPoolSizer->Add(endProductMACSizer, 0, wxALL, 5);
+
+    wxStaticBoxSizer *invalidMacSizer = new wxStaticBoxSizer(wxVERTICAL, macPage, _("Invalid MAC Address"));
+    invalidMacSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Request user doing update when target board with this MAC address:")), 0, wxALL, 5);
+    wxTextCtrl *invalidMac = new wxTextCtrl(macPage, wxID_ANY); // TODO: replace me
+    invalidMacSizer->Add(invalidMac, 0, wxLEFT | wxRIGHT, 5);
+
+    wxStaticBoxSizer *reportFileSizer = new wxStaticBoxSizer(wxVERTICAL, macPage, _("Report File"));
+    wxBoxSizer *reportDirSizer = new wxBoxSizer(wxHORIZONTAL);
+    reportDirSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Report folder:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
+    reportDirSizer->Add(new wxDirPickerCtrl(macPage, wxID_ANY), 1, wxLEFT, 5);
+    reportFileSizer->Add(reportDirSizer, 0, wxALL | wxEXPAND, 5);
+    wxBoxSizer *autoRotateSizer = new wxBoxSizer(wxHORIZONTAL);
+    autoRotateSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Automatically rotate report file?")), 0, wxRIGHT | wxALIGN_CENTER, 5);
+    wxArrayString rotateString;
+    rotateString.push_back(_("Never"));
+    rotateString.push_back(_("Every year"));
+    rotateString.push_back(_("Every month"));
+    rotateString.push_back(_("Every week"));
+    rotateString.push_back(_("Limit entries"));
+    wxChoice *rotateChoice = new wxChoice(macPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, rotateString);
+    autoRotateSizer->Add(rotateChoice, 0, wxLEFT, 5);
+    reportFileSizer->Add(autoRotateSizer, 0, wxALL, 5);
+    wxBoxSizer *limitEntriesSizer = new wxBoxSizer(wxHORIZONTAL);
+    limitEntriesSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Maximun entries in a sigle report file:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
+    limitEntriesSizer->Add(new wxTextCtrl(macPage, wxID_ANY), 0, wxLEFT, 5);
+    reportFileSizer->Add(limitEntriesSizer, 0, wxALL, 5);
+
+    wxBoxSizer *macSizer = new wxBoxSizer(wxVERTICAL);
+    macSizer->Add(macPoolSizer, 0, wxALL | wxEXPAND, 5);
+    macSizer->Add(invalidMacSizer, 0, wxALL | wxEXPAND, 5);
+    macSizer->Add(reportFileSizer, 0, wxALL | wxEXPAND, 5);
+    macPage->SetSizer(macSizer);
 
     prefNB->AddPage(networkPage, _("Network"), true);
     prefNB->AddPage(macPage, _("MAC Address"), false);
