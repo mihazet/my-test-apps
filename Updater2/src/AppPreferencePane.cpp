@@ -148,7 +148,7 @@ void AppPreferencePane::CreateControls()
     wxStaticBoxSizer *reportFileSizer = new wxStaticBoxSizer(wxVERTICAL, macPage, _("Report File"));
     wxBoxSizer *reportDirSizer = new wxBoxSizer(wxHORIZONTAL);
     reportDirSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Report folder:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
-    reportDirSizer->Add(new wxDirPickerCtrl(macPage, wxID_ANY), 1, wxLEFT, 5);
+    reportDirSizer->Add(new wxDirPickerCtrl(macPage, wxID_ANY, wxGetApp().m_pAppOptions->GetOption(wxT("ReportFolder"))), 1, wxLEFT, 5);
     reportFileSizer->Add(reportDirSizer, 0, wxALL | wxEXPAND, 5);
     wxBoxSizer *autoRotateSizer = new wxBoxSizer(wxHORIZONTAL);
     autoRotateSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Automatically rotate report file?")), 0, wxRIGHT | wxALIGN_CENTER, 5);
@@ -159,11 +159,14 @@ void AppPreferencePane::CreateControls()
     rotateString.push_back(_("Every week"));
     rotateString.push_back(_("Limit entries"));
     wxChoice *rotateChoice = new wxChoice(macPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, rotateString);
+    long lRotate = 0;
+    wxGetApp().m_pAppOptions->GetOption(wxT("ReportRotate")).ToLong(&lRotate);
+    rotateChoice->SetSelection(lRotate);
     autoRotateSizer->Add(rotateChoice, 0, wxLEFT, 5);
     reportFileSizer->Add(autoRotateSizer, 0, wxALL, 5);
     wxBoxSizer *limitEntriesSizer = new wxBoxSizer(wxHORIZONTAL);
     limitEntriesSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Maximun entries in a sigle report file:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
-    limitEntriesSizer->Add(new wxTextCtrl(macPage, wxID_ANY), 0, wxLEFT, 5);
+    limitEntriesSizer->Add(new wxTextCtrl(macPage, wxID_ANY, wxGetApp().m_pAppOptions->GetOption(wxT("ReportEntriesLimit"))), 0, wxLEFT, 5);
     reportFileSizer->Add(limitEntriesSizer, 0, wxALL, 5);
 
     wxBoxSizer *macSizer = new wxBoxSizer(wxVERTICAL);
