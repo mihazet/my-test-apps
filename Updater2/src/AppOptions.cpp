@@ -56,6 +56,15 @@ void AppOptions::Init()
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"GlobalFilePath\", \"\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"ActivedInterface\", \"\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"SkipVMInterface\", \"No\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"VendorCode\", \"\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"FirstProductCode\", \"\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"LastProductCode\", \"\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"CurrentProductCode\", \"\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"InvalidMACAddress\", \"00:52:C2:3C:50:00\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"ReportFolder\", \"\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"ReportRotate\", \"0\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"ReportEntriesLimit\", \"1024\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"ReportCurrent\", \"1\");")
         << wxT("COMMIT TRANSACTION;");
 
     _db->ExecuteUpdate(sql);

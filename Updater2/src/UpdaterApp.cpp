@@ -47,6 +47,16 @@ void UpdaterApp::Init()
         _skipVmwareNetworkAdapter = true;
     else
         _skipVmwareNetworkAdapter = false;
+
+    /* init report folder when it is empty */
+    if (m_pAppOptions->GetOption(wxT("ReportFolder")).IsEmpty())
+    {
+        wxStandardPaths& stdPaths = wxStandardPaths::Get();
+        wxString defaultReportFolder = wxFileName(stdPaths.GetExecutablePath()).GetPathWithSep() + wxT("report");
+        m_pAppOptions->SetOption(wxT("ReportFolder"), defaultReportFolder);
+        if (!wxFileName::DirExists(defaultReportFolder))
+            wxFileName::Mkdir(defaultReportFolder);
+    }
 }
 
 bool UpdaterApp::OnInit()
