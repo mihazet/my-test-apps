@@ -148,7 +148,7 @@ void AppPreferencePane::CreateControls()
     wxStaticBoxSizer *reportFileSizer = new wxStaticBoxSizer(wxVERTICAL, macPage, _("Report File"));
     wxBoxSizer *reportDirSizer = new wxBoxSizer(wxHORIZONTAL);
     reportDirSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Report folder:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
-    reportDirSizer->Add(new wxDirPickerCtrl(macPage, wxID_ANY, wxGetApp().m_pAppOptions->GetOption(wxT("ReportFolder"))), 1, wxLEFT, 5);
+    reportDirSizer->Add(new wxDirPickerCtrl(macPage, wxID_ANY, wxGetApp().m_pAppOptions->GetOption(wxT("ReportFolder")), wxDirSelectorPromptStr, wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE & ~wxDIRP_DIR_MUST_EXIST), 1, wxLEFT, 5);
     reportFileSizer->Add(reportDirSizer, 0, wxALL | wxEXPAND, 5);
     wxBoxSizer *autoRotateSizer = new wxBoxSizer(wxHORIZONTAL);
     autoRotateSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Automatically rotate report file?")), 0, wxRIGHT | wxALIGN_CENTER, 5);
