@@ -45,6 +45,10 @@ enum
 
     /* log */
 
+    /* preference */
+    myID_REPORT_ENTRIES_DESC,
+    myID_REPORT_ENTRIES_NUM,
+
     /* threads */
     myID_SEARCH_THREAD,
     myID_UPDATE_THREAD,

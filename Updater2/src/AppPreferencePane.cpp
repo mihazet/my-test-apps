@@ -4,7 +4,7 @@
 #include <wx/wx.h>
 #include <wx/notebook.h>
 #include <wx/spinctrl.h>
-#include <wx/filepicker.h>
+#include "WidgetId.h"
 #include "UpdaterApp.h"
 #include "AppPreferencePane.h"
 
@@ -148,7 +148,9 @@ void AppPreferencePane::CreateControls()
     wxStaticBoxSizer *reportFileSizer = new wxStaticBoxSizer(wxVERTICAL, macPage, _("Report File"));
     wxBoxSizer *reportDirSizer = new wxBoxSizer(wxHORIZONTAL);
     reportDirSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Report folder:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
-    reportDirSizer->Add(new wxDirPickerCtrl(macPage, wxID_ANY, wxGetApp().m_pAppOptions->GetOption(wxT("ReportFolder")), wxDirSelectorPromptStr, wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE & ~wxDIRP_DIR_MUST_EXIST), 1, wxLEFT, 5);
+    wxDirPickerCtrl *reportDirPicker = new wxDirPickerCtrl(macPage, wxID_ANY, wxGetApp().m_pAppOptions->GetOption(wxT("ReportFolder")), wxDirSelectorPromptStr, wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE & ~wxDIRP_DIR_MUST_EXIST);
+    reportDirPicker->Bind(wxEVT_COMMAND_DIRPICKER_CHANGED, &AppPreferencePane::OnUpdateReportFolder, this);
+    reportDirSizer->Add(reportDirPicker, 1, wxLEFT, 5);
     reportFileSizer->Add(reportDirSizer, 0, wxALL | wxEXPAND, 5);
     wxBoxSizer *autoRotateSizer = new wxBoxSizer(wxHORIZONTAL);
     autoRotateSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Automatically rotate report file?")), 0, wxRIGHT | wxALIGN_CENTER, 5);
@@ -159,14 +161,20 @@ void AppPreferencePane::CreateControls()
     rotateString.push_back(_("Every week"));
     rotateString.push_back(_("Limit entries"));
     wxChoice *rotateChoice = new wxChoice(macPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, rotateString);
+    rotateChoice->Bind(wxEVT_COMMAND_CHOICE_SELECTED, &AppPreferencePane::OnUpdateReportRotate, this);
     long lRotate = 0;
     wxGetApp().m_pAppOptions->GetOption(wxT("ReportRotate")).ToLong(&lRotate);
     rotateChoice->SetSelection(lRotate);
     autoRotateSizer->Add(rotateChoice, 0, wxLEFT, 5);
     reportFileSizer->Add(autoRotateSizer, 0, wxALL, 5);
     wxBoxSizer *limitEntriesSizer = new wxBoxSizer(wxHORIZONTAL);
-    limitEntriesSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Maximun entries in a sigle report file:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
-    limitEntriesSizer->Add(new wxTextCtrl(macPage, wxID_ANY, wxGetApp().m_pAppOptions->GetOption(wxT("ReportEntriesLimit"))), 0, wxLEFT, 5);
+    wxStaticText *reportEntriesDesc = new wxStaticText(macPage, myID_REPORT_ENTRIES_DESC, _("Maximun entries in a single report file:"));
+    reportEntriesDesc->Enable(lRotate == 4);
+    limitEntriesSizer->Add(reportEntriesDesc, 0, wxRIGHT | wxALIGN_CENTER, 5);
+    wxTextCtrl *reportEntriesNum = new wxTextCtrl(macPage, myID_REPORT_ENTRIES_NUM, wxGetApp().m_pAppOptions->GetOption(wxT("ReportEntriesLimit")));
+    reportEntriesNum->Bind(wxEVT_COMMAND_TEXT_UPDATED, &AppPreferencePane::OnUpdateReportLimitEntries, this);
+    reportEntriesNum->Enable(lRotate == 4);
+    limitEntriesSizer->Add(reportEntriesNum, 0, wxLEFT, 5);
     reportFileSizer->Add(limitEntriesSizer, 0, wxALL, 5);
 
     wxBoxSizer *macSizer = new wxBoxSizer(wxVERTICAL);
@@ -221,4 +229,34 @@ void AppPreferencePane::OnUseSearchMethod2(wxCommandEvent &WXUNUSED(event))
 void AppPreferencePane::OnUpdateNumberOfSearch(wxCommandEvent &event)
 {
     wxGetApp().m_pAppOptions->SetOption(wxT("SearchCount"), wxString::Format(wxT("%d"), event.GetInt()));
+}
+
+void AppPreferencePane::OnUpdateReportLimitEntries(wxCommandEvent& event)
+{
+    long newLimit = 1024;
+    event.GetString().ToLong(&newLimit);
+    wxGetApp().m_pAppOptions->SetOption(wxT("ReportEntriesLimit"), wxString::Format(wxT("%d"), newLimit));
+}
+
+void AppPreferencePane::OnUpdateReportRotate(wxCommandEvent& event)
+{
+    int newChoice = event.GetSelection();
+    long oldChoice;
+
+    if (wxGetApp().m_pAppOptions->GetOption(wxT("ReportRotate")).ToLong(&oldChoice))
+    {
+        if (newChoice != oldChoice)
+        {
+            wxStaticText *desc = wxDynamicCast(FindWindow(myID_REPORT_ENTRIES_DESC), wxStaticText);
+            wxTextCtrl *num = wxDynamicCast(FindWindow(myID_REPORT_ENTRIES_NUM), wxTextCtrl);
+            desc->Enable(newChoice == 4);
+            num->Enable(newChoice == 4);
+            wxGetApp().m_pAppOptions->SetOption(wxT("ReportRotate"), wxString::Format(wxT("%d"), newChoice));
+        }
+    }
+}
+
+void AppPreferencePane::OnUpdateReportFolder(wxFileDirPickerEvent& event)
+{
+    wxGetApp().m_pAppOptions->SetOption(wxT("ReportFolder"), event.GetPath());
 }

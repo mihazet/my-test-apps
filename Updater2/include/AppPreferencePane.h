@@ -2,6 +2,7 @@
 #define _APP_PREFERENCE_PANE_H_
 
 #include <wx/wx.h>
+#include <wx/filepicker.h>
 
 class AppPreferencePane : public wxPanel
 {
@@ -36,6 +37,9 @@ private:
     void OnUseSearchMethod1(wxCommandEvent& event);
     void OnUseSearchMethod2(wxCommandEvent& event);
     void OnUpdateNumberOfSearch(wxCommandEvent& event);
+    void OnUpdateReportLimitEntries(wxCommandEvent& event);
+    void OnUpdateReportRotate(wxCommandEvent& event);
+    void OnUpdateReportFolder(wxFileDirPickerEvent& event);
     
     // private data members
 };
