@@ -7,6 +7,7 @@
 #include "WidgetId.h"
 #include "UpdaterApp.h"
 #include "AppPreferencePane.h"
+#include "NetAddrTextCtrl.h"
 
 // ------------------------------------------------------------------------
 // Resources
@@ -126,24 +127,24 @@ void AppPreferencePane::CreateControls()
     wxStaticBoxSizer *macPoolSizer = new wxStaticBoxSizer(wxVERTICAL, macPage, _("Pool Range"));
     wxBoxSizer *vendorMACSizer = new wxBoxSizer(wxHORIZONTAL);
     vendorMACSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Default MAC Vendor code:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
-    wxTextCtrl *vendorMAC = new wxTextCtrl(macPage, wxID_ANY); // TODO: replace me
+    NetAddrTextCtrl *vendorMAC = new NetAddrTextCtrl(macPage, wxID_ANY, NetAddrTextCtrl::NETADDR_TYPE_HALF_MAC, wxGetApp().m_pAppOptions->GetOption(wxT("VendorCode")));
     vendorMACSizer->Add(vendorMAC, 0, wxLEFT, 5);
     macPoolSizer->Add(vendorMACSizer, 0, wxALL, 5);
     wxBoxSizer *startProductMACSizer = new wxBoxSizer(wxHORIZONTAL);
     startProductMACSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("MAC Product code begin at:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
-    wxTextCtrl *startProductMAC = new wxTextCtrl(macPage, wxID_ANY); // TODO: replace me
+    NetAddrTextCtrl *startProductMAC = new NetAddrTextCtrl(macPage, wxID_ANY, NetAddrTextCtrl::NETADDR_TYPE_HALF_MAC, wxGetApp().m_pAppOptions->GetOption(wxT("FirstProductCode")));
     startProductMACSizer->Add(startProductMAC, 0, wxLEFT, 5);
     macPoolSizer->Add(startProductMACSizer, 0, wxALL, 5);
     wxBoxSizer *endProductMACSizer = new wxBoxSizer(wxHORIZONTAL);
     endProductMACSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("MAC Product code end at:")), 0, wxRIGHT | wxALIGN_CENTER, 5);
-    wxTextCtrl *endProductMAC = new wxTextCtrl(macPage, wxID_ANY); // TODO: replace me
+    NetAddrTextCtrl *endProductMAC = new NetAddrTextCtrl(macPage, wxID_ANY, NetAddrTextCtrl::NETADDR_TYPE_HALF_MAC, wxGetApp().m_pAppOptions->GetOption(wxT("LastProductCode")));
     endProductMACSizer->Add(endProductMAC, 0, wxLEFT, 5);
     macPoolSizer->Add(endProductMACSizer, 0, wxALL, 5);
 
     wxStaticBoxSizer *invalidMacSizer = new wxStaticBoxSizer(wxVERTICAL, macPage, _("Invalid MAC Address"));
     invalidMacSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Request user doing update when target board with this MAC address:")), 0, wxALL, 5);
-    wxTextCtrl *invalidMac = new wxTextCtrl(macPage, wxID_ANY); // TODO: replace me
-    invalidMacSizer->Add(invalidMac, 0, wxLEFT | wxRIGHT, 5);
+    NetAddrTextCtrl *invalidMAC = new NetAddrTextCtrl(macPage, wxID_ANY, NetAddrTextCtrl::NETADDR_TYPE_MAC, wxGetApp().m_pAppOptions->GetOption(wxT("InvalidMACAddress")));
+    invalidMacSizer->Add(invalidMAC, 0, wxLEFT | wxRIGHT, 5);
 
     wxStaticBoxSizer *reportFileSizer = new wxStaticBoxSizer(wxVERTICAL, macPage, _("Report File"));
     wxBoxSizer *reportDirSizer = new wxBoxSizer(wxHORIZONTAL);
