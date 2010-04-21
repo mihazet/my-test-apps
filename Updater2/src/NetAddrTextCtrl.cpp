@@ -18,24 +18,38 @@ NetAddrTextCtrl::NetAddrTextCtrl(wxWindow *parent, wxWindowID id,
                                  const wxString &value,
                                  const wxPoint &pos, const wxSize &size)
     : wxControl(parent, id, pos, size, wxDOUBLE_BORDER | wxWANTS_CHARS),
-    _type(type)
+    _type(type),
+    _digitBoxW(10),
+    _digitBoxH(16),
+    _outsideBorderTop(1),
+    _outsideBorderBottom(1),
+    _outsideBorderLeft(1),
+    _outsideBorderRight(1),
+    _insideBorderTop(2),
+    _insideBorderBottom(2),
+    _insideBorderLeft(1),
+    _insideBorderRight(1),
+    _family(wxFONTFAMILY_MODERN)
 {
     Init();
     SetValue(value);
     Layout();
-    SetInitialSize(wxSize(120, 20));
+    SetInitialSize(wxSize(_bitmapWidth, _bitmapHeight));
 }
 
 NetAddrTextCtrl::~NetAddrTextCtrl()
 {
-
+    wxDELETE(_displayBitmap);
+    wxDELETE(_displayFont);
 }
 
 void NetAddrTextCtrl::Init()
 {
-    _digitBoxW = 10;
-    _digitBoxH = 16;
-
+    _displayBitmap = NULL;
+    _displayFont = NULL;
+    _hlField = 0;
+    _hlDigit = 0;
+    _hasFocused = false;
 }
 
 wxString NetAddrTextCtrl::GetValue()
@@ -160,6 +174,53 @@ void NetAddrTextCtrl::SetValue(const wxString &newValue)
 //
 bool NetAddrTextCtrl::Layout()
 {
+    wxMemoryDC memDC;
+
+    if (!_displayFont)
+    {
+        int fontSize = 4;
+        wxCoord strW, strH;
+        wxString exampleText = wxT("0");
+
+        /* keep making the font bigger until it's too big, then subtract one */
+        do
+        {
+            fontSize++;
+            memDC.SetFont(wxFont(fontSize, _family, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+            memDC.GetTextExtent(exampleText, &strW, &strH);
+        } while ((strW <= _digitBoxW) && (strH <= _digitBoxH));
+
+        _displayFont = new wxFont(--fontSize, _family, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    }
+
+    if (!_displayBitmap)
+    {
+        int tokenDigitCount[NETADDR_TYPE_INVALID] = { 12, 12, 6 };
+        int delimitDigitCount[NETADDR_TYPE_INVALID] = { 3, 5, 2 };
+        _bitmapWidth = _outsideBorderLeft 
+            + tokenDigitCount[_type] * (_insideBorderLeft + _digitBoxW + _insideBorderRight)
+            + delimitDigitCount[_type] * (_insideBorderLeft + _digitBoxW + _insideBorderRight)
+            + _outsideBorderRight;
+        _bitmapHeight = _outsideBorderTop + _insideBorderTop + _digitBoxH + _insideBorderBottom + _outsideBorderBottom;
+
+        _displayBitmap = new wxBitmap(_bitmapWidth, _bitmapHeight);
+    }
+
+    memDC.SelectObject(*_displayBitmap);
+
+    /* start to draw on bitmap */
+
+    // draw a focus rectangle 
+    memDC.SetBrush(*wxLIGHT_GREY_BRUSH);
+    memDC.SetPen(_hasFocused ? *wxBLACK : *wxTRANSPARENT_PEN);
+    memDC.DrawRectangle(0, 0, _bitmapWidth - 4, _bitmapHeight - 4); // 4 is a magic number, I don't know why?
+
+    memDC.SetFont(*_displayFont);
+    memDC.SetTextForeground(*wxBLUE);
+    memDC.SetTextBackground(*wxLIGHT_GREY);
+    memDC.DrawText(wxT("01:02:34"), 0, 0);
+
+    memDC.SelectObject(wxNullBitmap);
     return true;
 }
 
@@ -216,6 +277,8 @@ void NetAddrTextCtrl::OnKeyDown(wxKeyEvent &event)
 void NetAddrTextCtrl::OnMouse(wxMouseEvent &event)
 {
     //wxLogMessage(wxT("Mouse %d.%d"), event.GetX(), event.GetY());
+
+    event.Skip();
 }
 
 void NetAddrTextCtrl::OnErase(wxEraseEvent &WXUNUSED(event))
@@ -226,21 +289,22 @@ void NetAddrTextCtrl::OnErase(wxEraseEvent &WXUNUSED(event))
 void NetAddrTextCtrl::OnPaint(wxPaintEvent &event)
 {
     wxPaintDC dc(this);
-    bool focus = (FindFocus() == this);
-    dc.SetFont(wxFont(10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
-    dc.DrawText(wxT("192.168.001.012"), 0, 0);
+    dc.DrawBitmap(*_displayBitmap, 0, 0);
     wxLogMessage(wxT("OnPaint"));
 }
 
 void NetAddrTextCtrl::OnFocus(wxFocusEvent &event)
 {
+    _hasFocused = (event.GetEventType() == wxEVT_SET_FOCUS);
+    Layout();
+    Refresh(false);
     if (event.GetEventType() == wxEVT_KILL_FOCUS)
     {
-        wxLogMessage(wxT("Kill Focus"));
+        wxLogMessage(wxT("Kill Focus: %d"), event.GetId());
     }
     else
     {
-        wxLogMessage(wxT("Get Focus"));
+        wxLogMessage(wxT("Get Focus: %d"), event.GetId());
     }
 }
 

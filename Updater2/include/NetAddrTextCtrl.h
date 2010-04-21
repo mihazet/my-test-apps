@@ -39,12 +39,38 @@ private:
     void OnFocus(wxFocusEvent &event);
 
     /* data members */
-    NetAddrType _type;
+    const NetAddrType _type;
     wxLongLong _internalValue;
-    int _digitBoxW; // a single digit width
-    int _digitBoxH; // a single digit height
+    const int _digitBoxW; // a single digit width
+    const int _digitBoxH; // a single digit height
+    int _hlField; // hightlighted field
+    int _hlDigit; // hightlighted digit
+    bool _hasFocused;
+    int _bitmapWidth;
+    int _bitmapHeight;
+    wxBitmap *_displayBitmap;
+    const wxFontFamily _family;
+    wxFont *_displayFont;
+    const int _outsideBorderTop, _outsideBorderBottom, _outsideBorderLeft, _outsideBorderRight;
+    const int _insideBorderTop, _insideBorderBottom, _insideBorderLeft, _insideBorderRight;
 
     DECLARE_EVENT_TABLE()
 };
+
+//
+// Information about the border parameters
+//
+// +--------------------------------
+// | +-------+-------+-------+------
+// | | +---+ | +---+ | +---+ |
+// | | |   | | |   | | | . | |
+// | | |   | | |   | | | . | | ...
+// | | +---+ | +---+ | +---+ |
+// | +-------+-------+-------+------
+// +--------------------------------
+//  ^ ^
+//  | +-- inside border left
+//  +---- outside border left
+//
 
 #endif /* _NET_ADDR_TEXT_CTRL_H_ */
