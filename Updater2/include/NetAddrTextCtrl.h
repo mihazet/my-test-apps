@@ -17,9 +17,7 @@ public:
     /* ctor */
     NetAddrTextCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
         const NetAddrType type = NETADDR_TYPE_HALF_MAC,
-        const wxString &value = wxEmptyString,
-        const wxPoint &pos = wxDefaultPosition,
-        const wxSize &size = wxDefaultSize);
+        const wxString &value = wxEmptyString);
     /* dtor */
     virtual ~NetAddrTextCtrl();
 
@@ -30,6 +28,7 @@ private:
     /* helper functions */
     void Init();
     virtual bool Layout();
+    void HighLightShift(bool right);
 
     /* event handlers */
     void OnKeyDown(wxKeyEvent &event);

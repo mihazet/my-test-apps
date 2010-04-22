@@ -1,7 +1,14 @@
 #include <wx/wx.h>
 #include <wx/event.h>
 #include <wx/tokenzr.h>
+#include <cmath>
 #include "NetAddrTextCtrl.h"
+
+
+const int gDigitInField[NetAddrTextCtrl::NETADDR_TYPE_INVALID]      = {  3,  2,  2 };
+const int gFieldMax[NetAddrTextCtrl::NETADDR_TYPE_INVALID]          = {  4,  6,  3 };
+const int gFieldBase[NetAddrTextCtrl::NETADDR_TYPE_INVALID]         = { 10, 16, 16 };
+const wxString gFieldDelimit[NetAddrTextCtrl::NETADDR_TYPE_INVALID] = { wxT("."), wxT(":"), wxT(":") };
 
 
 BEGIN_EVENT_TABLE(NetAddrTextCtrl, wxControl)
@@ -15,9 +22,8 @@ END_EVENT_TABLE()
 
 NetAddrTextCtrl::NetAddrTextCtrl(wxWindow *parent, wxWindowID id,
                                  const NetAddrType type, 
-                                 const wxString &value,
-                                 const wxPoint &pos, const wxSize &size)
-    : wxControl(parent, id, pos, size, wxDOUBLE_BORDER | wxWANTS_CHARS),
+                                 const wxString &value)
+    : wxControl(),
     _type(type),
     _digitBoxW(10),
     _digitBoxH(16),
@@ -34,7 +40,7 @@ NetAddrTextCtrl::NetAddrTextCtrl(wxWindow *parent, wxWindowID id,
     Init();
     SetValue(value);
     Layout();
-    SetInitialSize(wxSize(_bitmapWidth, _bitmapHeight));
+    wxControl::Create(parent, id, wxDefaultPosition, wxSize(_bitmapWidth, _bitmapHeight), wxDOUBLE_BORDER | wxWANTS_CHARS);
 }
 
 NetAddrTextCtrl::~NetAddrTextCtrl()
@@ -54,9 +60,15 @@ void NetAddrTextCtrl::Init()
 
 wxString NetAddrTextCtrl::GetValue()
 {
+    wxString format;
     if (_type == NETADDR_TYPE_IP)
     {
-        return wxString::Format(wxT("%d.%d.%d.%d"), 
+        format 
+            << wxT("%d") << gFieldDelimit[_type]
+            << wxT("%d") << gFieldDelimit[_type]
+            << wxT("%d") << gFieldDelimit[_type]
+            << wxT("%d");
+        return wxString::Format(format, 
             (_internalValue >> 24) & 0xFF,
             (_internalValue >> 16) & 0xFF,
             (_internalValue >> 8) & 0xFF,
@@ -64,7 +76,14 @@ wxString NetAddrTextCtrl::GetValue()
     }
     else if (_type == NETADDR_TYPE_MAC)
     {
-        return wxString::Format(wxT("%02X:%02X:%02X:%02X:%02X:%02X"),
+        format
+            << wxT("%02X") << gFieldDelimit[_type]
+            << wxT("%02X") << gFieldDelimit[_type]
+            << wxT("%02X") << gFieldDelimit[_type]
+            << wxT("%02X") << gFieldDelimit[_type]
+            << wxT("%02X") << gFieldDelimit[_type]
+            << wxT("%02X");
+        return wxString::Format(format,
             (_internalValue >> 40) & 0xFF,
             (_internalValue >> 32) & 0xFF,
             (_internalValue >> 24) & 0xFF,
@@ -74,7 +93,11 @@ wxString NetAddrTextCtrl::GetValue()
     }
     else if (_type == NETADDR_TYPE_HALF_MAC)
     {
-        return wxString::Format(wxT("%02X:%02X:%02X"),
+        format
+            << wxT("%02X") << gFieldDelimit[_type]
+            << wxT("%02X") << gFieldDelimit[_type]
+            << wxT("%02X");
+        return wxString::Format(format,
             (_internalValue >> 16) & 0xFF,
             (_internalValue >> 8) & 0xFF,
             _internalValue & 0xFF);
@@ -192,36 +215,98 @@ bool NetAddrTextCtrl::Layout()
 
         _displayFont = new wxFont(--fontSize, _family, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
     }
+    memDC.SetFont(*_displayFont);
 
     if (!_displayBitmap)
     {
-        int tokenDigitCount[NETADDR_TYPE_INVALID] = { 12, 12, 6 };
-        int delimitDigitCount[NETADDR_TYPE_INVALID] = { 3, 5, 2 };
         _bitmapWidth = _outsideBorderLeft 
-            + tokenDigitCount[_type] * (_insideBorderLeft + _digitBoxW + _insideBorderRight)
-            + delimitDigitCount[_type] * (_insideBorderLeft + _digitBoxW + _insideBorderRight)
+            + gDigitInField[_type] * gFieldMax[_type] * (_insideBorderLeft + _digitBoxW + _insideBorderRight)
+            + (gFieldMax[_type] - 1) * (_insideBorderLeft + _digitBoxW + _insideBorderRight)
             + _outsideBorderRight;
         _bitmapHeight = _outsideBorderTop + _insideBorderTop + _digitBoxH + _insideBorderBottom + _outsideBorderBottom;
 
         _displayBitmap = new wxBitmap(_bitmapWidth, _bitmapHeight);
     }
-
     memDC.SelectObject(*_displayBitmap);
 
     /* start to draw on bitmap */
-
-    // draw a focus rectangle 
+    // draw a focus rectangle outline
     memDC.SetBrush(*wxLIGHT_GREY_BRUSH);
     memDC.SetPen(_hasFocused ? *wxBLACK : *wxTRANSPARENT_PEN);
-    memDC.DrawRectangle(0, 0, _bitmapWidth - 4, _bitmapHeight - 4); // 4 is a magic number, I don't know why?
+    memDC.DrawRectangle(0, 0, _bitmapWidth - 4, _bitmapHeight - 4); // 4 is a magic number, I don't know why? We can't see the whole bitmap, both right/bottom are clipped.
 
-    memDC.SetFont(*_displayFont);
-    memDC.SetTextForeground(*wxBLUE);
-    memDC.SetTextBackground(*wxLIGHT_GREY);
-    memDC.DrawText(wxT("01:02:34"), 0, 0);
+    // draw token and delimit characters digit by digit
+    int digitIdx, fieldIdx;
+    for (fieldIdx = 0; fieldIdx < gFieldMax[_type]; fieldIdx++)
+    {
+        // draw token
+        for (digitIdx = 0; digitIdx < gDigitInField[_type]; digitIdx++)
+        {
+            if (_hasFocused && (fieldIdx == _hlField) && (digitIdx == _hlDigit))
+            {
+                memDC.SetTextForeground(*wxBLACK);
+                memDC.SetTextBackground(*wxWHITE);
+                memDC.SetBackgroundMode(wxSOLID);
+            }
+            else
+            {
+                memDC.SetTextForeground(*wxBLUE);
+                memDC.SetBackgroundMode(wxTRANSPARENT);
+            }
+
+            if (gFieldBase[_type] == 10)
+            {
+                int denominator = (int)pow((double)10, (int)(2 - digitIdx));
+                memDC.DrawText(wxString::Format(wxT("%d"), (((_internalValue >> (8 * (gFieldMax[_type] - 1 - fieldIdx))) & 0xFF) / denominator) % 10),
+                    _outsideBorderLeft + (fieldIdx * (gDigitInField[_type] + 1) + digitIdx) * (_insideBorderLeft + _digitBoxW + _insideBorderRight),
+                    _outsideBorderTop);
+            }
+            else if (gFieldBase[_type] == 16)
+            {
+                memDC.DrawText(wxString::Format(wxT("%X"), (_internalValue >> (8 * (gFieldMax[_type] - 1 - fieldIdx) + 4 - (4 * digitIdx))) & 0xF),
+                    _outsideBorderLeft + (fieldIdx * (gDigitInField[_type] + 1) + digitIdx) * (_insideBorderLeft + _digitBoxW + _insideBorderRight),
+                    _outsideBorderTop);
+            }
+        }
+
+        // draw delimit
+        if (fieldIdx != (gFieldMax[_type] - 1))
+        {
+            memDC.SetTextForeground(*wxBLACK);
+            memDC.SetBackgroundMode(wxTRANSPARENT);
+            memDC.DrawText(gFieldDelimit[_type],
+                _outsideBorderLeft + (fieldIdx * (gDigitInField[_type] + 1) + digitIdx) * (_insideBorderLeft + _digitBoxW + _insideBorderRight),
+                _outsideBorderTop);
+        }
+    }
 
     memDC.SelectObject(wxNullBitmap);
     return true;
+}
+
+void NetAddrTextCtrl::HighLightShift(bool right)
+{
+    
+    if (right)
+    {
+        if (++_hlDigit >= gDigitInField[_type])
+        {
+            _hlDigit = 0;
+            _hlField++;
+        }
+        if (_hlField >= gFieldMax[_type])
+            _hlField = 0;
+    }
+    else
+    {
+        if (--_hlDigit < 0)
+        {
+            _hlDigit = gDigitInField[_type] - 1;
+            _hlField--;
+        }
+        if (_hlField < 0)
+            _hlField = gFieldMax[_type] - 1;
+    }
 }
 
 //
@@ -236,11 +321,12 @@ void NetAddrTextCtrl::OnKeyDown(wxKeyEvent &event)
     switch (keyCode)
     {
     case WXK_TAB:
+    case WXK_RETURN:
         /* simulate a navigation tab key */
         {
             wxNavigationKeyEvent navEvt;
-            navEvt.SetWindowChange(event.ControlDown());
-            navEvt.SetDirection(!event.ShiftDown());
+            navEvt.SetWindowChange((keyCode == WXK_TAB) ? event.ControlDown() : false);
+            navEvt.SetDirection((keyCode == WXK_TAB) ? !event.ShiftDown() : true);
             navEvt.SetEventObject(GetParent());
             navEvt.SetCurrentFocus(GetParent());
             GetParent()->GetEventHandler()->ProcessEvent(navEvt);
@@ -256,15 +342,51 @@ void NetAddrTextCtrl::OnKeyDown(wxKeyEvent &event)
         if (_type == NETADDR_TYPE_IP)
             break;
     case '0':
+    case WXK_NUMPAD0:
     case '1':
+    case WXK_NUMPAD1:
     case '2':
+    case WXK_NUMPAD2:
     case '3':
+    case WXK_NUMPAD3:
     case '4':
+    case WXK_NUMPAD4:
     case '5':
+    case WXK_NUMPAD5:
     case '6':
+    case WXK_NUMPAD6:
     case '7':
+    case WXK_NUMPAD7:
     case '8':
+    case WXK_NUMPAD8:
     case '9':
+    case WXK_NUMPAD9:
+        break;
+
+    case WXK_RIGHT:
+        HighLightShift(true);
+        Layout();
+        Refresh(false);
+        break;
+
+    case WXK_LEFT:
+        HighLightShift(false);
+        Layout();
+        Refresh(false);
+        break;
+
+    case WXK_HOME:
+        _hlField = 0;
+        _hlDigit = 0;
+        Layout();
+        Refresh(false);
+        break;
+
+    case WXK_END:
+        _hlField = gFieldMax[_type] - 1;
+        _hlDigit = gDigitInField[_type] - 1;
+        Layout();
+        Refresh(false);
         break;
 
     default: 
@@ -276,7 +398,18 @@ void NetAddrTextCtrl::OnKeyDown(wxKeyEvent &event)
 
 void NetAddrTextCtrl::OnMouse(wxMouseEvent &event)
 {
-    //wxLogMessage(wxT("Mouse %d.%d"), event.GetX(), event.GetY());
+    if (event.LeftDown() || event.LeftDClick())
+    {
+        int posX = event.GetX();
+
+        // find the nearest digit (skip delimit), and change highlight to it
+        if (_hasFocused)
+        {
+            HighLightShift(true);
+            Layout();
+            Refresh(false);
+        }
+    }
 
     event.Skip();
 }
