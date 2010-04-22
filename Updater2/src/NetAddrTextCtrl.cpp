@@ -398,20 +398,39 @@ void NetAddrTextCtrl::OnKeyDown(wxKeyEvent &event)
 
 void NetAddrTextCtrl::OnMouse(wxMouseEvent &event)
 {
+    int posX, fieldIdx, digitIdx, distance;
+    int shortestDistance = 0x7FFFFFFF;
+    bool skip = true;
+
     if (event.LeftDown() || event.LeftDClick())
     {
-        int posX = event.GetX();
+        posX = event.GetX();
 
         // find the nearest digit (skip delimit), and change highlight to it
+        // The pos -> digit need to sync with Layout logic
+        for (fieldIdx = 0; fieldIdx < gFieldMax[_type]; fieldIdx++)
+        {
+            for (digitIdx = 0; digitIdx < gDigitInField[_type]; digitIdx++)
+            {
+                distance = abs(posX - (_outsideBorderLeft + (fieldIdx * (gDigitInField[_type] + 1) + digitIdx) * (_insideBorderLeft + _digitBoxW + _insideBorderRight) + _digitBoxW / 2));
+                if (distance < shortestDistance)
+                {
+                    shortestDistance = distance;
+                    _hlField = fieldIdx;
+                    _hlDigit = digitIdx;
+                }
+            }
+        }
+
         if (_hasFocused)
         {
-            HighLightShift(true);
             Layout();
             Refresh(false);
+            skip = false;
         }
     }
 
-    event.Skip();
+    event.Skip(skip);
 }
 
 void NetAddrTextCtrl::OnErase(wxEraseEvent &WXUNUSED(event))
@@ -421,23 +440,16 @@ void NetAddrTextCtrl::OnErase(wxEraseEvent &WXUNUSED(event))
     
 void NetAddrTextCtrl::OnPaint(wxPaintEvent &event)
 {
+    wxLogMessage(wxT("OnPaint: %d"), event.GetId());
     wxPaintDC dc(this);
     dc.DrawBitmap(*_displayBitmap, 0, 0);
-    wxLogMessage(wxT("OnPaint"));
 }
 
 void NetAddrTextCtrl::OnFocus(wxFocusEvent &event)
 {
+    wxLogMessage(wxT("%s Focus: %d"), (event.GetEventType() == wxEVT_KILL_FOCUS) ? wxT("Kill") : wxT("Get"), event.GetId());
     _hasFocused = (event.GetEventType() == wxEVT_SET_FOCUS);
     Layout();
     Refresh(false);
-    if (event.GetEventType() == wxEVT_KILL_FOCUS)
-    {
-        wxLogMessage(wxT("Kill Focus: %d"), event.GetId());
-    }
-    else
-    {
-        wxLogMessage(wxT("Get Focus: %d"), event.GetId());
-    }
 }
 
