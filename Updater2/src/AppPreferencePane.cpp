@@ -138,6 +138,7 @@ void AppPreferencePane::CreateControls()
     macPoolSizer->Add(halfMACSizer, 0, wxALL, 5);
     macPoolSizer->AddStretchSpacer();
     wxButton *verifyBtn = new wxButton(macPage, wxID_ANY, _("Verify and Update"));
+    verifyBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AppPreferencePane::OnVerifyAndUpdateMAC, this);
     macPoolSizer->Add(verifyBtn, 0, wxALL | wxALIGN_BOTTOM, 5);
 
     wxStaticBoxSizer *invalidMacSizer = new wxStaticBoxSizer(wxVERTICAL, macPage, _("Invalid MAC Address"));
@@ -147,6 +148,7 @@ void AppPreferencePane::CreateControls()
     invalidMacSizerH->Add(invalidMAC, 0, wxALL, 0);
     invalidMacSizerH->AddStretchSpacer();
     wxButton *updateInvalidMacBtn = new wxButton(macPage, wxID_ANY, _("Update"));
+    updateInvalidMacBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AppPreferencePane::OnUpdateInvalidMAC, this);
     invalidMacSizerH->Add(updateInvalidMacBtn, 0, wxALL, 0);
     invalidMacSizer->Add(invalidMacSizerH, 0, wxLEFT | wxRIGHT | wxEXPAND, 5);
 
@@ -264,4 +266,19 @@ void AppPreferencePane::OnUpdateReportRotate(wxCommandEvent& event)
 void AppPreferencePane::OnUpdateReportFolder(wxFileDirPickerEvent& event)
 {
     wxGetApp().m_pAppOptions->SetOption(wxT("ReportFolder"), event.GetPath());
+}
+
+void AppPreferencePane::OnVerifyAndUpdateMAC(wxCommandEvent& WXUNUSED(event))
+{
+    NetAddrTextCtrl *vendor = wxDynamicCast(FindWindow(myID_MAC_VENDOR_CODE), NetAddrTextCtrl);
+    NetAddrTextCtrl *productFirst = wxDynamicCast(FindWindow(myID_MAC_PRODUCT_CODE_1ST), NetAddrTextCtrl);
+    NetAddrTextCtrl *productLast = wxDynamicCast(FindWindow(myID_MAC_PRODUCT_CODE_LAST), NetAddrTextCtrl);
+}
+
+void AppPreferencePane::OnUpdateInvalidMAC(wxCommandEvent& WXUNUSED(event))
+{
+    NetAddrTextCtrl *invalid = wxDynamicCast(FindWindow(myID_MAC_INVALID), NetAddrTextCtrl);
+    wxString str = invalid->GetValue();
+    if (invalid)
+        wxGetApp().m_pAppOptions->SetOption(wxT("InvalidMACAddress"), invalid->GetValue());
 }

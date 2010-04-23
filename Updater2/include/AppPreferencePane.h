@@ -40,6 +40,8 @@ private:
     void OnUpdateReportLimitEntries(wxCommandEvent& event);
     void OnUpdateReportRotate(wxCommandEvent& event);
     void OnUpdateReportFolder(wxFileDirPickerEvent& event);
+    void OnVerifyAndUpdateMAC(wxCommandEvent& event);
+    void OnUpdateInvalidMAC(wxCommandEvent& event);
     
     // private data members
 };
