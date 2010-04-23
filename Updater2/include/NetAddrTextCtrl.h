@@ -29,6 +29,10 @@ private:
     void Init();
     virtual bool Layout();
     void HighLightShift(bool right);
+    int GetSpecificDigitValue(const int fieldIdx, const int digitIdx);
+    long GetSpecificFieldValue(const int fieldIdx);
+    int GetHighLightDigitValue();
+    void SetSpecificDigitValue(const int fieldIdx, const int digitIdx, const int newDigitValue);
 
     /* event handlers */
     void OnKeyDown(wxKeyEvent &event);

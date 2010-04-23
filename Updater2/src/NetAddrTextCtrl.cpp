@@ -254,19 +254,9 @@ bool NetAddrTextCtrl::Layout()
                 memDC.SetBackgroundMode(wxTRANSPARENT);
             }
 
-            if (gFieldBase[_type] == 10)
-            {
-                int denominator = (int)pow((double)10, (int)(2 - digitIdx));
-                memDC.DrawText(wxString::Format(wxT("%d"), (((_internalValue >> (8 * (gFieldMax[_type] - 1 - fieldIdx))) & 0xFF) / denominator) % 10),
-                    _outsideBorderLeft + (fieldIdx * (gDigitInField[_type] + 1) + digitIdx) * (_insideBorderLeft + _digitBoxW + _insideBorderRight),
-                    _outsideBorderTop);
-            }
-            else if (gFieldBase[_type] == 16)
-            {
-                memDC.DrawText(wxString::Format(wxT("%X"), (_internalValue >> (8 * (gFieldMax[_type] - 1 - fieldIdx) + 4 - (4 * digitIdx))) & 0xF),
-                    _outsideBorderLeft + (fieldIdx * (gDigitInField[_type] + 1) + digitIdx) * (_insideBorderLeft + _digitBoxW + _insideBorderRight),
-                    _outsideBorderTop);
-            }
+            memDC.DrawText(wxString::Format((gFieldBase[_type] == 10) ? wxT("%d") : wxT("%X"), GetSpecificDigitValue(fieldIdx, digitIdx)),
+                _outsideBorderLeft + (fieldIdx * (gDigitInField[_type] + 1) + digitIdx) * (_insideBorderLeft + _digitBoxW + _insideBorderRight),
+                _outsideBorderTop);
         }
 
         // draw delimit
@@ -309,19 +299,69 @@ void NetAddrTextCtrl::HighLightShift(bool right)
     }
 }
 
+int NetAddrTextCtrl::GetSpecificDigitValue(const int fieldIdx, const int digitIdx)
+{
+    wxASSERT_MSG((fieldIdx < gFieldMax[_type]), "filedIdx out of range");
+    wxASSERT_MSG((digitIdx < gDigitInField[_type]), "digitIdx out of range");
+
+    long fieldValue = GetSpecificFieldValue(fieldIdx);
+    int denominator = (int) pow((double)gFieldBase[_type], (int)(gDigitInField[_type] - 1 - digitIdx));
+    int digitValue = (fieldValue / denominator) % gFieldBase[_type];
+
+    return digitValue;
+}
+
+long NetAddrTextCtrl::GetSpecificFieldValue(const int fieldIdx)
+{
+    wxASSERT_MSG((fieldIdx < gFieldMax[_type]), "filedIdx out of range");
+
+    wxLongLong llFieldValue = (_internalValue >> (8 * (gFieldMax[_type] - 1 - fieldIdx))) & 0xFF;
+    // wxLongLong::ToLong() will trigger a runtime assert in debug mode if the conversion will lose data,
+    // so, it is better to make sure the wxLongLong value above is truncated by ourself first.
+    long fieldValue = llFieldValue.ToLong();
+    return fieldValue;
+}
+
+int NetAddrTextCtrl::GetHighLightDigitValue()
+{
+    return GetSpecificDigitValue(_hlField, _hlDigit);
+}
+
+void NetAddrTextCtrl::SetSpecificDigitValue(const int fieldIdx, const int digitIdx, const int newDigitValue)
+{
+    wxASSERT_MSG((fieldIdx < gFieldMax[_type]), "filedIdx out of range");
+    wxASSERT_MSG((digitIdx < gDigitInField[_type]), "digitIdx out of range");
+    wxASSERT_MSG((newDigitValue < gFieldBase[_type]), "newDigitValue out of range");
+
+    long oldFieldValue = GetSpecificFieldValue(fieldIdx);
+    int oldDigitValue = GetSpecificDigitValue(fieldIdx, digitIdx);
+    int newFieldValue = oldFieldValue 
+        + (newDigitValue - oldDigitValue) * pow((double)gFieldBase[_type], (int)(gDigitInField[_type] - 1 - digitIdx));
+
+    /* update _internalValue */
+    int shift = 8 * (gFieldMax[_type] - 1 - fieldIdx);
+    wxLongLong oldVal = oldFieldValue;
+    wxLongLong newVal = newFieldValue;  
+    _internalValue = _internalValue + ((newVal - oldVal) << shift);
+}
+
 //
 // Event handlers
 //
 void NetAddrTextCtrl::OnKeyDown(wxKeyEvent &event)
 {
     int keyCode = event.GetKeyCode();
+    bool needRepaint = true;
+    int digitValue = 0;
+    bool isA2F = false, isNumPad = true;
 
-    wxLogMessage(wxT("Key %d down"), keyCode);
+    wxLogDebug(wxT("Key %d down"), keyCode);
 
     switch (keyCode)
     {
     case WXK_TAB:
     case WXK_RETURN:
+    case WXK_NUMPAD_ENTER:
         /* simulate a navigation tab key */
         {
             wxNavigationKeyEvent navEvt;
@@ -330,6 +370,7 @@ void NetAddrTextCtrl::OnKeyDown(wxKeyEvent &event)
             navEvt.SetEventObject(GetParent());
             navEvt.SetCurrentFocus(GetParent());
             GetParent()->GetEventHandler()->ProcessEvent(navEvt);
+            needRepaint = false;
         }
         break;
 
@@ -339,60 +380,101 @@ void NetAddrTextCtrl::OnKeyDown(wxKeyEvent &event)
     case 'D':
     case 'E':
     case 'F':
-        if (_type == NETADDR_TYPE_IP)
+        if (gFieldBase[_type] == 10)
+        {
+            needRepaint = false;
             break;
+        }
+        digitValue = keyCode - 'A' + 10;
+        isA2F = true;
+        // intent to fall through...
     case '0':
-    case WXK_NUMPAD0:
     case '1':
-    case WXK_NUMPAD1:
     case '2':
-    case WXK_NUMPAD2:
     case '3':
-    case WXK_NUMPAD3:
     case '4':
-    case WXK_NUMPAD4:
     case '5':
-    case WXK_NUMPAD5:
     case '6':
-    case WXK_NUMPAD6:
     case '7':
-    case WXK_NUMPAD7:
     case '8':
-    case WXK_NUMPAD8:
     case '9':
+        if (event.ShiftDown())
+        {
+            needRepaint = false;
+            break;
+        }
+        if (!isA2F)
+            digitValue = keyCode - '0';
+        isNumPad = false;
+        // intent to fall through...
+    case WXK_NUMPAD0:
+    case WXK_NUMPAD1:
+    case WXK_NUMPAD2:
+    case WXK_NUMPAD3:
+    case WXK_NUMPAD4:
+    case WXK_NUMPAD5:
+    case WXK_NUMPAD6:
+    case WXK_NUMPAD7:
+    case WXK_NUMPAD8:
     case WXK_NUMPAD9:
+        if (!isA2F && isNumPad)
+            digitValue = keyCode - WXK_NUMPAD0;
+
+        SetSpecificDigitValue(_hlField, _hlDigit, digitValue);
+        HighLightShift(true);
+        break;
+
+    case WXK_UP:
+    case WXK_DOWN:    
+        digitValue = GetSpecificDigitValue(_hlField, _hlDigit);
+        if (keyCode == WXK_UP)
+        {
+            digitValue++;
+            if (digitValue >= gFieldBase[_type])
+                digitValue = 0;
+            SetSpecificDigitValue(_hlField, _hlDigit, digitValue);
+        }
+        else
+        {
+            digitValue--;
+            if (digitValue < 0)
+                digitValue = gFieldBase[_type] - 1;
+            SetSpecificDigitValue(_hlField, _hlDigit, digitValue);
+        }
         break;
 
     case WXK_RIGHT:
         HighLightShift(true);
-        Layout();
-        Refresh(false);
         break;
 
     case WXK_LEFT:
         HighLightShift(false);
-        Layout();
-        Refresh(false);
         break;
 
     case WXK_HOME:
+    case WXK_NUMPAD_HOME:
         _hlField = 0;
         _hlDigit = 0;
-        Layout();
-        Refresh(false);
         break;
 
     case WXK_END:
+    case WXK_NUMPAD_END:
         _hlField = gFieldMax[_type] - 1;
         _hlDigit = gDigitInField[_type] - 1;
-        Layout();
-        Refresh(false);
         break;
 
     default: 
         /* for key that we are not interesed, just skip it */
         event.Skip();
+        needRepaint = false;
+        wxBell();
         break;
+    }
+
+    if (needRepaint)
+    {
+        Layout();
+        Refresh(false);
     }
 }
 
@@ -440,14 +522,14 @@ void NetAddrTextCtrl::OnErase(wxEraseEvent &WXUNUSED(event))
     
 void NetAddrTextCtrl::OnPaint(wxPaintEvent &event)
 {
-    wxLogMessage(wxT("OnPaint: %d"), event.GetId());
+    wxLogDebug(wxT("OnPaint: %d"), event.GetId());
     wxPaintDC dc(this);
     dc.DrawBitmap(*_displayBitmap, 0, 0);
 }
 
 void NetAddrTextCtrl::OnFocus(wxFocusEvent &event)
 {
-    wxLogMessage(wxT("%s Focus: %d"), (event.GetEventType() == wxEVT_KILL_FOCUS) ? wxT("Kill") : wxT("Get"), event.GetId());
+    wxLogDebug(wxT("%s Focus: %d"), (event.GetEventType() == wxEVT_KILL_FOCUS) ? wxT("Kill") : wxT("Get"), event.GetId());
     _hasFocused = (event.GetEventType() == wxEVT_SET_FOCUS);
     Layout();
     Refresh(false);
