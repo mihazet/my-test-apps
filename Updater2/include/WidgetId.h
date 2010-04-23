@@ -48,6 +48,10 @@ enum
     /* preference */
     myID_REPORT_ENTRIES_DESC,
     myID_REPORT_ENTRIES_NUM,
+    myID_MAC_VENDOR_CODE,
+    myID_MAC_PRODUCT_CODE_1ST,
+    myID_MAC_PRODUCT_CODE_LAST,
+    myID_MAC_INVALID,
 
     /* threads */
     myID_SEARCH_THREAD,
