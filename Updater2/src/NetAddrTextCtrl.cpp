@@ -60,50 +60,17 @@ void NetAddrTextCtrl::Init()
 
 wxString NetAddrTextCtrl::GetValue()
 {
-    wxString format;
-    if (_type == NETADDR_TYPE_IP)
+    wxString valueString;
+    int idx;
+
+    for (idx = 0; idx < gFieldMax[_type]; idx++)
     {
-        format 
-            << wxT("%d") << gFieldDelimit[_type]
-            << wxT("%d") << gFieldDelimit[_type]
-            << wxT("%d") << gFieldDelimit[_type]
-            << wxT("%d");
-        return wxString::Format(format, 
-            (_internalValue >> 24) & 0xFF,
-            (_internalValue >> 16) & 0xFF,
-            (_internalValue >> 8) & 0xFF,
-            _internalValue & 0xFF);
-    }
-    else if (_type == NETADDR_TYPE_MAC)
-    {
-        format
-            << wxT("%02X") << gFieldDelimit[_type]
-            << wxT("%02X") << gFieldDelimit[_type]
-            << wxT("%02X") << gFieldDelimit[_type]
-            << wxT("%02X") << gFieldDelimit[_type]
-            << wxT("%02X") << gFieldDelimit[_type]
-            << wxT("%02X");
-        return wxString::Format(format,
-            (_internalValue >> 40) & 0xFF,
-            (_internalValue >> 32) & 0xFF,
-            (_internalValue >> 24) & 0xFF,
-            (_internalValue >> 16) & 0xFF,
-            (_internalValue >> 8) & 0xFF,
-            _internalValue & 0xFF);
-    }
-    else if (_type == NETADDR_TYPE_HALF_MAC)
-    {
-        format
-            << wxT("%02X") << gFieldDelimit[_type]
-            << wxT("%02X") << gFieldDelimit[_type]
-            << wxT("%02X");
-        return wxString::Format(format,
-            (_internalValue >> 16) & 0xFF,
-            (_internalValue >> 8) & 0xFF,
-            _internalValue & 0xFF);
+        valueString << wxString::Format((gFieldBase[_type] == 10) ? wxT("%ld") : wxT("%02lX"), GetSpecificFieldValue(idx));
+        if (idx != (gFieldMax[_type] - 1))
+            valueString << gFieldDelimit[_type];
     }
 
-    return wxEmptyString;
+    return valueString;
 }
 
 void NetAddrTextCtrl::SetValue(const wxString &newValue)
