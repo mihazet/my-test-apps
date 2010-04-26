@@ -80,14 +80,13 @@ void NetAddrTextCtrl::SetValue(const wxString &newValue)
     int count = 0;
     wxLongLong longlongValue, longlongTemp = 0;
     long longValue;
+    bool redraw = true;
 
     if (newValue.empty())
     {
-        _internalValue = 0;
-        return;
+        longlongTemp = 0;
     }
-
-    if (_type == NETADDR_TYPE_IP)
+    else if (_type == NETADDR_TYPE_IP)
     {
         tokenizer.SetString(newValue, wxT("."));
         while (tokenizer.HasMoreTokens())
@@ -104,6 +103,7 @@ void NetAddrTextCtrl::SetValue(const wxString &newValue)
                 longlongTemp += ((longValue & 0xFF) << (24 - 8 * count));
                 break;
             default:
+                redraw = false;
                 break;
             }
             count++;
@@ -143,20 +143,27 @@ void NetAddrTextCtrl::SetValue(const wxString &newValue)
 
         if (_type == NETADDR_TYPE_MAC)
         {
+            if (count != 6) redraw = false;
             wxASSERT_MSG((count == 6), wxT("Set wrong format value to NetAddrTextCtrl with MAC type."));
         }
         else if (_type == NETADDR_TYPE_HALF_MAC)
         {
+            if (count != 3) redraw = false;
             wxASSERT_MSG((count == 3), wxT("Set wrong format value to NetAddrTextCtrl with half MAC type."));
         }
     }
     else
     {
         wxASSERT_MSG(false, wxT("NetAddrTextCtrl with invalid type!"));
-        return;
+        redraw = false;
     }
 
-    _internalValue = longlongTemp;
+    if (redraw)
+    {
+        _internalValue = longlongTemp;
+        Layout();
+        Refresh();
+    }
 }
 
 bool NetAddrTextCtrl::IsBiggerThan(const NetAddrTextCtrl& addr)
@@ -176,6 +183,8 @@ bool NetAddrTextCtrl::IsBiggerThan(const NetAddrTextCtrl& addr)
                 bigger = true;
                 break;
             }
+            else if (fieldSelf < fieldOther)
+                break;
         }
     }
 
