@@ -195,7 +195,7 @@ bool NetAddrTextCtrl::IsEqual(const NetAddrTextCtrl& addr)
         for (fieldIdx = 0; fieldIdx < gFieldMax[_type]; fieldIdx++)
         {
             fieldSelf = GetSpecificFieldValue(fieldIdx);
-            fieldOther = GetSpecificFieldValue(fieldIdx);
+            fieldOther = addr.GetSpecificFieldValue(fieldIdx);
             if (fieldSelf != fieldOther)
             {
                 equal = false;
