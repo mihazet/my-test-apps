@@ -280,12 +280,60 @@ void AppPreferencePane::OnVerifyAndUpdateMAC(wxCommandEvent& WXUNUSED(event))
     NetAddrTextCtrl *vendor = wxDynamicCast(FindWindow(myID_MAC_VENDOR_CODE), NetAddrTextCtrl);
     NetAddrTextCtrl *productFirst = wxDynamicCast(FindWindow(myID_MAC_PRODUCT_CODE_1ST), NetAddrTextCtrl);
     NetAddrTextCtrl *productLast = wxDynamicCast(FindWindow(myID_MAC_PRODUCT_CODE_LAST), NetAddrTextCtrl);
+    bool valid = false;
+    wxString message, caption;
+    int result;
+
+    wxASSERT_MSG(vendor && productFirst && productLast, wxT("Can't find class instance pointer"));
+
+    if (productLast->IsBiggerThan(*productFirst))
+        valid = true;
+    else if (productLast->IsEqual(*productFirst))
+    {
+        caption << _("The 1st product code is equal to the last product code");
+        message << _("You are entering the same first and last product code.") << wxT(" ")
+            << _("This means you only have _ONE_ valid product code in the automated MAC address generation procedure.") << wxT(" ")
+            << _("If this isn't your intention, please press [Cancel] and try to reassign the correct setting again.") << wxT(" ")
+            << _("If this is indeed your intention, please press [OK] again to confirm it.");
+        wxMessageDialog dlg(this, message, caption, wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxICON_QUESTION);
+        result = dlg.ShowModal();
+        if (result == wxID_OK)
+            valid = true;
+    }
+    else
+    {
+        caption << _("Product code range incorrect, do swap?");
+        message << _("You are entering the first product code larger than the last product code.") << wxT(" ")
+            << _("However, the first product code _MUST_ be smaller than the last product code.") << wxT(" ")
+            << _("If you want to swap the first/last product code, please press [OK] again to confirm it.") << wxT(" ")
+            << _("If you want to change these product codes manually, please press [CANCEL] and try to reassign again.");
+        wxMessageDialog dlg(this, message, caption, wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_QUESTION);
+        result = dlg.ShowModal();
+        if (result == wxID_OK)
+        {
+            wxString firstString = productFirst->GetValue();
+            wxString lastString = productLast->GetValue();
+            productFirst->SetValue(lastString);
+            productLast->SetValue(firstString);
+            valid = true;
+        }
+    }
+
+    if (valid)
+    {
+        wxGetApp().m_pAppOptions->SetOption(wxT("VendorCode"), vendor->GetValue());
+        wxGetApp().m_pAppOptions->SetOption(wxT("FirstProductCode"), productFirst->GetValue());
+        wxGetApp().m_pAppOptions->SetOption(wxT("LastProductCode"), productLast->GetValue());
+        /* also erase the current product code */
+        wxGetApp().m_pAppOptions->SetOption(wxT("CurrentProductCode"), wxEmptyString);
+    }
 }
 
 void AppPreferencePane::OnUpdateInvalidMAC(wxCommandEvent& WXUNUSED(event))
 {
     NetAddrTextCtrl *invalid = wxDynamicCast(FindWindow(myID_MAC_INVALID), NetAddrTextCtrl);
-    wxString str = invalid->GetValue();
-    if (invalid)
-        wxGetApp().m_pAppOptions->SetOption(wxT("InvalidMACAddress"), invalid->GetValue());
+
+    wxASSERT_MSG(invalid, wxT("Can't find class object instance pointer"));
+
+    wxGetApp().m_pAppOptions->SetOption(wxT("InvalidMACAddress"), invalid->GetValue());
 }
