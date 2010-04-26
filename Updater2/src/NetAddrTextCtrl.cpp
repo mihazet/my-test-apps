@@ -159,6 +159,54 @@ void NetAddrTextCtrl::SetValue(const wxString &newValue)
     _internalValue = longlongTemp;
 }
 
+bool NetAddrTextCtrl::IsBiggerThan(const NetAddrTextCtrl& addr)
+{
+    bool bigger = false;
+    long fieldSelf, fieldOther;
+    int fieldIdx;
+
+    if (_type == addr._type)
+    {
+        for (fieldIdx = 0; fieldIdx < gFieldMax[_type]; fieldIdx++)
+        {
+            fieldSelf = GetSpecificFieldValue(fieldIdx);
+            fieldOther = addr.GetSpecificFieldValue(fieldIdx);
+            if (fieldSelf > fieldOther)
+            {
+                bigger = true;
+                break;
+            }
+        }
+    }
+
+    return bigger;
+}
+
+bool NetAddrTextCtrl::IsEqual(const NetAddrTextCtrl& addr)
+{
+    bool equal = false;
+    long fieldSelf, fieldOther;
+    int fieldIdx;
+
+    if (_type == addr._type)
+    {
+        equal = true;
+
+        for (fieldIdx = 0; fieldIdx < gFieldMax[_type]; fieldIdx++)
+        {
+            fieldSelf = GetSpecificFieldValue(fieldIdx);
+            fieldOther = GetSpecificFieldValue(fieldIdx);
+            if (fieldSelf != fieldOther)
+            {
+                equal = false;
+                break;
+            }
+        }
+    }
+
+    return equal;
+}
+
 //
 // Helper functions
 //
@@ -266,7 +314,7 @@ void NetAddrTextCtrl::HighLightShift(bool right)
     }
 }
 
-int NetAddrTextCtrl::GetSpecificDigitValue(const int fieldIdx, const int digitIdx)
+int NetAddrTextCtrl::GetSpecificDigitValue(const int fieldIdx, const int digitIdx) const
 {
     wxASSERT_MSG((fieldIdx < gFieldMax[_type]), "filedIdx out of range");
     wxASSERT_MSG((digitIdx < gDigitInField[_type]), "digitIdx out of range");
@@ -278,7 +326,7 @@ int NetAddrTextCtrl::GetSpecificDigitValue(const int fieldIdx, const int digitId
     return digitValue;
 }
 
-long NetAddrTextCtrl::GetSpecificFieldValue(const int fieldIdx)
+long NetAddrTextCtrl::GetSpecificFieldValue(const int fieldIdx) const
 {
     wxASSERT_MSG((fieldIdx < gFieldMax[_type]), "filedIdx out of range");
 
@@ -289,7 +337,7 @@ long NetAddrTextCtrl::GetSpecificFieldValue(const int fieldIdx)
     return fieldValue;
 }
 
-int NetAddrTextCtrl::GetHighLightDigitValue()
+int NetAddrTextCtrl::GetHighLightDigitValue() const
 {
     return GetSpecificDigitValue(_hlField, _hlDigit);
 }

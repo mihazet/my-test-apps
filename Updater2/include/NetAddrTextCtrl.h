@@ -23,15 +23,17 @@ public:
 
     wxString GetValue();
     void SetValue(const wxString& value);
+    bool IsBiggerThan(const NetAddrTextCtrl& addr);
+    bool IsEqual(const NetAddrTextCtrl& addr);
 
 private:
     /* helper functions */
     void Init();
     virtual bool Layout();
     void HighLightShift(bool right);
-    int GetSpecificDigitValue(const int fieldIdx, const int digitIdx);
-    long GetSpecificFieldValue(const int fieldIdx);
-    int GetHighLightDigitValue();
+    int GetSpecificDigitValue(const int fieldIdx, const int digitIdx) const;
+    long GetSpecificFieldValue(const int fieldIdx) const;
+    int GetHighLightDigitValue() const;
     void SetSpecificDigitValue(const int fieldIdx, const int digitIdx, const int newDigitValue);
 
     /* event handlers */
