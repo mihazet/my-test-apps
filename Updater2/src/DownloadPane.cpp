@@ -492,14 +492,9 @@ void DownloadPane::SaveOptionValue()
 
 bool DownloadPane::IsMACAddressInvalid(const wxString &mac_address)
 {
-    bool invalid = false;
+    int compare_result = wxGetApp().m_pAppOptions->GetOption(wxT("InvalidMACAddress")).CmpNoCase(mac_address);
 
-    //if (!mac_address.Cmp(wxT("00:1D:72:9C:94:E5")))
-    if (!mac_address.Cmp(wxT("00:18:23:01:02:03")))
-    //if (!mac_address.Cmp(wxT("00:23:18:AB:CD:EF")))
-        invalid = true;
-
-    return invalid;
+    return (compare_result == 0);
 }
 
 wxString DownloadPane::ExplainUpdateThreadErrorCode(const int error)
