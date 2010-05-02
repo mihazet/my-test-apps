@@ -793,6 +793,30 @@
           <string name="language">""</string>
         </document>
         <document>
+          <string name="title">"MacAddrUpdatePane.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/MacAddrUpdatePane.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"3/5/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"MacAddrUpdatePane.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/MacAddrUpdatePane.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"3/5/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"MacAddrUsagePane.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/MacAddrUsagePane.cpp"</string>
