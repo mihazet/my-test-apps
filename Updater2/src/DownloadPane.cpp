@@ -19,6 +19,7 @@
 #include "UpdateThread.h"
 #include "UpdaterApp.h"
 #include "AppOptions.h"
+#include "MacAddrUpdatePane.h"
 
 // ------------------------------------------------------------------------
 // Resources
@@ -684,6 +685,10 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
         return;
     }
 
+    wxGetApp().m_AuiManager.AddPane(new MacAddrUpdatePane(GetParent()), wxAuiPaneInfo().Caption(wxT("Update MAC Address")).Float());
+    wxGetApp().m_AuiManager.Update();
+
+#if 0
     wxTextEntryDialog textDlg(this, _("Please assign new MAC address"));
     if (textDlg.ShowModal() == wxID_OK)
     {
@@ -691,6 +696,7 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
         if (thread && (thread->Create() == wxTHREAD_NO_ERROR) && (thread->Run() == wxTHREAD_NO_ERROR))
             _updateThreadCount++;
     }
+#endif
 
     // just call skip here, so this event will be handled by the wxInfoBarBase, which will hide the infobar.
     event.Skip();
