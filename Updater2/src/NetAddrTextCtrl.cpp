@@ -507,6 +507,7 @@ void NetAddrTextCtrl::OnMouse(wxMouseEvent &event)
     int posX, fieldIdx, digitIdx, distance;
     int shortestDistance = 0x7FFFFFFF;
     bool skip = true;
+    int evtType = event.GetEventType();
 
     if (event.LeftDown() || event.LeftDClick())
     {
@@ -532,6 +533,23 @@ void NetAddrTextCtrl::OnMouse(wxMouseEvent &event)
         {
             Layout();
             Refresh(false);
+            skip = false;
+        }
+    }
+    else if (evtType == wxEVT_MOUSEWHEEL)
+    {
+        if ((event.GetWheelAxis() == 0)
+            && (event.GetWheelRotation() != 0)
+            && (event.GetModifiers() == 0))
+        {
+            // Translate mousewheel actions into key up/down. This is
+            // the simplest way of getting native behaviour: scrolling the
+            // wheel moves selection up/down by one item.
+            wxKeyEvent keyEvt(wxEVT_KEY_DOWN);
+            keyEvt.m_keyCode = event.GetWheelRotation() > 0
+                               ? WXK_UP
+                               : WXK_DOWN;
+            GetEventHandler()->ProcessEvent(keyEvt);
             skip = false;
         }
     }
