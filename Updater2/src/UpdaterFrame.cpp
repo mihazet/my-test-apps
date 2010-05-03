@@ -77,20 +77,21 @@ UpdaterFrame::~UpdaterFrame()
     wxString perspective;
 
     if (pOpt)
-        pOpt->SetOption(wxT("ActivePerspective"), _auiManager.SavePerspective());
+        pOpt->SetOption(wxT("ActivePerspective"), _auiManager->SavePerspective());
 
-    _auiManager.UnInit();
+    _auiManager->UnInit();
 }
 
 void UpdaterFrame::Init()
 {
+    _auiManager = &wxGetApp().m_AuiManager;
 }
 
 void UpdaterFrame::CreateControls()
 {
     /* tell wxAuiManager to manage this frame */
-    _auiManager.SetManagedWindow(this);
-    _auiManager.SetFlags(_auiManager.GetFlags() | wxAUI_MGR_LIVE_RESIZE);
+    _auiManager->SetManagedWindow(this);
+    _auiManager->SetFlags(_auiManager->GetFlags() | wxAUI_MGR_LIVE_RESIZE);
 
     /* setup icon for window title bar, taskbar and task switching bar */
     wxIconBundle icons;
@@ -131,21 +132,21 @@ void UpdaterFrame::CreateControls()
     wxLog *logger = new wxLogTextCtrl(dbgWin->GetLogTextCtrl());
     delete wxLog::SetActiveTarget(logger);
     wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S]"));
-    _auiManager.AddPane(dbgWin, wxAuiPaneInfo().Name(PANE_NAME_LOG).
+    _auiManager->AddPane(dbgWin, wxAuiPaneInfo().Name(PANE_NAME_LOG).
         Caption(_("Log Window")).Bottom().CloseButton(true).
         DestroyOnClose(false).MaximizeButton(false).MinSize(300, 150));
 
-    _auiManager.AddPane(new DownloadPane(this), wxAuiPaneInfo().
+    _auiManager->AddPane(new DownloadPane(this), wxAuiPaneInfo().
         Name(PANE_NAME_IMAGE_UPDATE).Caption(_("Device Download Window")).Center().
         CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
         MinSize(300, -1));
 
-    _auiManager.AddPane(new MacAddrUsagePane(this), wxAuiPaneInfo().
+    _auiManager->AddPane(new MacAddrUsagePane(this), wxAuiPaneInfo().
         Name(PANE_NAME_MAC_USAGE).Caption(_("MAC Address Usage Window")).Center().
         CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
         MinSize(300, 300).Hide());
 
-    _auiManager.AddPane(new AppPreferencePane(this), wxAuiPaneInfo().
+    _auiManager->AddPane(new AppPreferencePane(this), wxAuiPaneInfo().
         Name(PANE_NAME_PREFERENCE).Caption(_("Preference")).Float().Dockable(false).
         CloseButton(true).DestroyOnClose(false).MaximizeButton(false).
         MinSize(450, 400).Hide());
@@ -165,7 +166,7 @@ void UpdaterFrame::CreateControls()
     AppOptions *pOpt = wxGetApp().m_pAppOptions;
     if (pOpt)
     {
-        pOpt->SetOption(wxT("DefaultPerspective"), _auiManager.SavePerspective());
+        pOpt->SetOption(wxT("DefaultPerspective"), _auiManager->SavePerspective());
         if (pOpt->GetOption(wxT("ActivePerspective"), perspective))
         {
             if (perspective.empty())
@@ -176,9 +177,9 @@ void UpdaterFrame::CreateControls()
     }
 
     if (useLastLayout)
-        _auiManager.LoadPerspective(perspective);
+        _auiManager->LoadPerspective(perspective);
     else
-        _auiManager.Update();
+        _auiManager->Update();
 }
 
 void UpdaterFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
@@ -232,7 +233,7 @@ void UpdaterFrame::OnViewPane(wxCommandEvent &event)
             default:
                 continue;
             }
-            _auiManager.GetPane(paneName).Show((evtId == paneId) ? true : false);
+            _auiManager->GetPane(paneName).Show((evtId == paneId) ? true : false);
         }
     }
     else if ((evtId > myID_VIEW_CHECK_PANE_START) && (evtId < myID_VIEW_CHECK_PANE_END))
@@ -248,9 +249,9 @@ void UpdaterFrame::OnViewPane(wxCommandEvent &event)
         default:
             return;
         }
-        _auiManager.GetPane(paneName).Show(event.IsChecked());
+        _auiManager->GetPane(paneName).Show(event.IsChecked());
     }
-    _auiManager.Update();
+    _auiManager->Update();
 }
 
 void UpdaterFrame::OnUpdatePane(wxUpdateUIEvent &event)
@@ -275,7 +276,7 @@ void UpdaterFrame::OnUpdatePane(wxUpdateUIEvent &event)
     default:
         return;
     }
-    event.Check(_auiManager.GetPane(paneName).IsShown());
+    event.Check(_auiManager->GetPane(paneName).IsShown());
 }
 
 void UpdaterFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
@@ -288,7 +289,7 @@ void UpdaterFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
         pOpt->SetOption(wxT("ActivePerspective"), wxEmptyString);
         if (pOpt->GetOption(wxT("DefaultPerspective"), defaultLayout)
             && !defaultLayout.empty())
-            _auiManager.LoadPerspective(defaultLayout);
+            _auiManager->LoadPerspective(defaultLayout);
     }
 }
 

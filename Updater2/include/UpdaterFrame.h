@@ -49,7 +49,7 @@ private:
     void OnQuit(wxCommandEvent &event);
 
 private:
-    wxAuiManager _auiManager;
+    wxAuiManager *_auiManager;
 
     DECLARE_EVENT_TABLE()
 };

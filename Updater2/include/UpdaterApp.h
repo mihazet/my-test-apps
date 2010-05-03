@@ -4,6 +4,7 @@
 #include <wx/wx.h>
 #include <wx/snglinst.h>
 #include <wx/vector.h>
+#include <wx/aui/framemanager.h>
 #ifdef __WXMSW__
 #include <iphlpapi.h>
 #elif defined (__WXGTK__)
@@ -32,6 +33,7 @@ public:
 
     wxVector<NetAdapter> m_Adapters;
     AppOptions *m_pAppOptions;
+    wxAuiManager m_AuiManager;
 
 private:
     // event handlers
