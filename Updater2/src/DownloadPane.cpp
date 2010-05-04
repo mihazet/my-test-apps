@@ -686,18 +686,14 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
         return;
     }
 
-    wxGetApp().m_AuiManager.AddPane(new MacAddrUpdatePane(GetParent()), wxAuiPaneInfo().Caption(wxT("Update MAC Address")).Float());
+    /* invoke MacAddrUpdatePane */
+    wxWindow *pane = new MacAddrUpdatePane(GetParent(), wxID_ANY, _preparedUpdateThreadCodedString);
+    wxPoint panePos;
+    panePos.x = (wxGetDisplaySize().GetWidth() - pane->GetSize().GetWidth()) / 2;
+    panePos.y = (wxGetDisplaySize().GetHeight() - pane->GetSize().GetHeight()) / 2;
+    wxGetApp().m_AuiManager.AddPane(pane,
+        wxAuiPaneInfo().Caption(_("Update MAC Address")).Float().FloatingPosition(panePos));
     wxGetApp().m_AuiManager.Update();
-
-#if 0
-    wxTextEntryDialog textDlg(this, _("Please assign new MAC address"));
-    if (textDlg.ShowModal() == wxID_OK)
-    {
-        UpdateThread *thread = new UpdateThread(this, _preparedUpdateThreadCodedString, wxEmptyString, textDlg.GetValue());
-        if (thread && (thread->Create() == wxTHREAD_NO_ERROR) && (thread->Run() == wxTHREAD_NO_ERROR))
-            _updateThreadCount++;
-    }
-#endif
 
     // just call skip here, so this event will be handled by the wxInfoBarBase, which will hide the infobar.
     event.Skip();

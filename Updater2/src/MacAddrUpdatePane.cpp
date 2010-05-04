@@ -7,6 +7,7 @@
 #include "UpdateThread.h"
 #include "NetAddrTextCtrl.h"
 #include "MacAddrUpdatePane.h"
+#include "WidgetId.h"
 
 // ------------------------------------------------------------------------
 // Resources
@@ -85,7 +86,7 @@ void MacAddrUpdatePane::CreateControls()
         addrString << wxT(":") << wxGetApp().m_pAppOptions->GetOption(wxT("FirstProductCode"));
     else
         addrString << wxT(":") << productString;
-    NetAddrTextCtrl *addr = new NetAddrTextCtrl(this, wxID_ANY, NetAddrTextCtrl::NETADDR_TYPE_MAC, addrString);
+    NetAddrTextCtrl *addr = new NetAddrTextCtrl(this, myID_MAC_UPDATE_NETADDR_TEXTCTRL, NetAddrTextCtrl::NETADDR_TYPE_MAC, addrString);
     paneSizer->Add(addr, 0, wxALL | wxALIGN_CENTER, 10);
     paneSizer->Add(new wxStaticText(this, wxID_STATIC, _("Recommend the use of automatically generated MAC address.")), 0, wxBOTTOM | wxLEFT | wxRIGHT, 15);
 
@@ -101,6 +102,10 @@ void MacAddrUpdatePane::CreateControls()
 // event handlers
 void MacAddrUpdatePane::OnUpdateButtonClicked(wxCommandEvent& WXUNUSED(event))
 {   
+    NetAddrTextCtrl *addr = wxDynamicCast(FindWindow(myID_MAC_UPDATE_NETADDR_TEXTCTRL), NetAddrTextCtrl);
+    UpdateThread *thread = new UpdateThread(this, _codeString, wxEmptyString, addr->GetValue());
+    if (thread && (thread->Create() == wxTHREAD_NO_ERROR) && (thread->Run() == wxTHREAD_NO_ERROR))
+        wxGetApp().m_UpdateThreadCount++;
     _multiFunctionBtn->Unbind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUpdatePane::OnUpdateButtonClicked, this);
 }
 

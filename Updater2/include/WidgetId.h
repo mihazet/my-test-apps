@@ -55,6 +55,9 @@ enum
     myID_MAC_INVALID,
     myID_UPDATE_INVALID_MAC_BTN,
 
+    /* mac update */
+    myID_MAC_UPDATE_NETADDR_TEXTCTRL,
+
     /* threads */
     myID_SEARCH_THREAD,
     myID_UPDATE_THREAD,
