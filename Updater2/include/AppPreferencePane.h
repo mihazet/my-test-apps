@@ -42,6 +42,8 @@ private:
     void OnUpdateReportFolder(wxFileDirPickerEvent& event);
     void OnVerifyAndUpdateMAC(wxCommandEvent& event);
     void OnUpdateInvalidMAC(wxCommandEvent& event);
+    void OnVendorOrProductMacAddressUpdated(wxCommandEvent& event);
+    void OnInvalidMacAddressUpdated(wxCommandEvent& event);
     
     // private data members
 };

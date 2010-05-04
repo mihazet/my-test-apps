@@ -135,16 +135,20 @@ void AppPreferencePane::CreateControls()
     wxFlexGridSizer *halfMACSizer = new wxFlexGridSizer(2);
     halfMACSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Default MAC Vendor code:")), 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5);
     NetAddrTextCtrl *vendorMAC = new NetAddrTextCtrl(macPage, myID_MAC_VENDOR_CODE, NetAddrTextCtrl::NETADDR_TYPE_HALF_MAC, wxGetApp().m_pAppOptions->GetOption(wxT("VendorCode")));
+    vendorMAC->Bind(myEVT_NETADDR_TEXTCTRL_UPDATED, &AppPreferencePane::OnVendorOrProductMacAddressUpdated, this);
     halfMACSizer->Add(vendorMAC, 0, wxLEFT, 5);
     halfMACSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("MAC Product code begin at:")), 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5);
     NetAddrTextCtrl *startProductMAC = new NetAddrTextCtrl(macPage, myID_MAC_PRODUCT_CODE_1ST, NetAddrTextCtrl::NETADDR_TYPE_HALF_MAC, wxGetApp().m_pAppOptions->GetOption(wxT("FirstProductCode")));
+    startProductMAC->Bind(myEVT_NETADDR_TEXTCTRL_UPDATED, &AppPreferencePane::OnVendorOrProductMacAddressUpdated, this);
     halfMACSizer->Add(startProductMAC, 0, wxLEFT, 5);
     halfMACSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("MAC Product code end at:")), 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5);
     NetAddrTextCtrl *endProductMAC = new NetAddrTextCtrl(macPage, myID_MAC_PRODUCT_CODE_LAST, NetAddrTextCtrl::NETADDR_TYPE_HALF_MAC, wxGetApp().m_pAppOptions->GetOption(wxT("LastProductCode")));
+    endProductMAC->Bind(myEVT_NETADDR_TEXTCTRL_UPDATED, &AppPreferencePane::OnVendorOrProductMacAddressUpdated, this);
     halfMACSizer->Add(endProductMAC, 0, wxLEFT, 5);
     macPoolSizer->Add(halfMACSizer, 0, wxALL, 5);
     macPoolSizer->AddStretchSpacer();
-    wxButton *verifyBtn = new wxButton(macPage, wxID_ANY, _("Verify and Update"));
+    wxButton *verifyBtn = new wxButton(macPage, myID_UPDATE_VENDOR_PRODUCT_CODE_BTN, _("Verify and Update"));
+    verifyBtn->Enable(false);
     verifyBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AppPreferencePane::OnVerifyAndUpdateMAC, this);
     macPoolSizer->Add(verifyBtn, 0, wxALL | wxALIGN_BOTTOM, 5);
 
@@ -152,9 +156,11 @@ void AppPreferencePane::CreateControls()
     invalidMacSizer->Add(new wxStaticText(macPage, wxID_STATIC, _("Request user doing update when target board with this MAC address:")), 0, wxALL, 5);
     wxBoxSizer *invalidMacSizerH = new wxBoxSizer(wxHORIZONTAL);
     NetAddrTextCtrl *invalidMAC = new NetAddrTextCtrl(macPage, myID_MAC_INVALID, NetAddrTextCtrl::NETADDR_TYPE_MAC, wxGetApp().m_pAppOptions->GetOption(wxT("InvalidMACAddress")));
+    invalidMAC->Bind(myEVT_NETADDR_TEXTCTRL_UPDATED, &AppPreferencePane::OnInvalidMacAddressUpdated, this);
     invalidMacSizerH->Add(invalidMAC, 0, wxALL, 0);
     invalidMacSizerH->AddStretchSpacer();
-    wxButton *updateInvalidMacBtn = new wxButton(macPage, wxID_ANY, _("Update"));
+    wxButton *updateInvalidMacBtn = new wxButton(macPage, myID_UPDATE_INVALID_MAC_BTN, _("Update"));
+    updateInvalidMacBtn->Enable(false);
     updateInvalidMacBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AppPreferencePane::OnUpdateInvalidMAC, this);
     invalidMacSizerH->Add(updateInvalidMacBtn, 0, wxALL, 0);
     invalidMacSizer->Add(invalidMacSizerH, 0, wxLEFT | wxRIGHT | wxEXPAND, 5);
@@ -275,16 +281,17 @@ void AppPreferencePane::OnUpdateReportFolder(wxFileDirPickerEvent& event)
     wxGetApp().m_pAppOptions->SetOption(wxT("ReportFolder"), event.GetPath());
 }
 
-void AppPreferencePane::OnVerifyAndUpdateMAC(wxCommandEvent& WXUNUSED(event))
+void AppPreferencePane::OnVerifyAndUpdateMAC(wxCommandEvent& event)
 {
     NetAddrTextCtrl *vendor = wxDynamicCast(FindWindow(myID_MAC_VENDOR_CODE), NetAddrTextCtrl);
     NetAddrTextCtrl *productFirst = wxDynamicCast(FindWindow(myID_MAC_PRODUCT_CODE_1ST), NetAddrTextCtrl);
     NetAddrTextCtrl *productLast = wxDynamicCast(FindWindow(myID_MAC_PRODUCT_CODE_LAST), NetAddrTextCtrl);
+    wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
     bool valid = false;
     wxString message, caption;
     int result;
 
-    wxASSERT_MSG(vendor && productFirst && productLast, wxT("Can't find class instance pointer"));
+    wxASSERT_MSG(vendor && productFirst && productLast && btn, wxT("Can't find class instance pointer"));
 
     if (productLast->IsBiggerThan(*productFirst))
         valid = true;
@@ -326,14 +333,34 @@ void AppPreferencePane::OnVerifyAndUpdateMAC(wxCommandEvent& WXUNUSED(event))
         wxGetApp().m_pAppOptions->SetOption(wxT("LastProductCode"), productLast->GetValue());
         /* also erase the current product code */
         wxGetApp().m_pAppOptions->SetOption(wxT("CurrentProductCode"), wxEmptyString);
+
+        btn->Enable(false);
     }
 }
 
-void AppPreferencePane::OnUpdateInvalidMAC(wxCommandEvent& WXUNUSED(event))
+void AppPreferencePane::OnUpdateInvalidMAC(wxCommandEvent& event)
 {
     NetAddrTextCtrl *invalid = wxDynamicCast(FindWindow(myID_MAC_INVALID), NetAddrTextCtrl);
+    wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
 
-    wxASSERT_MSG(invalid, wxT("Can't find class object instance pointer"));
+    wxASSERT_MSG(invalid && btn, wxT("Can't find class object instance pointer"));
 
     wxGetApp().m_pAppOptions->SetOption(wxT("InvalidMACAddress"), invalid->GetValue());
+    btn->Enable(false);
+}
+
+void AppPreferencePane::OnVendorOrProductMacAddressUpdated(wxCommandEvent& WXUNUSED(event))
+{
+    wxButton *btn = NULL;
+    
+    if ((btn = wxDynamicCast(FindWindow(myID_UPDATE_VENDOR_PRODUCT_CODE_BTN), wxButton)) != NULL)
+        btn->Enable();
+}
+
+void AppPreferencePane::OnInvalidMacAddressUpdated(wxCommandEvent& WXUNUSED(event))
+{
+    wxButton *btn = NULL;
+
+    if ((btn = wxDynamicCast(FindWindow(myID_UPDATE_INVALID_MAC_BTN), wxButton)) != NULL)
+        btn->Enable();
 }
