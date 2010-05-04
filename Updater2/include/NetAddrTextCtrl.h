@@ -2,6 +2,9 @@
 #define _NET_ADDR_TEXT_CTRL_H_
 
 #include <wx/wx.h>
+#include <wx/event.h>
+
+wxDECLARE_EVENT(myEVT_NETADDR_TEXTCTRL_UPDATED, wxCommandEvent);
 
 class NetAddrTextCtrl : public wxControl
 {

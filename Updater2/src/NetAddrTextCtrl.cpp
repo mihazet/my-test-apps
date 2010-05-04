@@ -4,6 +4,7 @@
 #include <cmath>
 #include "NetAddrTextCtrl.h"
 
+wxDEFINE_EVENT(myEVT_NETADDR_TEXTCTRL_UPDATED, wxCommandEvent);
 
 const int gDigitInField[NetAddrTextCtrl::NETADDR_TYPE_INVALID]      = {  3,  2,  2 };
 const int gFieldMax[NetAddrTextCtrl::NETADDR_TYPE_INVALID]          = {  4,  6,  3 };
@@ -367,6 +368,14 @@ void NetAddrTextCtrl::SetSpecificDigitValue(const int fieldIdx, const int digitI
     wxLongLong oldVal = oldFieldValue;
     wxLongLong newVal = newFieldValue;  
     _internalValue = _internalValue + ((newVal - oldVal) << shift);
+
+    /* fire updated event */
+    wxEvtHandler *handler = GetEventHandler();
+    if (handler)
+    {
+        wxCommandEvent evt(myEVT_NETADDR_TEXTCTRL_UPDATED, GetId());
+        handler->ProcessEvent(evt);
+    }
 }
 
 //
