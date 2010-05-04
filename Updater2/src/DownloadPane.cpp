@@ -362,7 +362,6 @@ DownloadPane::~DownloadPane()
 
 void DownloadPane::Init()
 {
-    _updateThreadCount = 0;
 }
 
 bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
@@ -570,6 +569,8 @@ void DownloadPane::OnSearchButtonClicked(wxCommandEvent &event)
         }
         if (btn)
             btn->Enable(false);
+
+        wxGetApp().m_SearchThreadRunning = true;
     }
 }
 
@@ -586,7 +587,7 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
         if (store && ((rb->GetValue() && !globalFile.empty()) || !rb->GetValue()))
         {
             unsigned int row, nRow = store->GetCount();
-            _updateThreadCount = 0;
+            wxGetApp().m_UpdateThreadCount = 0;
             for (row = 0; row < nRow; row++)
             {
                 wxString threadCodedWord;
@@ -624,7 +625,7 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                         && (thread->Create() == wxTHREAD_NO_ERROR)
                         && (thread->Run() == wxTHREAD_NO_ERROR))
                     {
-                        _updateThreadCount++;
+                        wxGetApp().m_UpdateThreadCount++;
                     }
                 }
             }
@@ -648,7 +649,7 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
         wxLogError(wxT("Can not find wxRadioButton instance to validate required information!"));
     }
 
-    if (_updateThreadCount)
+    if (wxGetApp().m_UpdateThreadCount)
     {
         /* Besides disable button in update ui event handler, we also disable button here
            right away to avoid this click action re-enter again */
@@ -678,7 +679,7 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
     }
 
     /* do nothing if there is update thread activity */
-    if (_updateThreadCount)
+    if (wxGetApp().m_UpdateThreadCount)
     {
         _promptForUpdateError->ShowMessage(_("System busying now! Try later..."), wxICON_EXCLAMATION);
         /* don't skip at here, so the button on infobar will not leave */
@@ -748,7 +749,7 @@ void DownloadPane::OnUpdateDownloadButton(wxUpdateUIEvent &event)
         }
     }
 
-    if ((_updateThreadCount == 0)
+    if ((wxGetApp().m_UpdateThreadCount == 0)
         && at_least_one_is_checked
         && all_files_are_ok)
         event.Enable(true);
@@ -784,6 +785,7 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
         wxLogMessage(wxT("Device search thread is completed!"));
         btn = wxDynamicCast(FindWindow(myID_DOWNLOAD_SEARCH_BTN), wxButton);
         if (btn) btn->Enable(true);
+        wxGetApp().m_SearchThreadRunning = false;
         break;
     case SEARCH_THREAD_TARGET_FOUND:
         lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
@@ -968,7 +970,7 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
             }
         }
 
-        _updateThreadCount--;
+        wxGetApp().m_UpdateThreadCount--;
         break;
 
     case UPDATE_THREAD_PROGRESS:

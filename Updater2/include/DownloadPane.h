@@ -47,7 +47,6 @@ private:
     void OnDeviceSpecificFileActivated(wxCommandEvent &event);
 
     // data member
-    int _updateThreadCount;
     wxString _preparedUpdateThreadCodedString; // used by button on the info button
     wxInfoBar *_promptForModifyMAC;
     wxInfoBar *_promptForUpdateError;

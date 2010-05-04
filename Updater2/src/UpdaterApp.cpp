@@ -57,6 +57,10 @@ void UpdaterApp::Init()
         if (!wxFileName::DirExists(defaultReportFolder))
             wxFileName::Mkdir(defaultReportFolder);
     }
+
+    /* thread management */
+    m_UpdateThreadCount = 0;
+    m_SearchThreadRunning = false;
 }
 
 bool UpdaterApp::OnInit()

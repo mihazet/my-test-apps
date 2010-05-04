@@ -34,6 +34,8 @@ public:
     wxVector<NetAdapter> m_Adapters;
     AppOptions *m_pAppOptions;
     wxAuiManager m_AuiManager;
+    int m_UpdateThreadCount;
+    bool m_SearchThreadRunning;
 
 private:
     // event handlers

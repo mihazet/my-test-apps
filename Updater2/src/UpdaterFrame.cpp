@@ -303,8 +303,17 @@ void UpdaterFrame::OnSize(wxSizeEvent &WXUNUSED(event))
     //event.Skip();
 }
 
-void UpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
+void UpdaterFrame::OnClose(wxCloseEvent &event)
 {
+    if ((wxGetApp().m_UpdateThreadCount != 0) 
+        || wxGetApp().m_SearchThreadRunning)
+    {
+        if (event.CanVeto())
+        {
+            event.Veto();
+            return;
+        }
+    }
     Destroy();
 }
 
