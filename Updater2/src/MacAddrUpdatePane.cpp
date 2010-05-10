@@ -16,10 +16,15 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
+#define CLOSE_COUNTDOWN     10
 
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
+BEGIN_EVENT_TABLE(MacAddrUpdatePane, wxPanel)
+    EVT_TIMER(wxID_ANY, MacAddrUpdatePane::OnTimer)
+END_EVENT_TABLE()
+
 MacAddrUpdatePane::MacAddrUpdatePane()
 {
     Init();
@@ -35,7 +40,12 @@ MacAddrUpdatePane::MacAddrUpdatePane(wxWindow *parent, wxWindowID id,
 
 MacAddrUpdatePane::~MacAddrUpdatePane()
 {
-
+    if (_closeSelfTimer)
+    {
+        if (_closeSelfTimer->IsRunning())
+            _closeSelfTimer->Stop();
+        delete _closeSelfTimer;
+    }
 }
 
 void MacAddrUpdatePane::Init()
@@ -45,6 +55,8 @@ void MacAddrUpdatePane::Init()
     _ip = wxEmptyString;
     _mac = wxEmptyString;
     _row = -1;
+    _closeSelfTimer = new wxTimer(this);
+    _closeTimeout = CLOSE_COUNTDOWN;
 }
 
 bool MacAddrUpdatePane::Create(wxWindow *parent, wxWindowID id,
@@ -107,6 +119,7 @@ void MacAddrUpdatePane::OnUpdateButtonClicked(wxCommandEvent& WXUNUSED(event))
     if (thread && (thread->Create() == wxTHREAD_NO_ERROR) && (thread->Run() == wxTHREAD_NO_ERROR))
         wxGetApp().m_UpdateThreadCount++;
     _multiFunctionBtn->Unbind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUpdatePane::OnUpdateButtonClicked, this);
+    Bind(wxEVT_COMMAND_THREAD, &MacAddrUpdatePane::OnThread, this, myID_UPDATE_THREAD);
 }
 
 void MacAddrUpdatePane::OnCloseBttonClicked(wxCommandEvent& WXUNUSED(event))
@@ -114,4 +127,45 @@ void MacAddrUpdatePane::OnCloseBttonClicked(wxCommandEvent& WXUNUSED(event))
     _multiFunctionBtn->Unbind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUpdatePane::OnCloseBttonClicked, this);
     wxGetApp().m_AuiManager.DetachPane(this);
     Destroy();
+}
+
+void MacAddrUpdatePane::OnThread(wxThreadEvent& event)
+{
+    UpdateThreadMessage msg = event.GetPayload<UpdateThreadMessage>();
+    wxString label;
+
+    wxASSERT_MSG((wxGetApp().m_UpdateThreadCount == 1), wxT("Update thread count should be 1 when receiving this event"));
+
+    switch (msg.type)
+    {
+    case UPDATE_THREAD_MODIFY_MAC_ADDRESS_COMPLETED:
+        /* start update button label timer and do the first re-label */
+        _closeSelfTimer->Start(1000);
+        label << _("Close") << wxT(" [") << _closeTimeout << wxT("]");
+        _multiFunctionBtn->SetLabel(label);
+        /* change button event handler and zero thread counter */
+        _multiFunctionBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUpdatePane::OnCloseBttonClicked, this);
+        wxGetApp().m_UpdateThreadCount = 0;
+        break;
+    default:
+        wxLogWarning(_("Unsupported message type (%d) received!"), msg.type);
+        break;
+    }
+}
+
+void MacAddrUpdatePane::OnTimer(wxTimerEvent& WXUNUSED(event))
+{
+    wxString label;
+
+    if (--_closeTimeout >= 0)
+    {
+        label << _("Close") << wxT(" [") << _closeTimeout << wxT("]");
+        _multiFunctionBtn->SetLabel(label);
+    }
+    else
+    {
+        wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, _multiFunctionBtn->GetId());
+        evt.SetEventObject(_multiFunctionBtn);
+        _multiFunctionBtn->GetEventHandler()->ProcessEvent(evt);
+    }
 }

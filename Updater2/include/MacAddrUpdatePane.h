@@ -2,6 +2,7 @@
 #define _MAC_ADDR_UPDATE_PANE_H_
 
 #include <wx/wx.h>
+#include <wx/timer.h>
 
 class MacAddrUpdatePane : public wxPanel
 {
@@ -34,6 +35,8 @@ private:
     // event handlers
     void OnUpdateButtonClicked(wxCommandEvent& event);
     void OnCloseBttonClicked(wxCommandEvent& event);
+    void OnThread(wxThreadEvent& event);
+    void OnTimer(wxTimerEvent& event);
     
     // private data members
     wxString _codeString;
@@ -42,6 +45,10 @@ private:
     wxString _mac;
     long _row;
     wxButton *_multiFunctionBtn;
+    wxTimer *_closeSelfTimer;
+    long _closeTimeout;
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif /* _MAC_ADDR_UPDATE_PANE_H_ */
