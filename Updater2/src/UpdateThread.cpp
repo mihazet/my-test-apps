@@ -141,7 +141,6 @@ wxThread::ExitCode UpdateThread::Entry()
     // [Device -> Updater] change the first byte 54 to 74.
     //
 
-    wxThreadEvent event(wxEVT_COMMAND_THREAD, myID_UPDATE_THREAD);
     UpdateThreadMessage msg;
     wxIPV4address remote, local;
     int error_code = UTERROR_NOERROR;

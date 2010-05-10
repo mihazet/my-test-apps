@@ -148,7 +148,7 @@ void MacAddrUpdatePane::OnThread(wxThreadEvent& event)
         wxGetApp().m_UpdateThreadCount = 0;
         break;
     default:
-        wxLogWarning(_("Unsupported message type (%d) received!"), msg.type);
+        wxLogWarning(wxT("Unsupported message type (%d) received!"), msg.type);
         break;
     }
 }

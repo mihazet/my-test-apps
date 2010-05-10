@@ -880,7 +880,6 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
     {
     case UPDATE_THREAD_DOWNLOAD_FIRMWARE_COMPLETED:
     case UPDATE_THREAD_DOWNLOAD_BOOTLOADER_COMPLETED:
-    case UPDATE_THREAD_MODIFY_MAC_ADDRESS_COMPLETED:
     case UPDATE_THREAD_ERASE_MANAGEMENT_DATA_COMPLETED:
     case UPDATE_THREAD_DO_NOTHING_COMPLETED:
 
@@ -1018,6 +1017,7 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
         }
         break;
     default:
+        wxLogWarning(wxT("Unsupported message type (%d) received!"), msg.type);
         break;
     }
 }
