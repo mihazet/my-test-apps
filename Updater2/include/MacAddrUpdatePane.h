@@ -44,6 +44,10 @@ private:
     wxString _ip;
     wxString _mac;
     long _row;
+    wxStaticBitmap *_resultBitmap;
+    const static wxBitmap _resultUnknown;
+    const static wxBitmap _resultPass;
+    const static wxBitmap _resultFail;
     wxButton *_multiFunctionBtn;
     wxTimer *_closeSelfTimer;
     long _closeTimeout;

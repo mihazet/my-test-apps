@@ -12,11 +12,17 @@
 // ------------------------------------------------------------------------
 // Resources
 // ------------------------------------------------------------------------
+#include "img/result-unknown.xpm"
+#include "img/result-pass.xpm"
+#include "img/result-fail.xpm"
 
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
 #define CLOSE_COUNTDOWN     10
+const wxBitmap MacAddrUpdatePane::_resultUnknown =  wxBitmap(result_unknown_xpm);
+const wxBitmap MacAddrUpdatePane::_resultPass = wxBitmap(result_pass_xpm);
+const wxBitmap MacAddrUpdatePane::_resultFail = wxBitmap(result_fail_xpm);
 
 // ------------------------------------------------------------------------
 // Implementation
@@ -55,6 +61,8 @@ void MacAddrUpdatePane::Init()
     _ip = wxEmptyString;
     _mac = wxEmptyString;
     _row = -1;
+    _resultBitmap = NULL;
+    _multiFunctionBtn = NULL;
     _closeSelfTimer = new wxTimer(this);
     _closeTimeout = CLOSE_COUNTDOWN;
 }
@@ -102,7 +110,8 @@ void MacAddrUpdatePane::CreateControls()
     paneSizer->Add(addr, 0, wxALL | wxALIGN_CENTER, 10);
     paneSizer->Add(new wxStaticText(this, wxID_STATIC, _("Recommend the use of automatically generated MAC address.")), 0, wxBOTTOM | wxLEFT | wxRIGHT, 15);
 
-    paneSizer->AddStretchSpacer();
+    _resultBitmap = new wxStaticBitmap(this, wxID_ANY, _resultUnknown);
+    paneSizer->Add(_resultBitmap, 0, wxALL | wxALIGN_CENTER , 5);
 
     _multiFunctionBtn = new wxButton(this, wxID_ANY, _("Update"));
     _multiFunctionBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUpdatePane::OnUpdateButtonClicked, this);
@@ -132,20 +141,79 @@ void MacAddrUpdatePane::OnCloseBttonClicked(wxCommandEvent& WXUNUSED(event))
 void MacAddrUpdatePane::OnThread(wxThreadEvent& event)
 {
     UpdateThreadMessage msg = event.GetPayload<UpdateThreadMessage>();
-    wxString label;
+    wxString label, token;
+    wxStringTokenizer tokenzr;
+    int loop = 0;
+    long longValue = 0;
+    bool invalidResponse = false, pass = false;
 
     wxASSERT_MSG((wxGetApp().m_UpdateThreadCount == 1), wxT("Update thread count should be 1 when receiving this event"));
 
     switch (msg.type)
     {
     case UPDATE_THREAD_MODIFY_MAC_ADDRESS_COMPLETED:
-        /* start update button label timer and do the first re-label */
-        _closeSelfTimer->Start(1000);
-        label << _("Close") << wxT(" [") << _closeTimeout << wxT("]");
-        _multiFunctionBtn->SetLabel(label);
-        /* change button event handler and zero thread counter */
-        _multiFunctionBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUpdatePane::OnCloseBttonClicked, this);
-        wxGetApp().m_UpdateThreadCount = 0;
+
+        tokenzr.SetString(msg.payload, UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD);
+        while (tokenzr.HasMoreTokens())
+        {
+            token = tokenzr.GetNextToken();
+            switch (loop++)
+            {
+            case 0: // row
+                token.ToLong(&longValue);
+                if (_row != longValue)
+                    invalidResponse = true;
+                break;
+            case 1: // name
+                if (_name != token)
+                    invalidResponse = true;
+                break;
+            case 2: // ip
+                if (_ip != token)
+                    invalidResponse = true;
+                break;
+            case 3: // mac
+                break;
+            case 4: // result
+                token.ToLong(&longValue);
+                if (longValue == UTERROR_NOERROR)
+                    pass = true;
+                break;
+            default:
+                break;
+            }
+
+            if (invalidResponse)
+                break;
+        }
+
+        if (!invalidResponse)
+        {
+            if (pass)
+            {
+                /* update result bitmap */
+                _resultBitmap->SetBitmap(_resultPass);
+                /* start update button label timer and do the first re-label */
+                _closeSelfTimer->Start(1000);
+                label << _("Close") << wxT(" [") << _closeTimeout << wxT("]");
+
+                // TODO: update mac address report file
+            }
+            else
+            {
+                /* update result bitmap */
+                _resultBitmap->SetBitmap(_resultFail);
+                /* update button label */
+                label << _("Close");
+            }
+
+            /* udpate the button label */
+            _multiFunctionBtn->SetLabel(label);
+
+            /* change button event handler and zero thread counter */
+            _multiFunctionBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUpdatePane::OnCloseBttonClicked, this);
+            wxGetApp().m_UpdateThreadCount = 0;            
+        }
         break;
     default:
         wxLogWarning(wxT("Unsupported message type (%d) received!"), msg.type);
