@@ -633,11 +633,18 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
 
                 /* remove old result if it exists */
                 store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE_RESULT);
-                wxString oldResult = data.GetString();
-                if (!oldResult.empty())
+                if (!data.GetString().empty())
                 {
                     data = wxEmptyString;
                     store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE_RESULT);
+                    store->RowChanged(row);
+                }
+                /* remove old progress if it exists */
+                store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE_PROGRESS);
+                if (data.GetLong() != 0)
+                {
+                    data = (long)0;
+                    store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE_PROGRESS);
                     store->RowChanged(row);
                 }
             }
