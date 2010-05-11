@@ -134,15 +134,16 @@ void UpdaterFrame::CreateControls()
     wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S]"));
     _auiManager->AddPane(dbgWin, wxAuiPaneInfo().Name(PANE_NAME_LOG).
         Caption(_("Log Window")).Bottom().CloseButton(true).
-        DestroyOnClose(false).MaximizeButton(false).MinSize(300, 150));
+        DestroyOnClose(false).MaximizeButton(false).MinSize(300, 150).
+        Hide());
 
     _auiManager->AddPane(new DownloadPane(this), wxAuiPaneInfo().
-        Name(PANE_NAME_IMAGE_UPDATE).Caption(_("Device Download Window")).Center().
+        Name(PANE_NAME_IMAGE_UPDATE).CaptionVisible(false).Center().
         CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
         MinSize(300, -1));
 
     _auiManager->AddPane(new MacAddrUsagePane(this), wxAuiPaneInfo().
-        Name(PANE_NAME_MAC_USAGE).Caption(_("MAC Address Usage Window")).Center().
+        Name(PANE_NAME_MAC_USAGE).CaptionVisible(false).Center().
         CloseButton(false).DestroyOnClose(false).MaximizeButton(true).
         MinSize(300, 300).Hide());
 
