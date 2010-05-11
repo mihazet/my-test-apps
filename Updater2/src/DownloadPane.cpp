@@ -584,7 +584,9 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
     {
         wxString globalFile = filePicker->GetPath();
         wxDataViewListStore *store = lc->GetStore();
-        if (store && ((rb->GetValue() && !globalFile.empty()) || !rb->GetValue()))
+        bool useGlobalImage = rb->GetValue();
+
+        if (store && ((useGlobalImage && !globalFile.empty()) || !useGlobalImage))
         {
             unsigned int row, nRow = store->GetCount();
             wxGetApp().m_UpdateThreadCount = 0;
@@ -603,7 +605,7 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                     wxString mac = data.GetString();
                     store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_SPECIFIC_IMAGE_FILE_PATH);
                     wxString specificFile = data.GetString();
-                    if (!rb->GetValue() && specificFile.empty())
+                    if (!useGlobalImage && specificFile.empty())
                     {
                         wxString noSpecificFileMsg;
                         noSpecificFileMsg << wxT("Skip to update device") << wxT(" ") << name << wxT(", because of lack of device-specific image file path.");
@@ -620,7 +622,7 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                         << mac << UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD
                         << wxGetApp().m_pAppOptions->GetOption(wxT("ActivedInterface"));
 
-                    UpdateThread *thread = new UpdateThread(this, threadCodedWord, rb->GetValue() ? globalFile : specificFile);
+                    UpdateThread *thread = new UpdateThread(this, threadCodedWord, useGlobalImage ? globalFile : specificFile);
                     if (thread
                         && (thread->Create() == wxTHREAD_NO_ERROR)
                         && (thread->Run() == wxTHREAD_NO_ERROR))
@@ -628,15 +630,25 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                         wxGetApp().m_UpdateThreadCount++;
                     }
                 }
+
+                /* remove old result if it exists */
+                store->GetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE_RESULT);
+                wxString oldResult = data.GetString();
+                if (!oldResult.empty())
+                {
+                    data = wxEmptyString;
+                    store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE_RESULT);
+                    store->RowChanged(row);
+                }
             }
             lc->UnselectAll();
         }
         else if (!store)
             wxLogError(wxT("Can not find store in wxDataViewListCtrl instance to validate required information!"));
-        else if (rb->GetValue() && globalFile.empty())
+        else if (useGlobalImage && globalFile.empty())
         {
             wxString noGlobalFileMsg;
-            noGlobalFileMsg << wxT("Update procedure is skipped because of lack of global image file path.");
+            noGlobalFileMsg << _("Update procedure is skipped because of lack of global image file path.");
             _promptForUpdateError->ShowMessage(noGlobalFileMsg, wxICON_INFORMATION);
         }
     }
