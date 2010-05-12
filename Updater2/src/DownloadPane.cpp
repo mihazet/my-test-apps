@@ -332,6 +332,7 @@ void DeviceList::OnItemValueChanged(wxDataViewEvent &WXUNUSED(event))
 BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_BUTTON(myID_DOWNLOAD_SEARCH_BTN, DownloadPane::OnSearchButtonClicked)
     EVT_BUTTON(myID_DOWNLOAD_SELECTED_BTN, DownloadPane::OnDownloadButtonClicked)
+    EVT_UPDATE_UI(myID_DOWNLOAD_SEARCH_BTN, DownloadPane::OnUpdateSearchButton)
     EVT_UPDATE_UI(myID_DOWNLOAD_SELECTED_BTN, DownloadPane::OnUpdateDownloadButton)
     EVT_UPDATE_UI(myID_DOWNLOAD_GLOBAL_FILE, DownloadPane::OnUpdateGlobalFilePath)
     EVT_THREAD(myID_SEARCH_THREAD, DownloadPane::OnSearchThread)
@@ -560,7 +561,7 @@ void DownloadPane::OnSearchButtonClicked(wxCommandEvent &event)
     {
         wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_TARGET_LIST), wxDataViewListCtrl);
         wxDataViewListStore *model;
-        wxButton *btn = wxDynamicCast(FindWindow(event.GetId()), wxButton);
+        wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
 
         if (lc)
         {
@@ -718,6 +719,11 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
     event.Skip();
 }
 
+void DownloadPane::OnUpdateSearchButton(wxUpdateUIEvent &event)
+{
+    event.Enable((wxGetApp().m_UpdateThreadCount == 0) && (wxGetApp().m_SearchThreadRunning == false));
+}
+
 void DownloadPane::OnUpdateDownloadButton(wxUpdateUIEvent &event)
 {
     wxRadioButton *rb = wxDynamicCast(FindWindow(myID_DOWNLOAD_GLOBAL_RB), wxRadioButton);
@@ -784,7 +790,6 @@ void DownloadPane::OnUpdateGlobalFilePath(wxUpdateUIEvent &event)
 void DownloadPane::OnSearchThread(wxThreadEvent &event)
 {
     SearchThreadMessage msg = event.GetPayload<SearchThreadMessage>();
-    wxButton *btn;
     wxDataViewListStore *model;
     wxDataViewListCtrl *lc;
     wxVector<wxVariant> data;
@@ -798,8 +803,6 @@ void DownloadPane::OnSearchThread(wxThreadEvent &event)
     {
     case SEARCH_THREAD_COMPLETED:
         wxLogMessage(wxT("Device search thread is completed!"));
-        btn = wxDynamicCast(FindWindow(myID_DOWNLOAD_SEARCH_BTN), wxButton);
-        if (btn) btn->Enable(true);
         wxGetApp().m_SearchThreadRunning = false;
         break;
     case SEARCH_THREAD_TARGET_FOUND:
