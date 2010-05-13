@@ -706,6 +706,10 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
         return;
     }
 
+    // TODO: check if vendor and product codes setup completed
+
+    // TODO: check if we are running out of product code
+
     /* invoke MacAddrUpdatePane */
     wxWindow *pane = new MacAddrUpdatePane(GetParent(), wxID_ANY, _preparedUpdateThreadCodedString);
     wxPoint panePos;
