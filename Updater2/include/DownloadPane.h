@@ -50,7 +50,7 @@ private:
     // data member
     wxString _preparedUpdateThreadCodedString; // used by button on the info button
     wxInfoBar *_promptForModifyMAC;
-    wxInfoBar *_promptForUpdateError;
+    wxInfoBar *_promptForNotification;
 
     DECLARE_EVENT_TABLE()
 };

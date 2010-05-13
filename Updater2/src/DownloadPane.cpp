@@ -385,8 +385,8 @@ void DownloadPane::CreateControls()
     _promptForModifyMAC->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &DownloadPane::OnModifyMACButtonClicked, this, myID_MODIFY_MAC_BTN);
     _promptForModifyMAC->AddButton(wxID_ANY, _("Ignore"));
     _promptForModifyMAC->SetFont(GetFont().Bold().Larger());
-    _promptForUpdateError = new wxInfoBar(this);
-    _promptForUpdateError->SetFont(GetFont().Bold().Larger());
+    _promptForNotification = new wxInfoBar(this);
+    _promptForNotification->SetFont(GetFont().Bold().Larger());
 
     wxStaticBoxSizer *listBoxSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Device list"));
 
@@ -432,7 +432,7 @@ void DownloadPane::CreateControls()
 
     wxBoxSizer *bgSizer = new wxBoxSizer(wxVERTICAL);
     bgSizer->Add(_promptForModifyMAC, wxSizerFlags().Expand());
-    bgSizer->Add(_promptForUpdateError, wxSizerFlags().Expand());
+    bgSizer->Add(_promptForNotification, wxSizerFlags().Expand());
     bgSizer->Add(listBoxSizer, 1, wxALL | wxEXPAND, 5);
     bgSizer->Add(operationBoxSizer, 0, wxALL | wxEXPAND, 5);
 
@@ -610,7 +610,7 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
                     {
                         wxString noSpecificFileMsg;
                         noSpecificFileMsg << wxT("Skip to update device") << wxT(" ") << name << wxT(", because of lack of device-specific image file path.");
-                        _promptForUpdateError->ShowMessage(noSpecificFileMsg, wxICON_INFORMATION);
+                        _promptForNotification->ShowMessage(noSpecificFileMsg, wxICON_INFORMATION);
                         data = false;
                         store->SetValueByRow(data, row, DeviceList::COLUMN_DEVICE_UPDATE);
                         continue;
@@ -657,7 +657,7 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
         {
             wxString noGlobalFileMsg;
             noGlobalFileMsg << _("Update procedure is skipped because of lack of global image file path.");
-            _promptForUpdateError->ShowMessage(noGlobalFileMsg, wxICON_INFORMATION);
+            _promptForNotification->ShowMessage(noGlobalFileMsg, wxICON_INFORMATION);
         }
     }
     else if (!lc)
@@ -701,7 +701,7 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
     /* do nothing if there is update thread activity */
     if (wxGetApp().m_UpdateThreadCount)
     {
-        _promptForUpdateError->ShowMessage(_("System busying now! Try later..."), wxICON_EXCLAMATION);
+        _promptForNotification->ShowMessage(_("System busying now! Try later..."), wxICON_EXCLAMATION);
         /* don't skip at here, so the button on infobar will not leave */
         return;
     }
@@ -960,7 +960,7 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
                     msg_for_update_error << _("Image");
                 msg_for_update_error << wxT("! ") << _("Reason") << wxT(" = ")
                     << ExplainUpdateThreadErrorCode(error) << wxT("!");
-                _promptForUpdateError->ShowMessage(msg_for_update_error, wxICON_ERROR);
+                _promptForNotification->ShowMessage(msg_for_update_error, wxICON_ERROR);
             }
         }
 
