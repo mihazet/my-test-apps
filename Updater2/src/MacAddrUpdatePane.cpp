@@ -104,7 +104,11 @@ void MacAddrUpdatePane::CreateControls()
     wxString addrString = wxGetApp().m_pAppOptions->GetOption(wxT("VendorCode"));
     wxString productString = wxGetApp().m_pAppOptions->GetOption(wxT("CurrentProductCode"));
     if (productString.empty())
-        addrString << wxT(":") << wxGetApp().m_pAppOptions->GetOption(wxT("FirstProductCode"));
+    {
+        wxString firstAddr = wxGetApp().m_pAppOptions->GetOption(wxT("FirstProductCode"));
+        wxGetApp().m_pAppOptions->SetOption(wxT("CurrentProductCode"), firstAddr);
+        addrString << wxT(":") << firstAddr;
+    }
     else
         addrString << wxT(":") << productString;
     NetAddrTextCtrl *addr = new NetAddrTextCtrl(this, myID_MAC_UPDATE_NETADDR_TEXTCTRL, NetAddrTextCtrl::NETADDR_TYPE_MAC, addrString);
