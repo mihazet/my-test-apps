@@ -683,7 +683,7 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
 {
     wxStringTokenizer tokenzr(_preparedUpdateThreadCodedString, UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD);
     wxString name, ip, mac, token;
-    long row = -1, loop = 0;
+    long row = -1, loop = 0, longTemp;
 
     while (tokenzr.HasMoreTokens())
     {
@@ -701,14 +701,61 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
     /* do nothing if there is update thread activity */
     if (wxGetApp().m_UpdateThreadCount)
     {
-        _promptForNotification->ShowMessage(_("System busying now! Try later..."), wxICON_EXCLAMATION);
+        _promptForNotification->ShowMessage(_("There is another update procedure running! Please wait it completed and try later..."), wxICON_EXCLAMATION);
         /* don't skip at here, so the button on infobar will not leave */
         return;
     }
 
-    // TODO: check if vendor and product codes setup completed
+    /* check if vendor and product codes setup completed */
+    wxString vendor, firstProduct, lastProduct, currentProduct;
+    vendor = wxGetApp().m_pAppOptions->GetOption(wxT("VendorCode"));
+    firstProduct = wxGetApp().m_pAppOptions->GetOption(wxT("FirstProductCode"));
+    lastProduct = wxGetApp().m_pAppOptions->GetOption(wxT("LastProductCode"));
+    currentProduct = wxGetApp().m_pAppOptions->GetOption(wxT("CurrentProductCode"));
+    if (vendor.empty() || firstProduct.empty() || lastProduct.empty())
+        _promptForNotification->ShowMessage(_("MAC address auto-generation is disabled before you configure them done in the preference window!"), wxICON_EXCLAMATION);
+    else if (currentProduct.empty())
+        wxGetApp().m_pAppOptions->SetOption(wxT("CurrentProductCode"), firstProduct);
 
-    // TODO: check if we are running out of product code
+    /* check if we are running out of product code */
+    if (!vendor.empty() && !firstProduct.empty() && !lastProduct.empty() && !currentProduct.empty())
+    {
+        long lastValue = 0, currentValue = 0;
+        wxStringTokenizer tokenzr;
+        wxString token;
+
+        tokenzr.SetString(lastProduct, wxT(":"));
+        loop = 0;
+        while (tokenzr.HasMoreTokens())
+        {
+            token = tokenzr.GetNextToken();
+            switch (loop++)
+            {
+            case 0: token.ToLong(&longTemp, 16); lastValue += (longTemp << 16); break;
+            case 1: token.ToLong(&longTemp, 16); lastValue += (longTemp << 8); break;
+            case 2: token.ToLong(&longTemp, 16); lastValue += longTemp; break;
+            }
+        }
+
+        tokenzr.SetString(currentProduct, wxT(":"));
+        loop = 0;
+        while (tokenzr.HasMoreTokens())
+        {
+            token = tokenzr.GetNextToken();
+            switch (loop++)
+            {
+            case 0: token.ToLong(&longTemp, 16); currentValue += (longTemp << 16); break;
+            case 1: token.ToLong(&longTemp, 16); currentValue += (longTemp << 8); break;
+            case 2: token.ToLong(&longTemp, 16); currentValue += longTemp; break;
+            }
+        }
+
+        if (currentValue >= lastValue)
+        {
+            _promptForNotification->ShowMessage(_("The MAC address pool had run out! Please re-configure."), wxICON_ERROR);
+            return;
+        }
+    }
 
     /* invoke MacAddrUpdatePane */
     wxWindow *pane = new MacAddrUpdatePane(GetParent(), wxID_ANY, _preparedUpdateThreadCodedString);
