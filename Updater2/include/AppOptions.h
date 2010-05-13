@@ -11,6 +11,7 @@ public:
     ~AppOptions();
 
     bool SetOption(const wxString& option, const wxString& value);
+    bool SetOption(const wxString& option, const long value);
     bool GetOption(const wxString& option, wxString& value);
     wxString GetOption(const wxString& option);
     long GetOption(const wxString& option, long *value);

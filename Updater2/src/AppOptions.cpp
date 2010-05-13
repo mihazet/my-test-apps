@@ -83,6 +83,11 @@ bool AppOptions::SetOption(const wxString& option, const wxString& value)
     return result;
 }
 
+bool AppOptions::SetOption(const wxString& option, const long value)
+{
+    return SetOption(option, wxString::Format(wxT("%ld"), value));
+}
+
 bool AppOptions::GetOption(const wxString& option, wxString& value)
 {
     wxSQLite3ResultSet set;
