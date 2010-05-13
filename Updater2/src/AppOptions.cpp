@@ -110,3 +110,14 @@ wxString AppOptions::GetOption(const wxString& option)
     else
         return wxEmptyString;
 }
+
+long AppOptions::GetOption(const wxString& option, long *value)
+{
+    long result = 0;
+    
+    GetOption(option).ToLong(&result);
+    if (value)
+        *value = result;
+
+    return result;
+}

@@ -13,6 +13,7 @@ public:
     bool SetOption(const wxString& option, const wxString& value);
     bool GetOption(const wxString& option, wxString& value);
     wxString GetOption(const wxString& option);
+    long GetOption(const wxString& option, long *value);
 
 private:
     void Init();
