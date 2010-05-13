@@ -159,8 +159,10 @@ void MacAddrUpdatePane::CloseReportDatabase(wxSQLite3Database *db)
 
 wxSQLite3Database *MacAddrUpdatePane::OpenReportDatabase(int reportRotateType)
 {
-    wxString sql, dbPath;
+    wxString sqlUpdate, sqlQuery, dbPath, tempPath;
     wxSQLite3Database *db = NULL;
+    long limit, current;
+    int rowCount = 0;
 
     /* determinate the db file path */
     dbPath = wxGetApp().m_pAppOptions->GetOption(wxT("ReportFolder"))
@@ -185,9 +187,47 @@ wxSQLite3Database *MacAddrUpdatePane::OpenReportDatabase(int reportRotateType)
             wxDateTime::Now().GetWeekOfYear());
         break;
     case 4: // limit
-        dbPath << wxString::Format(wxT("report-L%ld.db"),
-            wxGetApp().m_pAppOptions->GetOption(wxT("ReportCurrent"), NULL));
-        // TODO: check if limit reached. If reached, update ReportCurrent and change dbPath
+        tempPath = dbPath;
+        current = wxGetApp().m_pAppOptions->GetOption(wxT("ReportCurrent"), NULL);
+        tempPath << wxString::Format(wxT("report-L%ld.db"), current);
+
+        // check if limit reached. If reached, update ReportCurrent and change dbPath
+        limit = wxGetApp().m_pAppOptions->GetOption(wxT("ReportEntriesLimit"), NULL);
+        if (wxFileName::FileExists(tempPath))
+        {
+            if (NULL != (db = new wxSQLite3Database()))
+            {
+                db->Open(tempPath);
+                if (db->IsOpen())
+                {
+                    sqlQuery << wxT("SELECT COUNT(*) FROM ReportTable");
+                    wxSQLite3ResultSet set = db->ExecuteQuery(sqlQuery);
+                    if (set.NextRow())
+                        rowCount = set.GetInt(0);
+                    set.Finalize();
+
+                    wxLogMessage(wxT("ROW COUNT = %d"), rowCount);
+
+                    if (rowCount >= limit)
+                    {
+                        current++;
+                        wxGetApp().m_pAppOptions->SetOption(wxT("ReportCurrent"), current);
+                        tempPath = dbPath;
+                        tempPath << wxString::Format(wxT("report-L%ld.db"), current);
+                    }
+
+                    dbPath = tempPath;
+
+                    db->Close();
+                    delete db;
+                }
+            }
+        }
+        else
+        {
+            /* file doesn't exist, we can use it directly */
+            dbPath = tempPath;
+        }
         break;
     }
 
@@ -197,7 +237,7 @@ wxSQLite3Database *MacAddrUpdatePane::OpenReportDatabase(int reportRotateType)
         db->Open(dbPath);
         if (db->IsOpen())
         {
-            sql << wxT("CREATE TABLE IF NOT EXISTS ReportTable (")
+            sqlUpdate << wxT("CREATE TABLE IF NOT EXISTS ReportTable (")
                 << wxT("Id INTEGER PRIMARY KEY")
                 << wxT(", ") << wxT("Date TEXT")
                 << wxT(", ") << wxT("Time TEXT")
@@ -206,7 +246,7 @@ wxSQLite3Database *MacAddrUpdatePane::OpenReportDatabase(int reportRotateType)
                 << wxT(", ") << wxT("NewMACAddress TEXT")
                 << wxT(", ") << wxT("Operator TEXT")
                 << wxT(")");
-            db->ExecuteUpdate(sql);
+            db->ExecuteUpdate(sqlUpdate);
         }
     }
 
