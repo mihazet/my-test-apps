@@ -3,6 +3,7 @@
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
 #include <wx/tokenzr.h>
+#include <wx/filename.h>
 #include "UpdaterApp.h"
 #include "UpdateThread.h"
 #include "NetAddrTextCtrl.h"
@@ -120,6 +121,98 @@ void MacAddrUpdatePane::CreateControls()
     SetSizerAndFit(paneSizer);
 }
 
+void MacAddrUpdatePane::UpdateReportFile(const wxString& macAddr)
+{
+    wxSQLite3Database *db = NULL;
+    wxString sql;
+    
+    db = OpenReportDatabase((int)wxGetApp().m_pAppOptions->GetOption(wxT("ReportRotate"), NULL));
+
+    if (db)
+    {
+        sql << wxT("INSERT INTO ReportTable (Date, Time, BoardName, OldMACAddress, NewMACAddress, Operator) ")
+            << wxT("VALUES ('") 
+            << wxDateTime::Now().FormatISODate() << wxT("', '")
+            << wxDateTime::Now().FormatISOTime() << wxT("', '")
+            << _name << wxT("', '")
+            << _mac << wxT("', '")
+            << macAddr << wxT("', '")
+            << wxT("yh.yang@delta.com.tw")
+            << wxT("')");
+
+        db->ExecuteUpdate(sql);
+    }
+
+    CloseReportDatabase(db);
+}
+
+
+void MacAddrUpdatePane::CloseReportDatabase(wxSQLite3Database *db)
+{
+    if (db)
+    {
+        if (db->IsOpen())
+            db->Close();
+        delete db;
+    }
+}
+
+wxSQLite3Database *MacAddrUpdatePane::OpenReportDatabase(int reportRotateType)
+{
+    wxString sql, dbPath;
+    wxSQLite3Database *db = NULL;
+
+    /* determinate the db file path */
+    dbPath = wxGetApp().m_pAppOptions->GetOption(wxT("ReportFolder"))
+        + wxFileName::GetPathSeparator();
+    switch (reportRotateType)
+    {
+    case 0: // never
+        dbPath << wxT("report.db");
+        break;
+    case 1: // year
+        dbPath << wxString::Format(wxT("report-%d.db"),
+            wxDateTime::Now().GetYear());
+        break;
+    case 2: // month
+        dbPath << wxString::Format(wxT("report-%d-%d.db"),
+            wxDateTime::Now().GetYear(),
+            wxDateTime::Now().GetMonth() + 1);
+        break;
+    case 3: // week
+        dbPath << wxString::Format(wxT("report-%dW%d.db"),
+            wxDateTime::Now().GetYear(),
+            wxDateTime::Now().GetWeekOfYear());
+        break;
+    case 4: // limit
+        dbPath << wxString::Format(wxT("report-L%ld.db"),
+            wxGetApp().m_pAppOptions->GetOption(wxT("ReportCurrent"), NULL));
+        // TODO: check if limit reached. If reached, update ReportCurrent and change dbPath
+        break;
+    }
+
+    /* open and check db file */
+    if (NULL != (db = new wxSQLite3Database()))
+    {
+        db->Open(dbPath);
+        if (db->IsOpen())
+        {
+            sql << wxT("CREATE TABLE IF NOT EXISTS ReportTable (")
+                << wxT("Id INTEGER PRIMARY KEY")
+                << wxT(", ") << wxT("Date TEXT")
+                << wxT(", ") << wxT("Time TEXT")
+                << wxT(", ") << wxT("BoardName TEXT")
+                << wxT(", ") << wxT("OldMACAddress TEXT")
+                << wxT(", ") << wxT("NewMACAddress TEXT")
+                << wxT(", ") << wxT("Operator TEXT")
+                << wxT(")");
+            db->ExecuteUpdate(sql);
+        }
+    }
+
+    return db;
+}
+
 // event handlers
 void MacAddrUpdatePane::OnUpdateButtonClicked(wxCommandEvent& WXUNUSED(event))
 {   
@@ -191,13 +284,18 @@ void MacAddrUpdatePane::OnThread(wxThreadEvent& event)
         {
             if (pass)
             {
+                /* add new record into report file */
+                NetAddrTextCtrl *addr = wxDynamicCast(FindWindow(myID_MAC_UPDATE_NETADDR_TEXTCTRL), NetAddrTextCtrl);
+                UpdateReportFile(addr->GetValue());
+
+                // TODO: if using generated mac, update the mac for next one generated.
+
                 /* update result bitmap */
                 _resultBitmap->SetBitmap(_resultPass);
+
                 /* start update button label timer and do the first re-label */
                 _closeSelfTimer->Start(1000);
-                label << _("Close") << wxT(" [") << _closeTimeout << wxT("]");
-
-                // TODO: update mac address report file
+                label << _("Close") << wxT(" [") << _closeTimeout << wxT("]");                
             }
             else
             {

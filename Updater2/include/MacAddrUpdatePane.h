@@ -3,6 +3,7 @@
 
 #include <wx/wx.h>
 #include <wx/timer.h>
+#include <wx/wxsqlite3.h>
 
 class MacAddrUpdatePane : public wxPanel
 {
@@ -31,6 +32,9 @@ private:
     // helper methods
     void Init();
     void CreateControls();
+    void UpdateReportFile(const wxString& macAddr);
+    wxSQLite3Database *OpenReportDatabase(int reportRotateType);
+    void CloseReportDatabase(wxSQLite3Database *db);
 
     // event handlers
     void OnUpdateButtonClicked(wxCommandEvent& event);
