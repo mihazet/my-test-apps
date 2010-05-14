@@ -338,3 +338,23 @@ wxString UpdaterApp::CalculateSubnetBroadcastAddress(wxString ipAddr, wxString n
         broadcast[0], broadcast[1], broadcast[2], broadcast[3]);
 }
 
+long UpdaterApp::HalfMAC2Long(const wxString &halfMAC)
+{
+    long longTemp = 0, loop = 0, longValue = 0;
+    wxStringTokenizer tokenzr(halfMAC, wxT(":-"));
+    wxString token;
+
+    while (tokenzr.HasMoreTokens())
+    {
+        token = tokenzr.GetNextToken();
+        switch (loop++)
+        {
+        case 0: token.ToLong(&longTemp, 16); longValue += (longTemp << 16); break;
+        case 1: token.ToLong(&longTemp, 16); longValue += (longTemp << 8); break;
+        case 2: token.ToLong(&longTemp, 16); longValue += longTemp; break;
+        }
+    }
+
+    return longValue;
+}
+

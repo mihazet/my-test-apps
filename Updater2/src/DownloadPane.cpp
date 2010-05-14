@@ -529,26 +529,6 @@ wxString DownloadPane::ExplainUpdateThreadErrorCode(const int error)
     return msg;
 }
 
-long DownloadPane::HalfMAC2Long(const wxString &halfMAC)
-{
-    long longTemp = 0, loop = 0, longValue = 0;
-    wxStringTokenizer tokenzr(halfMAC, wxT(":-"));
-    wxString token;
-
-    while (tokenzr.HasMoreTokens())
-    {
-        token = tokenzr.GetNextToken();
-        switch (loop++)
-        {
-        case 0: token.ToLong(&longTemp, 16); longValue += (longTemp << 16); break;
-        case 1: token.ToLong(&longTemp, 16); longValue += (longTemp << 8); break;
-        case 2: token.ToLong(&longTemp, 16); longValue += longTemp; break;
-        }
-    }
-
-    return longValue;
-}
-
 //
 // event handlers
 //
@@ -729,8 +709,8 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
         wxGetApp().m_pAppOptions->SetOption(wxT("CurrentProductCode"), firstProduct);
     else
     {
-        lastValue = HalfMAC2Long(lastProduct);
-        currentValue = HalfMAC2Long(currentProduct);
+        lastValue = wxGetApp().HalfMAC2Long(lastProduct);
+        currentValue = wxGetApp().HalfMAC2Long(currentProduct);
 
         if (currentValue >= lastValue)
         {

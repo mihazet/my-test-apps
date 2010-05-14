@@ -30,6 +30,7 @@ public:
     void Init();
     virtual bool OnInit();
     virtual int OnExit();
+    long HalfMAC2Long(const wxString& halfMAC);
 
     wxVector<NetAdapter> m_Adapters;
     AppOptions *m_pAppOptions;
