@@ -342,7 +342,26 @@ void MacAddrUpdatePane::OnThread(wxThreadEvent& event)
                 NetAddrTextCtrl *addr = wxDynamicCast(FindWindow(myID_MAC_UPDATE_NETADDR_TEXTCTRL), NetAddrTextCtrl);
                 UpdateReportFile(addr->GetValue());
 
-                // TODO: if using generated mac, update the mac for next one generated.
+                /* check if using generated mac, update the mac for next one generated */
+                _vendor = wxGetApp().m_pAppOptions->GetOption(wxT("VendorCode"));
+                _firstProduct = wxGetApp().m_pAppOptions->GetOption(wxT("FirstProductCode"));
+                _lastProduct = wxGetApp().m_pAppOptions->GetOption(wxT("LastProductCode"));
+                _currentProduct = wxGetApp().m_pAppOptions->GetOption(wxT("CurrentProductCode"));
+                if (!_vendor.empty() && !_firstProduct.empty() && !_lastProduct.empty() && !_currentProduct.empty())
+                {
+                    long long uiValue = wxGetApp().FullMAC2LongLong(addr->GetValue());
+                    long uiVendor = (uiValue >> 24) & 0x00FFFFFF;
+                    long uiProduct = uiValue & 0x00FFFFFF;
+                    long dbVendor = wxGetApp().HalfMAC2Long(_vendor);
+                    long dbProduct = wxGetApp().HalfMAC2Long(_currentProduct);
+                    if ((uiVendor == dbVendor) && (uiProduct == dbProduct))
+                    {
+                        dbProduct++;
+                        wxString prodString = wxString::Format(wxT("%02X:%02X:%02X"),
+                            (dbProduct >> 16) & 0xFF, (dbProduct >> 8) & 0xFF, dbProduct & 0xFF);
+                        wxGetApp().m_pAppOptions->SetOption(wxT("CurrentProductCode"), prodString);
+                    }
+                }
 
                 /* update result bitmap */
                 _resultBitmap->SetBitmap(_resultPass);
