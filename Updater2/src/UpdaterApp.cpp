@@ -15,6 +15,22 @@
 // Resources
 // ------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------
+// Declaration
+// ------------------------------------------------------------------------
+typedef struct
+{
+    wxLanguage langId;
+    wxString langStr;
+} MyLanguageMap;
+
+static const MyLanguageMap langSupported[] =
+{
+    { wxLANGUAGE_CHINESE_TRADITIONAL,       wxT("zh_TW")    },
+    { wxLANGUAGE_CHINESE_SIMPLIFIED,        wxT("zh_CN")    },
+
+    { wxLANGUAGE_DEFAULT,                   wxT("")         }
+};
 
 // ------------------------------------------------------------------------
 // Implementation
@@ -39,7 +55,6 @@ UpdaterApp::~UpdaterApp()
 void UpdaterApp::Init()
 {
     m_pAppOptions = new AppOptions();
-    _locale = NULL;
     _onlyMe = NULL;
     m_Adapters.clear();
     _adapterInfo = NULL;
@@ -47,6 +62,19 @@ void UpdaterApp::Init()
         _skipVmwareNetworkAdapter = true;
     else
         _skipVmwareNetworkAdapter = false;
+
+    /* language setting */
+    wxString langString = m_pAppOptions->GetOption(wxT("Language"));
+    long loop;
+    _lang = wxLANGUAGE_DEFAULT;
+    for (loop = 0; loop < WXSIZEOF(langSupported); loop++)
+    {
+        if (!langString.CmpNoCase(langSupported[loop].langStr))
+        {
+            _lang = langSupported[loop].langId;
+            break;
+        }
+    }
 
     /* init report folder when it is empty */
     if (m_pAppOptions->GetOption(wxT("ReportFolder")).IsEmpty())
@@ -66,6 +94,16 @@ void UpdaterApp::Init()
 bool UpdaterApp::OnInit()
 {
     /* init locale */
+    wxStandardPaths &stdPaths = wxStandardPaths::Get();
+    wxString localePath = wxFileName(stdPaths.GetExecutablePath()).GetPathWithSep() + wxT("locale");
+    if (!_locale.Init(_lang))
+    {
+        wxLogWarning(wxT("This language is not supported by system."));
+        // continue nevertheless
+    }
+    _locale.AddCatalogLookupPathPrefix(localePath);
+    _locale.AddCatalog(GetAppName());
+    _locale.AddCatalog(wxT("wxstd"));
 
     /* check single instance only */
     _onlyMe = new wxSingleInstanceChecker();

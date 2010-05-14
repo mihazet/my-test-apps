@@ -50,7 +50,7 @@ private:
 private:
     // internal data members
     wxLanguage _lang;
-    wxLocale *_locale;
+    wxLocale _locale;
     wxSingleInstanceChecker *_onlyMe;
 #ifdef __WXMSW__
     IP_ADAPTER_INFO *_adapterInfo;
