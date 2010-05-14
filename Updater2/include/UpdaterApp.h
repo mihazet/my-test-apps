@@ -31,6 +31,7 @@ public:
     virtual bool OnInit();
     virtual int OnExit();
     long HalfMAC2Long(const wxString& halfMAC);
+    long long FullMAC2LongLong(const wxString& fullMAC);
 
     wxVector<NetAdapter> m_Adapters;
     AppOptions *m_pAppOptions;

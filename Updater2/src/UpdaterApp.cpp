@@ -358,3 +358,27 @@ long UpdaterApp::HalfMAC2Long(const wxString &halfMAC)
     return longValue;
 }
 
+long long UpdaterApp::FullMAC2LongLong(const wxString &fullMAC)
+{
+    long long longlongValue = 0, longlongTemp;
+    long longTemp = 0, loop = 0;
+    wxStringTokenizer tokenzr(fullMAC, wxT(":-"));
+    wxString token;
+
+    while (tokenzr.HasMoreTokens())
+    {
+        token = tokenzr.GetNextToken();
+        switch (loop++)
+        {
+        case 0: token.ToLong(&longTemp, 16); longlongTemp = longTemp; longlongValue += (longlongTemp << 40); break;
+        case 1: token.ToLong(&longTemp, 16); longlongTemp = longTemp; longlongValue += (longlongTemp << 32); break;
+        case 2: token.ToLong(&longTemp, 16); longlongTemp = longTemp; longlongValue += (longlongTemp << 24); break;
+        case 3: token.ToLong(&longTemp, 16); longlongTemp = longTemp; longlongValue += (longlongTemp << 16); break;
+        case 4: token.ToLong(&longTemp, 16); longlongTemp = longTemp; longlongValue += (longlongTemp << 8); break;
+        case 5: token.ToLong(&longTemp, 16); longlongTemp = longTemp; longlongValue += longlongTemp; break;
+        }
+    }
+
+    return longlongValue;
+}
+
