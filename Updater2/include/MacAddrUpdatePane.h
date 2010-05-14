@@ -55,6 +55,10 @@ private:
     wxButton *_multiFunctionBtn;
     wxTimer *_closeSelfTimer;
     long _closeTimeout;
+    wxString _vendor;
+    wxString _firstProduct;
+    wxString _lastProduct;
+    wxString _currentProduct;
 
     DECLARE_EVENT_TABLE()
 };

@@ -66,6 +66,10 @@ void MacAddrUpdatePane::Init()
     _multiFunctionBtn = NULL;
     _closeSelfTimer = new wxTimer(this);
     _closeTimeout = CLOSE_COUNTDOWN;
+    _vendor = wxGetApp().m_pAppOptions->GetOption(wxT("VendorCode"));
+    _firstProduct = wxGetApp().m_pAppOptions->GetOption(wxT("FirstProductCode"));
+    _lastProduct = wxGetApp().m_pAppOptions->GetOption(wxT("LastProductCode"));
+    _currentProduct = wxGetApp().m_pAppOptions->GetOption(wxT("CurrentProductCode"));
 }
 
 bool MacAddrUpdatePane::Create(wxWindow *parent, wxWindowID id,
@@ -97,19 +101,29 @@ bool MacAddrUpdatePane::Create(wxWindow *parent, wxWindowID id,
 }
 
 void MacAddrUpdatePane::CreateControls()
-{
+{ 
     wxBoxSizer *paneSizer = new wxBoxSizer(wxVERTICAL);
+    wxString promptMessage, addrString;
 
-    paneSizer->Add(new wxStaticText(this, wxID_STATIC, _("Please input a new MAC address in the below region:")), 0, wxTOP | wxLEFT | wxRIGHT, 15);
-    wxString addrString = wxGetApp().m_pAppOptions->GetOption(wxT("VendorCode"));
-    wxString productString = wxGetApp().m_pAppOptions->GetOption(wxT("CurrentProductCode"));
-    if (productString.empty())
-        addrString << wxT(":") << wxGetApp().m_pAppOptions->GetOption(wxT("FirstProductCode"));
+    if (_vendor.empty() || _firstProduct.empty() || _lastProduct.empty())
+    {
+        promptMessage = _("You must assign a valid MAC address manually!");
+        _vendor = wxT("00:00:00");
+        _firstProduct = wxT("00:00:00");
+        _lastProduct = wxT("00:00:00");
+        if (_currentProduct.empty())
+            _currentProduct = wxT("00:00:00");
+    }
     else
-        addrString << wxT(":") << productString;
+    {
+        promptMessage = _("One new valid MAC address is generated.") + wxT("\n")
+            + _("It is strongly recommended to use it!");
+    }
+
+    paneSizer->Add(new wxStaticText(this, wxID_STATIC, promptMessage), 0, wxTOP | wxLEFT | wxRIGHT, 15);
+    addrString << _vendor << wxT(":") << _currentProduct;
     NetAddrTextCtrl *addr = new NetAddrTextCtrl(this, myID_MAC_UPDATE_NETADDR_TEXTCTRL, NetAddrTextCtrl::NETADDR_TYPE_MAC, addrString);
     paneSizer->Add(addr, 0, wxALL | wxALIGN_CENTER, 10);
-    paneSizer->Add(new wxStaticText(this, wxID_STATIC, _("Recommend the use of automatically generated MAC address.")), 0, wxBOTTOM | wxLEFT | wxRIGHT, 15);
 
     _resultBitmap = new wxStaticBitmap(this, wxID_ANY, _resultUnknown);
     paneSizer->Add(_resultBitmap, 0, wxALL | wxALIGN_CENTER , 5);
