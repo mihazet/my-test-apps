@@ -529,6 +529,26 @@ wxString DownloadPane::ExplainUpdateThreadErrorCode(const int error)
     return msg;
 }
 
+long DownloadPane::HalfMAC2Long(const wxString &halfMAC)
+{
+    long longTemp = 0, loop = 0, longValue = 0;
+    wxStringTokenizer tokenzr(halfMAC, wxT(":-"));
+    wxString token;
+
+    while (tokenzr.HasMoreTokens())
+    {
+        token = tokenzr.GetNextToken();
+        switch (loop++)
+        {
+        case 0: token.ToLong(&longTemp, 16); longValue += (longTemp << 16); break;
+        case 1: token.ToLong(&longTemp, 16); longValue += (longTemp << 8); break;
+        case 2: token.ToLong(&longTemp, 16); longValue += longTemp; break;
+        }
+    }
+
+    return longValue;
+}
+
 //
 // event handlers
 //
@@ -681,18 +701,23 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
 
 void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
 {
-    wxStringTokenizer tokenzr;
-    long loop = 0, longTemp;
+    long lastValue = 0, currentValue = 0;
+
+    //
+    // Notice:
+    // If we call event.Skip() in our handler, the event will be processed 
+    // by wxInfoBarBase, which will hide the infobar.
+    // If we don't, the infobar won't be hided
+    //
 
     /* do nothing if there is update thread activity */
     if (wxGetApp().m_UpdateThreadCount)
     {
         _promptForNotification->ShowMessage(_("There is another update procedure running! Please wait it completed and try later..."), wxICON_EXCLAMATION);
-        /* don't skip at here, so the button on infobar will not leave */
         return;
     }
 
-    /* check if vendor and product codes setup completed */
+    /* check if vendor and product codes setup completed, and if current out of range */
     wxString vendor, firstProduct, lastProduct, currentProduct;
     vendor = wxGetApp().m_pAppOptions->GetOption(wxT("VendorCode"));
     firstProduct = wxGetApp().m_pAppOptions->GetOption(wxT("FirstProductCode"));
@@ -702,43 +727,14 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
         _promptForNotification->ShowMessage(_("MAC address auto-generation is disabled before you configure them done in the preference window!"), wxICON_EXCLAMATION);
     else if (currentProduct.empty())
         wxGetApp().m_pAppOptions->SetOption(wxT("CurrentProductCode"), firstProduct);
-
-    /* check if we are running out of product code */
-    if (!vendor.empty() && !firstProduct.empty() && !lastProduct.empty() && !currentProduct.empty())
+    else
     {
-        long lastValue = 0, currentValue = 0;
-        wxStringTokenizer tokenzr;
-        wxString token;
-
-        tokenzr.SetString(lastProduct, wxT(":"));
-        loop = 0;
-        while (tokenzr.HasMoreTokens())
-        {
-            token = tokenzr.GetNextToken();
-            switch (loop++)
-            {
-            case 0: token.ToLong(&longTemp, 16); lastValue += (longTemp << 16); break;
-            case 1: token.ToLong(&longTemp, 16); lastValue += (longTemp << 8); break;
-            case 2: token.ToLong(&longTemp, 16); lastValue += longTemp; break;
-            }
-        }
-
-        tokenzr.SetString(currentProduct, wxT(":"));
-        loop = 0;
-        while (tokenzr.HasMoreTokens())
-        {
-            token = tokenzr.GetNextToken();
-            switch (loop++)
-            {
-            case 0: token.ToLong(&longTemp, 16); currentValue += (longTemp << 16); break;
-            case 1: token.ToLong(&longTemp, 16); currentValue += (longTemp << 8); break;
-            case 2: token.ToLong(&longTemp, 16); currentValue += longTemp; break;
-            }
-        }
+        lastValue = HalfMAC2Long(lastProduct);
+        currentValue = HalfMAC2Long(currentProduct);
 
         if (currentValue >= lastValue)
         {
-            _promptForNotification->ShowMessage(_("The MAC address pool had run out! Please re-configure."), wxICON_ERROR);
+            _promptForNotification->ShowMessage(_("You have run out of the MAC address pool! Please re-configure it."), wxICON_ERROR);
             return;
         }
     }
@@ -752,7 +748,6 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
         wxAuiPaneInfo().Caption(_("Update MAC Address")).Float().FloatingPosition(panePos));
     wxGetApp().m_AuiManager.Update();
 
-    // just call skip here, so this event will be handled by the wxInfoBarBase, which will hide the infobar.
     event.Skip();
 }
 
