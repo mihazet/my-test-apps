@@ -712,7 +712,7 @@ void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
         lastValue = wxGetApp().HalfMAC2Long(lastProduct);
         currentValue = wxGetApp().HalfMAC2Long(currentProduct);
 
-        if (currentValue >= lastValue)
+        if (currentValue > lastValue)
         {
             _promptForNotification->ShowMessage(_("You have run out of the MAC address pool! Please re-configure it."), wxICON_ERROR);
             return;
