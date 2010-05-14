@@ -681,22 +681,8 @@ void DownloadPane::OnDownloadButtonClicked(wxCommandEvent &event)
 
 void DownloadPane::OnModifyMACButtonClicked(wxCommandEvent &event)
 {
-    wxStringTokenizer tokenzr(_preparedUpdateThreadCodedString, UPDATE_THREAD_CODEDSTRING_DELIMIT_WORD);
-    wxString name, ip, mac, token;
-    long row = -1, loop = 0, longTemp;
-
-    while (tokenzr.HasMoreTokens())
-    {
-        token = tokenzr.GetNextToken();
-        switch (loop++)
-        {
-        case 0: token.ToLong(&row); break;
-        case 1: name = token; break;
-        case 2: ip = token; break;
-        case 3: mac = token; break;
-        default: break;
-        }
-    }
+    wxStringTokenizer tokenzr;
+    long loop = 0, longTemp;
 
     /* do nothing if there is update thread activity */
     if (wxGetApp().m_UpdateThreadCount)
