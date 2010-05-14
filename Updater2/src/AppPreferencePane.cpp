@@ -61,7 +61,7 @@ void AppPreferencePane::CreateControls()
     // network page
     //
     wxPanel *networkPage = new wxPanel(prefNB, wxID_ANY);
-    wxStaticBoxSizer *actIfSizer = new wxStaticBoxSizer(wxVERTICAL, networkPage, _("Actived Interface"));
+    wxStaticBoxSizer *actIfSizer = new wxStaticBoxSizer(wxVERTICAL, networkPage, _("Valid Interface"));
     actIfSizer->Add(new wxStaticText(networkPage, wxID_STATIC, _("Please choose an active interface from system valid interfaces:")), 0, wxALL, 5);
     wxVector<NetAdapter> &adapters = wxGetApp().m_Adapters;
     wxArrayString ifArrayStr;
@@ -297,7 +297,7 @@ void AppPreferencePane::OnVerifyAndUpdateMAC(wxCommandEvent& event)
         valid = true;
     else if (productLast->IsEqual(*productFirst))
     {
-        caption << _("The 1st product code is equal to the last product code");
+        caption << _("The beginning product code is equal to the end of product code.");
         message << _("You are entering the same first and last product code.") << wxT(" ")
             << _("This means you only have _ONE_ valid product code in the automated MAC address generation procedure.") << wxT(" ")
             << _("If this isn't your intention, please press [Cancel] and try to reassign the correct setting again.") << wxT(" ")

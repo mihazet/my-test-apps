@@ -117,7 +117,7 @@ void UpdaterFrame::CreateControls()
     view_menu->Append(myID_VIEW_RESET_LAYOUT, _("Reset layout"),
         _("Reset all panes to the default position and size."));
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(myID_HELP_DOC, _("Help file"), _("Show html help file."));
+    help_menu->Append(myID_HELP_DOC, _("User Manual"), _("Show user manual."));
     help_menu->Append(wxID_ABOUT, _("About..."), _("Show about dialog."));
     wxMenuBar *menubar = new wxMenuBar;
     menubar->Append(file_menu, _("&File"));

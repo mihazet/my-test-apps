@@ -939,11 +939,11 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
                 if (token.ToLong(&longValue))
                 {
                     error = (int)longValue;
-                    wxLogVerbose(_("UpdateThread is completed with error code = %d"), error);
+                    wxLogVerbose(wxT("UpdateThread is completed with error code = %d"), error);
                 }
                 else
                 {
-                    wxLogError(_("UpdateThread is completed with unknown error code"));
+                    wxLogError(wxT("UpdateThread is completed with unknown error code"));
                 }
                 break;
             default:

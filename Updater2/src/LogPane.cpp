@@ -143,7 +143,8 @@ void LogPane::OnSave(wxCommandEvent &WXUNUSED(event))
     wxString defaultDir = stdPaths.GetDocumentsDir();
     wxFileDialog dlg(this);
     dlg.SetDirectory(defaultDir);
-    dlg.SetWildcard(_("Log files (*.log)|*.log"));
+    wxString wildcard = _("Log files") + wxT(" (*.log)|*.log");
+    dlg.SetWildcard(wildcard);
     dlg.SetWindowStyle(wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
     if (dlg.ShowModal() == wxID_OK)
     {
