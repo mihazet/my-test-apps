@@ -3,7 +3,9 @@
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
 #include <wx/wxsqlite3.h>
+#include <wx/filedlg.h>
 #include "WidgetId.h"
+#include "UpdaterApp.h"
 #include "MacAddrUsagePane.h"
 
 // ------------------------------------------------------------------------
@@ -95,12 +97,12 @@ public:
         case MAC_USAGE_TIME: sqlQuery << wxT("Time"); break;
         case MAC_USAGE_BOARDNAME: sqlQuery << wxT("BoardName"); break;
         case MAC_USAGE_OLDMAC: sqlQuery << wxT("OldMACAddress"); break;
-        case MAC_USAGE_NEWMAC: sqlQuery << wxT("NetMACAddress"); break;
+        case MAC_USAGE_NEWMAC: sqlQuery << wxT("NewMACAddress"); break;
         case MAC_USAGE_OPERATOR: sqlQuery << wxT("Operator"); break;
         }
         sqlQuery << wxT(" FROM ReportTable WHERE Id = ") << row + 1;
 
-        set =  _db->ExecuteQuery(sqlQuery);
+        set = _db->ExecuteQuery(sqlQuery);
         if (set.NextRow())
             variant = set.GetAsString(0);
         set.Finalize();
@@ -110,6 +112,8 @@ public:
     {
         return false;
     }
+
+    wxSQLite3Database *GetDB() { return _db; }
 
 private:
     wxSQLite3Database *_db;
@@ -166,7 +170,9 @@ void MacAddrUsagePane::CreateControls()
 
     /* report operation */
     wxButton *importBtn = new wxButton(this, wxID_ANY, _("Import"));
+    importBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUsagePane::OnReportImport, this);
     wxButton *exportBtn = new wxButton(this, wxID_ANY, _("Export"));
+    exportBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUsagePane::OnReportExport, this);
     wxBoxSizer *opSizer = new wxBoxSizer(wxHORIZONTAL);
     opSizer->Add(importBtn, 0, wxALL, 5);
     opSizer->Add(exportBtn, 0, wxALL, 5);
@@ -178,3 +184,23 @@ void MacAddrUsagePane::CreateControls()
 }
 
 // event handlers
+void MacAddrUsagePane::OnReportImport(wxCommandEvent &WXUNUSED(event))
+{
+    wxString dir = wxGetApp().m_pAppOptions->GetOption(wxT("ReportFolder"));
+    wxString wildcard = _("MAC address report file") + wxT(" (*.db)|*.db");
+    wxFileDialog fileDlg(this, _("Import file"), dir, wxEmptyString,
+        wildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxSQLite3Database db;
+
+    if (wxID_OK == fileDlg.ShowModal())
+    {
+        _reportModel->GetDB()->Restore(fileDlg.GetPath());
+        _reportModel->Reset(_reportModel->GetRowCount());
+    }    
+}
+
+void MacAddrUsagePane::OnReportExport(wxCommandEvent &WXUNUSED(event))
+{
+
+}
+

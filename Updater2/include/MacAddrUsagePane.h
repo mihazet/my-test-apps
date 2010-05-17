@@ -33,8 +33,9 @@ private:
     void CreateControls();
 
     // event handlers
+    void OnReportImport(wxCommandEvent &event);
+    void OnReportExport(wxCommandEvent &event);
 
-    
     // private data members
     wxDataViewCtrl *_reportView;
     ReportDataModel *_reportModel;
