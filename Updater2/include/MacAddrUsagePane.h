@@ -2,6 +2,9 @@
 #define _MAC_ADDR_USAGE_PANE_H_
 
 #include <wx/wx.h>
+#include <wx/dataview.h>
+
+class ReportDataModel;
 
 class MacAddrUsagePane : public wxPanel
 {
@@ -33,6 +36,8 @@ private:
 
     
     // private data members
+    wxDataViewCtrl *_reportView;
+    ReportDataModel *_reportModel;
 };
 
 #endif /* _MAC_ADDR_USAGE_PANE_H_ */
