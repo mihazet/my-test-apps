@@ -35,6 +35,7 @@ private:
     // event handlers
     void OnReportImport(wxCommandEvent &event);
     void OnReportExport(wxCommandEvent &event);
+    void OnReportClear(wxCommandEvent &event);
 
     // private data members
     wxDataViewCtrl *_reportView;

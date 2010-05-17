@@ -11,6 +11,9 @@
 // ------------------------------------------------------------------------
 // Resources
 // ------------------------------------------------------------------------
+#include "img/import_32.xpm"
+#include "img/export_32.xpm"
+#include "img/clear_32.xpm"
 
 // ------------------------------------------------------------------------
 // Declaration
@@ -169,13 +172,22 @@ void MacAddrUsagePane::CreateControls()
     _reportView->AppendTextColumn(_("Operator"), MAC_USAGE_OPERATOR, wxDATAVIEW_CELL_INERT, 300, wxALIGN_LEFT);
 
     /* report operation */
-    wxButton *importBtn = new wxButton(this, wxID_ANY, _("Import"));
+    wxButton *importBtn = new wxButton(this, wxID_ANY, _("Import"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    importBtn->SetBitmap(wxBitmap(import_32_xpm));
+    importBtn->SetBitmapDisabled(wxBitmap(wxImage(import_32_xpm).ConvertToGreyscale()));
     importBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUsagePane::OnReportImport, this);
-    wxButton *exportBtn = new wxButton(this, wxID_ANY, _("Export"));
+    wxButton *exportBtn = new wxButton(this, wxID_ANY, _("Export"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    exportBtn->SetBitmap(wxBitmap(export_32_xpm));
+    exportBtn->SetBitmapDisabled(wxBitmap(wxImage(export_32_xpm).ConvertToGreyscale()));
     exportBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUsagePane::OnReportExport, this);
+    wxButton *clearBtn = new wxButton(this, wxID_ANY, _("Clear"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    clearBtn->SetBitmap(wxBitmap(clear_32_xpm));
+    clearBtn->SetBitmapDisabled(wxBitmap(wxImage(clear_32_xpm).ConvertToGreyscale()));
+    clearBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MacAddrUsagePane::OnReportClear, this);
     wxBoxSizer *opSizer = new wxBoxSizer(wxHORIZONTAL);
     opSizer->Add(importBtn, 0, wxALL, 5);
     opSizer->Add(exportBtn, 0, wxALL, 5);
+    opSizer->Add(clearBtn, 0, wxALL, 5);
     
     wxSizer *paneSizer = new wxBoxSizer(wxVERTICAL);
     paneSizer->Add(opSizer, 0, wxALL | wxEXPAND, 5);
@@ -202,5 +214,17 @@ void MacAddrUsagePane::OnReportImport(wxCommandEvent &WXUNUSED(event))
 void MacAddrUsagePane::OnReportExport(wxCommandEvent &WXUNUSED(event))
 {
 
+}
+
+void MacAddrUsagePane::OnReportClear(wxCommandEvent &WXUNUSED(event))
+{
+    wxSQLite3Database *pDB = _reportModel->GetDB();
+    wxString sql = wxT("DROP TABLE IF EXISTS ReportTable");
+
+    if (pDB && pDB->IsOpen())
+    {
+        pDB->ExecuteUpdate(sql);
+        _reportModel->Reset(0);
+    }
 }
 
