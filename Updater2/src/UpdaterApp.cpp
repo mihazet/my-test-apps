@@ -55,7 +55,6 @@ UpdaterApp::~UpdaterApp()
 void UpdaterApp::Init()
 {
     m_pAppOptions = new AppOptions();
-    _onlyMe = NULL;
     m_Adapters.clear();
     _adapterInfo = NULL;
     if (!m_pAppOptions->GetOption(wxT("SkipVMInterface")).Cmp(wxT("Yes")))
@@ -104,14 +103,6 @@ bool UpdaterApp::OnInit()
     _locale.AddCatalogLookupPathPrefix(localePath);
     _locale.AddCatalog(GetAppName());
     _locale.AddCatalog(wxT("wxstd"));
-
-    /* check single instance only */
-    _onlyMe = new wxSingleInstanceChecker();
-    if (_onlyMe->IsAnotherRunning())
-    {
-        wxLogWarning(_("Updater is already running, this instance will be terminated!"));
-        return false;
-    }
 
     /* get network adapter info */
     if (DetectNetAdapter())

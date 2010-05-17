@@ -2,7 +2,6 @@
 #define _UPDATER_APP_H_
 
 #include <wx/wx.h>
-#include <wx/snglinst.h>
 #include <wx/vector.h>
 #include <wx/aui/framemanager.h>
 #ifdef __WXMSW__
@@ -51,7 +50,6 @@ private:
     // internal data members
     wxLanguage _lang;
     wxLocale _locale;
-    wxSingleInstanceChecker *_onlyMe;
 #ifdef __WXMSW__
     IP_ADAPTER_INFO *_adapterInfo;
 #elif defined (__WXGTK__)
