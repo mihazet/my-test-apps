@@ -391,7 +391,7 @@ void DownloadPane::CreateControls()
     wxStaticBoxSizer *listBoxSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Device list"));
 
     /* target list box */
-    wxButton *search = new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, wxT("Search"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    wxButton *search = new wxButton(this, myID_DOWNLOAD_SEARCH_BTN, _("Search"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     search->SetBitmap(wxBitmap(search_32_xpm));
     search->SetBitmapDisabled(wxBitmap(wxImage(search_32_xpm).ConvertToGreyscale()));
     wxBoxSizer *searchSizer = new wxBoxSizer(wxHORIZONTAL);
