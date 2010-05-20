@@ -17,8 +17,6 @@ if not %OutputFolder% == %InputFolder% if exist %OutputFolder% rmdir /S /Q %Outp
 
 REM Create a temp file to list all the mo in locale folder
 dir /B %InputFolder%\*.mo > %TempFile%
-REM for /F "tokens=1 delims=." %%i in (%TempFile%) do mkdir %OutputFolder%\%%i
-REM for /F "tokens=1 delims=." %%i in (%TempFile%) do copy %InputFolder%\%%i.mo %OutputFolder%\%%i\%AppName%.mo
 for /F "tokens=1 delims=." %%i in (%TempFile%) do (
     mkdir %OutputFolder%\%%i
     copy %InputFolder%\%%i.mo %OutputFolder%\%%i\%AppName%.mo
