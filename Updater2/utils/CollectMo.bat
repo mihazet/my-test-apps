@@ -25,7 +25,7 @@ for /F "tokens=1 delims=." %%i in (%TempFile%) do (
 
 REM Copy output data to execute binary path for test purpose
 dir /B %executeBinaryParentPath% > %TempFile%
-for /F "tokens=1" %%i in (%TempFile%) do xcopy /S /F /Y /I %OutputFolder% %executeBinaryParentPath%\%%i\%OutputFolder%
+for /F "tokens=1" %%i in (%TempFile%) do xcopy /S /F /Y /I %OutputFolder% %executeBinaryParentPath%\%%i\locale
 
 REM Remove temp file
 del %TempFile%
