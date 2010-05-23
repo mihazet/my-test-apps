@@ -26,7 +26,6 @@
 #include "../include/MyKeyApp.h"
 
 ////@begin XPM images
-
 ////@end XPM images
 
 
@@ -85,21 +84,24 @@ void MyKeyApp::Init()
 bool MyKeyApp::OnInit()
 {    
 ////@begin MyKeyApp initialisation
-    // Remove the comment markers above and below this block
-    // to make permanent changes to the code.
+	// Remove the comment markers above and below this block
+	// to make permanent changes to the code.
 
 #if wxUSE_XPM
-    wxImage::AddHandler(new wxXPMHandler);
+	wxImage::AddHandler(new wxXPMHandler);
 #endif
 #if wxUSE_LIBPNG
-    wxImage::AddHandler(new wxPNGHandler);
+	wxImage::AddHandler(new wxPNGHandler);
 #endif
 #if wxUSE_LIBJPEG
-    wxImage::AddHandler(new wxJPEGHandler);
+	wxImage::AddHandler(new wxJPEGHandler);
 #endif
 #if wxUSE_GIF
-    wxImage::AddHandler(new wxGIFHandler);
+	wxImage::AddHandler(new wxGIFHandler);
 #endif
+	MyKeyWizard* mainWindow = new MyKeyWizard(NULL);
+	mainWindow->Run();
+	mainWindow->Destroy();
 ////@end MyKeyApp initialisation
 
     return true;
@@ -113,7 +115,7 @@ bool MyKeyApp::OnInit()
 int MyKeyApp::OnExit()
 {    
 ////@begin MyKeyApp cleanup
-    return wxApp::OnExit();
+	return wxApp::OnExit();
 ////@end MyKeyApp cleanup
 }
 

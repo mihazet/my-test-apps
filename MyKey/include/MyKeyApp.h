@@ -19,6 +19,7 @@
 
 ////@begin includes
 #include "wx/image.h"
+#include "MyKeyWizard.h"
 ////@end includes
 
 /*!
@@ -57,9 +58,11 @@ public:
     virtual int OnExit();
 
 ////@begin MyKeyApp event handler declarations
+
 ////@end MyKeyApp event handler declarations
 
 ////@begin MyKeyApp member function declarations
+
 ////@end MyKeyApp member function declarations
 
 ////@begin MyKeyApp member variables
