@@ -3,7 +3,7 @@
 // Purpose:     
 // Author:      
 // Modified by: 
-// Created:     23/05/2010 20:28:00
+// Created:     24/05/2010 00:37:08
 // RCS-ID:      
 // Copyright:   
 // Licence:     
@@ -23,7 +23,7 @@
 ////@begin includes
 ////@end includes
 
-#include "../include/MyKeyWizard.h"
+#include "MyKeyWizard.h"
 
 ////@begin XPM images
 #include "../resource/images/wizard.xpm"
@@ -72,7 +72,7 @@ MyKeyWizard::MyKeyWizard( wxWindow* parent, wxWindowID id, const wxPoint& pos )
 bool MyKeyWizard::Create( wxWindow* parent, wxWindowID id, const wxPoint& pos )
 {
 ////@begin MyKeyWizard creation
-    SetExtraStyle(wxWS_EX_BLOCK_EVENTS|wxWIZARD_EX_HELPBUTTON);
+    SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
     wxBitmap wizardBitmap(GetBitmapResource(wxT("resource/images/wizard.xpm")));
     wxWizard::Create( parent, id, _("My Key"), wizardBitmap, pos, wxDEFAULT_DIALOG_STYLE|wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX );
 
@@ -113,13 +113,19 @@ void MyKeyWizard::CreateControls()
 ////@begin MyKeyWizard content construction
     MyKeyWizard* itemWizard1 = this;
 
-    WizardPage* itemWizardPageSimple2 = new WizardPage( itemWizard1 );
+    WizardPageWelcome* itemWizardPageSimple2 = new WizardPageWelcome( itemWizard1 );
     itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple2);
+
+    WizardPagePasswd* itemWizardPageSimple4 = new WizardPagePasswd( itemWizard1 );
+    itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple4);
 
     wxWizardPageSimple* lastPage = NULL;
     if (lastPage)
         wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple2);
     lastPage = itemWizardPageSimple2;
+    if (lastPage)
+        wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple4);
+    lastPage = itemWizardPageSimple4;
 ////@end MyKeyWizard content construction
 }
 
@@ -183,34 +189,34 @@ wxIcon MyKeyWizard::GetIconResource( const wxString& name )
 
 
 /*
- * WizardPage type definition
+ * WizardPageWelcome type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( WizardPage, wxWizardPageSimple )
+IMPLEMENT_DYNAMIC_CLASS( WizardPageWelcome, wxWizardPageSimple )
 
 
 /*
- * WizardPage event table definition
+ * WizardPageWelcome event table definition
  */
 
-BEGIN_EVENT_TABLE( WizardPage, wxWizardPageSimple )
+BEGIN_EVENT_TABLE( WizardPageWelcome, wxWizardPageSimple )
 
-////@begin WizardPage event table entries
-////@end WizardPage event table entries
+////@begin WizardPageWelcome event table entries
+////@end WizardPageWelcome event table entries
 
 END_EVENT_TABLE()
 
 
 /*
- * WizardPage constructors
+ * WizardPageWelcome constructors
  */
 
-WizardPage::WizardPage()
+WizardPageWelcome::WizardPageWelcome()
 {
     Init();
 }
 
-WizardPage::WizardPage( wxWizard* parent )
+WizardPageWelcome::WizardPageWelcome( wxWizard* parent )
 {
     Init();
     Create( parent );
@@ -218,29 +224,29 @@ WizardPage::WizardPage( wxWizard* parent )
 
 
 /*
- * WizardPage creator
+ * WizardPageWelcome creator
  */
 
-bool WizardPage::Create( wxWizard* parent )
+bool WizardPageWelcome::Create( wxWizard* parent )
 {
-////@begin WizardPage creation
-    wxBitmap wizardBitmap(GetBitmapResource(wxT("resource/images/wizard.xpm")));
+////@begin WizardPageWelcome creation
+    wxBitmap wizardBitmap(wxNullBitmap);
     wxWizardPageSimple::Create( parent, NULL, NULL, wizardBitmap );
 
     CreateControls();
-////@end WizardPage creation
+////@end WizardPageWelcome creation
     return true;
 }
 
 
 /*
- * WizardPage destructor
+ * WizardPageWelcome destructor
  */
 
-WizardPage::~WizardPage()
+WizardPageWelcome::~WizardPageWelcome()
 {
-////@begin WizardPage destruction
-////@end WizardPage destruction
+////@begin WizardPageWelcome destruction
+////@end WizardPageWelcome destruction
 }
 
 
@@ -248,26 +254,26 @@ WizardPage::~WizardPage()
  * Member initialisation
  */
 
-void WizardPage::Init()
+void WizardPageWelcome::Init()
 {
-////@begin WizardPage member initialisation
-////@end WizardPage member initialisation
+////@begin WizardPageWelcome member initialisation
+////@end WizardPageWelcome member initialisation
 }
 
 
 /*
- * Control creation for WizardPage
+ * Control creation for WizardPageWelcome
  */
 
-void WizardPage::CreateControls()
+void WizardPageWelcome::CreateControls()
 {    
-////@begin WizardPage content construction
-    WizardPage* itemWizardPageSimple2 = this;
+////@begin WizardPageWelcome content construction
+    WizardPageWelcome* itemWizardPageSimple2 = this;
 
     wxStaticText* itemStaticText3 = new wxStaticText( itemWizardPageSimple2, wxID_STATIC, _("Welcome to My Key.\nThe purpose of this application is to generate some secret code for the Rockey4 USB dongle.\nPlease insert the USB dongle that you want to configure, and notice that only one dongle can be configured at the same time. If you have multiple dongle inserted in this computer, please temporary remove those you don't want to configure."), wxDefaultPosition, wxDefaultSize, 0 );
     itemStaticText3->Wrap(300);
 
-////@end WizardPage content construction
+////@end WizardPageWelcome content construction
 }
 
 
@@ -275,7 +281,7 @@ void WizardPage::CreateControls()
  * Should we show tooltips?
  */
 
-bool WizardPage::ShowToolTips()
+bool WizardPageWelcome::ShowToolTips()
 {
     return true;
 }
@@ -284,29 +290,186 @@ bool WizardPage::ShowToolTips()
  * Get bitmap resources
  */
 
-wxBitmap WizardPage::GetBitmapResource( const wxString& name )
+wxBitmap WizardPageWelcome::GetBitmapResource( const wxString& name )
 {
     // Bitmap retrieval
-////@begin WizardPage bitmap retrieval
+////@begin WizardPageWelcome bitmap retrieval
     wxUnusedVar(name);
-    if (name == _T("resource/images/wizard.xpm"))
-    {
-        wxBitmap bitmap(wizard_xpm);
-        return bitmap;
-    }
     return wxNullBitmap;
-////@end WizardPage bitmap retrieval
+////@end WizardPageWelcome bitmap retrieval
 }
 
 /*
  * Get icon resources
  */
 
-wxIcon WizardPage::GetIconResource( const wxString& name )
+wxIcon WizardPageWelcome::GetIconResource( const wxString& name )
 {
     // Icon retrieval
-////@begin WizardPage icon retrieval
+////@begin WizardPageWelcome icon retrieval
     wxUnusedVar(name);
     return wxNullIcon;
-////@end WizardPage icon retrieval
+////@end WizardPageWelcome icon retrieval
+}
+
+
+/*
+ * WizardPagePasswd type definition
+ */
+
+IMPLEMENT_DYNAMIC_CLASS( WizardPagePasswd, wxWizardPageSimple )
+
+
+/*
+ * WizardPagePasswd event table definition
+ */
+
+BEGIN_EVENT_TABLE( WizardPagePasswd, wxWizardPageSimple )
+
+////@begin WizardPagePasswd event table entries
+////@end WizardPagePasswd event table entries
+
+END_EVENT_TABLE()
+
+
+/*
+ * WizardPagePasswd constructors
+ */
+
+WizardPagePasswd::WizardPagePasswd()
+{
+    Init();
+}
+
+WizardPagePasswd::WizardPagePasswd( wxWizard* parent )
+{
+    Init();
+    Create( parent );
+}
+
+
+/*
+ * WizardPagePasswd creator
+ */
+
+bool WizardPagePasswd::Create( wxWizard* parent )
+{
+////@begin WizardPagePasswd creation
+    wxBitmap wizardBitmap(wxNullBitmap);
+    wxWizardPageSimple::Create( parent, NULL, NULL, wizardBitmap );
+
+    CreateControls();
+    if (GetSizer())
+        GetSizer()->Fit(this);
+////@end WizardPagePasswd creation
+    return true;
+}
+
+
+/*
+ * WizardPagePasswd destructor
+ */
+
+WizardPagePasswd::~WizardPagePasswd()
+{
+////@begin WizardPagePasswd destruction
+////@end WizardPagePasswd destruction
+}
+
+
+/*
+ * Member initialisation
+ */
+
+void WizardPagePasswd::Init()
+{
+////@begin WizardPagePasswd member initialisation
+////@end WizardPagePasswd member initialisation
+}
+
+
+/*
+ * Control creation for WizardPagePasswd
+ */
+
+void WizardPagePasswd::CreateControls()
+{    
+////@begin WizardPagePasswd content construction
+    WizardPagePasswd* itemWizardPageSimple4 = this;
+
+    wxGridBagSizer* itemGridBagSizer5 = new wxGridBagSizer(0, 0);
+    itemGridBagSizer5->SetEmptyCellSize(wxSize(80, 80));
+    itemWizardPageSimple4->SetSizer(itemGridBagSizer5);
+
+    wxStaticText* itemStaticText6 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Please input password:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer5->Add(itemStaticText6, wxGBPosition(0, 0), wxGBSpan(1, 3), wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxStaticText* itemStaticText7 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Level1 PW1"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer5->Add(itemStaticText7, wxGBPosition(2, 0), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxTextCtrl* itemTextCtrl8 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV1PW1, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
+    itemTextCtrl8->SetMaxLength(4);
+    itemGridBagSizer5->Add(itemTextCtrl8, wxGBPosition(2, 1), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxStaticText* itemStaticText9 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Level1 PW2"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer5->Add(itemStaticText9, wxGBPosition(2, 3), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxTextCtrl* itemTextCtrl10 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV1PW2, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
+    itemTextCtrl10->SetMaxLength(4);
+    itemGridBagSizer5->Add(itemTextCtrl10, wxGBPosition(2, 4), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxStaticText* itemStaticText11 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Level2 PW1"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer5->Add(itemStaticText11, wxGBPosition(3, 0), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxTextCtrl* itemTextCtrl12 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV2PW1, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
+    itemTextCtrl12->SetMaxLength(4);
+    itemGridBagSizer5->Add(itemTextCtrl12, wxGBPosition(3, 1), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxStaticText* itemStaticText13 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Level2 PW2"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer5->Add(itemStaticText13, wxGBPosition(3, 3), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxTextCtrl* itemTextCtrl14 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV2PW2, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
+    itemTextCtrl14->SetMaxLength(4);
+    itemGridBagSizer5->Add(itemTextCtrl14, wxGBPosition(3, 4), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxButton* itemButton15 = new wxButton( itemWizardPageSimple4, ID_BUTTON_DEMO, _("Use Demo Dongle"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer5->Add(itemButton15, wxGBPosition(4, 0), wxGBSpan(1, 2), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+////@end WizardPagePasswd content construction
+}
+
+
+/*
+ * Should we show tooltips?
+ */
+
+bool WizardPagePasswd::ShowToolTips()
+{
+    return true;
+}
+
+/*
+ * Get bitmap resources
+ */
+
+wxBitmap WizardPagePasswd::GetBitmapResource( const wxString& name )
+{
+    // Bitmap retrieval
+////@begin WizardPagePasswd bitmap retrieval
+    wxUnusedVar(name);
+    return wxNullBitmap;
+////@end WizardPagePasswd bitmap retrieval
+}
+
+/*
+ * Get icon resources
+ */
+
+wxIcon WizardPagePasswd::GetIconResource( const wxString& name )
+{
+    // Icon retrieval
+////@begin WizardPagePasswd icon retrieval
+    wxUnusedVar(name);
+    return wxNullIcon;
+////@end WizardPagePasswd icon retrieval
 }

@@ -23,7 +23,7 @@
 ////@begin includes
 ////@end includes
 
-#include "../include/MyKeyApp.h"
+#include "MyKeyApp.h"
 
 ////@begin XPM images
 ////@end XPM images
