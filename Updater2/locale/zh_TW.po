@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Realta Updater\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-18 01:34+0800\n"
-"PO-Revision-Date: 2010-05-18 01:35+0800\n"
+"POT-Creation-Date: 2010-05-24 13:46+0800\n"
+"PO-Revision-Date: 2010-05-24 13:46+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -221,7 +221,7 @@ msgstr "板子列表"
 
 #: ../src/DownloadPane.cpp:394
 msgid "Search"
-msgstr "搜尋h"
+msgstr "搜尋"
 
 #: ../src/DownloadPane.cpp:402
 msgid "Check All"
