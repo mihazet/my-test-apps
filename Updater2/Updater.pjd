@@ -289,7 +289,7 @@
           <string name="GUI mode">"GUI"</string>
           <string name="Toolkit">"wxMSW"</string>
           <string name="Processor type">"32-bit"</string>
-          <string name="Runtime linking">"Dynamic"</string>
+          <string name="Runtime linking">"Static"</string>
           <string name="Use exceptions">"Yes"</string>
           <string name="Use ODBC">"No"</string>
           <string name="Use XRC">"Yes"</string>
@@ -603,7 +603,7 @@
           <string name="GUI mode">"GUI"</string>
           <string name="Toolkit">"wxMSW"</string>
           <string name="Processor type">"32-bit"</string>
-          <string name="Runtime linking">"Dynamic"</string>
+          <string name="Runtime linking">"Static"</string>
           <string name="Use exceptions">"Yes"</string>
           <string name="Use ODBC">"No"</string>
           <string name="Use XRC">"Yes"</string>
