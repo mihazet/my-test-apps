@@ -416,6 +416,7 @@
           <string name="app-kind">"Standard"</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
+          <string name="event-handler-0">"wxEVT_WIZARD_PAGE_CHANGING|OnMyKeyWizardPageChanging|NONE||MyKeyWizard"</string>
           <string name="proxy-Id name">"ID_MYKEYWIZARD"</string>
           <long name="proxy-Id value">10000</long>
           <string name="proxy-Class">"MyKeyWizard"</string>

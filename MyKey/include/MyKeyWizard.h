@@ -83,6 +83,9 @@ public:
 
 ////@begin MyKeyWizard event handler declarations
 
+    /// wxEVT_WIZARD_PAGE_CHANGING event handler for ID_MYKEYWIZARD
+    void OnMyKeyWizardPageChanging( wxWizardEvent& event );
+
 ////@end MyKeyWizard event handler declarations
 
 ////@begin MyKeyWizard member function declarations

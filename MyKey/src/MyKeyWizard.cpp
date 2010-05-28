@@ -45,6 +45,8 @@ IMPLEMENT_DYNAMIC_CLASS( MyKeyWizard, wxWizard )
 BEGIN_EVENT_TABLE( MyKeyWizard, wxWizard )
 
 ////@begin MyKeyWizard event table entries
+    EVT_WIZARD_PAGE_CHANGING( ID_MYKEYWIZARD, MyKeyWizard::OnMyKeyWizardPageChanging )
+
 ////@end MyKeyWizard event table entries
 
 END_EVENT_TABLE()
@@ -676,6 +678,29 @@ void WizardPagePasswd::OnButtonDemoClick( wxCommandEvent& WXUNUSED(event) )
         lv1pw2->ChangeValue(wxT("C8F8"));
         lv2pw1->ChangeValue(wxT("0799"));
         lv2pw2->ChangeValue(wxT("C43B"));
+    }
+}
+
+
+/*
+ * wxEVT_WIZARD_PAGE_CHANGING event handler for ID_MYKEYWIZARD
+ */
+
+void MyKeyWizard::OnMyKeyWizardPageChanging( wxWizardEvent& event )
+{
+    int id = event.GetPage()->GetId();
+    
+    if (id == ID_WIZARDPAGE_WELCOME)
+    {
+        wxLogMessage(wxT("Welcome changing"));
+    }
+    else if (id == ID_WIZARDPAGE_PASSWD)
+    {
+        wxLogMessage(wxT("Password"));
+    }
+    else
+    {
+        wxLogMessage(wxT("other"));
     }
 }
 
