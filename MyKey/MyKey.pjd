@@ -250,8 +250,8 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
-          <string name="Library path">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% Rockey4ND.lib"</string>
+          <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%"</string>
           <string name="Resource flags">"%AUTO%"</string>
@@ -330,8 +330,8 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
-          <string name="Library path">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% Rockey4ND.lib"</string>
+          <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%"</string>
           <string name="Resource flags">"%AUTO%"</string>
@@ -893,7 +893,7 @@ Please insert the USB dongle that you want to configure, and notice that only on
                 <long name="proxy-Y">-1</long>
                 <long name="proxy-Width">50</long>
                 <long name="proxy-Height">-1</long>
-                <string name="proxy-AlignH">"Centre"</string>
+                <string name="proxy-AlignH">"Expand"</string>
                 <string name="proxy-AlignV">"Centre"</string>
                 <long name="proxy-Stretch factor">0</long>
                 <long name="proxy-Border">5</long>
@@ -1053,7 +1053,7 @@ Please insert the USB dongle that you want to configure, and notice that only on
                 <long name="proxy-Y">-1</long>
                 <long name="proxy-Width">50</long>
                 <long name="proxy-Height">-1</long>
-                <string name="proxy-AlignH">"Centre"</string>
+                <string name="proxy-AlignH">"Expand"</string>
                 <string name="proxy-AlignV">"Centre"</string>
                 <long name="proxy-Stretch factor">0</long>
                 <long name="proxy-Border">5</long>
@@ -1213,7 +1213,7 @@ Please insert the USB dongle that you want to configure, and notice that only on
                 <long name="proxy-Y">-1</long>
                 <long name="proxy-Width">50</long>
                 <long name="proxy-Height">-1</long>
-                <string name="proxy-AlignH">"Centre"</string>
+                <string name="proxy-AlignH">"Expand"</string>
                 <string name="proxy-AlignV">"Centre"</string>
                 <long name="proxy-Stretch factor">0</long>
                 <long name="proxy-Border">5</long>
@@ -1373,7 +1373,7 @@ Please insert the USB dongle that you want to configure, and notice that only on
                 <long name="proxy-Y">-1</long>
                 <long name="proxy-Width">50</long>
                 <long name="proxy-Height">-1</long>
-                <string name="proxy-AlignH">"Centre"</string>
+                <string name="proxy-AlignH">"Expand"</string>
                 <string name="proxy-AlignV">"Centre"</string>
                 <long name="proxy-Stretch factor">0</long>
                 <long name="proxy-Border">5</long>
@@ -1401,6 +1401,7 @@ Please insert the USB dongle that you want to configure, and notice that only on
                 <long name="title-mode">0</long>
                 <long name="locked">0</long>
                 <string name="proxy-type">"wbButtonProxy"</string>
+                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnButtonDemoClick|NONE||WizardPagePasswd"</string>
                 <string name="proxy-Id name">"ID_BUTTON_DEMO"</string>
                 <long name="proxy-Id value">10007</long>
                 <string name="proxy-Name">""</string>
@@ -2374,6 +2375,18 @@ Please insert the USB dongle that you want to configure, and notice that only on
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"23/5/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"Rockey4_ND_32.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/Rockey4_ND_32.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"28/5/2010"</string>
           <string name="language">""</string>
         </document>
       </document>

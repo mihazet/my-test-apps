@@ -24,6 +24,7 @@
 ////@end includes
 
 #include "MyKeyWizard.h"
+#include "Rockey4_ND_32.h"
 
 ////@begin XPM images
 #include "../resource/images/wizard.xpm"
@@ -333,6 +334,8 @@ IMPLEMENT_DYNAMIC_CLASS( WizardPagePasswd, wxWizardPageSimple )
 BEGIN_EVENT_TABLE( WizardPagePasswd, wxWizardPageSimple )
 
 ////@begin WizardPagePasswd event table entries
+    EVT_BUTTON( ID_BUTTON_DEMO, WizardPagePasswd::OnButtonDemoClick )
+
 ////@end WizardPagePasswd event table entries
 
 END_EVENT_TABLE()
@@ -415,28 +418,28 @@ void WizardPagePasswd::CreateControls()
 
     wxTextCtrl* itemTextCtrl8 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV1PW1, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
     itemTextCtrl8->SetMaxLength(4);
-    itemGridBagSizer5->Add(itemTextCtrl8, wxGBPosition(2, 1), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemGridBagSizer5->Add(itemTextCtrl8, wxGBPosition(2, 1), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText9 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Level1 PW2"), wxDefaultPosition, wxDefaultSize, 0 );
     itemGridBagSizer5->Add(itemStaticText9, wxGBPosition(2, 3), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxTextCtrl* itemTextCtrl10 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV1PW2, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
     itemTextCtrl10->SetMaxLength(4);
-    itemGridBagSizer5->Add(itemTextCtrl10, wxGBPosition(2, 4), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemGridBagSizer5->Add(itemTextCtrl10, wxGBPosition(2, 4), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText11 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Level2 PW1"), wxDefaultPosition, wxDefaultSize, 0 );
     itemGridBagSizer5->Add(itemStaticText11, wxGBPosition(3, 0), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxTextCtrl* itemTextCtrl12 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV2PW1, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
     itemTextCtrl12->SetMaxLength(4);
-    itemGridBagSizer5->Add(itemTextCtrl12, wxGBPosition(3, 1), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemGridBagSizer5->Add(itemTextCtrl12, wxGBPosition(3, 1), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText13 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Level2 PW2"), wxDefaultPosition, wxDefaultSize, 0 );
     itemGridBagSizer5->Add(itemStaticText13, wxGBPosition(3, 3), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxTextCtrl* itemTextCtrl14 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV2PW2, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
     itemTextCtrl14->SetMaxLength(4);
-    itemGridBagSizer5->Add(itemTextCtrl14, wxGBPosition(3, 4), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemGridBagSizer5->Add(itemTextCtrl14, wxGBPosition(3, 4), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxButton* itemButton15 = new wxButton( itemWizardPageSimple4, ID_BUTTON_DEMO, _("Use Demo Dongle"), wxDefaultPosition, wxDefaultSize, 0 );
     itemGridBagSizer5->Add(itemButton15, wxGBPosition(4, 0), wxGBSpan(1, 2), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
@@ -654,3 +657,25 @@ wxIcon WizardPage::GetIconResource( const wxString& name )
     return wxNullIcon;
 ////@end WizardPage icon retrieval
 }
+
+
+/*
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_DEMO
+ */
+
+void WizardPagePasswd::OnButtonDemoClick( wxCommandEvent& WXUNUSED(event) )
+{
+    wxTextCtrl *lv1pw1 = wxDynamicCast(FindWindow(ID_TEXTCTRL_LV1PW1), wxTextCtrl);
+    wxTextCtrl *lv1pw2 = wxDynamicCast(FindWindow(ID_TEXTCTRL_LV1PW2), wxTextCtrl);
+    wxTextCtrl *lv2pw1 = wxDynamicCast(FindWindow(ID_TEXTCTRL_LV2PW1), wxTextCtrl);
+    wxTextCtrl *lv2pw2 = wxDynamicCast(FindWindow(ID_TEXTCTRL_LV2PW2), wxTextCtrl);
+    
+    if (lv1pw1 && lv1pw2 && lv2pw1 && lv2pw2)
+    {
+        lv1pw1->ChangeValue(wxT("C44C"));
+        lv1pw2->ChangeValue(wxT("C8F8"));
+        lv2pw1->ChangeValue(wxT("0799"));
+        lv2pw2->ChangeValue(wxT("C43B"));
+    }
+}
+

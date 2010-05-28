@@ -180,6 +180,9 @@ public:
 
 ////@begin WizardPagePasswd event handler declarations
 
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_DEMO
+    void OnButtonDemoClick( wxCommandEvent& event );
+
 ////@end WizardPagePasswd event handler declarations
 
 ////@begin WizardPagePasswd member function declarations
