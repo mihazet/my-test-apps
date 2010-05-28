@@ -29,6 +29,7 @@
 ////@begin forward declarations
 class WizardPageWelcome;
 class WizardPagePasswd;
+class WizardPage;
 ////@end forward declarations
 
 /*!
@@ -44,6 +45,12 @@ class WizardPagePasswd;
 #define ID_TEXTCTRL_LV2PW1 10005
 #define ID_TEXTCTRL_LV2PW2 10006
 #define ID_BUTTON_DEMO 10007
+#define ID_WIZARDPAGE_KEYINFO 10008
+#define ID_TEXTCTRL_HWID 10009
+#define ID_TEXTCTRL_SWID 10010
+#define ID_TEXTCTRL_USER 10011
+#define ID_TEXTCTRL_CONTACT 10012
+#define ID_RADIOBOX_CODEGEN 10013
 #define SYMBOL_MYKEYWIZARD_IDNAME ID_MYKEYWIZARD
 ////@end control identifiers
 
@@ -189,6 +196,53 @@ public:
 
 ////@begin WizardPagePasswd member variables
 ////@end WizardPagePasswd member variables
+};
+
+/*!
+ * WizardPage class declaration
+ */
+
+class WizardPage: public wxWizardPageSimple
+{    
+    DECLARE_DYNAMIC_CLASS( WizardPage )
+    DECLARE_EVENT_TABLE()
+
+public:
+    /// Constructors
+    WizardPage();
+
+    WizardPage( wxWizard* parent );
+
+    /// Creation
+    bool Create( wxWizard* parent );
+
+    /// Destructor
+    ~WizardPage();
+
+    /// Initialises member variables
+    void Init();
+
+    /// Creates the controls and sizers
+    void CreateControls();
+
+////@begin WizardPage event handler declarations
+
+////@end WizardPage event handler declarations
+
+////@begin WizardPage member function declarations
+
+    /// Retrieves bitmap resources
+    wxBitmap GetBitmapResource( const wxString& name );
+
+    /// Retrieves icon resources
+    wxIcon GetIconResource( const wxString& name );
+////@end WizardPage member function declarations
+
+    /// Should we show tooltips?
+    static bool ShowToolTips();
+
+////@begin WizardPage member variables
+////@end WizardPage member variables
 };
 
 #endif

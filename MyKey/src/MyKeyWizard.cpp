@@ -119,6 +119,9 @@ void MyKeyWizard::CreateControls()
     WizardPagePasswd* itemWizardPageSimple4 = new WizardPagePasswd( itemWizard1 );
     itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple4);
 
+    WizardPage* itemWizardPageSimple16 = new WizardPage( itemWizard1 );
+    itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple16);
+
     wxWizardPageSimple* lastPage = NULL;
     if (lastPage)
         wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple2);
@@ -126,6 +129,9 @@ void MyKeyWizard::CreateControls()
     if (lastPage)
         wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple4);
     lastPage = itemWizardPageSimple4;
+    if (lastPage)
+        wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple16);
+    lastPage = itemWizardPageSimple16;
 ////@end MyKeyWizard content construction
 }
 
@@ -472,4 +478,179 @@ wxIcon WizardPagePasswd::GetIconResource( const wxString& name )
     wxUnusedVar(name);
     return wxNullIcon;
 ////@end WizardPagePasswd icon retrieval
+}
+
+
+/*
+ * WizardPage type definition
+ */
+
+IMPLEMENT_DYNAMIC_CLASS( WizardPage, wxWizardPageSimple )
+
+
+/*
+ * WizardPage event table definition
+ */
+
+BEGIN_EVENT_TABLE( WizardPage, wxWizardPageSimple )
+
+////@begin WizardPage event table entries
+////@end WizardPage event table entries
+
+END_EVENT_TABLE()
+
+
+/*
+ * WizardPage constructors
+ */
+
+WizardPage::WizardPage()
+{
+    Init();
+}
+
+WizardPage::WizardPage( wxWizard* parent )
+{
+    Init();
+    Create( parent );
+}
+
+
+/*
+ * WizardPage creator
+ */
+
+bool WizardPage::Create( wxWizard* parent )
+{
+////@begin WizardPage creation
+    wxBitmap wizardBitmap(wxNullBitmap);
+    wxWizardPageSimple::Create( parent, NULL, NULL, wizardBitmap );
+
+    CreateControls();
+    if (GetSizer())
+        GetSizer()->Fit(this);
+////@end WizardPage creation
+    return true;
+}
+
+
+/*
+ * WizardPage destructor
+ */
+
+WizardPage::~WizardPage()
+{
+////@begin WizardPage destruction
+////@end WizardPage destruction
+}
+
+
+/*
+ * Member initialisation
+ */
+
+void WizardPage::Init()
+{
+////@begin WizardPage member initialisation
+////@end WizardPage member initialisation
+}
+
+
+/*
+ * Control creation for WizardPage
+ */
+
+void WizardPage::CreateControls()
+{    
+////@begin WizardPage content construction
+    WizardPage* itemWizardPageSimple16 = this;
+
+    wxBoxSizer* itemBoxSizer17 = new wxBoxSizer(wxVERTICAL);
+    itemWizardPageSimple16->SetSizer(itemBoxSizer17);
+
+    wxStaticBox* itemStaticBoxSizer18Static = new wxStaticBox(itemWizardPageSimple16, wxID_ANY, _("Dongle Info"));
+    wxStaticBoxSizer* itemStaticBoxSizer18 = new wxStaticBoxSizer(itemStaticBoxSizer18Static, wxVERTICAL);
+    itemBoxSizer17->Add(itemStaticBoxSizer18, 0, wxGROW|wxALL, 5);
+
+    wxFlexGridSizer* itemFlexGridSizer19 = new wxFlexGridSizer(0, 2, 0, 0);
+    itemFlexGridSizer19->AddGrowableCol(1);
+    itemStaticBoxSizer18->Add(itemFlexGridSizer19, 0, wxGROW|wxALL, 5);
+
+    wxStaticText* itemStaticText20 = new wxStaticText( itemWizardPageSimple16, wxID_STATIC, _("Hardware ID"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer19->Add(itemStaticText20, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxTextCtrl* itemTextCtrl21 = new wxTextCtrl( itemWizardPageSimple16, ID_TEXTCTRL_HWID, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    itemTextCtrl21->Enable(false);
+    itemFlexGridSizer19->Add(itemTextCtrl21, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxStaticText* itemStaticText22 = new wxStaticText( itemWizardPageSimple16, wxID_STATIC, _("Software ID"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer19->Add(itemStaticText22, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxTextCtrl* itemTextCtrl23 = new wxTextCtrl( itemWizardPageSimple16, ID_TEXTCTRL_SWID, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer19->Add(itemTextCtrl23, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxStaticBox* itemStaticBoxSizer24Static = new wxStaticBox(itemWizardPageSimple16, wxID_ANY, _("User Info"));
+    wxStaticBoxSizer* itemStaticBoxSizer24 = new wxStaticBoxSizer(itemStaticBoxSizer24Static, wxVERTICAL);
+    itemBoxSizer17->Add(itemStaticBoxSizer24, 0, wxGROW|wxALL, 5);
+
+    wxFlexGridSizer* itemFlexGridSizer25 = new wxFlexGridSizer(0, 2, 0, 0);
+    itemFlexGridSizer25->AddGrowableCol(1);
+    itemStaticBoxSizer24->Add(itemFlexGridSizer25, 0, wxGROW|wxALL, 5);
+
+    wxStaticText* itemStaticText26 = new wxStaticText( itemWizardPageSimple16, wxID_STATIC, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer25->Add(itemStaticText26, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxTextCtrl* itemTextCtrl27 = new wxTextCtrl( itemWizardPageSimple16, ID_TEXTCTRL_USER, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer25->Add(itemTextCtrl27, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxStaticText* itemStaticText28 = new wxStaticText( itemWizardPageSimple16, wxID_STATIC, _("Contact"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer25->Add(itemStaticText28, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxTextCtrl* itemTextCtrl29 = new wxTextCtrl( itemWizardPageSimple16, ID_TEXTCTRL_CONTACT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer25->Add(itemTextCtrl29, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxArrayString itemRadioBox30Strings;
+    itemRadioBox30Strings.Add(_("&MD5"));
+    itemRadioBox30Strings.Add(_("&SHA1"));
+    wxRadioBox* itemRadioBox30 = new wxRadioBox( itemWizardPageSimple16, ID_RADIOBOX_CODEGEN, _("Security Code Generation"), wxDefaultPosition, wxDefaultSize, itemRadioBox30Strings, 1, wxRA_SPECIFY_ROWS );
+    itemRadioBox30->SetSelection(0);
+    itemBoxSizer17->Add(itemRadioBox30, 0, wxGROW|wxALL, 5);
+
+////@end WizardPage content construction
+}
+
+
+/*
+ * Should we show tooltips?
+ */
+
+bool WizardPage::ShowToolTips()
+{
+    return true;
+}
+
+/*
+ * Get bitmap resources
+ */
+
+wxBitmap WizardPage::GetBitmapResource( const wxString& name )
+{
+    // Bitmap retrieval
+////@begin WizardPage bitmap retrieval
+    wxUnusedVar(name);
+    return wxNullBitmap;
+////@end WizardPage bitmap retrieval
+}
+
+/*
+ * Get icon resources
+ */
+
+wxIcon WizardPage::GetIconResource( const wxString& name )
+{
+    // Icon retrieval
+////@begin WizardPage icon retrieval
+    wxUnusedVar(name);
+    return wxNullIcon;
+////@end WizardPage icon retrieval
 }
