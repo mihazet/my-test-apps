@@ -29,7 +29,8 @@
 ////@begin forward declarations
 class WizardPageWelcome;
 class WizardPagePasswd;
-class WizardPage;
+class WizardPageKeyInfo;
+class WizardPageDone;
 ////@end forward declarations
 
 /*!
@@ -51,6 +52,7 @@ class WizardPage;
 #define ID_TEXTCTRL_USER 10011
 #define ID_TEXTCTRL_CONTACT 10012
 #define ID_RADIOBOX_CODEGEN 10013
+#define ID_WIZARDPAGE_DONE 10014
 #define SYMBOL_MYKEYWIZARD_IDNAME ID_MYKEYWIZARD
 ////@end control identifiers
 
@@ -82,9 +84,6 @@ public:
     void CreateControls();
 
 ////@begin MyKeyWizard event handler declarations
-
-    /// wxEVT_WIZARD_PAGE_CHANGING event handler for ID_MYKEYWIZARD
-    void OnMyKeyWizardPageChanging( wxWizardEvent& event );
 
 ////@end MyKeyWizard event handler declarations
 
@@ -183,6 +182,9 @@ public:
 
 ////@begin WizardPagePasswd event handler declarations
 
+    /// wxEVT_WIZARD_PAGE_CHANGING event handler for ID_WIZARDPAGE_PASSWD
+    void OnPasswdPageChanging( wxWizardEvent& event );
+
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_DEMO
     void OnButtonDemoClick( wxCommandEvent& event );
 
@@ -205,25 +207,25 @@ public:
 };
 
 /*!
- * WizardPage class declaration
+ * WizardPageKeyInfo class declaration
  */
 
-class WizardPage: public wxWizardPageSimple
+class WizardPageKeyInfo: public wxWizardPageSimple
 {    
-    DECLARE_DYNAMIC_CLASS( WizardPage )
+    DECLARE_DYNAMIC_CLASS( WizardPageKeyInfo )
     DECLARE_EVENT_TABLE()
 
 public:
     /// Constructors
-    WizardPage();
+    WizardPageKeyInfo();
 
-    WizardPage( wxWizard* parent );
+    WizardPageKeyInfo( wxWizard* parent );
 
     /// Creation
     bool Create( wxWizard* parent );
 
     /// Destructor
-    ~WizardPage();
+    ~WizardPageKeyInfo();
 
     /// Initialises member variables
     void Init();
@@ -231,24 +233,74 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
-////@begin WizardPage event handler declarations
+////@begin WizardPageKeyInfo event handler declarations
 
-////@end WizardPage event handler declarations
+    /// wxEVT_WIZARD_PAGE_CHANGED event handler for ID_WIZARDPAGE_KEYINFO
+    void OnKeyInfoPageChanged( wxWizardEvent& event );
 
-////@begin WizardPage member function declarations
+////@end WizardPageKeyInfo event handler declarations
+
+////@begin WizardPageKeyInfo member function declarations
 
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
 
     /// Retrieves icon resources
     wxIcon GetIconResource( const wxString& name );
-////@end WizardPage member function declarations
+////@end WizardPageKeyInfo member function declarations
 
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-////@begin WizardPage member variables
-////@end WizardPage member variables
+////@begin WizardPageKeyInfo member variables
+////@end WizardPageKeyInfo member variables
+};
+
+/*!
+ * WizardPageDone class declaration
+ */
+
+class WizardPageDone: public wxWizardPageSimple
+{    
+    DECLARE_DYNAMIC_CLASS( WizardPageDone )
+    DECLARE_EVENT_TABLE()
+
+public:
+    /// Constructors
+    WizardPageDone();
+
+    WizardPageDone( wxWizard* parent );
+
+    /// Creation
+    bool Create( wxWizard* parent );
+
+    /// Destructor
+    ~WizardPageDone();
+
+    /// Initialises member variables
+    void Init();
+
+    /// Creates the controls and sizers
+    void CreateControls();
+
+////@begin WizardPageDone event handler declarations
+
+////@end WizardPageDone event handler declarations
+
+////@begin WizardPageDone member function declarations
+
+    /// Retrieves bitmap resources
+    wxBitmap GetBitmapResource( const wxString& name );
+
+    /// Retrieves icon resources
+    wxIcon GetIconResource( const wxString& name );
+////@end WizardPageDone member function declarations
+
+    /// Should we show tooltips?
+    static bool ShowToolTips();
+
+////@begin WizardPageDone member variables
+////@end WizardPageDone member variables
 };
 
 #endif

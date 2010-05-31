@@ -74,6 +74,11 @@ MyKeyApp::MyKeyApp()
 void MyKeyApp::Init()
 {
 ////@begin MyKeyApp member initialisation
+	basicPW1 = 0;
+	basicPW2 = 0;
+	advPW1 = 0;
+	advPW2 = 0;
+	hwID = 0;
 ////@end MyKeyApp member initialisation
 }
 

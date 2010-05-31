@@ -23,6 +23,7 @@
 ////@begin includes
 ////@end includes
 
+#include "MyKeyApp.h"
 #include "MyKeyWizard.h"
 #include "Rockey4_ND_32.h"
 
@@ -45,8 +46,6 @@ IMPLEMENT_DYNAMIC_CLASS( MyKeyWizard, wxWizard )
 BEGIN_EVENT_TABLE( MyKeyWizard, wxWizard )
 
 ////@begin MyKeyWizard event table entries
-    EVT_WIZARD_PAGE_CHANGING( ID_MYKEYWIZARD, MyKeyWizard::OnMyKeyWizardPageChanging )
-
 ////@end MyKeyWizard event table entries
 
 END_EVENT_TABLE()
@@ -122,8 +121,11 @@ void MyKeyWizard::CreateControls()
     WizardPagePasswd* itemWizardPageSimple4 = new WizardPagePasswd( itemWizard1 );
     itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple4);
 
-    WizardPage* itemWizardPageSimple16 = new WizardPage( itemWizard1 );
+    WizardPageKeyInfo* itemWizardPageSimple16 = new WizardPageKeyInfo( itemWizard1 );
     itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple16);
+
+    WizardPageDone* itemWizardPageSimple31 = new WizardPageDone( itemWizard1 );
+    itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple31);
 
     wxWizardPageSimple* lastPage = NULL;
     if (lastPage)
@@ -135,6 +137,9 @@ void MyKeyWizard::CreateControls()
     if (lastPage)
         wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple16);
     lastPage = itemWizardPageSimple16;
+    if (lastPage)
+        wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple31);
+    lastPage = itemWizardPageSimple31;
 ////@end MyKeyWizard content construction
 }
 
@@ -336,6 +341,8 @@ IMPLEMENT_DYNAMIC_CLASS( WizardPagePasswd, wxWizardPageSimple )
 BEGIN_EVENT_TABLE( WizardPagePasswd, wxWizardPageSimple )
 
 ////@begin WizardPagePasswd event table entries
+    EVT_WIZARD_PAGE_CHANGING( -1, WizardPagePasswd::OnPasswdPageChanging )
+
     EVT_BUTTON( ID_BUTTON_DEMO, WizardPagePasswd::OnButtonDemoClick )
 
 ////@end WizardPagePasswd event table entries
@@ -487,34 +494,36 @@ wxIcon WizardPagePasswd::GetIconResource( const wxString& name )
 
 
 /*
- * WizardPage type definition
+ * WizardPageKeyInfo type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( WizardPage, wxWizardPageSimple )
+IMPLEMENT_DYNAMIC_CLASS( WizardPageKeyInfo, wxWizardPageSimple )
 
 
 /*
- * WizardPage event table definition
+ * WizardPageKeyInfo event table definition
  */
 
-BEGIN_EVENT_TABLE( WizardPage, wxWizardPageSimple )
+BEGIN_EVENT_TABLE( WizardPageKeyInfo, wxWizardPageSimple )
 
-////@begin WizardPage event table entries
-////@end WizardPage event table entries
+////@begin WizardPageKeyInfo event table entries
+    EVT_WIZARD_PAGE_CHANGED( -1, WizardPageKeyInfo::OnKeyInfoPageChanged )
+
+////@end WizardPageKeyInfo event table entries
 
 END_EVENT_TABLE()
 
 
 /*
- * WizardPage constructors
+ * WizardPageKeyInfo constructors
  */
 
-WizardPage::WizardPage()
+WizardPageKeyInfo::WizardPageKeyInfo()
 {
     Init();
 }
 
-WizardPage::WizardPage( wxWizard* parent )
+WizardPageKeyInfo::WizardPageKeyInfo( wxWizard* parent )
 {
     Init();
     Create( parent );
@@ -525,28 +534,28 @@ WizardPage::WizardPage( wxWizard* parent )
  * WizardPage creator
  */
 
-bool WizardPage::Create( wxWizard* parent )
+bool WizardPageKeyInfo::Create( wxWizard* parent )
 {
-////@begin WizardPage creation
+////@begin WizardPageKeyInfo creation
     wxBitmap wizardBitmap(wxNullBitmap);
     wxWizardPageSimple::Create( parent, NULL, NULL, wizardBitmap );
 
     CreateControls();
     if (GetSizer())
         GetSizer()->Fit(this);
-////@end WizardPage creation
+////@end WizardPageKeyInfo creation
     return true;
 }
 
 
 /*
- * WizardPage destructor
+ * WizardPageKeyInfo destructor
  */
 
-WizardPage::~WizardPage()
+WizardPageKeyInfo::~WizardPageKeyInfo()
 {
-////@begin WizardPage destruction
-////@end WizardPage destruction
+////@begin WizardPageKeyInfo destruction
+////@end WizardPageKeyInfo destruction
 }
 
 
@@ -554,10 +563,10 @@ WizardPage::~WizardPage()
  * Member initialisation
  */
 
-void WizardPage::Init()
+void WizardPageKeyInfo::Init()
 {
-////@begin WizardPage member initialisation
-////@end WizardPage member initialisation
+////@begin WizardPageKeyInfo member initialisation
+////@end WizardPageKeyInfo member initialisation
 }
 
 
@@ -565,10 +574,10 @@ void WizardPage::Init()
  * Control creation for WizardPage
  */
 
-void WizardPage::CreateControls()
+void WizardPageKeyInfo::CreateControls()
 {    
-////@begin WizardPage content construction
-    WizardPage* itemWizardPageSimple16 = this;
+////@begin WizardPageKeyInfo content construction
+    WizardPageKeyInfo* itemWizardPageSimple16 = this;
 
     wxBoxSizer* itemBoxSizer17 = new wxBoxSizer(wxVERTICAL);
     itemWizardPageSimple16->SetSizer(itemBoxSizer17);
@@ -621,7 +630,7 @@ void WizardPage::CreateControls()
     itemRadioBox30->SetSelection(0);
     itemBoxSizer17->Add(itemRadioBox30, 0, wxGROW|wxALL, 5);
 
-////@end WizardPage content construction
+////@end WizardPageKeyInfo content construction
 }
 
 
@@ -629,7 +638,7 @@ void WizardPage::CreateControls()
  * Should we show tooltips?
  */
 
-bool WizardPage::ShowToolTips()
+bool WizardPageKeyInfo::ShowToolTips()
 {
     return true;
 }
@@ -638,26 +647,26 @@ bool WizardPage::ShowToolTips()
  * Get bitmap resources
  */
 
-wxBitmap WizardPage::GetBitmapResource( const wxString& name )
+wxBitmap WizardPageKeyInfo::GetBitmapResource( const wxString& name )
 {
     // Bitmap retrieval
-////@begin WizardPage bitmap retrieval
+////@begin WizardPageKeyInfo bitmap retrieval
     wxUnusedVar(name);
     return wxNullBitmap;
-////@end WizardPage bitmap retrieval
+////@end WizardPageKeyInfo bitmap retrieval
 }
 
 /*
  * Get icon resources
  */
 
-wxIcon WizardPage::GetIconResource( const wxString& name )
+wxIcon WizardPageKeyInfo::GetIconResource( const wxString& name )
 {
     // Icon retrieval
-////@begin WizardPage icon retrieval
+////@begin WizardPageKeyInfo icon retrieval
     wxUnusedVar(name);
     return wxNullIcon;
-////@end WizardPage icon retrieval
+////@end WizardPageKeyInfo icon retrieval
 }
 
 
@@ -682,25 +691,224 @@ void WizardPagePasswd::OnButtonDemoClick( wxCommandEvent& WXUNUSED(event) )
 }
 
 
+
+
 /*
- * wxEVT_WIZARD_PAGE_CHANGING event handler for ID_MYKEYWIZARD
+ * wxEVT_WIZARD_PAGE_CHANGING event handler for ID_WIZARDPAGE_PASSWD
  */
 
-void MyKeyWizard::OnMyKeyWizardPageChanging( wxWizardEvent& event )
+void WizardPagePasswd::OnPasswdPageChanging( wxWizardEvent& event )
 {
-    int id = event.GetPage()->GetId();
-    
-    if (id == ID_WIZARDPAGE_WELCOME)
+    wxTextCtrl *lv1pw1, *lv1pw2, *lv2pw1, *lv2pw2;
+    unsigned short &basicPW1 = wxGetApp().basicPW1;
+    unsigned short &basicPW2 = wxGetApp().basicPW2;
+    unsigned short &advPW1 = wxGetApp().advPW1;
+    unsigned short &advPW2 = wxGetApp().advPW2;
+    unsigned short result, dontCareShort;
+    unsigned long &hwID = wxGetApp().hwID;
+    unsigned long longTemp, dontCareLong;
+    unsigned char buffer[1000];
+    bool isOk = false;
+
+    if (event.GetDirection())
     {
-        wxLogMessage(wxT("Welcome changing"));
+        lv1pw1 = wxDynamicCast(FindWindow(ID_TEXTCTRL_LV1PW1), wxTextCtrl);
+        lv1pw2 = wxDynamicCast(FindWindow(ID_TEXTCTRL_LV1PW2), wxTextCtrl);
+        lv2pw1 = wxDynamicCast(FindWindow(ID_TEXTCTRL_LV2PW1), wxTextCtrl);
+        lv2pw2 = wxDynamicCast(FindWindow(ID_TEXTCTRL_LV2PW2), wxTextCtrl);
+        
+        if (!lv1pw1 || !lv1pw2 || !lv2pw1 || !lv2pw2)
+        {
+            event.Veto();
+            return;
+        }
+        
+        lv1pw1->GetValue().ToLong((long *)&longTemp, 16);
+        basicPW1 = (unsigned short)longTemp;
+        lv1pw2->GetValue().ToLong((long *)&longTemp, 16);
+        basicPW2 = (unsigned short)longTemp;
+        lv2pw1->GetValue().ToLong((long *)&longTemp, 16);
+        advPW1 = (unsigned short)longTemp;
+        lv2pw2->GetValue().ToLong((long *)&longTemp, 16);
+        advPW2 = (unsigned short)longTemp;
+        
+        result = Rockey(RY_FIND, &dontCareShort, &hwID, &dontCareLong, &basicPW1, &basicPW2, &advPW1, &advPW2, buffer);
+        
+        switch (result)
+        {
+        case ERR_SUCCESS:
+            isOk = true;
+            break;
+        case ERR_NO_ROCKEY:
+            wxLogMessage(wxT("No Rockey dongle is found!"));
+            break;
+        case ERR_INVALID_PASSWORD:
+            wxLogMessage(wxT("Invalid password!"));
+            break;
+        default:
+            break;
+        }
+        
+        if (!isOk)
+        {
+            event.Veto();
+            return;
+        }
     }
-    else if (id == ID_WIZARDPAGE_PASSWD)
+}
+
+
+
+/*
+ * WizardPageDone type definition
+ */
+
+IMPLEMENT_DYNAMIC_CLASS( WizardPageDone, wxWizardPageSimple )
+
+
+/*
+ * WizardPageDone event table definition
+ */
+
+BEGIN_EVENT_TABLE( WizardPageDone, wxWizardPageSimple )
+
+////@begin WizardPageDone event table entries
+////@end WizardPageDone event table entries
+
+END_EVENT_TABLE()
+
+
+/*
+ * WizardPageDone constructors
+ */
+
+WizardPageDone::WizardPageDone()
+{
+    Init();
+}
+
+WizardPageDone::WizardPageDone( wxWizard* parent )
+{
+    Init();
+    Create( parent );
+}
+
+
+/*
+ * WizardPageDone creator
+ */
+
+bool WizardPageDone::Create( wxWizard* parent )
+{
+////@begin WizardPageDone creation
+    wxBitmap wizardBitmap(wxNullBitmap);
+    wxWizardPageSimple::Create( parent, NULL, NULL, wizardBitmap );
+
+    CreateControls();
+    if (GetSizer())
+        GetSizer()->Fit(this);
+////@end WizardPageDone creation
+    return true;
+}
+
+
+/*
+ * WizardPageDone destructor
+ */
+
+WizardPageDone::~WizardPageDone()
+{
+////@begin WizardPageDone destruction
+////@end WizardPageDone destruction
+}
+
+
+/*
+ * Member initialisation
+ */
+
+void WizardPageDone::Init()
+{
+////@begin WizardPageDone member initialisation
+////@end WizardPageDone member initialisation
+}
+
+
+/*
+ * Control creation for WizardPageDone
+ */
+
+void WizardPageDone::CreateControls()
+{    
+////@begin WizardPageDone content construction
+    WizardPageDone* itemWizardPageSimple31 = this;
+
+    wxBoxSizer* itemBoxSizer32 = new wxBoxSizer(wxVERTICAL);
+    itemWizardPageSimple31->SetSizer(itemBoxSizer32);
+
+    wxStaticText* itemStaticText33 = new wxStaticText( itemWizardPageSimple31, wxID_STATIC, _("Congratulations"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticText33->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD, false, wxT("Times New Roman")));
+    itemBoxSizer32->Add(itemStaticText33, 0, wxALIGN_LEFT|wxALL, 5);
+
+    wxStaticText* itemStaticText34 = new wxStaticText( itemWizardPageSimple31, wxID_STATIC, _("Your key configuration has done."), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer32->Add(itemStaticText34, 0, wxALIGN_LEFT|wxALL, 5);
+
+////@end WizardPageDone content construction
+}
+
+
+/*
+ * Should we show tooltips?
+ */
+
+bool WizardPageDone::ShowToolTips()
+{
+    return true;
+}
+
+/*
+ * Get bitmap resources
+ */
+
+wxBitmap WizardPageDone::GetBitmapResource( const wxString& name )
+{
+    // Bitmap retrieval
+////@begin WizardPageDone bitmap retrieval
+    wxUnusedVar(name);
+    return wxNullBitmap;
+////@end WizardPageDone bitmap retrieval
+}
+
+/*
+ * Get icon resources
+ */
+
+wxIcon WizardPageDone::GetIconResource( const wxString& name )
+{
+    // Icon retrieval
+////@begin WizardPageDone icon retrieval
+    wxUnusedVar(name);
+    return wxNullIcon;
+////@end WizardPageDone icon retrieval
+}
+
+
+/*
+ * wxEVT_WIZARD_PAGE_CHANGED event handler for ID_WIZARDPAGE_KEYINFO
+ */
+
+void WizardPageKeyInfo::OnKeyInfoPageChanged( wxWizardEvent& event )
+{
+    wxTextCtrl *hwIDText;
+    unsigned long &hwID = wxGetApp().hwID;
+
+    if (event.GetDirection())
     {
-        wxLogMessage(wxT("Password"));
-    }
-    else
-    {
-        wxLogMessage(wxT("other"));
+        hwIDText = wxDynamicCast(FindWindow(ID_TEXTCTRL_HWID), wxTextCtrl);
+        if (hwIDText)
+        {
+            hwIDText->ChangeValue(wxString::Format(wxT("0x%08lX"), hwID));
+        }
     }
 }
 

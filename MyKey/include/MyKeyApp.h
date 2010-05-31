@@ -66,6 +66,12 @@ public:
 ////@end MyKeyApp member function declarations
 
 ////@begin MyKeyApp member variables
+public:
+	unsigned short basicPW1;
+	unsigned short basicPW2;
+	unsigned short advPW1;
+	unsigned short advPW2;
+	unsigned long hwID;
 ////@end MyKeyApp member variables
 };
 
