@@ -960,7 +960,7 @@ void WizardPageKeyInfo::OnKeyInfoPageChanging( wxWizardEvent& event )
     unsigned short &basicPW2 = wxGetApp().basicPW2;
     unsigned short &advPW1 = wxGetApp().advPW1;
     unsigned short &advPW2 = wxGetApp().advPW2;
-    unsigned short result, dontCareShort;
+    unsigned short result, pos, len, dontCareShort;
     unsigned long dontCareLong, longTemp, swID;
     unsigned char buffer[1000];
 
@@ -975,7 +975,7 @@ void WizardPageKeyInfo::OnKeyInfoPageChanging( wxWizardEvent& event )
         /* validate data */
         if (!userText || userText->GetValue().empty())
         {
-            wxLogError(wxT("Invalid name fiedl"));
+            wxLogError(wxT("Invalid name field"));
             event.Veto();
             goto data_invalid;
         }
@@ -997,7 +997,10 @@ void WizardPageKeyInfo::OnKeyInfoPageChanging( wxWizardEvent& event )
         result = Rockey(RY_WRITE_USERID, &rockey, &swID, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
 
         /* write user data */
-
+        pos = 500;
+        len = userText->GetValue().length();
+        memcpy(buffer, userText->GetValue().ToAscii(), userText->GetValue().length());
+        result = Rockey(RY_WRITE, &rockey, &dontCareLong, &dontCareLong, &pos, &len, &dontCareShort, &dontCareShort, buffer);
         
 data_invalid:
         result = Rockey(RY_CLOSE, &rockey, &dontCareLong, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
