@@ -918,7 +918,7 @@ void WizardPageKeyInfo::OnKeyInfoPageChanged( wxWizardEvent& event )
     unsigned short &advPW1 = wxGetApp().advPW1;
     unsigned short &advPW2 = wxGetApp().advPW2;
     unsigned long swID, dontCareLong;
-    unsigned short result, dontCareShort;
+    unsigned short result, pos, len, dontCareShort;
     unsigned char buffer[1000];
 
     if (event.GetDirection())
@@ -935,6 +935,11 @@ void WizardPageKeyInfo::OnKeyInfoPageChanged( wxWizardEvent& event )
             result = Rockey(RY_READ_USERID, &rockey, &swID, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
             if (!result)
                 swIDText->ChangeValue(wxString::Format(wxT("0x%lX"), swID));
+
+            /* read total data length */
+            pos = 500;
+            len = 3;
+            result = Rockey(RY_READ, &rockey, &dontCareLong, &dontCareLong, &pos, &len, &dontCareShort, &dontCareShort, buffer);
         }
         
         result = Rockey(RY_CLOSE, &rockey, &dontCareLong, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
@@ -948,7 +953,7 @@ void WizardPageKeyInfo::OnKeyInfoPageChanged( wxWizardEvent& event )
 
 void WizardPageKeyInfo::OnKeyInfoPageChanging( wxWizardEvent& event )
 {
-    wxTextCtrl *swIDText = NULL;
+    wxTextCtrl *swIDText = NULL, *userText, *contactText;
     unsigned long &hwID = wxGetApp().hwID;
     unsigned short &rockey = wxGetApp().rockey;
     unsigned short &basicPW1 = wxGetApp().basicPW1;
@@ -963,13 +968,38 @@ void WizardPageKeyInfo::OnKeyInfoPageChanging( wxWizardEvent& event )
     {
         result = Rockey(RY_OPEN, &rockey, &hwID, &dontCareLong, &basicPW1, &basicPW2, &advPW1, &advPW2, buffer);
         
+        userText = wxDynamicCast(FindWindow(ID_TEXTCTRL_USER), wxTextCtrl);
+        contactText = wxDynamicCast(FindWindow(ID_TEXTCTRL_CONTACT), wxTextCtrl);
         swIDText = wxDynamicCast(FindWindow(ID_TEXTCTRL_SWID), wxTextCtrl);
-        if (swIDText && swIDText->GetValue().ToULong(&longTemp, 16))
+
+        /* validate data */
+        if (!userText || userText->GetValue().empty())
         {
-            swID = longTemp;
-            result = Rockey(RY_WRITE_USERID, &rockey, &swID, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
+            wxLogError(wxT("Invalid name fiedl"));
+            event.Veto();
+            goto data_invalid;
         }
+        else if (!contactText || contactText->GetValue().empty())
+        {
+            wxLogError(wxT("Invalid contact field"));
+            event.Veto();
+            goto data_invalid;
+        }
+        else if (!swIDText || !swIDText->GetValue().ToULong(&longTemp, 16))
+        {
+            wxLogError(wxT("Invalid user id field"));
+            event.Veto();
+            goto data_invalid;
+        }
+
+        /* write user id */
+        swID = longTemp;
+        result = Rockey(RY_WRITE_USERID, &rockey, &swID, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
+
+        /* write user data */
+
         
+data_invalid:
         result = Rockey(RY_CLOSE, &rockey, &dontCareLong, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
     }
 }
