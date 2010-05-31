@@ -518,6 +518,7 @@ BEGIN_EVENT_TABLE( WizardPageKeyInfo, wxWizardPageSimple )
 
 ////@begin WizardPageKeyInfo event table entries
     EVT_WIZARD_PAGE_CHANGED( -1, WizardPageKeyInfo::OnKeyInfoPageChanged )
+    EVT_WIZARD_PAGE_CHANGING( -1, WizardPageKeyInfo::OnKeyInfoPageChanging )
 
 ////@end WizardPageKeyInfo event table entries
 
@@ -909,16 +910,67 @@ wxIcon WizardPageDone::GetIconResource( const wxString& name )
 
 void WizardPageKeyInfo::OnKeyInfoPageChanged( wxWizardEvent& event )
 {
-    wxTextCtrl *hwIDText;
+    wxTextCtrl *hwIDText = NULL, *swIDText = NULL;
     unsigned long &hwID = wxGetApp().hwID;
+    unsigned short &rockey = wxGetApp().rockey;
+    unsigned short &basicPW1 = wxGetApp().basicPW1;
+    unsigned short &basicPW2 = wxGetApp().basicPW2;
+    unsigned short &advPW1 = wxGetApp().advPW1;
+    unsigned short &advPW2 = wxGetApp().advPW2;
+    unsigned long swID, dontCareLong;
+    unsigned short result, dontCareShort;
+    unsigned char buffer[1000];
 
     if (event.GetDirection())
     {
         hwIDText = wxDynamicCast(FindWindow(ID_TEXTCTRL_HWID), wxTextCtrl);
         if (hwIDText)
-        {
             hwIDText->ChangeValue(wxString::Format(wxT("0x%08lX"), hwID));
+
+        result = Rockey(RY_OPEN, &rockey, &hwID, &dontCareLong, &basicPW1, &basicPW2, &advPW1, &advPW2, buffer);
+
+        swIDText = wxDynamicCast(FindWindow(ID_TEXTCTRL_SWID), wxTextCtrl);
+        if (!result && swIDText)
+        {
+            result = Rockey(RY_READ_USERID, &rockey, &swID, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
+            if (!result)
+                swIDText->ChangeValue(wxString::Format(wxT("0x%lX"), swID));
         }
+        
+        result = Rockey(RY_CLOSE, &rockey, &dontCareLong, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
+    }
+}
+
+
+/*
+ * wxEVT_WIZARD_PAGE_CHANGING event handler for ID_WIZARDPAGE_KEYINFO
+ */
+
+void WizardPageKeyInfo::OnKeyInfoPageChanging( wxWizardEvent& event )
+{
+    wxTextCtrl *swIDText = NULL;
+    unsigned long &hwID = wxGetApp().hwID;
+    unsigned short &rockey = wxGetApp().rockey;
+    unsigned short &basicPW1 = wxGetApp().basicPW1;
+    unsigned short &basicPW2 = wxGetApp().basicPW2;
+    unsigned short &advPW1 = wxGetApp().advPW1;
+    unsigned short &advPW2 = wxGetApp().advPW2;
+    unsigned short result, dontCareShort;
+    unsigned long dontCareLong, longTemp, swID;
+    unsigned char buffer[1000];
+
+    if (event.GetDirection())
+    {
+        result = Rockey(RY_OPEN, &rockey, &hwID, &dontCareLong, &basicPW1, &basicPW2, &advPW1, &advPW2, buffer);
+        
+        swIDText = wxDynamicCast(FindWindow(ID_TEXTCTRL_SWID), wxTextCtrl);
+        if (swIDText && swIDText->GetValue().ToULong(&longTemp, 16))
+        {
+            swID = longTemp;
+            result = Rockey(RY_WRITE_USERID, &rockey, &swID, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
+        }
+        
+        result = Rockey(RY_CLOSE, &rockey, &dontCareLong, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
     }
 }
 

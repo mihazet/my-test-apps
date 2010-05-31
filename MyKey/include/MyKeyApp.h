@@ -72,6 +72,7 @@ public:
 	unsigned short advPW1;
 	unsigned short advPW2;
 	unsigned long hwID;
+	unsigned short rockey;
 ////@end MyKeyApp member variables
 };
 

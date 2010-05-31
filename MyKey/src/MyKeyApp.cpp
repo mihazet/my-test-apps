@@ -79,6 +79,7 @@ void MyKeyApp::Init()
 	advPW1 = 0;
 	advPW2 = 0;
 	hwID = 0;
+	rockey = 0;
 ////@end MyKeyApp member initialisation
 }
 

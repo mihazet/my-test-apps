@@ -238,6 +238,9 @@ public:
     /// wxEVT_WIZARD_PAGE_CHANGED event handler for ID_WIZARDPAGE_KEYINFO
     void OnKeyInfoPageChanged( wxWizardEvent& event );
 
+    /// wxEVT_WIZARD_PAGE_CHANGING event handler for ID_WIZARDPAGE_KEYINFO
+    void OnKeyInfoPageChanging( wxWizardEvent& event );
+
 ////@end WizardPageKeyInfo event handler declarations
 
 ////@begin WizardPageKeyInfo member function declarations

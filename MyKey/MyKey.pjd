@@ -395,6 +395,7 @@
           <string name="variable-2">"advPW1|unsigned short||0|1|0|"</string>
           <string name="variable-3">"advPW2|unsigned short||0|1|0|"</string>
           <string name="variable-4">"hwID|unsigned long||0|1|0|"</string>
+          <string name="variable-5">"rockey|unsigned short||0|1|0|"</string>
           <string name="proxy-Class">"MyKeyApp"</string>
           <string name="proxy-Base class">"wxApp"</string>
           <string name="proxy-Implementation filename">"src/MyKeyApp.cpp"</string>
@@ -1574,6 +1575,7 @@ Please insert the USB dongle that you want to configure, and notice that only on
             <long name="locked">0</long>
             <string name="proxy-type">"wbWizardPageProxy"</string>
             <string name="event-handler-0">"wxEVT_WIZARD_PAGE_CHANGED|OnKeyInfoPageChanged|NONE||WizardPageKeyInfo"</string>
+            <string name="event-handler-1">"wxEVT_WIZARD_PAGE_CHANGING|OnKeyInfoPageChanging|NONE||WizardPageKeyInfo"</string>
             <string name="proxy-Id name">"ID_WIZARDPAGE_KEYINFO"</string>
             <long name="proxy-Id value">10008</long>
             <string name="proxy-Class">"WizardPageKeyInfo"</string>
