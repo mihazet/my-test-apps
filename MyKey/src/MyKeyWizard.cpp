@@ -118,28 +118,28 @@ void MyKeyWizard::CreateControls()
     WizardPageWelcome* itemWizardPageSimple2 = new WizardPageWelcome( itemWizard1 );
     itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple2);
 
-    WizardPagePasswd* itemWizardPageSimple4 = new WizardPagePasswd( itemWizard1 );
-    itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple4);
+    WizardPagePasswd* itemWizardPageSimple6 = new WizardPagePasswd( itemWizard1 );
+    itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple6);
 
-    WizardPageKeyInfo* itemWizardPageSimple16 = new WizardPageKeyInfo( itemWizard1 );
-    itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple16);
+    WizardPageKeyInfo* itemWizardPageSimple18 = new WizardPageKeyInfo( itemWizard1 );
+    itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple18);
 
-    WizardPageDone* itemWizardPageSimple31 = new WizardPageDone( itemWizard1 );
-    itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple31);
+    WizardPageDone* itemWizardPageSimple33 = new WizardPageDone( itemWizard1 );
+    itemWizard1->GetPageAreaSizer()->Add(itemWizardPageSimple33);
 
     wxWizardPageSimple* lastPage = NULL;
     if (lastPage)
         wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple2);
     lastPage = itemWizardPageSimple2;
     if (lastPage)
-        wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple4);
-    lastPage = itemWizardPageSimple4;
+        wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple6);
+    lastPage = itemWizardPageSimple6;
     if (lastPage)
-        wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple16);
-    lastPage = itemWizardPageSimple16;
+        wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple18);
+    lastPage = itemWizardPageSimple18;
     if (lastPage)
-        wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple31);
-    lastPage = itemWizardPageSimple31;
+        wxWizardPageSimple::Chain(lastPage, itemWizardPageSimple33);
+    lastPage = itemWizardPageSimple33;
 ////@end MyKeyWizard content construction
 }
 
@@ -248,6 +248,8 @@ bool WizardPageWelcome::Create( wxWizard* parent )
     wxWizardPageSimple::Create( parent, NULL, NULL, wizardBitmap );
 
     CreateControls();
+    if (GetSizer())
+        GetSizer()->Fit(this);
 ////@end WizardPageWelcome creation
     return true;
 }
@@ -284,8 +286,16 @@ void WizardPageWelcome::CreateControls()
 ////@begin WizardPageWelcome content construction
     WizardPageWelcome* itemWizardPageSimple2 = this;
 
-    wxStaticText* itemStaticText3 = new wxStaticText( itemWizardPageSimple2, wxID_STATIC, _("Welcome to My Key.\nThe purpose of this application is to generate some secret code for the Rockey4 USB dongle.\nPlease insert the USB dongle that you want to configure, and notice that only one dongle can be configured at the same time. If you have multiple dongle inserted in this computer, please temporary remove those you don't want to configure."), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticText3->Wrap(300);
+    wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxVERTICAL);
+    itemWizardPageSimple2->SetSizer(itemBoxSizer3);
+
+    wxStaticText* itemStaticText4 = new wxStaticText( itemWizardPageSimple2, wxID_STATIC, _("Welcome to My Key"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticText4->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD, false, wxT("Times New Roman")));
+    itemBoxSizer3->Add(itemStaticText4, 0, wxALIGN_LEFT|wxALL, 5);
+
+    wxStaticText* itemStaticText5 = new wxStaticText( itemWizardPageSimple2, wxID_STATIC, _("The purpose of this application is to generate some secret code for the Rockey4 USB dongle.\nPlease insert the USB dongle that you want to configure, and notice that only one dongle can be configured at the same time. If you have multiple dongle inserted in this computer, please temporary remove those you don't want to configure."), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticText5->Wrap(300);
+    itemBoxSizer3->Add(itemStaticText5, 0, wxALIGN_LEFT|wxALL, 5);
 
 ////@end WizardPageWelcome content construction
 }
@@ -413,45 +423,45 @@ void WizardPagePasswd::Init()
 void WizardPagePasswd::CreateControls()
 {    
 ////@begin WizardPagePasswd content construction
-    WizardPagePasswd* itemWizardPageSimple4 = this;
+    WizardPagePasswd* itemWizardPageSimple6 = this;
 
-    wxGridBagSizer* itemGridBagSizer5 = new wxGridBagSizer(0, 0);
-    itemGridBagSizer5->SetEmptyCellSize(wxSize(80, 80));
-    itemWizardPageSimple4->SetSizer(itemGridBagSizer5);
+    wxGridBagSizer* itemGridBagSizer7 = new wxGridBagSizer(0, 0);
+    itemGridBagSizer7->SetEmptyCellSize(wxSize(80, 80));
+    itemWizardPageSimple6->SetSizer(itemGridBagSizer7);
 
-    wxStaticText* itemStaticText6 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Please input password:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemGridBagSizer5->Add(itemStaticText6, wxGBPosition(0, 0), wxGBSpan(1, 3), wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText8 = new wxStaticText( itemWizardPageSimple6, wxID_STATIC, _("Please input password:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer7->Add(itemStaticText8, wxGBPosition(0, 0), wxGBSpan(1, 3), wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText7 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Level1 PW1"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemGridBagSizer5->Add(itemStaticText7, wxGBPosition(2, 0), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText9 = new wxStaticText( itemWizardPageSimple6, wxID_STATIC, _("Level1 PW1"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer7->Add(itemStaticText9, wxGBPosition(2, 0), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxTextCtrl* itemTextCtrl8 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV1PW1, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
-    itemTextCtrl8->SetMaxLength(4);
-    itemGridBagSizer5->Add(itemTextCtrl8, wxGBPosition(2, 1), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    wxStaticText* itemStaticText9 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Level1 PW2"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemGridBagSizer5->Add(itemStaticText9, wxGBPosition(2, 3), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    wxTextCtrl* itemTextCtrl10 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV1PW2, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
+    wxTextCtrl* itemTextCtrl10 = new wxTextCtrl( itemWizardPageSimple6, ID_TEXTCTRL_LV1PW1, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
     itemTextCtrl10->SetMaxLength(4);
-    itemGridBagSizer5->Add(itemTextCtrl10, wxGBPosition(2, 4), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemGridBagSizer7->Add(itemTextCtrl10, wxGBPosition(2, 1), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText11 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Level2 PW1"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemGridBagSizer5->Add(itemStaticText11, wxGBPosition(3, 0), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText11 = new wxStaticText( itemWizardPageSimple6, wxID_STATIC, _("Level1 PW2"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer7->Add(itemStaticText11, wxGBPosition(2, 3), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxTextCtrl* itemTextCtrl12 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV2PW1, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
+    wxTextCtrl* itemTextCtrl12 = new wxTextCtrl( itemWizardPageSimple6, ID_TEXTCTRL_LV1PW2, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
     itemTextCtrl12->SetMaxLength(4);
-    itemGridBagSizer5->Add(itemTextCtrl12, wxGBPosition(3, 1), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemGridBagSizer7->Add(itemTextCtrl12, wxGBPosition(2, 4), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText13 = new wxStaticText( itemWizardPageSimple4, wxID_STATIC, _("Level2 PW2"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemGridBagSizer5->Add(itemStaticText13, wxGBPosition(3, 3), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText13 = new wxStaticText( itemWizardPageSimple6, wxID_STATIC, _("Level2 PW1"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer7->Add(itemStaticText13, wxGBPosition(3, 0), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxTextCtrl* itemTextCtrl14 = new wxTextCtrl( itemWizardPageSimple4, ID_TEXTCTRL_LV2PW2, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
+    wxTextCtrl* itemTextCtrl14 = new wxTextCtrl( itemWizardPageSimple6, ID_TEXTCTRL_LV2PW1, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
     itemTextCtrl14->SetMaxLength(4);
-    itemGridBagSizer5->Add(itemTextCtrl14, wxGBPosition(3, 4), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemGridBagSizer7->Add(itemTextCtrl14, wxGBPosition(3, 1), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* itemButton15 = new wxButton( itemWizardPageSimple4, ID_BUTTON_DEMO, _("Use Demo Dongle"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemGridBagSizer5->Add(itemButton15, wxGBPosition(4, 0), wxGBSpan(1, 2), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText15 = new wxStaticText( itemWizardPageSimple6, wxID_STATIC, _("Level2 PW2"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer7->Add(itemStaticText15, wxGBPosition(3, 3), wxGBSpan(1, 1), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxTextCtrl* itemTextCtrl16 = new wxTextCtrl( itemWizardPageSimple6, ID_TEXTCTRL_LV2PW2, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
+    itemTextCtrl16->SetMaxLength(4);
+    itemGridBagSizer7->Add(itemTextCtrl16, wxGBPosition(3, 4), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxButton* itemButton17 = new wxButton( itemWizardPageSimple6, ID_BUTTON_DEMO, _("Use Demo Dongle"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemGridBagSizer7->Add(itemButton17, wxGBPosition(4, 0), wxGBSpan(1, 2), wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 ////@end WizardPagePasswd content construction
 }
@@ -577,58 +587,58 @@ void WizardPageKeyInfo::Init()
 void WizardPageKeyInfo::CreateControls()
 {    
 ////@begin WizardPageKeyInfo content construction
-    WizardPageKeyInfo* itemWizardPageSimple16 = this;
+    WizardPageKeyInfo* itemWizardPageSimple18 = this;
 
-    wxBoxSizer* itemBoxSizer17 = new wxBoxSizer(wxVERTICAL);
-    itemWizardPageSimple16->SetSizer(itemBoxSizer17);
+    wxBoxSizer* itemBoxSizer19 = new wxBoxSizer(wxVERTICAL);
+    itemWizardPageSimple18->SetSizer(itemBoxSizer19);
 
-    wxStaticBox* itemStaticBoxSizer18Static = new wxStaticBox(itemWizardPageSimple16, wxID_ANY, _("Dongle Info"));
-    wxStaticBoxSizer* itemStaticBoxSizer18 = new wxStaticBoxSizer(itemStaticBoxSizer18Static, wxVERTICAL);
-    itemBoxSizer17->Add(itemStaticBoxSizer18, 0, wxGROW|wxALL, 5);
+    wxStaticBox* itemStaticBoxSizer20Static = new wxStaticBox(itemWizardPageSimple18, wxID_ANY, _("Dongle Info"));
+    wxStaticBoxSizer* itemStaticBoxSizer20 = new wxStaticBoxSizer(itemStaticBoxSizer20Static, wxVERTICAL);
+    itemBoxSizer19->Add(itemStaticBoxSizer20, 0, wxGROW|wxALL, 5);
 
-    wxFlexGridSizer* itemFlexGridSizer19 = new wxFlexGridSizer(0, 2, 0, 0);
-    itemFlexGridSizer19->AddGrowableCol(1);
-    itemStaticBoxSizer18->Add(itemFlexGridSizer19, 0, wxGROW|wxALL, 5);
+    wxFlexGridSizer* itemFlexGridSizer21 = new wxFlexGridSizer(0, 2, 0, 0);
+    itemFlexGridSizer21->AddGrowableCol(1);
+    itemStaticBoxSizer20->Add(itemFlexGridSizer21, 0, wxGROW|wxALL, 5);
 
-    wxStaticText* itemStaticText20 = new wxStaticText( itemWizardPageSimple16, wxID_STATIC, _("Hardware ID"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer19->Add(itemStaticText20, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText22 = new wxStaticText( itemWizardPageSimple18, wxID_STATIC, _("Hardware ID"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer21->Add(itemStaticText22, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxTextCtrl* itemTextCtrl21 = new wxTextCtrl( itemWizardPageSimple16, ID_TEXTCTRL_HWID, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    itemTextCtrl21->Enable(false);
-    itemFlexGridSizer19->Add(itemTextCtrl21, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxTextCtrl* itemTextCtrl23 = new wxTextCtrl( itemWizardPageSimple18, ID_TEXTCTRL_HWID, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    itemTextCtrl23->Enable(false);
+    itemFlexGridSizer21->Add(itemTextCtrl23, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText22 = new wxStaticText( itemWizardPageSimple16, wxID_STATIC, _("Software ID"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer19->Add(itemStaticText22, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText24 = new wxStaticText( itemWizardPageSimple18, wxID_STATIC, _("Software ID"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer21->Add(itemStaticText24, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxTextCtrl* itemTextCtrl23 = new wxTextCtrl( itemWizardPageSimple16, ID_TEXTCTRL_SWID, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer19->Add(itemTextCtrl23, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxTextCtrl* itemTextCtrl25 = new wxTextCtrl( itemWizardPageSimple18, ID_TEXTCTRL_SWID, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer21->Add(itemTextCtrl25, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticBox* itemStaticBoxSizer24Static = new wxStaticBox(itemWizardPageSimple16, wxID_ANY, _("User Info"));
-    wxStaticBoxSizer* itemStaticBoxSizer24 = new wxStaticBoxSizer(itemStaticBoxSizer24Static, wxVERTICAL);
-    itemBoxSizer17->Add(itemStaticBoxSizer24, 0, wxGROW|wxALL, 5);
+    wxStaticBox* itemStaticBoxSizer26Static = new wxStaticBox(itemWizardPageSimple18, wxID_ANY, _("User Info"));
+    wxStaticBoxSizer* itemStaticBoxSizer26 = new wxStaticBoxSizer(itemStaticBoxSizer26Static, wxVERTICAL);
+    itemBoxSizer19->Add(itemStaticBoxSizer26, 0, wxGROW|wxALL, 5);
 
-    wxFlexGridSizer* itemFlexGridSizer25 = new wxFlexGridSizer(0, 2, 0, 0);
-    itemFlexGridSizer25->AddGrowableCol(1);
-    itemStaticBoxSizer24->Add(itemFlexGridSizer25, 0, wxGROW|wxALL, 5);
+    wxFlexGridSizer* itemFlexGridSizer27 = new wxFlexGridSizer(0, 2, 0, 0);
+    itemFlexGridSizer27->AddGrowableCol(1);
+    itemStaticBoxSizer26->Add(itemFlexGridSizer27, 0, wxGROW|wxALL, 5);
 
-    wxStaticText* itemStaticText26 = new wxStaticText( itemWizardPageSimple16, wxID_STATIC, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer25->Add(itemStaticText26, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText28 = new wxStaticText( itemWizardPageSimple18, wxID_STATIC, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer27->Add(itemStaticText28, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxTextCtrl* itemTextCtrl27 = new wxTextCtrl( itemWizardPageSimple16, ID_TEXTCTRL_USER, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer25->Add(itemTextCtrl27, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxTextCtrl* itemTextCtrl29 = new wxTextCtrl( itemWizardPageSimple18, ID_TEXTCTRL_USER, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer27->Add(itemTextCtrl29, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText28 = new wxStaticText( itemWizardPageSimple16, wxID_STATIC, _("Contact"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer25->Add(itemStaticText28, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText30 = new wxStaticText( itemWizardPageSimple18, wxID_STATIC, _("Contact"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer27->Add(itemStaticText30, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxTextCtrl* itemTextCtrl29 = new wxTextCtrl( itemWizardPageSimple16, ID_TEXTCTRL_CONTACT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer25->Add(itemTextCtrl29, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxTextCtrl* itemTextCtrl31 = new wxTextCtrl( itemWizardPageSimple18, ID_TEXTCTRL_CONTACT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer27->Add(itemTextCtrl31, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxArrayString itemRadioBox30Strings;
-    itemRadioBox30Strings.Add(_("&MD5"));
-    itemRadioBox30Strings.Add(_("&SHA1"));
-    wxRadioBox* itemRadioBox30 = new wxRadioBox( itemWizardPageSimple16, ID_RADIOBOX_CODEGEN, _("Security Code Generation"), wxDefaultPosition, wxDefaultSize, itemRadioBox30Strings, 1, wxRA_SPECIFY_ROWS );
-    itemRadioBox30->SetSelection(0);
-    itemBoxSizer17->Add(itemRadioBox30, 0, wxGROW|wxALL, 5);
+    wxArrayString itemRadioBox32Strings;
+    itemRadioBox32Strings.Add(_("&MD5"));
+    itemRadioBox32Strings.Add(_("&SHA1"));
+    wxRadioBox* itemRadioBox32 = new wxRadioBox( itemWizardPageSimple18, ID_RADIOBOX_CODEGEN, _("Security Code Generation"), wxDefaultPosition, wxDefaultSize, itemRadioBox32Strings, 1, wxRA_SPECIFY_ROWS );
+    itemRadioBox32->SetSelection(0);
+    itemBoxSizer19->Add(itemRadioBox32, 0, wxGROW|wxALL, 5);
 
 ////@end WizardPageKeyInfo content construction
 }
@@ -841,17 +851,17 @@ void WizardPageDone::Init()
 void WizardPageDone::CreateControls()
 {    
 ////@begin WizardPageDone content construction
-    WizardPageDone* itemWizardPageSimple31 = this;
+    WizardPageDone* itemWizardPageSimple33 = this;
 
-    wxBoxSizer* itemBoxSizer32 = new wxBoxSizer(wxVERTICAL);
-    itemWizardPageSimple31->SetSizer(itemBoxSizer32);
+    wxBoxSizer* itemBoxSizer34 = new wxBoxSizer(wxVERTICAL);
+    itemWizardPageSimple33->SetSizer(itemBoxSizer34);
 
-    wxStaticText* itemStaticText33 = new wxStaticText( itemWizardPageSimple31, wxID_STATIC, _("Congratulations"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticText33->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD, false, wxT("Times New Roman")));
-    itemBoxSizer32->Add(itemStaticText33, 0, wxALIGN_LEFT|wxALL, 5);
+    wxStaticText* itemStaticText35 = new wxStaticText( itemWizardPageSimple33, wxID_STATIC, _("Congratulations"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticText35->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD, false, wxT("Times New Roman")));
+    itemBoxSizer34->Add(itemStaticText35, 0, wxALIGN_LEFT|wxALL, 5);
 
-    wxStaticText* itemStaticText34 = new wxStaticText( itemWizardPageSimple31, wxID_STATIC, _("Your key configuration has done."), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer32->Add(itemStaticText34, 0, wxALIGN_LEFT|wxALL, 5);
+    wxStaticText* itemStaticText36 = new wxStaticText( itemWizardPageSimple33, wxID_STATIC, _("Your key configuration has done."), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer34->Add(itemStaticText36, 0, wxALIGN_LEFT|wxALL, 5);
 
 ////@end WizardPageDone content construction
 }
