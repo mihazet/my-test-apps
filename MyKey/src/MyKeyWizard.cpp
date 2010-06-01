@@ -18,6 +18,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
+#include "wx/tokenzr.h"
 #endif
 
 ////@begin includes
@@ -963,6 +964,7 @@ void WizardPageKeyInfo::OnKeyInfoPageChanging( wxWizardEvent& event )
     unsigned short result, pos, len, dontCareShort;
     unsigned long dontCareLong, longTemp, swID;
     unsigned char buffer[1000];
+    wxString textData, totalData;
 
     if (event.GetDirection())
     {
@@ -997,9 +999,12 @@ void WizardPageKeyInfo::OnKeyInfoPageChanging( wxWizardEvent& event )
         result = Rockey(RY_WRITE_USERID, &rockey, &swID, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
 
         /* write user data */
+        textData = userText->GetValue() + wxT(" ") + contactText->GetValue();
+        len = textData.length();
+        totalData = wxString::Format(wxT("%d "), len) + textData;
+        len = totalData.length();
         pos = 500;
-        len = userText->GetValue().length();
-        memcpy(buffer, userText->GetValue().ToAscii(), userText->GetValue().length());
+        memcpy(buffer, totalData.ToAscii(), len);
         result = Rockey(RY_WRITE, &rockey, &dontCareLong, &dontCareLong, &pos, &len, &dontCareShort, &dontCareShort, buffer);
         
 data_invalid:
