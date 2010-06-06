@@ -438,6 +438,8 @@ void WizardPagePasswd::CreateControls()
 
     wxTextCtrl* itemTextCtrl10 = new wxTextCtrl( itemWizardPageSimple6, ID_TEXTCTRL_LV1PW1, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
     itemTextCtrl10->SetMaxLength(4);
+    if (WizardPagePasswd::ShowToolTips())
+        itemTextCtrl10->SetToolTip(_("Please provide the basic password #1 of the dongle here.\nThe password is a 4-digit hexdecimal number, ex: 01AB"));
     itemGridBagSizer7->Add(itemTextCtrl10, wxGBPosition(2, 1), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText11 = new wxStaticText( itemWizardPageSimple6, wxID_STATIC, _("Level1 PW2"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -445,6 +447,8 @@ void WizardPagePasswd::CreateControls()
 
     wxTextCtrl* itemTextCtrl12 = new wxTextCtrl( itemWizardPageSimple6, ID_TEXTCTRL_LV1PW2, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
     itemTextCtrl12->SetMaxLength(4);
+    if (WizardPagePasswd::ShowToolTips())
+        itemTextCtrl12->SetToolTip(_("Please provide the basic password #2 of the dongle here.\nThe password is a 4-digit hexdecimal number, ex: 01AB"));
     itemGridBagSizer7->Add(itemTextCtrl12, wxGBPosition(2, 4), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText13 = new wxStaticText( itemWizardPageSimple6, wxID_STATIC, _("Level2 PW1"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -452,6 +456,8 @@ void WizardPagePasswd::CreateControls()
 
     wxTextCtrl* itemTextCtrl14 = new wxTextCtrl( itemWizardPageSimple6, ID_TEXTCTRL_LV2PW1, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
     itemTextCtrl14->SetMaxLength(4);
+    if (WizardPagePasswd::ShowToolTips())
+        itemTextCtrl14->SetToolTip(_("Please provide the advanced password #1 of the dongle here.\nThe password is a 4-digit hexdecimal number, ex: 01AB"));
     itemGridBagSizer7->Add(itemTextCtrl14, wxGBPosition(3, 1), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText15 = new wxStaticText( itemWizardPageSimple6, wxID_STATIC, _("Level2 PW2"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -459,6 +465,8 @@ void WizardPagePasswd::CreateControls()
 
     wxTextCtrl* itemTextCtrl16 = new wxTextCtrl( itemWizardPageSimple6, ID_TEXTCTRL_LV2PW2, wxEmptyString, wxDefaultPosition, wxSize(50, -1), wxTE_PASSWORD );
     itemTextCtrl16->SetMaxLength(4);
+    if (WizardPagePasswd::ShowToolTips())
+        itemTextCtrl16->SetToolTip(_("Please provide the advanced password #2 of the dongle here.\nThe password is a 4-digit hexdecimal number, ex: 01AB"));
     itemGridBagSizer7->Add(itemTextCtrl16, wxGBPosition(3, 4), wxGBSpan(1, 1), wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxButton* itemButton17 = new wxButton( itemWizardPageSimple6, ID_BUTTON_DEMO, _("Use Demo Dongle"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -602,17 +610,22 @@ void WizardPageKeyInfo::CreateControls()
     itemFlexGridSizer21->AddGrowableCol(1);
     itemStaticBoxSizer20->Add(itemFlexGridSizer21, 0, wxGROW|wxALL, 5);
 
-    wxStaticText* itemStaticText22 = new wxStaticText( itemWizardPageSimple18, wxID_STATIC, _("Hardware ID"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* itemStaticText22 = new wxStaticText( itemWizardPageSimple18, wxID_STATIC, _("Hardware ID (hex)"), wxDefaultPosition, wxDefaultSize, 0 );
     itemFlexGridSizer21->Add(itemStaticText22, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxTextCtrl* itemTextCtrl23 = new wxTextCtrl( itemWizardPageSimple18, ID_TEXTCTRL_HWID, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    if (WizardPageKeyInfo::ShowToolTips())
+        itemTextCtrl23->SetToolTip(_("This field cannot be edited. Each dongle in the world has an unique hardware ID. The number is hexdecimal."));
     itemTextCtrl23->Enable(false);
     itemFlexGridSizer21->Add(itemTextCtrl23, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText24 = new wxStaticText( itemWizardPageSimple18, wxID_STATIC, _("Software ID"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* itemStaticText24 = new wxStaticText( itemWizardPageSimple18, wxID_STATIC, _("Software ID (hex)"), wxDefaultPosition, wxDefaultSize, 0 );
     itemFlexGridSizer21->Add(itemStaticText24, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxTextCtrl* itemTextCtrl25 = new wxTextCtrl( itemWizardPageSimple18, ID_TEXTCTRL_SWID, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    itemTextCtrl25->SetMaxLength(8);
+    if (WizardPageKeyInfo::ShowToolTips())
+        itemTextCtrl25->SetToolTip(_("You can assign a software ID for this dongle. The software  ID is 32-bit length number, and it is a hexdecimal number."));
     itemFlexGridSizer21->Add(itemTextCtrl25, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticBox* itemStaticBoxSizer26Static = new wxStaticBox(itemWizardPageSimple18, wxID_ANY, _("User Info"));
@@ -627,12 +640,16 @@ void WizardPageKeyInfo::CreateControls()
     itemFlexGridSizer27->Add(itemStaticText28, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxTextCtrl* itemTextCtrl29 = new wxTextCtrl( itemWizardPageSimple18, ID_TEXTCTRL_USER, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    if (WizardPageKeyInfo::ShowToolTips())
+        itemTextCtrl29->SetToolTip(_("Please assign the owner's name of this dongle. Space is allowed in the name string."));
     itemFlexGridSizer27->Add(itemTextCtrl29, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText30 = new wxStaticText( itemWizardPageSimple18, wxID_STATIC, _("Contact"), wxDefaultPosition, wxDefaultSize, 0 );
     itemFlexGridSizer27->Add(itemStaticText30, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxTextCtrl* itemTextCtrl31 = new wxTextCtrl( itemWizardPageSimple18, ID_TEXTCTRL_CONTACT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    if (WizardPageKeyInfo::ShowToolTips())
+        itemTextCtrl31->SetToolTip(_("Please assign the owner's contact info in this field. For example, the email address or phone number. Space is not allowed in this information."));
     itemFlexGridSizer27->Add(itemTextCtrl31, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString itemRadioBox32Strings;

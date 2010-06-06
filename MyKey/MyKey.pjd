@@ -949,7 +949,8 @@ Please insert the USB dongle that you want to configure, and notice that only on
                 <string name="proxy-Initial value">""</string>
                 <long name="proxy-Max length">4</long>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"Please provide the basic password #1 of the dongle here.
+The password is a 4-digit hexdecimal number, ex: 01AB"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -1109,7 +1110,8 @@ Please insert the USB dongle that you want to configure, and notice that only on
                 <string name="proxy-Initial value">""</string>
                 <long name="proxy-Max length">4</long>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"Please provide the basic password #2 of the dongle here.
+The password is a 4-digit hexdecimal number, ex: 01AB"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -1269,7 +1271,8 @@ Please insert the USB dongle that you want to configure, and notice that only on
                 <string name="proxy-Initial value">""</string>
                 <long name="proxy-Max length">4</long>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"Please provide the advanced password #1 of the dongle here.
+The password is a 4-digit hexdecimal number, ex: 01AB"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -1429,7 +1432,8 @@ Please insert the USB dongle that you want to configure, and notice that only on
                 <string name="proxy-Initial value">""</string>
                 <long name="proxy-Max length">4</long>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"Please provide the advanced password #2 of the dongle here.
+The password is a 4-digit hexdecimal number, ex: 01AB"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -1726,7 +1730,7 @@ Please insert the USB dongle that you want to configure, and notice that only on
                     <string name="proxy-Implementation filename">""</string>
                     <string name="proxy-Header filename">""</string>
                     <string name="proxy-Member variable name">""</string>
-                    <string name="proxy-Label">"Hardware ID"</string>
+                    <string name="proxy-Label">"Hardware ID (hex)"</string>
                     <long name="proxy-Wrapping width">-1</long>
                     <string name="proxy-Help text">""</string>
                     <string name="proxy-Tooltip text">""</string>
@@ -1799,7 +1803,7 @@ Please insert the USB dongle that you want to configure, and notice that only on
                     <string name="proxy-Initial value">""</string>
                     <long name="proxy-Max length">0</long>
                     <string name="proxy-Help text">""</string>
-                    <string name="proxy-Tooltip text">""</string>
+                    <string name="proxy-Tooltip text">"This field cannot be edited. Each dongle in the world has an unique hardware ID. The number is hexdecimal."</string>
                     <string name="proxy-Background colour">""</string>
                     <string name="proxy-Foreground colour">""</string>
                     <string name="proxy-Font">""</string>
@@ -1878,7 +1882,7 @@ Please insert the USB dongle that you want to configure, and notice that only on
                     <string name="proxy-Implementation filename">""</string>
                     <string name="proxy-Header filename">""</string>
                     <string name="proxy-Member variable name">""</string>
-                    <string name="proxy-Label">"Software ID"</string>
+                    <string name="proxy-Label">"Software ID (hex)"</string>
                     <long name="proxy-Wrapping width">-1</long>
                     <string name="proxy-Help text">""</string>
                     <string name="proxy-Tooltip text">""</string>
@@ -1949,9 +1953,9 @@ Please insert the USB dongle that you want to configure, and notice that only on
                     <string name="proxy-Header filename">""</string>
                     <string name="proxy-Member variable name">""</string>
                     <string name="proxy-Initial value">""</string>
-                    <long name="proxy-Max length">0</long>
+                    <long name="proxy-Max length">8</long>
                     <string name="proxy-Help text">""</string>
-                    <string name="proxy-Tooltip text">""</string>
+                    <string name="proxy-Tooltip text">"You can assign a software ID for this dongle. The software  ID is 32-bit length number, and it is a hexdecimal number."</string>
                     <string name="proxy-Background colour">""</string>
                     <string name="proxy-Foreground colour">""</string>
                     <string name="proxy-Font">""</string>
@@ -2167,7 +2171,7 @@ Please insert the USB dongle that you want to configure, and notice that only on
                     <string name="proxy-Initial value">""</string>
                     <long name="proxy-Max length">0</long>
                     <string name="proxy-Help text">""</string>
-                    <string name="proxy-Tooltip text">""</string>
+                    <string name="proxy-Tooltip text">"Please assign the owner's name of this dongle. Space is allowed in the name string."</string>
                     <string name="proxy-Background colour">""</string>
                     <string name="proxy-Foreground colour">""</string>
                     <string name="proxy-Font">""</string>
@@ -2319,7 +2323,7 @@ Please insert the USB dongle that you want to configure, and notice that only on
                     <string name="proxy-Initial value">""</string>
                     <long name="proxy-Max length">0</long>
                     <string name="proxy-Help text">""</string>
-                    <string name="proxy-Tooltip text">""</string>
+                    <string name="proxy-Tooltip text">"Please assign the owner's contact info in this field. For example, the email address or phone number. Space is not allowed in this information."</string>
                     <string name="proxy-Background colour">""</string>
                     <string name="proxy-Foreground colour">""</string>
                     <string name="proxy-Font">""</string>
