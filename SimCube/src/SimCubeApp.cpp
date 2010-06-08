@@ -300,7 +300,7 @@ bool SimCubeApp::OnInit()
     wxStandardPaths &stdPaths = wxStandardPaths::Get();
 
     _locale = new wxLocale();
-    if (_locale && _locale->Init(_lang, wxLOCALE_CONV_ENCODING))
+    if (_locale && _locale->Init(_lang))
     {
         wxString localePath = wxFileName(stdPaths.GetExecutablePath()).GetPathWithSep();
         localePath += wxT("locale");
