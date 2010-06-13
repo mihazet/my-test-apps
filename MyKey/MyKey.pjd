@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <anthemion-project version="1.0.0.0" xmlns="http://www.anthemion.co.uk">
   <header>
-    <long name="name_counter">0</long>
+    <long name="name_counter">1</long>
     <string name="html_path">""</string>
     <string name="title">""</string>
     <string name="author">""</string>
@@ -268,6 +268,7 @@
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
           <bool name="Enable .sln generation">1</bool>
+          <bool name="Generate manifest">1</bool>
         </document>
         <document>
           <string name="title">"VC++ Project Unicode Release"</string>
@@ -348,6 +349,7 @@
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
           <bool name="Enable .sln generation">1</bool>
+          <bool name="Generate manifest">1</bool>
         </document>
       </document>
     </document>
@@ -432,7 +434,7 @@
           <string name="proxy-Title">"My Key"</string>
           <string name="proxy-Bitmap">"resource/images/wizard.xpm"</string>
           <bool name="proxy-Centre">1</bool>
-          <string name="proxy-Icon">""</string>
+          <string name="proxy-Icon">"resource/images/MyKey_32.xpm"</string>
           <string name="proxy-Help text">""</string>
           <string name="proxy-Tooltip text">""</string>
           <string name="proxy-Background colour">""</string>
@@ -2726,6 +2728,28 @@ The password is a 4-digit hexdecimal number, ex: 01AB"</string>
         <long name="owns-file">1</long>
         <long name="title-mode">0</long>
         <long name="locked">1</long>
+        <document>
+          <string name="title">"MyKey_32.xpm"</string>
+          <string name="type">"image-document"</string>
+          <string name="filename">"resource/images/MyKey_32.xpm"</string>
+          <string name="icon-name">"image"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <long name="zoom-level">100</long>
+        </document>
+        <document>
+          <string name="title">"wizard.xpm"</string>
+          <string name="type">"image-document"</string>
+          <string name="filename">"resource/images/wizard.xpm"</string>
+          <string name="icon-name">"image"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <long name="zoom-level">100</long>
+        </document>
       </document>
     </document>
   </documents>

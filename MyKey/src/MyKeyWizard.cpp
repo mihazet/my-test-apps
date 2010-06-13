@@ -30,6 +30,7 @@
 
 ////@begin XPM images
 #include "../resource/images/wizard.xpm"
+#include "../resource/images/MyKey_32.xpm"
 ////@end XPM images
 
 
@@ -80,6 +81,7 @@ bool MyKeyWizard::Create( wxWindow* parent, wxWindowID id, const wxPoint& pos )
     wxWizard::Create( parent, id, _("My Key"), wizardBitmap, pos, wxDEFAULT_DIALOG_STYLE|wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX );
 
     CreateControls();
+    SetIcon(GetIconResource(wxT("resource/images/MyKey_32.xpm")));
 ////@end MyKeyWizard creation
     return true;
 }
@@ -198,6 +200,11 @@ wxIcon MyKeyWizard::GetIconResource( const wxString& name )
     // Icon retrieval
 ////@begin MyKeyWizard icon retrieval
     wxUnusedVar(name);
+    if (name == _T("resource/images/MyKey_32.xpm"))
+    {
+        wxIcon icon(MyKey_32_xpm);
+        return icon;
+    }
     return wxNullIcon;
 ////@end MyKeyWizard icon retrieval
 }
