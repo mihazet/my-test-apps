@@ -950,7 +950,7 @@ void WizardPageKeyInfo::OnKeyInfoPageChanged( wxWizardEvent& event )
     {
         hwIDText = wxDynamicCast(FindWindow(ID_TEXTCTRL_HWID), wxTextCtrl);
         if (hwIDText)
-            hwIDText->ChangeValue(wxString::Format(wxT("0x%08lX"), hwID));
+            hwIDText->ChangeValue(wxString::Format(wxT("%08lX"), hwID));
 
         result = Rockey(RY_OPEN, &rockey, &hwID, &dontCareLong, &basicPW1, &basicPW2, &advPW1, &advPW2, buffer);
 
@@ -959,7 +959,7 @@ void WizardPageKeyInfo::OnKeyInfoPageChanged( wxWizardEvent& event )
         {
             result = Rockey(RY_READ_USERID, &rockey, &swID, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
             if (!result)
-                swIDText->ChangeValue(wxString::Format(wxT("0x%lX"), swID));
+                swIDText->ChangeValue(wxString::Format(wxT("%lX"), swID));
 
             /* read total data length */
             pos = 500;
