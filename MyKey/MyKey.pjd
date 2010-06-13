@@ -263,7 +263,7 @@
           <string name="Project rebuild command">"%AUTO%"</string>
           <string name="Project clean command">"%AUTO%"</string>
           <string name="Project debug command">"%AUTO%"</string>
-          <string name="Pre-build command">"%AUTO%"</string>
+          <string name="Pre-build command">"SubWCRev . include\Version_template.h include\Version.h"</string>
           <string name="Post-build command">"%AUTO%"</string>
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
@@ -344,7 +344,7 @@
           <string name="Project rebuild command">"%AUTO%"</string>
           <string name="Project clean command">"%AUTO%"</string>
           <string name="Project debug command">"%AUTO%"</string>
-          <string name="Pre-build command">"%AUTO%"</string>
+          <string name="Pre-build command">"SubWCRev . include\Version_template.h include\Version.h"</string>
           <string name="Post-build command">"%AUTO%"</string>
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
