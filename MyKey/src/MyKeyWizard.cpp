@@ -935,16 +935,18 @@ wxIcon WizardPageDone::GetIconResource( const wxString& name )
 
 void WizardPageKeyInfo::OnKeyInfoPageChanged( wxWizardEvent& event )
 {
-    wxTextCtrl *hwIDText = NULL, *swIDText = NULL;
+    wxTextCtrl *hwIDText = NULL, *swIDText = NULL, *userText = NULL, *contactText = NULL;
     unsigned long &hwID = wxGetApp().hwID;
     unsigned short &rockey = wxGetApp().rockey;
     unsigned short &basicPW1 = wxGetApp().basicPW1;
     unsigned short &basicPW2 = wxGetApp().basicPW2;
     unsigned short &advPW1 = wxGetApp().advPW1;
     unsigned short &advPW2 = wxGetApp().advPW2;
-    unsigned long swID, dontCareLong;
+    unsigned long swID, dontCareLong, longTemp = 0;
     unsigned short result, pos, len, dontCareShort;
     unsigned char buffer[1000];
+    wxString lenStr, totalData, userData, contactData;
+    size_t delimitPos;
 
     if (event.GetDirection())
     {
@@ -965,8 +967,35 @@ void WizardPageKeyInfo::OnKeyInfoPageChanged( wxWizardEvent& event )
             pos = 500;
             len = 3;
             result = Rockey(RY_READ, &rockey, &dontCareLong, &dontCareLong, &pos, &len, &dontCareShort, &dontCareShort, buffer);
+            if (!result)
+                lenStr = wxString::From8BitData((const char *)&buffer[0], 3);
+            else
+                goto data_invalid;
+
+            /* read total data */
+            lenStr.ToULong(&longTemp);
+            if (longTemp)
+            {
+                pos = 500 + ((longTemp < 10) ? 2 : ((longTemp < 100) ? 3 : 4));
+                len = longTemp;
+                result = Rockey(RY_READ, &rockey, &dontCareLong, &dontCareLong, &pos, &len, &dontCareShort, &dontCareShort, buffer);
+                if (!result)
+                {
+                    totalData = wxString::From8BitData((const char *)&buffer[0], len);
+                    delimitPos = totalData.find_last_of(' ');
+                    userData = totalData.Mid(0, delimitPos);
+                    contactData = totalData.Mid(delimitPos + 1);
+                    userText = wxDynamicCast(FindWindow(ID_TEXTCTRL_USER), wxTextCtrl);
+                    contactText = wxDynamicCast(FindWindow(ID_TEXTCTRL_CONTACT), wxTextCtrl);
+                    if (!userData.empty() && userText)
+                        userText->ChangeValue(userData);
+                    if (!contactData.empty() && contactText)
+                        contactText->ChangeValue(contactData);
+                }
+            }
         }
         
+data_invalid:
         result = Rockey(RY_CLOSE, &rockey, &dontCareLong, &dontCareLong, &dontCareShort, &dontCareShort, &dontCareShort, &dontCareShort, buffer);
     }
 }
@@ -978,7 +1007,7 @@ void WizardPageKeyInfo::OnKeyInfoPageChanged( wxWizardEvent& event )
 
 void WizardPageKeyInfo::OnKeyInfoPageChanging( wxWizardEvent& event )
 {
-    wxTextCtrl *swIDText = NULL, *userText, *contactText;
+    wxTextCtrl *swIDText = NULL, *userText = NULL, *contactText = NULL;
     unsigned long &hwID = wxGetApp().hwID;
     unsigned short &rockey = wxGetApp().rockey;
     unsigned short &basicPW1 = wxGetApp().basicPW1;
@@ -1028,7 +1057,7 @@ void WizardPageKeyInfo::OnKeyInfoPageChanging( wxWizardEvent& event )
         totalData = wxString::Format(wxT("%d "), len) + textData;
         len = totalData.length();
         pos = 500;
-        memcpy(buffer, totalData.ToAscii(), len);
+        memcpy(buffer, totalData.To8BitData(), len);
         result = Rockey(RY_WRITE, &rockey, &dontCareLong, &dontCareLong, &pos, &len, &dontCareShort, &dontCareShort, buffer);
         
 data_invalid:
