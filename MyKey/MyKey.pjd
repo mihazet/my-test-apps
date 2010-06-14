@@ -2718,6 +2718,65 @@ The password is a 4-digit hexdecimal number, ex: 01AB"</string>
           <string name="created">"28/5/2010"</string>
           <string name="language">""</string>
         </document>
+        <document>
+          <string name="title">"md5"</string>
+          <string name="type">"html-folder-document"</string>
+          <string name="filename">""</string>
+          <string name="icon-name">"folder"</string>
+          <long name="is-transient">1</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <string name="created">"15/6/2010"</string>
+          <document>
+            <string name="title">"md5.cpp"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"lib/wxMD5/md5.cpp"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"15/6/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"md5.h"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"lib/wxMD5/md5.h"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"15/6/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"wxMD5.cpp"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"lib/wxMD5/wxMD5.cpp"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"15/6/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"wxMD5.h"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"lib/wxMD5/wxMD5.h"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"15/6/2010"</string>
+            <string name="language">""</string>
+          </document>
+        </document>
       </document>
       <document>
         <string name="title">"Images"</string>
