@@ -237,7 +237,7 @@
           <string name="CFG">""</string>
           <string name="Compiler location">"%AUTO%"</string>
           <string name="Compiler bin path">"%AUTO%"</string>
-          <string name="Compiler include path">"%AUTO%,include"</string>
+          <string name="Compiler include path">"%AUTO%,include,lib/wxMD5"</string>
           <string name="Compiler lib path">"%AUTO%"</string>
           <string name="PATH variable">"%AUTO%"</string>
           <string name="C++ command">"%AUTO%"</string>
@@ -318,7 +318,7 @@
           <string name="CFG">""</string>
           <string name="Compiler location">"%AUTO%"</string>
           <string name="Compiler bin path">"%AUTO%"</string>
-          <string name="Compiler include path">"%AUTO%,include"</string>
+          <string name="Compiler include path">"%AUTO%,include,lib/wxMD5"</string>
           <string name="Compiler lib path">"%AUTO%"</string>
           <string name="PATH variable">"%AUTO%"</string>
           <string name="C++ command">"%AUTO%"</string>
