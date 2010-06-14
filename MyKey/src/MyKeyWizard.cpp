@@ -1015,7 +1015,7 @@ void WizardPageKeyInfo::OnKeyInfoPageChanging( wxWizardEvent& event )
     unsigned short &advPW1 = wxGetApp().advPW1;
     unsigned short &advPW2 = wxGetApp().advPW2;
     unsigned short result, pos, len, dontCareShort;
-    unsigned long dontCareLong, longTemp, swID;
+    unsigned long dontCareLong, longTemp = 0, swID;
     unsigned char buffer[1000];
     wxString textData, totalData;
 
