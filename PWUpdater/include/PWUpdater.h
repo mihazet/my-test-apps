@@ -9,6 +9,7 @@
 #define _PWUPDATER_H_
 
 #include <wx/wx.h>
+#include <wx/aui/framemanager.h>
 
 // ========================================================================
 // Application class
@@ -52,6 +53,9 @@ private:
     
     /* event handler functions */
     void OnQuit(wxCommandEvent &event);
+
+    /* data members */
+    wxAuiManager _auiMgr;
 
     DECLARE_EVENT_TABLE()
 };

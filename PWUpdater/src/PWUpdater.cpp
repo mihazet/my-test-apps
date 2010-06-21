@@ -13,7 +13,11 @@
 #include <wx/wx.h>
 #include <wx/socket.h>
 #include "PWUpdater.h"
- 
+#include "DownloadPane.h"
+#include "LogPane.h"
+
+#define wxLOG_COMPONENT "PWUpdater/ui/frame"
+
 // ------------------------------------------------------------------------
 // Application implementation
 // ------------------------------------------------------------------------
@@ -60,7 +64,6 @@ bool PWUpdaterFrame::Create(wxWindow *parent, wxWindowID id,
 
 void PWUpdaterFrame::Init()
 {
-
 }
 
 void PWUpdaterFrame::CreateControls()
@@ -71,6 +74,25 @@ void PWUpdaterFrame::CreateControls()
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(file_menu, _("&File"));
     SetMenuBar(menuBar);
+
+    /* tool bar */
+
+    /* status bar */
+
+    /* aui */
+    _auiMgr.SetManagedWindow(this);
+    _auiMgr.SetFlags(_auiMgr.GetFlags() | wxAUI_MGR_LIVE_RESIZE);
+
+    _auiMgr.AddPane(new LogPane(this),
+        wxAuiPaneInfo().Name(wxT("LogPane")).Caption(_("Log Window")).
+        CloseButton(true).DestroyOnClose(false).MinSize(560, 420).
+        Float());
+    _auiMgr.AddPane(new DownloadPane(this),
+        wxAuiPaneInfo().Name(wxT("DownloadPane")).CaptionVisible(false).
+        Center().CloseButton(false).DestroyOnClose(false).
+        MaximizeButton(true));
+
+    _auiMgr.Update();
 }
 
 void PWUpdaterFrame::OnQuit(wxCommandEvent &WXUNUSED(event))

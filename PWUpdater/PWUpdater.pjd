@@ -199,7 +199,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"VC++ Project"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"VC++ Project"</string>
           <string name="Build mode">"Debug"</string>
@@ -253,7 +253,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,include"</string>
+          <string name="Include path">"%AUTO%,include,resource"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <bool name="Suppress source rules">0</bool>
@@ -279,7 +279,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"VC++ Project"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"VC++ Project"</string>
           <string name="Build mode">"Release"</string>
@@ -333,7 +333,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,include"</string>
+          <string name="Include path">"%AUTO%,include,resource"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <bool name="Suppress source rules">0</bool>
@@ -382,6 +382,54 @@
         <long name="owns-file">1</long>
         <long name="title-mode">0</long>
         <long name="locked">1</long>
+        <document>
+          <string name="title">"DownloadPane.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/DownloadPane.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"21/6/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"DownloadPane.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/DownloadPane.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"21/6/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"LogPane.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/LogPane.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"21/6/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"LogPane.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/LogPane.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"21/6/2010"</string>
+          <string name="language">""</string>
+        </document>
         <document>
           <string name="title">"PWUpdater.cpp"</string>
           <string name="type">"source-editor-document"</string>
