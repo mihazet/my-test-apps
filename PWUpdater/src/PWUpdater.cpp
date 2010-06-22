@@ -50,6 +50,11 @@ PWUpdaterFrame::PWUpdaterFrame(wxWindow *parent, wxWindowID id,
     Create(parent, id, caption, pos, size, style);
 }
 
+PWUpdaterFrame::~PWUpdaterFrame()
+{
+    _auiMgr.UnInit();
+}
+
 bool PWUpdaterFrame::Create(wxWindow *parent, wxWindowID id,
     const wxString &caption, const wxPoint &pos, const wxSize &size,
     long style)
@@ -79,7 +84,7 @@ void PWUpdaterFrame::CreateControls()
 
     /* status bar */
 
-    /* aui */
+    /* aui manager & panes */
     _auiMgr.SetManagedWindow(this);
     _auiMgr.SetFlags(_auiMgr.GetFlags() | wxAUI_MGR_LIVE_RESIZE);
 

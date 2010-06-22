@@ -39,7 +39,7 @@ public:
         const wxPoint &pos = wxDefaultPosition,
         const wxSize &size = wxDefaultSize,
         long style = wxDEFAULT_FRAME_STYLE);
-    ~PWUpdaterFrame() {}
+    ~PWUpdaterFrame();
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
         const wxString &caption = wxT("PWUpdater"),
         const wxPoint &pos = wxDefaultPosition,

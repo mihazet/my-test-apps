@@ -30,6 +30,8 @@ LogPane::LogPane(wxWindow *parent, wxWindowID id, const wxPoint &pos,
 
 LogPane::~LogPane()
 {
+    if (_oldLogTarget)
+        delete _oldLogTarget;
 }
 
 bool LogPane::Create(wxWindow *parent, wxWindowID id, const wxPoint &pos,
@@ -37,13 +39,12 @@ bool LogPane::Create(wxWindow *parent, wxWindowID id, const wxPoint &pos,
 {
     wxPanel::Create(parent, id, pos, size, style);
     CreateControls();
-    Center();
 
-    /* use our log target */
+    /* setup log target */
     if (_logTextCtrl)
     {
-        delete wxLog::SetActiveTarget(new wxLogTextCtrl(_logTextCtrl));
-        wxLog::SetTimestamp(wxT("[%Y/%m/%d %H:%M:%S] "));
+        _oldLogTarget = wxLog::SetActiveTarget(new wxLogTextCtrl(_logTextCtrl));
+        wxLog::SetTimestamp(wxT("[%Y/%m/%d-%H:%M:%S]"));
     }
     return true;
 }
@@ -54,12 +55,13 @@ bool LogPane::Create(wxWindow *parent, wxWindowID id, const wxPoint &pos,
 void LogPane::Init()
 {
     _logTextCtrl = NULL;
+    _oldLogTarget = NULL;
 }
 
 void LogPane::CreateControls()
 {
     wxBoxSizer *allSizer = new wxBoxSizer(wxHORIZONTAL);
-    /* log text ctrl */
+    /* log window */
     _logTextCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
         wxDefaultPosition, wxDefaultSize,
         wxTE_MULTILINE|wxTE_READONLY);

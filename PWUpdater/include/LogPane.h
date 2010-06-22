@@ -22,7 +22,6 @@ public:
         const wxSize &size = wxDefaultSize,
         long style = wxTAB_TRAVERSAL);
 
-    //wxTextCtrl *GetLogTextCtrl() { return _logTextCtrl; }
     bool IsVerbose();
     void SetVerbose(bool verbose = true);
 
@@ -35,8 +34,9 @@ private:
     void OnSave(wxCommandEvent &event);
     void OnErase(wxCommandEvent &event);
 
-private:
+    // private data members
     wxTextCtrl *_logTextCtrl;
+    wxLog *_oldLogTarget;
 };
 
 #endif /* _LOG_PANE_H_ */
