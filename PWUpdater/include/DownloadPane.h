@@ -27,6 +27,8 @@ private:
     void CreateControls();
 
     // event handlers
+    void OnButtonStartTftp(wxCommandEvent &event);
+    void OnButtonStopTftp(wxCommandEvent &event);
 
     // data member
 

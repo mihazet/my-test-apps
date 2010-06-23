@@ -45,5 +45,19 @@ TftpServerThread::~TftpServerThread()
 
 wxThread::ExitCode TftpServerThread::Entry()
 {
+    wxIPV4address remote;
+    unsigned char serverBuffer[1024];
+
+    while (!TestDestroy())
+    {
+        _udpServerSocket->RecvFrom(remote, &serverBuffer[0], 1024);
+        if (!_udpServerSocket->Error())
+        {
+            
+        }
+
+        wxSleep(1);
+    }
+
     return (wxThread::ExitCode)0;
 }
