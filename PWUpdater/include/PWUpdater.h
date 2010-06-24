@@ -9,7 +9,10 @@
 #define _PWUPDATER_H_
 
 #include <wx/wx.h>
+#include <wx/thread.h>
 #include <wx/aui/framemanager.h>
+
+class TftpServerThread;
 
 // ========================================================================
 // Application class
@@ -19,6 +22,10 @@ class PWUpdaterApp : public wxApp
 public:
     PWUpdaterApp() { Init(); }
     ~PWUpdaterApp() {}
+
+    /* tftp server thread managment */
+    TftpServerThread *m_pTftpServerThread;
+    wxCriticalSection m_serverCS;
 
 private:
     void Init();
@@ -52,6 +59,7 @@ private:
     void CreateControls();
     
     /* event handler functions */
+    void OnClose(wxCloseEvent &event);
     void OnQuit(wxCommandEvent &event);
 
     /* data members */

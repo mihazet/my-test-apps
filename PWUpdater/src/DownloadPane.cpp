@@ -2,6 +2,8 @@
 // Headers
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
+#include <wx/thread.h>
+#include "PWUpdater.h"
 #include "DownloadPane.h"
 #include "WidgetsId.h"
 #include "TftpServerThread.h"
@@ -64,23 +66,73 @@ void DownloadPane::CreateControls()
     SetSizerAndFit(paneSizer);
 }
 
+void DownloadPane::DoStartTftpServerThread()
+{
+    wxCriticalSection &cs = wxGetApp().m_serverCS;
+    TftpServerThread *&pServer = wxGetApp().m_pTftpServerThread;
+
+    cs.Enter();
+
+    /* check if another tftp server thread is running... */
+    if (pServer)
+    {
+        cs.Leave();
+        wxLogWarning(wxT("There is another tftp server thread running!"));
+        return;
+    }
+
+    pServer = new TftpServerThread(this);
+
+    if (pServer->Create() != wxTHREAD_NO_ERROR)
+    {
+        wxLogError(wxT("Can't create tftp server thread!"));
+        wxDELETE(pServer);
+    }
+    else
+    {
+        if (pServer->Run() != wxTHREAD_NO_ERROR)
+        {
+            wxLogError(wxT("Can't run the tftp server thread!"));
+            wxDELETE(pServer);
+        }
+    }
+
+    cs.Leave();
+}
+
+void DownloadPane::DoStopTftpServerThread()
+{
+    wxCriticalSection &cs = wxGetApp().m_serverCS;
+    TftpServerThread *&pServer = wxGetApp().m_pTftpServerThread;
+
+    cs.Enter();
+
+    /* check if tftp server thread is already running... */
+    if (!pServer)
+    {
+        cs.Leave();
+        wxLogWarning(wxT("There is no tftp server thread running."));
+        return;
+    }
+
+    if (pServer->Delete() != wxTHREAD_NO_ERROR)
+        wxLogError(wxT("Can't delete tftp server thread!"));
+
+    cs.Leave();
+}
+
 //
 // event handlers
 //
-void DownloadPane::OnButtonStartTftp(wxCommandEvent &event)
+void DownloadPane::OnButtonStartTftp(wxCommandEvent &WXUNUSED(event))
 {
-    TftpServerThread *server = new TftpServerThread(this);
-
-    if (server
-        && (server->Create() == wxTHREAD_NO_ERROR)
-        && (server->Run() == wxTHREAD_NO_ERROR))
-    {
-        wxLogMessage(wxT("Start tftp server thread..."));
-    }
+    wxLogMessage(wxT("Start tftp server thread..."));
+    DoStartTftpServerThread();
 }
 
-void DownloadPane::OnButtonStopTftp(wxCommandEvent &event)
+void DownloadPane::OnButtonStopTftp(wxCommandEvent &WXUNUSED(event))
 {
     wxLogMessage(wxT("Stop tftp server thread..."));
+    DoStopTftpServerThread();
 }
 

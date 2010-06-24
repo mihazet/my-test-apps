@@ -25,6 +25,8 @@ private:
     // helper methods
     void Init();
     void CreateControls();
+    void DoStartTftpServerThread();
+    void DoStopTftpServerThread();
 
     // event handlers
     void OnButtonStartTftp(wxCommandEvent &event);

@@ -11,7 +11,9 @@
 // Headers
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
+#include <wx/thread.h>
 #include "TftpServerThread.h"
+#include "PWUpdater.h"
 
 #define wxLOG_COMPONENT "PWUpdater/tftpserver"
 
@@ -40,6 +42,15 @@ TftpServerThread::TftpServerThread(wxEvtHandler *handler,
 
 TftpServerThread::~TftpServerThread()
 {
+    wxCriticalSection &cs = wxGetApp().m_serverCS;
+    TftpServerThread *&pServer = wxGetApp().m_pTftpServerThread;
+
+    /* the server thread is being destroyed, make sure not to leave
+       the dangling pointer around. */
+    cs.Enter();
+    pServer = NULL;
+    cs.Leave();
+
     wxDELETE(_udpServerSocket);
 }
 
@@ -56,8 +67,10 @@ wxThread::ExitCode TftpServerThread::Entry()
             
         }
 
+        wxLogMessage(wxT("tftp server running..."));
         wxSleep(1);
     }
 
+    //wxLogMessage(wxT("tftp server terminated!"));
     return (wxThread::ExitCode)0;
 }

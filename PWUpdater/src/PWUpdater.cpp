@@ -11,8 +11,10 @@
 // Headers
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
+#include <wx/thread.h>
 #include <wx/socket.h>
 #include "PWUpdater.h"
+#include "TftpServerThread.h"
 #include "DownloadPane.h"
 #include "LogPane.h"
 
@@ -25,6 +27,9 @@ IMPLEMENT_APP(PWUpdaterApp)
 
 void PWUpdaterApp::Init()
 {
+    m_serverCS.Enter();
+    m_pTftpServerThread = NULL;
+    m_serverCS.Leave();
 }
 
 bool PWUpdaterApp::OnInit()
@@ -39,6 +44,7 @@ bool PWUpdaterApp::OnInit()
 // Main frame implementation
 // ------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(PWUpdaterFrame, wxFrame)
+    EVT_CLOSE(PWUpdaterFrame::OnClose)
     EVT_MENU(wxID_EXIT, PWUpdaterFrame::OnQuit)
 END_EVENT_TABLE()
 
@@ -75,7 +81,7 @@ void PWUpdaterFrame::CreateControls()
 {
     /* menu bar */
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(wxID_EXIT, _("&Quuit"), _("Quit this program."));
+    file_menu->Append(wxID_EXIT, _("&Quit"), _("Quit this program."));
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(file_menu, _("&File"));
     SetMenuBar(menuBar);
@@ -98,6 +104,32 @@ void PWUpdaterFrame::CreateControls()
         MaximizeButton(true));
 
     _auiMgr.Update();
+}
+
+void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
+{
+    wxCriticalSection &cs = wxGetApp().m_serverCS;
+    TftpServerThread *&pServer = wxGetApp().m_pTftpServerThread;
+
+    /* delete tftp server thread if it is still running... */
+    cs.Enter();
+    if (pServer)
+        pServer->Delete();
+    cs.Leave();
+
+    /* make sure tftp server terminated. */
+    while (true)
+    {
+        cs.Enter();
+        if (!pServer)
+            break;
+        cs.Leave();
+
+        /* give the tftp server a chance to terminated. */
+        wxMilliSleep(100);
+    }
+
+    Destroy();
 }
 
 void PWUpdaterFrame::OnQuit(wxCommandEvent &WXUNUSED(event))
