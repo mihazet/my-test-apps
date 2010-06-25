@@ -11,39 +11,22 @@
 #include <wx/wx.h>
 #include <wx/thread.h>
 #include <wx/socket.h>
+#include "TftpCommon.h"
 
 /* Definition of event */
 enum
 {
     TFTP_SERVER_MSG_READ_REQUEST,
+        // _num = file tranfer mode
+        // _str = transfer file name
     TFTP_SERVER_MSG_WRITE_REQUEST,
+        // _num = file tranfer mode
+        // _str = transfer file name
     TFTP_SERVER_MSG_ERROR,
+        // _num = error code
+        // _str = error message from tftp client
 
     TFTP_SERVER_MSG_INVALID
-};
-
-/* Definition for TFTP_SERVER_MSG_{READ,WRITE}_REQUEST */
-enum
-{
-    TFTP_TRANSFER_MODE_ASCII,
-    TFTP_TRANSFER_MODE_BINARY,
-
-    TFTP_TRANSFER_MODE_INVALID
-};
-
-/* Definition for TFTP_SERVER_MSG_ERROR */
-enum
-{
-    TFTP_ERROR_CODE_NOT_DEFINE,
-    TFTP_ERROR_CODE_FILE_NOT_FOUND,
-    TFTP_ERROR_CODE_ACCESS_VIOLATION,
-    TFTP_ERROR_CODE_DISK_FULL,
-    TFTP_ERROR_CODE_ILLEGAL_OPERATION,
-    TFTP_ERROR_CODE_UNKNOWN_TRANSFER_ID,
-    TFTP_ERROR_CODE_FILE_ALREADY_EXISTS,
-    TFTP_ERROR_CODE_NO_SUCH_USER,
-
-    TFTP_ERROR_CODE_INVALID
 };
 
 class TftpServerMessage
