@@ -15,6 +15,7 @@ enum
 
     /* threads */
     myID_THREAD_SERVER,
+    myID_THREAD_TRANSMISSION,
 };
 
 #endif /* _WIDGETS_ID_H_ */

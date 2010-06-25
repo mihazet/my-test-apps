@@ -27,10 +27,14 @@ private:
     void CreateControls();
     void DoStartTftpServerThread();
     void DoStopTftpServerThread();
+    void DoStartTftpTransmissionThread();
+    void DoStopTftpTransmissionThread();
 
     // event handlers
     void OnButtonStartTftp(wxCommandEvent &event);
     void OnButtonStopTftp(wxCommandEvent &event);
+    void OnButtonStartTransfer(wxCommandEvent &event);
+    void OnButtonStopTransfer(wxCommandEvent &event);
     void OnThreadTftpServer(wxThreadEvent &event);
 
     // data member

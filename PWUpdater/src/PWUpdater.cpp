@@ -15,6 +15,7 @@
 #include <wx/socket.h>
 #include "PWUpdater.h"
 #include "TftpServerThread.h"
+#include "TftpTransmissionThread.h"
 #include "DownloadPane.h"
 #include "LogPane.h"
 
@@ -30,6 +31,10 @@ void PWUpdaterApp::Init()
     m_serverCS.Enter();
     m_pTftpServerThread = NULL;
     m_serverCS.Leave();
+
+    m_transmissionCS.Enter();
+    m_tftpTransmissionThreads.clear();
+    m_transmissionCS.Leave();
 }
 
 bool PWUpdaterApp::OnInit()
@@ -110,6 +115,12 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
 {
     wxCriticalSection &cs = wxGetApp().m_serverCS;
     TftpServerThread *&pServer = wxGetApp().m_pTftpServerThread;
+    wxCriticalSection &cs2 = wxGetApp().m_transmissionCS;
+    wxVector<TftpTransmissionThread *> &transmissions
+        = wxGetApp().m_tftpTransmissionThreads;
+    wxVector<TftpTransmissionThread *>::iterator it;
+    bool serverTerminated = false;
+    bool allTransmissionTerminated = false;
 
     /* delete tftp server thread if it is still running... */
     cs.Enter();
@@ -117,13 +128,43 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
         pServer->Delete();
     cs.Leave();
 
-    /* make sure tftp server terminated. */
+    /* delete tftp transmission threads if any are still running... */
+    cs2.Enter();
+    for (it = transmissions.begin(); it != transmissions.end(); ++it)
+    {
+        if (*it)
+            (*it)->Delete();
+    }
+    cs2.Leave();
+
+    /* make sure tftp server and transmissions terminated. */
     while (true)
     {
-        cs.Enter();
-        if (!pServer)
+        if (!serverTerminated)
+        {
+            cs.Enter();
+            if (!pServer)
+                serverTerminated = true;
+            cs.Leave();
+        }
+
+        if (!allTransmissionTerminated)
+        {
+            allTransmissionTerminated = true;
+            cs2.Enter();
+            for (it = transmissions.begin(); it != transmissions.end(); ++it)
+            {
+                if (*it != NULL)
+                {
+                    allTransmissionTerminated = false;
+                    break;
+                }
+            }
+            cs2.Leave();
+        }
+
+        if (serverTerminated && allTransmissionTerminated)
             break;
-        cs.Leave();
 
         /* give the tftp server a chance to terminated. */
         wxMilliSleep(100);

@@ -11,8 +11,10 @@
 #include <wx/wx.h>
 #include <wx/thread.h>
 #include <wx/aui/framemanager.h>
+#include <wx/vector.h>
 
 class TftpServerThread;
+class TftpTransmissionThread;
 
 // ========================================================================
 // Application class
@@ -26,6 +28,10 @@ public:
     /* tftp server thread managment */
     TftpServerThread *m_pTftpServerThread;
     wxCriticalSection m_serverCS;
+
+    /* tftp transmission threads management */
+    wxVector<TftpTransmissionThread *> m_tftpTransmissionThreads;
+    wxCriticalSection m_transmissionCS;
 
 private:
     void Init();

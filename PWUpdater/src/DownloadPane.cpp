@@ -7,6 +7,7 @@
 #include "DownloadPane.h"
 #include "WidgetsId.h"
 #include "TftpServerThread.h"
+#include "TftpTransmissionThread.h"
 
 // ------------------------------------------------------------------------
 // Resources
@@ -61,8 +62,16 @@ void DownloadPane::CreateControls()
 {
     wxBoxSizer *paneSizer = new wxBoxSizer(wxVERTICAL);
 
-    paneSizer->Add(new wxButton(this, myID_BTN_START_TFTP, wxT("Start")), 0, wxALL, 5);
-    paneSizer->Add(new wxButton(this, myID_BTN_STOP_TFTP, wxT("Stop")), 0, wxALL, 5);
+    paneSizer->Add(new wxButton(this, myID_BTN_START_TFTP, wxT("Start Server")), 0, wxALL, 5);
+    paneSizer->Add(new wxButton(this, myID_BTN_STOP_TFTP, wxT("Stop Server")), 0, wxALL, 5);
+
+    wxButton *startTx = new wxButton(this, wxID_ANY, wxT("Start Transfer"));
+    startTx->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &DownloadPane::OnButtonStartTransfer, this);
+    paneSizer->Add(startTx, 0, wxALL, 5);
+
+    wxButton *stopTx = new wxButton(this, wxID_ANY, wxT("Stop Transfer"));
+    stopTx->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &DownloadPane::OnButtonStopTransfer, this);
+    paneSizer->Add(stopTx, 0, wxALL, 5);
 
     SetSizerAndFit(paneSizer);
 }
@@ -122,6 +131,62 @@ void DownloadPane::DoStopTftpServerThread()
     cs.Leave();
 }
 
+void DownloadPane::DoStartTftpTransmissionThread()
+{
+    wxCriticalSection &cs = wxGetApp().m_transmissionCS;
+    wxVector<TftpTransmissionThread *> &transmissions
+        = wxGetApp().m_tftpTransmissionThreads;
+    wxIPV4address remote;
+    TftpTransmissionThread *pTransmission;
+    bool done = true;
+
+    cs.Enter();
+
+    pTransmission = new TftpTransmissionThread(this, remote);
+
+    if (pTransmission->Create() != wxTHREAD_NO_ERROR)
+    {
+        wxLogError(wxT("Can't create tftp transmission thread!"));
+        wxDELETE(pTransmission);
+        done = false;
+    }
+    else
+    {
+        if (pTransmission->Run() != wxTHREAD_NO_ERROR)
+        {
+            wxLogError(wxT("Can't run the tftp server thread!"));
+            wxDELETE(pTransmission);
+            done = false;
+        }
+    }
+
+    if (done)
+        transmissions.push_back(pTransmission);
+
+    cs.Leave();
+}
+
+void DownloadPane::DoStopTftpTransmissionThread()
+{
+    wxCriticalSection &cs = wxGetApp().m_transmissionCS;
+    wxVector<TftpTransmissionThread *> &transmissions
+        = wxGetApp().m_tftpTransmissionThreads;
+    wxVector<TftpTransmissionThread *>::iterator it;
+
+    cs.Enter();
+
+    for (it = transmissions.begin(); it != transmissions.end(); ++it)
+    {
+        if (*it)
+        {
+            if ((*it)->Delete() != wxTHREAD_NO_ERROR)
+                wxLogError(wxT("Can't delete tftp transmission thread!"));
+        }
+    }
+
+    cs.Leave();
+}
+
 //
 // event handlers
 //
@@ -135,6 +200,18 @@ void DownloadPane::OnButtonStopTftp(wxCommandEvent &WXUNUSED(event))
 {
     wxLogMessage(wxT("Stop tftp server thread..."));
     DoStopTftpServerThread();
+}
+
+void DownloadPane::OnButtonStartTransfer(wxCommandEvent &WXUNUSED(event))
+{
+    wxLogMessage(wxT("Start tftp transfer thread..."));
+    DoStartTftpTransmissionThread();
+}
+
+void DownloadPane::OnButtonStopTransfer(wxCommandEvent &WXUNUSED(event))
+{
+    wxLogMessage(wxT("Stop tftp transfer thread..."));
+    DoStopTftpTransmissionThread();
 }
 
 void DownloadPane::OnThreadTftpServer(wxThreadEvent &event)
