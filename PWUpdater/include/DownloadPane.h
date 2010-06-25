@@ -2,6 +2,7 @@
 #define _DOWNLOAD_PANE_H_
 
 #include <wx/wx.h>
+#include <wx/socket.h>
 
 class DownloadPane : public wxPanel
 {
@@ -27,7 +28,8 @@ private:
     void CreateControls();
     void DoStartTftpServerThread();
     void DoStopTftpServerThread();
-    void DoStartTftpTransmissionThread();
+    void DoStartTftpTransmissionThread(const wxIPV4address &remote,
+        const wxString &file, bool read, int mode);
     void DoStopTftpTransmissionThread();
 
     // event handlers

@@ -131,18 +131,19 @@ void DownloadPane::DoStopTftpServerThread()
     cs.Leave();
 }
 
-void DownloadPane::DoStartTftpTransmissionThread()
+void DownloadPane::DoStartTftpTransmissionThread(const wxIPV4address &remote,
+                                                 const wxString &file,
+                                                 bool read, int mode)
 {
     wxCriticalSection &cs = wxGetApp().m_transmissionCS;
     wxVector<TftpTransmissionThread *> &transmissions
         = wxGetApp().m_tftpTransmissionThreads;
-    wxIPV4address remote;
     TftpTransmissionThread *pTransmission;
     bool done = true;
 
     cs.Enter();
 
-    pTransmission = new TftpTransmissionThread(this, remote);
+    pTransmission = new TftpTransmissionThread(this, remote, file, read, mode);
 
     if (pTransmission->Create() != wxTHREAD_NO_ERROR)
     {
@@ -204,8 +205,10 @@ void DownloadPane::OnButtonStopTftp(wxCommandEvent &WXUNUSED(event))
 
 void DownloadPane::OnButtonStartTransfer(wxCommandEvent &WXUNUSED(event))
 {
+    wxIPV4address dummy;
     wxLogMessage(wxT("Start tftp transfer thread..."));
-    DoStartTftpTransmissionThread();
+    DoStartTftpTransmissionThread(dummy, wxT("StartTransferTest"),
+        true, TFTP_TRANSFER_MODE_BINARY);
 }
 
 void DownloadPane::OnButtonStopTransfer(wxCommandEvent &WXUNUSED(event))
@@ -217,13 +220,38 @@ void DownloadPane::OnButtonStopTransfer(wxCommandEvent &WXUNUSED(event))
 void DownloadPane::OnThreadTftpServer(wxThreadEvent &event)
 {
     TftpServerMessage msg = event.GetPayload<TftpServerMessage>();
-    int num;
-    wxString str;
+    int mode = TFTP_TRANSFER_MODE_BINARY, ec = -1;
+    wxString fileName, errorMsg;
     wxIPV4address remote;
+    bool error = false, read = false;
 
-    msg.GetValue(num);
-    msg.GetValue(str);
-    remote = msg.GetRemote();
-    wxLogMessage(wxT("evt = %d, num = %d, str = %s, remote ip = %s, port = %d"),
-        msg.GetEvent(), num, str, remote.IPAddress(), remote.Service());
+    switch (msg.GetEvent())
+    {
+    case TFTP_SERVER_MSG_READ_REQUEST:
+        read = true;
+    case TFTP_SERVER_MSG_WRITE_REQUEST:
+        msg.GetValue(mode);
+        msg.GetValue(fileName);
+        remote = msg.GetRemote();
+        break;
+    case TFTP_SERVER_MSG_ERROR:
+        msg.GetValue(ec);
+        msg.GetValue(errorMsg);
+        remote = msg.GetRemote();
+        error = true;
+        break;
+    default:
+        wxLogError(wxT("Unknown TFTP Server messge received! (%d"), msg.GetEvent());
+        return;
+    }
+
+    if (error)
+    {
+        wxLogMessage(wxT("Error reported by TFTP Client. Error Code = %d, Reason = %s"),
+            ec, errorMsg);
+    }
+    else
+    {
+        DoStartTftpTransmissionThread(remote, fileName, read, mode);
+    }
 }
