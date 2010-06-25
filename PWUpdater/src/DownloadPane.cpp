@@ -23,6 +23,7 @@
 BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_BUTTON(myID_BTN_START_TFTP, DownloadPane::OnButtonStartTftp)
     EVT_BUTTON(myID_BTN_STOP_TFTP, DownloadPane::OnButtonStopTftp)
+    EVT_THREAD(myID_THREAD_SERVER, DownloadPane::OnThreadTftpServer)
 END_EVENT_TABLE()
 
 DownloadPane::DownloadPane()
@@ -136,3 +137,16 @@ void DownloadPane::OnButtonStopTftp(wxCommandEvent &WXUNUSED(event))
     DoStopTftpServerThread();
 }
 
+void DownloadPane::OnThreadTftpServer(wxThreadEvent &event)
+{
+    TftpServerMessage msg = event.GetPayload<TftpServerMessage>();
+    int num;
+    wxString str;
+    wxIPV4address remote;
+
+    msg.GetValue(num);
+    msg.GetValue(str);
+    remote = msg.GetRemote();
+    wxLogMessage(wxT("evt = %d, num = %d, str = %s, remote ip = %s, port = %d"),
+        msg.GetEvent(), num, str, remote.IPAddress(), remote.Service());
+}

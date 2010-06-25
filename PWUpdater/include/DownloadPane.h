@@ -31,6 +31,7 @@ private:
     // event handlers
     void OnButtonStartTftp(wxCommandEvent &event);
     void OnButtonStopTftp(wxCommandEvent &event);
+    void OnThreadTftpServer(wxThreadEvent &event);
 
     // data member
 

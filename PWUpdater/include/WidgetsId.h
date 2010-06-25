@@ -11,7 +11,10 @@ enum
 
     /* download pane */
     myID_BTN_START_TFTP,
-    myID_BTN_STOP_TFTP
+    myID_BTN_STOP_TFTP,
+
+    /* threads */
+    myID_THREAD_SERVER,
 };
 
 #endif /* _WIDGETS_ID_H_ */
