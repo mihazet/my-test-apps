@@ -42,8 +42,7 @@ enum
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
-TftpServerThread::TftpServerThread(wxEvtHandler *handler,
-                                   const wxString &root)
+TftpServerThread::TftpServerThread(wxEvtHandler *handler)
     : wxThread(wxTHREAD_DETACHED), _pHandler(handler)
 {
     wxIPV4address local;

@@ -79,7 +79,7 @@ private:
 class TftpServerThread : public wxThread
 {
 public:
-    TftpServerThread(wxEvtHandler *handler, const wxString &root = wxEmptyString);
+    TftpServerThread(wxEvtHandler *handler);
     ~TftpServerThread();
 
 private:
