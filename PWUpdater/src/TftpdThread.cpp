@@ -279,11 +279,14 @@ void TftpdServerThread::DoStartTransmissionThread(
         = wxGetApp().m_tftpdTransmissionThreads;
     TftpdTransmissionThread *pTransmission;
     bool done = true;
+    wxFileName rp = wxFileName::DirName(_rootPath);
+    wxString fullName 
+        = rp.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR) + file;
 
     cs.Enter();
 
     pTransmission = new TftpdTransmissionThread(_pHandler,
-        _threadEventId, remote, file, rrq, mode);
+        _threadEventId, remote, fullName, rrq, mode);
 
     if (pTransmission->Create() != wxTHREAD_NO_ERROR)
     {
@@ -325,7 +328,10 @@ TftpdTransmissionThread::TftpdTransmissionThread(wxEvtHandler *handler,
 {
     wxIPV4address local;
 
+    /* use any interface */
     local.AnyAddress();
+
+    /* init socket */
     _udpTransmissionSocket = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
 }
 
@@ -341,7 +347,6 @@ TftpdTransmissionThread::~TftpdTransmissionThread()
     cs.Enter();
     for (it = transmissions.begin(); it != transmissions.end(); ++it)
     {
-
         if (*it == this)
         {
             *it = NULL;
@@ -355,12 +360,57 @@ TftpdTransmissionThread::~TftpdTransmissionThread()
 
 wxThread::ExitCode TftpdTransmissionThread::Entry()
 {
-    //wxLogMessage(wxT("Transmission thread start!"));
+    TftpdMessage *msg = NULL;
+    unsigned char transferBuffer[1024];
+    wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
+    bool exist = wxFileName::FileExists(_file);
 
-    while (!TestDestroy())
+    if (_read) // RRQ
     {
-        wxLogMessage(wxT("Transmission thread running!"));
-        //wxMilliSleep(1000);
+        if (exist)
+        {
+            /* response data to tftp client */
+
+            /* read acknowledgement from tftp client */
+
+            /* notify the main thread */
+
+        }
+        else
+        {
+            /* response error to tftp client */
+
+            /* notify the main thread */
+            msg = new TftpdMessage(TFTPD_EVENT_ERROR,
+                wxT("File not found!"),
+                TFTPD_ERROR_FILE_NOT_FOUND);
+            event.SetPayload<TftpdMessage>(*msg);
+            wxQueueEvent(_pHandler, event.Clone());
+            wxDELETE(msg);
+        }
+    }
+    else // WRQ
+    {
+        if (!exist)
+        {
+            /* read data from tftp client */
+
+            /* response acknowledgement to tftp client */
+
+            /* notify the main thread */
+        }
+        else
+        {
+            /* response error to tftp client */
+
+            /* notify the main thread */
+            msg = new TftpdMessage(TFTPD_EVENT_ERROR,
+                wxT("File already exists!"),
+                TFTPD_ERROR_FILE_ALREADY_EXISTS);
+            event.SetPayload<TftpdMessage>(*msg);
+            wxQueueEvent(_pHandler, event.Clone());
+            wxDELETE(msg);
+        }
     }
 
     return (wxThread::ExitCode)0;
