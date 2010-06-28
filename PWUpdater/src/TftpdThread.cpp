@@ -102,8 +102,19 @@ wxThread::ExitCode TftpdServerThread::Entry()
     wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
     wxString file;
     int mode;
+    bool rootPathExist = wxFileName::DirExists(_rootPath);
 
-    while (!TestDestroy())
+    /* check root directory is valid */
+    if (!rootPathExist)
+    {
+        msg = new TftpdMessage(TFTPD_EVENT_ERROR,
+            wxT("Root directory doesn't exist!"), TFTPD_ERROR_NOT_DEFINE);
+        event.SetPayload<TftpdMessage>(*msg);
+        wxQueueEvent(_pHandler, event.Clone());
+        wxDELETE(msg);
+    }
+
+    while (!TestDestroy() && rootPathExist)
     {
         /*
          * When we read from a non-blocking socket and there is no data 
