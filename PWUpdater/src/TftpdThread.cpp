@@ -20,6 +20,8 @@
 #include <wx/wx.h>
 #include <wx/socket.h>
 #include <wx/thread.h>
+#include <wx/stdpaths.h>
+#include <wx/filename.h>
 #include "TftpdThread.h"
 #include "PWUpdater.h"
 
@@ -49,10 +51,30 @@ TftpdServerThread::TftpdServerThread(wxEvtHandler *handler, const int id,
                                      const wxString &rootPath)
     : _pHandler(handler),
     _threadEventId(id),
-    _rootPath(rootPath),
     wxThread(wxTHREAD_DETACHED)
 {
+    /*
+       Setup root directory for the tftpd.
+       Make sure the path ends without the trailing path separator.
+     */
+    if (rootPath.empty())
+    {
+        // use current working directory as root directory...
+        wxStandardPaths &stdPaths = wxStandardPaths::Get();
+        wxFileName exec = wxFileName(stdPaths.GetExecutablePath());
+        _rootPath = exec.GetPath(wxPATH_GET_VOLUME);
+    }
+    else
+    {
+        // rootPath may have the trailing path separator, remove it...
+        wxFileName dir = wxFileName::DirName(rootPath);
+        _rootPath = dir.GetPath(wxPATH_GET_VOLUME);
+    }
+
+    /* use standard tftp port */
     local.Service(69);
+
+    /* init socket */
     _udpServerSocket = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
 }
 
