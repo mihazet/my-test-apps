@@ -78,6 +78,8 @@ wxThread::ExitCode TftpdServerThread::Entry()
     wxSocketError error;
     TftpdMessage *msg = NULL;
     wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
+    wxString file;
+    int mode;
 
     while (!TestDestroy())
     {
@@ -95,6 +97,21 @@ wxThread::ExitCode TftpdServerThread::Entry()
             msg = ProtocolParser(&serverBuffer[0], count);
             if (msg)
             {
+                /* create transfer thread for RRQ/WRQ */
+                if (msg->GetEvent() == TFTPD_EVENT_READ_REQUEST)
+                {
+                    file = msg->GetString();
+                    mode = msg->GetNum1();
+                    DoStartTransmissionThread(remote, file, mode, true);
+                }
+                else if (msg->GetEvent() == TFTPD_EVENT_WRITE_REQUEST)
+                {
+                    file = msg->GetString();
+                    mode = msg->GetNum1();
+                    DoStartTransmissionThread(remote, file, mode, false);
+                }
+
+                /* post event to main thread */
                 event.SetPayload<TftpdMessage>(*msg);
                 wxQueueEvent(_pHandler, event.Clone());
                 wxDELETE(msg);
@@ -220,15 +237,54 @@ bool TftpdServerThread::IsTwoNullTerminatedString(unsigned char *buf,
     return true;
 }
 
+void TftpdServerThread::DoStartTransmissionThread(
+    const wxIPV4address &remote, const wxString &file,
+    const int mode, bool rrq)
+{
+    wxCriticalSection &cs = wxGetApp().m_transmissionCS;
+    wxVector<TftpdTransmissionThread *> &transmissions
+        = wxGetApp().m_tftpdTransmissionThreads;
+    TftpdTransmissionThread *pTransmission;
+    bool done = true;
+
+    cs.Enter();
+
+    pTransmission = new TftpdTransmissionThread(_pHandler,
+        _threadEventId, remote, file, rrq, mode);
+
+    if (pTransmission->Create() != wxTHREAD_NO_ERROR)
+    {
+        wxLogError(wxT("Can't create tftp transmission thread!"));
+        wxDELETE(pTransmission);
+        done = false;
+    }
+    else
+    {
+        if (pTransmission->Run() != wxTHREAD_NO_ERROR)
+        {
+            wxLogError(wxT("Can't run the tftp transmission thread!"));
+            wxDELETE(pTransmission);
+            done = false;
+        }
+    }
+
+    if (done)
+        transmissions.push_back(pTransmission);
+
+    cs.Leave();
+}
+
 // ------------------------------------------------------------------------
 // Implementation (Transmission Thread)
 // ------------------------------------------------------------------------
 TftpdTransmissionThread::TftpdTransmissionThread(wxEvtHandler *handler,
+                                                 const int threadEventId,
                                                  const wxIPV4address &remote,
                                                  const wxString &file,
                                                  bool read, int mode)
     : wxThread(wxTHREAD_DETACHED),
     _pHandler(handler),
+    _threadEventId(threadEventId),
     _remote(remote),
     _file(file),
     _read(read),

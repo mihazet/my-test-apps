@@ -120,6 +120,8 @@ private:
     bool IsSingleNullTerminatedString(unsigned char *buf, unsigned int len);
     bool IsTwoNullTerminatedString(unsigned char *buf, unsigned int len,
         unsigned char **str2);
+    void DoStartTransmissionThread(const wxIPV4address &remote,
+        const wxString &file, const int mode, bool rrq);
 
     wxEvtHandler *_pHandler;
     int _threadEventId;
@@ -136,6 +138,7 @@ class TftpdTransmissionThread : public wxThread
 {
 public:
     TftpdTransmissionThread(wxEvtHandler *handler,
+        const int threadEventId,
         const wxIPV4address &remote,
         const wxString &file = wxEmptyString,
         bool read = true, int mode = TFTPD_TRANSFER_MODE_BINARY);
@@ -150,6 +153,7 @@ private:
     wxString _file;
     bool _read;
     int _mode;
+    int _threadEventId;
 };
 
 #endif /* _TFTPD_THREAD_H_ */
