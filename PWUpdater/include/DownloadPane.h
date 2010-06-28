@@ -37,7 +37,7 @@ private:
     void OnButtonStopTftp(wxCommandEvent &event);
     void OnButtonStartTransfer(wxCommandEvent &event);
     void OnButtonStopTransfer(wxCommandEvent &event);
-    void OnThreadTftpServer(wxThreadEvent &event);
+    void OnThreadTftpd(wxThreadEvent &event);
 
     // data member
 

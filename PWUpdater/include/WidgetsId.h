@@ -14,8 +14,7 @@ enum
     myID_BTN_STOP_TFTP,
 
     /* threads */
-    myID_THREAD_SERVER,
-    myID_THREAD_TRANSMISSION,
+    myID_THREAD_TFTPD,
 };
 
 #endif /* _WIDGETS_ID_H_ */

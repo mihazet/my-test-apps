@@ -6,8 +6,7 @@
 #include "PWUpdater.h"
 #include "DownloadPane.h"
 #include "WidgetsId.h"
-#include "TftpServerThread.h"
-#include "TftpTransmissionThread.h"
+#include "TftpdThread.h"
 
 // ------------------------------------------------------------------------
 // Resources
@@ -24,7 +23,7 @@
 BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_BUTTON(myID_BTN_START_TFTP, DownloadPane::OnButtonStartTftp)
     EVT_BUTTON(myID_BTN_STOP_TFTP, DownloadPane::OnButtonStopTftp)
-    EVT_THREAD(myID_THREAD_SERVER, DownloadPane::OnThreadTftpServer)
+    EVT_THREAD(myID_THREAD_TFTPD, DownloadPane::OnThreadTftpd)
 END_EVENT_TABLE()
 
 DownloadPane::DownloadPane()
@@ -78,8 +77,16 @@ void DownloadPane::CreateControls()
 
 void DownloadPane::DoStartTftpServerThread()
 {
+    wxIPV4address local;
+    wxString root;
     wxCriticalSection &cs = wxGetApp().m_serverCS;
-    TftpServerThread *&pServer = wxGetApp().m_pTftpServerThread;
+    TftpdServerThread *&pServer = wxGetApp().m_pTftpdServerThread;
+    
+    /* assign preferred interface */
+    local.AnyAddress();
+
+    /* assign root path. Use wxEmptyString for current working path. */
+    root = wxEmptyString;
 
     cs.Enter();
 
@@ -91,7 +98,7 @@ void DownloadPane::DoStartTftpServerThread()
         return;
     }
 
-    pServer = new TftpServerThread(this);
+    pServer = new TftpdServerThread(this, myID_THREAD_TFTPD, local, root);
 
     if (pServer->Create() != wxTHREAD_NO_ERROR)
     {
@@ -113,7 +120,7 @@ void DownloadPane::DoStartTftpServerThread()
 void DownloadPane::DoStopTftpServerThread()
 {
     wxCriticalSection &cs = wxGetApp().m_serverCS;
-    TftpServerThread *&pServer = wxGetApp().m_pTftpServerThread;
+    TftpdServerThread *&pServer = wxGetApp().m_pTftpdServerThread;
 
     cs.Enter();
 
@@ -136,14 +143,14 @@ void DownloadPane::DoStartTftpTransmissionThread(const wxIPV4address &remote,
                                                  bool read, int mode)
 {
     wxCriticalSection &cs = wxGetApp().m_transmissionCS;
-    wxVector<TftpTransmissionThread *> &transmissions
-        = wxGetApp().m_tftpTransmissionThreads;
-    TftpTransmissionThread *pTransmission;
+    wxVector<TftpdTransmissionThread *> &transmissions
+        = wxGetApp().m_tftpdTransmissionThreads;
+    TftpdTransmissionThread *pTransmission;
     bool done = true;
 
     cs.Enter();
 
-    pTransmission = new TftpTransmissionThread(this, remote, file, read, mode);
+    pTransmission = new TftpdTransmissionThread(this, remote, file, read, mode);
 
     if (pTransmission->Create() != wxTHREAD_NO_ERROR)
     {
@@ -170,9 +177,9 @@ void DownloadPane::DoStartTftpTransmissionThread(const wxIPV4address &remote,
 void DownloadPane::DoStopTftpTransmissionThread()
 {
     wxCriticalSection &cs = wxGetApp().m_transmissionCS;
-    wxVector<TftpTransmissionThread *> &transmissions
-        = wxGetApp().m_tftpTransmissionThreads;
-    wxVector<TftpTransmissionThread *>::iterator it;
+    wxVector<TftpdTransmissionThread *> &transmissions
+        = wxGetApp().m_tftpdTransmissionThreads;
+    wxVector<TftpdTransmissionThread *>::iterator it;
 
     cs.Enter();
 
@@ -208,7 +215,7 @@ void DownloadPane::OnButtonStartTransfer(wxCommandEvent &WXUNUSED(event))
     wxIPV4address dummy;
     wxLogMessage(wxT("Start tftp transfer thread..."));
     DoStartTftpTransmissionThread(dummy, wxT("StartTransferTest"),
-        true, TFTP_TRANSFER_MODE_BINARY);
+        true, TFTPD_TRANSFER_MODE_BINARY);
 }
 
 void DownloadPane::OnButtonStopTransfer(wxCommandEvent &WXUNUSED(event))
@@ -217,41 +224,50 @@ void DownloadPane::OnButtonStopTransfer(wxCommandEvent &WXUNUSED(event))
     DoStopTftpTransmissionThread();
 }
 
-void DownloadPane::OnThreadTftpServer(wxThreadEvent &event)
+void DownloadPane::OnThreadTftpd(wxThreadEvent &event)
 {
-    TftpServerMessage msg = event.GetPayload<TftpServerMessage>();
-    int mode = TFTP_TRANSFER_MODE_BINARY, ec = -1;
-    wxString fileName, errorMsg;
-    wxIPV4address remote;
-    bool error = false, read = false;
+    TftpdMessage msg = event.GetPayload<TftpdMessage>();
+    int transferMode, errorCode, currentBlock, totalBlock;
+    wxString fileName, errorMessage;
 
     switch (msg.GetEvent())
     {
-    case TFTP_SERVER_MSG_READ_REQUEST:
-        read = true;
-    case TFTP_SERVER_MSG_WRITE_REQUEST:
-        msg.GetValue(mode);
-        msg.GetValue(fileName);
-        remote = msg.GetRemote();
+    case TFTPD_EVENT_READ_REQUEST:
+        transferMode = msg.GetNum1();
+        fileName = msg.GetString();
+        wxLogMessage(wxT("Read request: file %s, mode = %d"),
+            fileName, transferMode);
         break;
-    case TFTP_SERVER_MSG_ERROR:
-        msg.GetValue(ec);
-        msg.GetValue(errorMsg);
-        remote = msg.GetRemote();
-        error = true;
+    case TFTPD_EVENT_READ_TRANSFER_UPDATE:
+    case TFTPD_EVENT_READ_TRANSFER_DONE:
+        currentBlock = msg.GetNum1();
+        totalBlock = msg.GetNum2();
+        fileName = msg.GetString();
+        wxLogMessage(wxT("Read update: file %s, current = %d, total = %s"),
+            fileName, currentBlock, totalBlock);
+        break;
+    case TFTPD_EVENT_WRITE_REQUEST:
+        transferMode = msg.GetNum1();
+        fileName = msg.GetString();
+        wxLogMessage(wxT("Write request: file %s, mode = %d"),
+            fileName, transferMode);
+        break;
+    case TFTPD_EVENT_WRITE_TRANSFER_UPDATE:
+    case TFTPD_EVENT_WRITE_TRANSFER_DONE:
+        currentBlock = msg.GetNum1();
+        totalBlock = msg.GetNum2();
+        fileName = msg.GetString();
+        wxLogMessage(wxT("Write update: file %s, current = %d, total = %s"),
+            fileName, currentBlock, totalBlock);
+        break;
+    case TFTPD_EVENT_ERROR:
+        errorCode = msg.GetNum1();
+        errorMessage = msg.GetString();
+        wxLogMessage(wxT("Tftp error: error code = %d, error message = %s"),
+            errorCode, errorMessage);
         break;
     default:
-        wxLogError(wxT("Unknown TFTP Server messge received! (%d"), msg.GetEvent());
+        wxLogError(wxT("Unknown TFTPD messge received! (%d"), msg.GetEvent());
         return;
-    }
-
-    if (error)
-    {
-        wxLogMessage(wxT("Error reported by TFTP Client. Error Code = %d, Reason = %s"),
-            ec, errorMsg);
-    }
-    else
-    {
-        DoStartTftpTransmissionThread(remote, fileName, read, mode);
     }
 }

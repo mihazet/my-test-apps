@@ -1,5 +1,5 @@
 /*
- *  TftpServerThread.cpp - A simple implementation for tftp server.
+ *  TftpdThread.cpp - A simple implementation for tftp server.
  *  Refer to RFC1350 for TFTP protocol detail.
  *
  *  This program is distributed in the hope that it will be useful,
@@ -9,7 +9,7 @@
  */
 
 #ifdef _MSC_VER
- #define _CRT_SECURE_NO_WARNINGS
+ #define _CRT_SECURE_NO_WARNINGS /* disable security warning in string.h */
 #endif
 // ------------------------------------------------------------------------
 // Headers
@@ -18,12 +18,12 @@
 #include <string.h>
 #include <ctype.h>
 #include <wx/wx.h>
+#include <wx/socket.h>
 #include <wx/thread.h>
-#include "TftpServerThread.h"
+#include "TftpdThread.h"
 #include "PWUpdater.h"
-#include "WidgetsId.h"
 
-#define wxLOG_COMPONENT "PWUpdater/tftpserver"
+#define wxLOG_COMPONENT "PWUpdater/tftpd"
 
 // ------------------------------------------------------------------------
 // Resources
@@ -32,24 +32,34 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
-
-// ------------------------------------------------------------------------
-// Implementation
-// ------------------------------------------------------------------------
-TftpServerThread::TftpServerThread(wxEvtHandler *handler)
-    : wxThread(wxTHREAD_DETACHED), _pHandler(handler)
+enum
 {
-    wxIPV4address local;
+    TFTP_OPCODE_RRQ     = 1,
+    TFTP_OPCODE_WRQ     = 2,
+    TFTP_OPCODE_DATA    = 3,
+    TFTP_OPCODE_ACK     = 4,
+    TFTP_OPCODE_ERROR   = 5
+};
 
-    local.AnyAddress();
+// ------------------------------------------------------------------------
+// Implementation (Server Thread)
+// ------------------------------------------------------------------------
+TftpdServerThread::TftpdServerThread(wxEvtHandler *handler, const int id,
+                                     wxIPV4address &local,
+                                     const wxString &rootPath)
+    : _pHandler(handler),
+    _threadEventId(id),
+    _rootPath(rootPath),
+    wxThread(wxTHREAD_DETACHED)
+{
     local.Service(69);
     _udpServerSocket = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
 }
 
-TftpServerThread::~TftpServerThread()
+TftpdServerThread::~TftpdServerThread()
 {
     wxCriticalSection &cs = wxGetApp().m_serverCS;
-    TftpServerThread *&pServer = wxGetApp().m_pTftpServerThread;
+    TftpdServerThread *&pServer = wxGetApp().m_pTftpdServerThread;
 
     /* the server thread is being destroyed, make sure not to leave
        the dangling pointer around. */
@@ -60,14 +70,14 @@ TftpServerThread::~TftpServerThread()
     wxDELETE(_udpServerSocket);
 }
 
-wxThread::ExitCode TftpServerThread::Entry()
+wxThread::ExitCode TftpdServerThread::Entry()
 {
     wxIPV4address remote;
     unsigned char serverBuffer[1024];
     wxUint32 count;
     wxSocketError error;
-    TftpServerMessage *msg = NULL;
-    wxThreadEvent event(wxEVT_COMMAND_THREAD, myID_THREAD_SERVER);
+    TftpdMessage *msg = NULL;
+    wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
 
     while (!TestDestroy())
     {
@@ -85,8 +95,7 @@ wxThread::ExitCode TftpServerThread::Entry()
             msg = ProtocolParser(&serverBuffer[0], count);
             if (msg)
             {
-                msg->SetRemote(remote);
-                event.SetPayload<TftpServerMessage>(*msg);
+                event.SetPayload<TftpdMessage>(*msg);
                 wxQueueEvent(_pHandler, event.Clone());
                 wxDELETE(msg);
             }
@@ -111,9 +120,10 @@ wxThread::ExitCode TftpServerThread::Entry()
 // return NULL. Otherwise, return a pointer to a valid TftpServerMessage
 // object. It is the responsibility of caller to delete this object.
 //
-TftpServerMessage *TftpServerThread::ProtocolParser(unsigned char *buf, unsigned int len)
+TftpdMessage *TftpdServerThread::ProtocolParser(unsigned char *buf,
+                                                unsigned int len)
 {
-    int opCode, errorCode, mode = TFTP_TRANSFER_MODE_INVALID;
+    int opCode, errorCode, mode = TFTPD_TRANSFER_MODE_INVALID;
     wxString fileName, errorMsg, txMode;
     unsigned char *pStr2 = NULL;
 
@@ -131,16 +141,16 @@ TftpServerMessage *TftpServerThread::ProtocolParser(unsigned char *buf, unsigned
                     fileName = wxString::FromAscii(&buf[2]);
                     txMode = wxString::FromAscii(pStr2);
                     if (!txMode.CmpNoCase(wxT("netascii")))
-                        mode = TFTP_TRANSFER_MODE_ASCII;
+                        mode = TFTPD_TRANSFER_MODE_ASCII;
                     else if (!txMode.CmpNoCase(wxT("octet")))
-                        mode = TFTP_TRANSFER_MODE_BINARY;
+                        mode = TFTPD_TRANSFER_MODE_BINARY;
 
-                    if (mode != TFTP_TRANSFER_MODE_INVALID)
+                    if (mode != TFTPD_TRANSFER_MODE_INVALID)
                     {
-                        return new TftpServerMessage(
+                        return new TftpdMessage(
                             (opCode == TFTP_OPCODE_RRQ)
-                            ? TFTP_SERVER_MSG_READ_REQUEST
-                            : TFTP_SERVER_MSG_WRITE_REQUEST,
+                            ? TFTPD_EVENT_READ_REQUEST
+                            : TFTPD_EVENT_WRITE_REQUEST,
                             fileName, mode);
                     }
                 }
@@ -153,7 +163,7 @@ TftpServerMessage *TftpServerThread::ProtocolParser(unsigned char *buf, unsigned
                 if (IsSingleNullTerminatedString(&buf[4], len - 4))
                 {
                     errorMsg = wxString::FromAscii(&buf[4]);
-                    return new TftpServerMessage(TFTP_SERVER_MSG_ERROR,
+                    return new TftpdMessage(TFTPD_EVENT_ERROR,
                         errorMsg, errorCode);
                 }
             }
@@ -166,7 +176,8 @@ TftpServerMessage *TftpServerThread::ProtocolParser(unsigned char *buf, unsigned
     return NULL;
 }
 
-bool TftpServerThread::IsSingleNullTerminatedString(unsigned char *buf, unsigned int len)
+bool TftpdServerThread::IsSingleNullTerminatedString(unsigned char *buf,
+                                                     unsigned int len)
 {
     unsigned int index;
 
@@ -182,8 +193,9 @@ bool TftpServerThread::IsSingleNullTerminatedString(unsigned char *buf, unsigned
     return true;
 }
 
-bool TftpServerThread::IsTwoNullTerminatedString(unsigned char *buf, unsigned int len,
-                                                 unsigned char **str2)
+bool TftpdServerThread::IsTwoNullTerminatedString(unsigned char *buf,
+                                                  unsigned int len,
+                                                  unsigned char **str2)
 {
     unsigned int str1Len, str2Len;
 
@@ -208,3 +220,59 @@ bool TftpServerThread::IsTwoNullTerminatedString(unsigned char *buf, unsigned in
     return true;
 }
 
+// ------------------------------------------------------------------------
+// Implementation (Transmission Thread)
+// ------------------------------------------------------------------------
+TftpdTransmissionThread::TftpdTransmissionThread(wxEvtHandler *handler,
+                                                 const wxIPV4address &remote,
+                                                 const wxString &file,
+                                                 bool read, int mode)
+    : wxThread(wxTHREAD_DETACHED),
+    _pHandler(handler),
+    _remote(remote),
+    _file(file),
+    _read(read),
+    _mode(mode)
+{
+    wxIPV4address local;
+
+    local.AnyAddress();
+    _udpTransmissionSocket = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
+}
+
+TftpdTransmissionThread::~TftpdTransmissionThread()
+{
+    wxCriticalSection &cs = wxGetApp().m_transmissionCS;
+    wxVector<TftpdTransmissionThread *> &transmissions 
+        = wxGetApp().m_tftpdTransmissionThreads;
+    wxVector<TftpdTransmissionThread *>::iterator it;
+
+    /* The transmission thread is being destroyed, make sure no to leave
+       the dangling pointer around. */
+    cs.Enter();
+    for (it = transmissions.begin(); it != transmissions.end(); ++it)
+    {
+
+        if (*it == this)
+        {
+            *it = NULL;
+            break;
+        }
+    }
+    cs.Leave();
+
+    wxDELETE(_udpTransmissionSocket);
+}
+
+wxThread::ExitCode TftpdTransmissionThread::Entry()
+{
+    wxLogMessage(wxT("Transmission thread start!"));
+
+    while (!TestDestroy())
+    {
+        wxLogMessage(wxT("Transmission thread running!"));
+        wxMilliSleep(1000);
+    }
+
+    return (wxThread::ExitCode)0;
+}

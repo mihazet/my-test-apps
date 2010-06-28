@@ -13,8 +13,8 @@
 #include <wx/aui/framemanager.h>
 #include <wx/vector.h>
 
-class TftpServerThread;
-class TftpTransmissionThread;
+class TftpdServerThread;
+class TftpdTransmissionThread;
 
 // ========================================================================
 // Application class
@@ -25,12 +25,12 @@ public:
     PWUpdaterApp() { Init(); }
     ~PWUpdaterApp() {}
 
-    /* tftp server thread managment */
-    TftpServerThread *m_pTftpServerThread;
+    /* tftpd server thread managment */
+    TftpdServerThread *m_pTftpdServerThread;
     wxCriticalSection m_serverCS;
 
-    /* tftp transmission threads management */
-    wxVector<TftpTransmissionThread *> m_tftpTransmissionThreads;
+    /* tftpd transmission threads management */
+    wxVector<TftpdTransmissionThread *> m_tftpdTransmissionThreads;
     wxCriticalSection m_transmissionCS;
 
 private:

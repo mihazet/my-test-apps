@@ -14,8 +14,7 @@
 #include <wx/thread.h>
 #include <wx/socket.h>
 #include "PWUpdater.h"
-#include "TftpServerThread.h"
-#include "TftpTransmissionThread.h"
+#include "TftpdThread.h"
 #include "DownloadPane.h"
 #include "LogPane.h"
 
@@ -29,11 +28,11 @@ IMPLEMENT_APP(PWUpdaterApp)
 void PWUpdaterApp::Init()
 {
     m_serverCS.Enter();
-    m_pTftpServerThread = NULL;
+    m_pTftpdServerThread = NULL;
     m_serverCS.Leave();
 
     m_transmissionCS.Enter();
-    m_tftpTransmissionThreads.clear();
+    m_tftpdTransmissionThreads.clear();
     m_transmissionCS.Leave();
 }
 
@@ -114,11 +113,11 @@ void PWUpdaterFrame::CreateControls()
 void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
 {
     wxCriticalSection &cs = wxGetApp().m_serverCS;
-    TftpServerThread *&pServer = wxGetApp().m_pTftpServerThread;
+    TftpdServerThread *&pServer = wxGetApp().m_pTftpdServerThread;
     wxCriticalSection &cs2 = wxGetApp().m_transmissionCS;
-    wxVector<TftpTransmissionThread *> &transmissions
-        = wxGetApp().m_tftpTransmissionThreads;
-    wxVector<TftpTransmissionThread *>::iterator it;
+    wxVector<TftpdTransmissionThread *> &transmissions
+        = wxGetApp().m_tftpdTransmissionThreads;
+    wxVector<TftpdTransmissionThread *>::iterator it;
     bool serverTerminated = false;
     bool allTransmissionTerminated = false;
 
