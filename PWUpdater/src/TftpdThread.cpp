@@ -322,12 +322,12 @@ TftpdTransmissionThread::~TftpdTransmissionThread()
 
 wxThread::ExitCode TftpdTransmissionThread::Entry()
 {
-    wxLogMessage(wxT("Transmission thread start!"));
+    //wxLogMessage(wxT("Transmission thread start!"));
 
     while (!TestDestroy())
     {
         wxLogMessage(wxT("Transmission thread running!"));
-        wxMilliSleep(1000);
+        //wxMilliSleep(1000);
     }
 
     return (wxThread::ExitCode)0;
