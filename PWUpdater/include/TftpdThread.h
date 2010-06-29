@@ -146,6 +146,9 @@ public:
 
 private:
     virtual wxThread::ExitCode Entry();
+    bool DoSendOneBlockData(void *data, long len);
+    void NotifyMainThread(int evt, const wxString &str,
+        const int num1, const int num2 = -1);
 
     wxEvtHandler *_pHandler;
     wxDatagramSocket *_udpTransmissionSocket;
@@ -154,6 +157,7 @@ private:
     bool _read;
     int _mode;
     int _threadEventId;
+    short _txBlock;
 };
 
 #endif /* _TFTPD_THREAD_H_ */

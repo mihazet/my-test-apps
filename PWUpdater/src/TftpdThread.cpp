@@ -22,6 +22,7 @@
 #include <wx/thread.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
+#include <wx/wfstream.h>
 #include "TftpdThread.h"
 #include "PWUpdater.h"
 
@@ -333,6 +334,9 @@ TftpdTransmissionThread::TftpdTransmissionThread(wxEvtHandler *handler,
 
     /* init socket */
     _udpTransmissionSocket = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
+
+    /* internal value */
+    _txBlock = 1;
 }
 
 TftpdTransmissionThread::~TftpdTransmissionThread()
@@ -360,37 +364,55 @@ TftpdTransmissionThread::~TftpdTransmissionThread()
 
 wxThread::ExitCode TftpdTransmissionThread::Entry()
 {
-    TftpdMessage *msg = NULL;
     unsigned char transferBuffer[1024];
-    wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
     bool exist = wxFileName::FileExists(_file);
+    wxString mode;
+    bool txOk;
 
     if (_read) // RRQ
     {
+        mode = (_mode == TFTPD_TRANSFER_MODE_BINARY) ? wxT("rb") : wxT("r");
+
         if (exist)
         {
-            /* response data to tftp client */
+            wxFFileInputStream data(_file, mode);
 
-            /* read acknowledgement from tftp client */
+            if (data.IsOk())
+            {
+                wxFileOffset dataTotalLen = data.GetLength();
+                int totalBlocks = (dataTotalLen / 512) + 1;
+                int lastBlockSize = dataTotalLen % 512;
 
-            /* notify the main thread */
+                for (int blk = 0; blk < totalBlocks; blk++)
+                {
+                    bool last = (blk == totalBlocks - 1);
+                    int size = last ? lastBlockSize : 512;
+                    data.Read(&transferBuffer[0], size);
+                    txOk = DoSendOneBlockData(&transferBuffer[0], size);
+                    if (txOk)
+                    {
+                        int tftpEvent = last 
+                            ? TFTPD_EVENT_READ_TRANSFER_DONE
+                            : TFTPD_EVENT_READ_TRANSFER_UPDATE;
+                        NotifyMainThread(tftpEvent, _file, _txBlock, totalBlocks);
 
+                        /* advance block count */
+                        _txBlock++;
+                    }
+                }
+            }
         }
         else
         {
             /* response error to tftp client */
 
-            /* notify the main thread */
-            msg = new TftpdMessage(TFTPD_EVENT_ERROR,
-                wxT("File not found!"),
-                TFTPD_ERROR_FILE_NOT_FOUND);
-            event.SetPayload<TftpdMessage>(*msg);
-            wxQueueEvent(_pHandler, event.Clone());
-            wxDELETE(msg);
+            NotifyMainThread(TFTPD_EVENT_ERROR, wxT("File not found!"), TFTPD_ERROR_FILE_NOT_FOUND);
         }
     }
     else // WRQ
     {
+        mode = (_mode == TFTPD_TRANSFER_MODE_BINARY) ? wxT("wb") : wxT("w");
+
         if (!exist)
         {
             /* read data from tftp client */
@@ -403,15 +425,85 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
         {
             /* response error to tftp client */
 
-            /* notify the main thread */
-            msg = new TftpdMessage(TFTPD_EVENT_ERROR,
-                wxT("File already exists!"),
-                TFTPD_ERROR_FILE_ALREADY_EXISTS);
-            event.SetPayload<TftpdMessage>(*msg);
-            wxQueueEvent(_pHandler, event.Clone());
-            wxDELETE(msg);
+            NotifyMainThread(TFTPD_EVENT_ERROR, wxT("File already exists!"), TFTPD_ERROR_FILE_ALREADY_EXISTS);
         }
     }
 
     return (wxThread::ExitCode)0;
 }
+
+//
+// Send data to tftp client, and wait for ack...
+// If ack is not received within 'rexmt' second, then resend...
+// If ack is still not received within 'timeout' second, then abort...
+// Return true - transmission done
+// Return false - transmission timeout
+//
+bool TftpdTransmissionThread::DoSendOneBlockData(void *data, long len)
+{
+    unsigned char *txBuf = new unsigned char[len + 4];
+    unsigned char rxBuf[4];
+    wxSocketError error;
+    wxUint32 count;
+    short opcode, block;
+    bool done = false;
+
+    txBuf[0] = (TFTP_OPCODE_DATA >> 8) & 0xFF;
+    txBuf[1] = TFTP_OPCODE_DATA & 0xFF;
+    txBuf[2] = (_txBlock >> 8) & 0xFF;
+    txBuf[3] = _txBlock & 0xFF;
+    if (len > 0)
+        memcpy(&txBuf[4], data, len);
+    
+    _udpTransmissionSocket->SendTo(_remote, txBuf, len + 4);
+    if (!_udpTransmissionSocket->Error())
+    {
+        while (!TestDestroy())
+        {
+            _udpTransmissionSocket->RecvFrom(_remote, rxBuf, 4);
+            if (!_udpTransmissionSocket->Error())
+            {
+                count = _udpTransmissionSocket->LastCount();
+                if (count == 4)
+                {
+                    opcode = (rxBuf[0] << 8) + rxBuf[1];
+                    block = (rxBuf[2] << 8) + rxBuf[3];
+                    if ((opcode == TFTP_OPCODE_ACK) && (block == _txBlock))
+                    {
+                        done = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                error = _udpTransmissionSocket->LastError();
+                if (error == wxSOCKET_WOULDBLOCK)
+                {
+                    continue; // not real error, check timeout
+                }
+                else
+                {
+                    // real error, do something
+                }
+            }
+        }
+    }
+    else
+    {
+        error = _udpTransmissionSocket->LastError();
+    }
+
+    delete [] txBuf;
+    return done;
+}
+
+void TftpdTransmissionThread::NotifyMainThread(int evt, const wxString &str,
+                                               const int num1, const int num2)
+{
+    wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
+    TftpdMessage msg(evt, str, num1, num2);
+    event.SetPayload<TftpdMessage>(msg);
+    wxQueueEvent(_pHandler, event.Clone());
+}
+
