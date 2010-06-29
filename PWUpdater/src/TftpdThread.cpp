@@ -471,8 +471,15 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
 // Send data to tftp client, and wait for ack...
 // If ack is not received within 'rexmt' second, then resend...
 // If ack is still not received within 'timeout' second, then abort...
-// Return true - transmission done
-// Return false - transmission timeout
+//
+// Input:
+//  data - pointer to data buffer
+//  len - length of data buffer
+// Output:
+//  None
+// Return:
+//  true - transmission done
+//  false - transmission timeout
 //
 bool TftpdTransmissionThread::DoSendOneBlockDataAndWaitAck(void *data, long len)
 {
@@ -558,6 +565,26 @@ bool TftpdTransmissionThread::DoSendOneBlockDataAndWaitAck(void *data, long len)
 
     delete [] txBuf;
     return done;
+}
+
+//
+// Send ack to tftp client, and wait for data...
+// If data is not received within 'rexmt' second, then resend...
+// If data is still not received within 'timeout' second, then abort...
+//
+// Input:
+//  data - pointer to buffer to receive data
+//  len - pointer to long integer to receive data length
+// Output:
+//  len - save the data length to long integer pointed by len.
+//        *len == 0, this is last block data, else not last block.
+// Return:
+//  true - receive done
+//  false - receive timeout
+//
+bool TftpdTransmissionThread::DoSendAckAndReceiveOneBlockData(void *data, long *len)
+{
+
 }
 
 void TftpdTransmissionThread::DoSendError(short error, const wxString &msg)
