@@ -23,6 +23,7 @@
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
 #include <wx/wfstream.h>
+#include <wx/stopwatch.h>
 #include "TftpdThread.h"
 #include "PWUpdater.h"
 
@@ -477,10 +478,12 @@ bool TftpdTransmissionThread::DoSendOneBlockDataAndWaitAck(void *data, long len)
 {
     unsigned char *txBuf = new unsigned char[len + 4];
     unsigned char rxBuf[4];
-    wxSocketError error;
+    wxSocketError error = wxSOCKET_NOERROR;
     wxUint32 count;
     short opcode, block;
-    bool done = false;
+    bool done = false, resend = false, timeout = false;
+    wxStopWatch stopWatch;
+    long totalTime = 0, diffTime = 0;
 
     txBuf[0] = (TFTP_OPCODE_DATA >> 8) & 0xFF;
     txBuf[1] = TFTP_OPCODE_DATA & 0xFF;
@@ -489,43 +492,68 @@ bool TftpdTransmissionThread::DoSendOneBlockDataAndWaitAck(void *data, long len)
     if (len > 0)
         memcpy(&txBuf[4], data, len);
     
-    _udpTransmissionSocket->SendTo(_remote, txBuf, len + 4);
-    if (!_udpTransmissionSocket->Error())
+    for (int sendCount = 0; true; sendCount++)
     {
-        while (!TestDestroy())
+        _udpTransmissionSocket->SendTo(_remote, txBuf, len + 4);
+        if (!_udpTransmissionSocket->Error())
         {
-            _udpTransmissionSocket->RecvFrom(_remote, rxBuf, 4);
-            if (!_udpTransmissionSocket->Error())
+            stopWatch.Start();
+
+            while (!TestDestroy())
             {
-                count = _udpTransmissionSocket->LastCount();
-                if (count == 4)
+                _udpTransmissionSocket->RecvFrom(_remote, rxBuf, 4);
+                if (!_udpTransmissionSocket->Error())
                 {
-                    opcode = (rxBuf[0] << 8) + rxBuf[1];
-                    block = (rxBuf[2] << 8) + rxBuf[3];
-                    if ((opcode == TFTP_OPCODE_ACK) && (block == _txBlock))
+                    count = _udpTransmissionSocket->LastCount();
+                    if (count == 4)
                     {
-                        done = true;
+                        opcode = (rxBuf[0] << 8) + rxBuf[1];
+                        block = (rxBuf[2] << 8) + rxBuf[3];
+                        if ((opcode == TFTP_OPCODE_ACK) && (block == _txBlock))
+                        {
+                            done = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    error = _udpTransmissionSocket->LastError();
+                    if (error == wxSOCKET_WOULDBLOCK)
+                    {
+                        diffTime = stopWatch.Time();
+                        if (diffTime > _rexmt)
+                        {
+                            resend = true;
+                            break;
+                        }
+                        else
+                            continue;
+                    }
+                    else
+                    {
                         break;
                     }
                 }
             }
-            else
-            {
-                error = _udpTransmissionSocket->LastError();
-                if (error == wxSOCKET_WOULDBLOCK)
-                {
-                    continue; // not real error, check timeout
-                }
-                else
-                {
-                    // real error, do something
-                }
-            }
         }
-    }
-    else
-    {
-        error = _udpTransmissionSocket->LastError();
+        else
+        {
+            error = _udpTransmissionSocket->LastError();
+        }
+
+        totalTime += diffTime;
+        if (totalTime > _timeout)
+            timeout = true;
+
+        if (done) // transmission successfully
+            break;
+        else if (timeout) // transmission timeout
+            break;
+        else if (resend) // re-send
+            continue;
+        else // socket error?
+            break;
     }
 
     delete [] txBuf;
