@@ -400,13 +400,18 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
                         /* advance block count */
                         _txBlock++;
                     }
+                    else
+                    {
+                        NotifyMainThread(TFTPD_EVENT_ERROR, wxT("Timeout!"),
+                            TFTPD_ERROR_NOT_DEFINE);
+                        break;
+                    }
                 }
             }
         }
         else
         {
-            /* response error to tftp client */
-
+            DoSendError(TFTPD_ERROR_FILE_NOT_FOUND, wxT("File not found!"));
             NotifyMainThread(TFTPD_EVENT_ERROR, wxT("File not found!"), TFTPD_ERROR_FILE_NOT_FOUND);
         }
     }
@@ -424,8 +429,7 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
         }
         else
         {
-            /* response error to tftp client */
-
+            DoSendError(TFTPD_ERROR_FILE_ALREADY_EXISTS, wxT("File alreay exists!"));
             NotifyMainThread(TFTPD_EVENT_ERROR, wxT("File already exists!"), TFTPD_ERROR_FILE_ALREADY_EXISTS);
         }
     }
@@ -497,6 +501,21 @@ bool TftpdTransmissionThread::DoSendOneBlockData(void *data, long len)
 
     delete [] txBuf;
     return done;
+}
+
+void TftpdTransmissionThread::DoSendError(short error, const wxString &msg)
+{
+    unsigned long len = msg.length();
+    unsigned char *txBuf = new unsigned char[len + 5];
+
+    txBuf[0] = (TFTP_OPCODE_ERROR >> 8) & 0xFF;
+    txBuf[1] = TFTP_OPCODE_ERROR & 0xFF;
+    txBuf[2] = (error >> 8) & 0xFF;
+    txBuf[3] = error & 0xFF;
+    memcpy(&txBuf[4], msg.To8BitData(), len);
+    txBuf[len + 4] = 0;
+
+    _udpTransmissionSocket->SendTo(_remote, &txBuf[0], len + 5);
 }
 
 void TftpdTransmissionThread::NotifyMainThread(int evt, const wxString &str,
