@@ -146,7 +146,7 @@ public:
 
 private:
     virtual wxThread::ExitCode Entry();
-    bool DoSendOneBlockData(void *data, long len);
+    bool DoSendOneBlockDataAndWaitAck(void *data, long len);
     void DoSendError(short error, const wxString &msg = wxEmptyString);
     void NotifyMainThread(int evt, const wxString &str,
         const int num1, const int num2 = -1);

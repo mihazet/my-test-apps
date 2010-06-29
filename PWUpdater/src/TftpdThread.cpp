@@ -389,7 +389,7 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
                     bool last = (blk == totalBlocks - 1);
                     int size = last ? lastBlockSize : 512;
                     data.Read(&transferBuffer[0], size);
-                    txOk = DoSendOneBlockData(&transferBuffer[0], size);
+                    txOk = DoSendOneBlockDataAndWaitAck(&transferBuffer[0], size);
                     if (txOk)
                     {
                         int tftpEvent = last 
@@ -444,7 +444,7 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
 // Return true - transmission done
 // Return false - transmission timeout
 //
-bool TftpdTransmissionThread::DoSendOneBlockData(void *data, long len)
+bool TftpdTransmissionThread::DoSendOneBlockDataAndWaitAck(void *data, long len)
 {
     unsigned char *txBuf = new unsigned char[len + 4];
     unsigned char rxBuf[4];
