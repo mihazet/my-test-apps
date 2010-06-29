@@ -220,7 +220,8 @@ TftpdMessage *TftpdServerThread::ProtocolParser(unsigned char *buf,
             }
             break;
         default:
-            break;
+            return new TftpdMessage(TFTPD_EVENT_ERROR,
+                wxT("Illegal operation!"), TFTPD_ERROR_ILLEGAL_OPERATION);
         }
     }
 
