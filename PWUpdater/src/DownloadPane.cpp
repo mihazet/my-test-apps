@@ -164,7 +164,7 @@ void DownloadPane::OnThreadTftpd(wxThreadEvent &event)
         currentBlock = msg.GetNum1();
         totalBlock = msg.GetNum2();
         fileName = msg.GetString();
-        wxLogMessage(wxT("Read update: file %s, current = %d, total = %s"),
+        wxLogMessage(wxT("Read update: file %s, current = %d, total = %d"),
             fileName, currentBlock, totalBlock);
         break;
     case TFTPD_EVENT_WRITE_REQUEST:
@@ -178,7 +178,7 @@ void DownloadPane::OnThreadTftpd(wxThreadEvent &event)
         currentBlock = msg.GetNum1();
         totalBlock = msg.GetNum2();
         fileName = msg.GetString();
-        wxLogMessage(wxT("Write update: file %s, current = %d, total = %s"),
+        wxLogMessage(wxT("Write update: file %s, current = %d, total = %d"),
             fileName, currentBlock, totalBlock);
         break;
     case TFTPD_EVENT_ERROR:
