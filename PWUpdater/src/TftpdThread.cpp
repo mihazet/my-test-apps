@@ -103,19 +103,30 @@ wxThread::ExitCode TftpdServerThread::Entry()
     wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
     wxString file;
     int mode;
-    bool rootPathExist = wxFileName::DirExists(_rootPath);
+
+    /* check socket */
+    if (!_udpServerSocket->IsOk())
+    {
+        msg = new TftpdMessage(TFTPD_EVENT_ERROR,
+            wxT("Tftp server port is unavailable!"), TFTPD_ERROR_ACCESS_VIOLATION);
+        event.SetPayload<TftpdMessage>(*msg);
+        wxQueueEvent(_pHandler, event.Clone());
+        wxDELETE(msg);
+        return (wxThread::ExitCode)0;
+    }
 
     /* check root directory is valid */
-    if (!rootPathExist)
+    if (!wxFileName::DirExists(_rootPath))
     {
         msg = new TftpdMessage(TFTPD_EVENT_ERROR,
             wxT("Root directory doesn't exist!"), TFTPD_ERROR_NOT_DEFINE);
         event.SetPayload<TftpdMessage>(*msg);
         wxQueueEvent(_pHandler, event.Clone());
         wxDELETE(msg);
+        return (wxThread::ExitCode)0;
     }
 
-    while (!TestDestroy() && rootPathExist)
+    while (!TestDestroy())
     {
         /*
          * When we read from a non-blocking socket and there is no data 
