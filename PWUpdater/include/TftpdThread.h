@@ -143,6 +143,8 @@ public:
         const wxString &file = wxEmptyString,
         bool read = true, int mode = TFTPD_TRANSFER_MODE_BINARY);
     ~TftpdTransmissionThread();
+    void SetRetransmitInterval(long ms);
+    void SetTotalTimeout(long ms);
 
 private:
     virtual wxThread::ExitCode Entry();
@@ -159,6 +161,8 @@ private:
     int _mode;
     int _threadEventId;
     short _txBlock;
+    long _rexmt;
+    long _timeout;
 };
 
 #endif /* _TFTPD_THREAD_H_ */

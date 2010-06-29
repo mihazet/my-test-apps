@@ -338,6 +338,8 @@ TftpdTransmissionThread::TftpdTransmissionThread(wxEvtHandler *handler,
 
     /* internal value */
     _txBlock = 1;
+    _rexmt = 5000;
+    _timeout = 25000;
 }
 
 TftpdTransmissionThread::~TftpdTransmissionThread()
@@ -361,6 +363,22 @@ TftpdTransmissionThread::~TftpdTransmissionThread()
     cs.Leave();
 
     wxDELETE(_udpTransmissionSocket);
+}
+
+void TftpdTransmissionThread::SetRetransmitInterval(long ms)
+{
+    wxASSERT_MSG((ms < _timeout),
+        wxT("Retransmit interval can not be larger than total timeout!"));
+
+    _rexmt = ms;
+}
+
+void TftpdTransmissionThread::SetTotalTimeout(long ms)
+{
+    wxASSERT_MSG((ms > _rexmt),
+        wxT("Total timeout can not be smaller than retransmit interval!"));
+
+    _timeout = ms;
 }
 
 wxThread::ExitCode TftpdTransmissionThread::Entry()
