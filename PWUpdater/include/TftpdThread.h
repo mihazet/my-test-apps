@@ -161,7 +161,7 @@ private:
     bool _read;
     int _mode;
     int _threadEventId;
-    short _txBlock;
+    short _dataBlock;
     long _rexmt;
     long _timeout;
 };

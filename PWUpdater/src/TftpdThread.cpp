@@ -349,7 +349,7 @@ TftpdTransmissionThread::TftpdTransmissionThread(wxEvtHandler *handler,
     _udpTransmissionSocket = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
 
     /* internal value */
-    _txBlock = 1;
+    _dataBlock = 1;
     _rexmt = 5000;
     _timeout = 25000;
 }
@@ -425,10 +425,10 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
                         int tftpEvent = last 
                             ? TFTPD_EVENT_READ_TRANSFER_DONE
                             : TFTPD_EVENT_READ_TRANSFER_UPDATE;
-                        NotifyMainThread(tftpEvent, _file, _txBlock, totalBlocks);
+                        NotifyMainThread(tftpEvent, _file, _dataBlock, totalBlocks);
 
                         /* advance block count */
-                        _txBlock++;
+                        _dataBlock++;
                     }
                     else
                     {
@@ -494,8 +494,8 @@ bool TftpdTransmissionThread::DoSendOneBlockDataAndWaitAck(void *data, long len)
 
     txBuf[0] = (TFTP_OPCODE_DATA >> 8) & 0xFF;
     txBuf[1] = TFTP_OPCODE_DATA & 0xFF;
-    txBuf[2] = (_txBlock >> 8) & 0xFF;
-    txBuf[3] = _txBlock & 0xFF;
+    txBuf[2] = (_dataBlock >> 8) & 0xFF;
+    txBuf[3] = _dataBlock & 0xFF;
     if (len > 0)
         memcpy(&txBuf[4], data, len);
     
@@ -516,7 +516,7 @@ bool TftpdTransmissionThread::DoSendOneBlockDataAndWaitAck(void *data, long len)
                     {
                         opcode = (rxBuf[0] << 8) + rxBuf[1];
                         block = (rxBuf[2] << 8) + rxBuf[3];
-                        if ((opcode == TFTP_OPCODE_ACK) && (block == _txBlock))
+                        if ((opcode == TFTP_OPCODE_ACK) && (block == _dataBlock))
                         {
                             done = true;
                             break;
