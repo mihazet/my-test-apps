@@ -162,6 +162,7 @@ private:
     int _mode;
     int _threadEventId;
     short _dataBlock;
+    short _ackBlock;
     long _rexmt;
     long _timeout;
 };

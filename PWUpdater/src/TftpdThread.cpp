@@ -350,6 +350,7 @@ TftpdTransmissionThread::TftpdTransmissionThread(wxEvtHandler *handler,
 
     /* internal value */
     _dataBlock = 1;
+    _ackBlock = 0;
     _rexmt = 5000;
     _timeout = 25000;
 }
