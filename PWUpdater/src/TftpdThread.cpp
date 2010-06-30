@@ -584,7 +584,7 @@ bool TftpdTransmissionThread::DoSendOneBlockDataAndWaitAck(void *data, long len)
 //
 bool TftpdTransmissionThread::DoSendAckAndReceiveOneBlockData(void *data, long *len)
 {
-
+    return false;
 }
 
 void TftpdTransmissionThread::DoSendError(short error, const wxString &msg)
