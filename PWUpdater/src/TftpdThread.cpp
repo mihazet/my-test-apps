@@ -397,9 +397,12 @@ void TftpdTransmissionThread::SetTotalTimeout(long ms)
 wxThread::ExitCode TftpdTransmissionThread::Entry()
 {
     unsigned char transferBuffer[1024];
+    unsigned char receiveBuffer[1024];
     bool exist = wxFileName::FileExists(_file);
     wxString mode;
-    bool txOk;
+    bool txOk, rxOk, last;
+    long rxLen;
+    int tftpEvent;
 
     if (_read) // RRQ
     {
@@ -417,13 +420,13 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
 
                 for (int blk = 0; blk < totalBlocks; blk++)
                 {
-                    bool last = (blk == totalBlocks - 1);
+                    last = (blk == totalBlocks - 1);
                     int size = last ? lastBlockSize : 512;
                     data.Read(&transferBuffer[0], size);
                     txOk = DoSendOneBlockDataAndWaitAck(&transferBuffer[0], size);
                     if (txOk)
                     {
-                        int tftpEvent = last 
+                        tftpEvent = last 
                             ? TFTPD_EVENT_READ_TRANSFER_DONE
                             : TFTPD_EVENT_READ_TRANSFER_UPDATE;
                         NotifyMainThread(tftpEvent, _file, _dataBlock, totalBlocks);
@@ -452,11 +455,38 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
 
         if (!exist)
         {
-            /* read data from tftp client */
+            wxFFileOutputStream data(_file, mode);
 
-            /* response acknowledgement to tftp client */
+            if (data.IsOk())
+            {
+                while (true)
+                {
+                    rxOk = DoSendAckAndWaitOneBlockData(&receiveBuffer[0], &rxLen);
+                    if (rxOk)
+                    {
+                        wxLogMessage(wxT("rxOK, len = %d"), rxLen);
+                        if (rxLen != 0)
+                            data.Write(&receiveBuffer[0], rxLen);
+                        last = (rxLen < 512);
+                        tftpEvent = last
+                            ? TFTPD_EVENT_WRITE_TRANSFER_DONE
+                            : TFTPD_EVENT_WRITE_TRANSFER_UPDATE;
+                        NotifyMainThread(tftpEvent, _file, _ackBlock, _ackBlock);
+                        if (last)
+                            break;
 
-            /* notify the main thread */
+                        /* advance ack # */
+                        _ackBlock++;
+                    }
+                    else
+                    {
+                        wxLogMessage(wxT("rxNG"));
+                        NotifyMainThread(TFTPD_EVENT_ERROR, wxT("Timeout!"),
+                            TFTPD_ERROR_NOT_DEFINE);
+                        break;
+                    }
+                }
+            }
         }
         else
         {
@@ -578,14 +608,91 @@ bool TftpdTransmissionThread::DoSendOneBlockDataAndWaitAck(void *data, long len)
 //  len - pointer to long integer to receive data length
 // Output:
 //  len - save the data length to long integer pointed by len.
-//        *len == 0, this is last block data, else not last block.
+//        *len < 512, this is last block data, else not last block.
 // Return:
 //  true - receive done
 //  false - receive timeout
 //
-bool TftpdTransmissionThread::DoSendAckAndReceiveOneBlockData(void *data, long *len)
+bool TftpdTransmissionThread::DoSendAckAndWaitOneBlockData(void *data, long *len)
 {
-    return false;
+    unsigned char rxBuf[1024];
+    unsigned char txBuf[4];
+    wxSocketError error = wxSOCKET_NOERROR;
+    wxUint32 count;
+    short opcode, block;
+    bool done = false, resend = false, timeout = false;
+    wxStopWatch stopWatch;
+    long totalTime = 0, diffTime = 0;
+
+    txBuf[0] = (TFTP_OPCODE_ACK >> 8) & 0xFF;
+    txBuf[1] = TFTP_OPCODE_ACK & 0xFF;
+    txBuf[2] = (_ackBlock >> 8) & 0xFF;
+    txBuf[3] = _ackBlock & 0xFF;
+    
+    for (int sendCount = 1; true; sendCount++)
+    {
+        _udpTransmissionSocket->SendTo(_remote, txBuf, 4);
+        if (!_udpTransmissionSocket->Error())
+        {
+            stopWatch.Start();
+
+            while (!TestDestroy())
+            {
+                _udpTransmissionSocket->RecvFrom(_remote, rxBuf, 1024);
+                if (!_udpTransmissionSocket->Error())
+                {
+                    count = _udpTransmissionSocket->LastCount();
+                    *len = count - 4;
+                    opcode = (rxBuf[0] << 8) + rxBuf[1];
+                    block = (rxBuf[2] << 8) + rxBuf[3];
+                    if ((opcode == TFTP_OPCODE_DATA) && (block == _dataBlock))
+                    {
+                        memcpy(data, &rxBuf[4], *len);
+                        done = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    error = _udpTransmissionSocket->LastError();
+                    if (error == wxSOCKET_WOULDBLOCK)
+                    {
+                        diffTime = stopWatch.Time();
+                        if (diffTime > _rexmt)
+                        {
+                            resend = true;
+                            break;
+                        }
+                        else
+                            continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            error = _udpTransmissionSocket->LastError();
+        }
+
+        totalTime += diffTime;
+        if (totalTime > _timeout)
+            timeout = true;
+
+        if (done) // transmission successfully
+            break;
+        else if (timeout) // transmission timeout
+            break;
+        else if (resend) // re-send
+            continue;
+        else // socket error?
+            break;
+    }
+
+    return done;
 }
 
 void TftpdTransmissionThread::DoSendError(short error, const wxString &msg)
