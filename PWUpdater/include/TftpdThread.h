@@ -66,6 +66,7 @@ enum
     TFTPD_ERROR_UNKNOWN_TRANSFER_ID     = 5,
     TFTPD_ERROR_FILE_ALREADY_EXISTS     = 6,
     TFTPD_ERROR_NO_SUCH_USER            = 7,
+    TFTPD_ERROR_OPTION_NEGOTIATION      = 8,
 
     TFTPD_ERROR_INVALID
 };
@@ -118,8 +119,6 @@ private:
     virtual wxThread::ExitCode Entry();
     TftpdMessage *ProtocolParser(unsigned char *buf, unsigned int len);
     bool IsSingleNullTerminatedString(unsigned char *buf, unsigned int len);
-    bool IsTwoNullTerminatedString(unsigned char *buf, unsigned int len,
-        unsigned char **str2);
     void DoStartTransmissionThread(const wxIPV4address &remote,
         const wxString &file, const int mode, bool rrq);
 
@@ -127,6 +126,8 @@ private:
     int _threadEventId;
     wxString _rootPath;
     wxDatagramSocket *_udpServerSocket;
+    bool _optResendTimeout, _optTransferSize, _optBlockSize;
+    long _valResendTimeout, _valTransferSize, _valBlockSize;
 };
 
 
@@ -143,12 +144,15 @@ public:
         const wxString &file = wxEmptyString,
         bool read = true, int mode = TFTPD_TRANSFER_MODE_BINARY);
     ~TftpdTransmissionThread();
-    void SetRetransmitInterval(long ms);
-    void SetTotalTimeout(long ms);
+    void SetRetransmitInterval(long ms) { _rexmt = ms; }
+    void SetTotalTimeout(long ms) { _timeout = ms; }
+    void SetBlockSize(long size) { _blkSize = size; }
+    void SetTransferSize(long size) { _transferSize = size; }
 
 private:
     virtual wxThread::ExitCode Entry();
     bool DoSendOneBlockDataAndWaitAck(void *data, long len);
+    void DoSendOptAckAndWaitAckIfNeed(long fileLen);
     bool DoSendAckAndWaitOneBlockData(void *data, long *len);
     void DoSendError(short error, const wxString &msg = wxEmptyString);
     void NotifyMainThread(int evt, const wxString &str,
@@ -165,6 +169,8 @@ private:
     short _ackBlock;
     long _rexmt;
     long _timeout;
+    long _blkSize;
+    long _transferSize;
 };
 
 #endif /* _TFTPD_THREAD_H_ */

@@ -1,6 +1,7 @@
 /*
  *  TftpdThread.cpp - A simple implementation for tftp server.
  *  Refer to RFC1350 for TFTP protocol detail.
+ *  Refer to RFC2347/RFC2348/RFC2349 for TFTP option extension detail.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -42,7 +43,8 @@ enum
     TFTP_OPCODE_WRQ     = 2,
     TFTP_OPCODE_DATA    = 3,
     TFTP_OPCODE_ACK     = 4,
-    TFTP_OPCODE_ERROR   = 5
+    TFTP_OPCODE_ERROR   = 5,
+    TFTP_OPCODE_OACK    = 6
 };
 
 // ------------------------------------------------------------------------
@@ -78,6 +80,10 @@ TftpdServerThread::TftpdServerThread(wxEvtHandler *handler, const int id,
 
     /* init socket */
     _udpServerSocket = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
+
+    /* RFC2347/2348/2349 - option negotiation for transmission */
+    _optResendTimeout = _optTransferSize = _optBlockSize = false;
+    _valResendTimeout = _valTransferSize = _valBlockSize = -1;
 }
 
 TftpdServerThread::~TftpdServerThread()
@@ -180,15 +186,18 @@ wxThread::ExitCode TftpdServerThread::Entry()
 
 //
 // If data in the buf can not be recognized as valid tftp protocol, then
-// return NULL. Otherwise, return a pointer to a valid TftpServerMessage
-// object. It is the responsibility of caller to delete this object.
+// return NULL. Otherwise, return a pointer to a valid TftpdMessage object.
+// It is the responsibility of caller to delete this object.
 //
 TftpdMessage *TftpdServerThread::ProtocolParser(unsigned char *buf,
                                                 unsigned int len)
 {
     int opCode, errorCode, mode = TFTPD_TRANSFER_MODE_INVALID;
-    wxString fileName, errorMsg, txMode;
-    unsigned char *pStr2 = NULL;
+    wxString fileName, errorMsg, txMode, optName, optValue;
+    size_t nameLen, modeLen, optLen, valueLen;
+    unsigned int pair, optIdx;
+    bool optParseError = false;
+    long longTemp = 0;
 
     if (len > 2)
     {
@@ -199,23 +208,87 @@ TftpdMessage *TftpdServerThread::ProtocolParser(unsigned char *buf,
         case TFTP_OPCODE_WRQ:
             if (len > 4)
             {
-                if (IsTwoNullTerminatedString(&buf[2], len - 2, &pStr2))
-                {
-                    fileName = wxString::FromAscii(&buf[2]);
-                    txMode = wxString::FromAscii(pStr2);
-                    if (!txMode.CmpNoCase(wxT("netascii")))
-                        mode = TFTPD_TRANSFER_MODE_ASCII;
-                    else if (!txMode.CmpNoCase(wxT("octet")))
-                        mode = TFTPD_TRANSFER_MODE_BINARY;
+                /* file name */
+                nameLen = strlen((const char *)&buf[2]);
+                if (nameLen >= (len - 2))
+                    break;
+                else
+                    fileName = wxString::FromAscii(&buf[2], nameLen);
 
-                    if (mode != TFTPD_TRANSFER_MODE_INVALID)
+                /* mode */
+                modeLen = strlen((const char *)&buf[2 + nameLen + 1]);
+                if (modeLen >= (len - 2 - nameLen - 1))
+                    break;
+                else
+                    txMode = wxString::FromAscii(&buf[2 + nameLen + 1], modeLen);
+                if (!txMode.CmpNoCase(wxT("netascii")))
+                    mode = TFTPD_TRANSFER_MODE_ASCII;
+                else if (!txMode.CmpNoCase(wxT("octet")))
+                    mode = TFTPD_TRANSFER_MODE_BINARY;
+
+                /* option/value pairs */
+                optIdx = 2 + nameLen + 1 + modeLen + 1;
+                for (pair = 1; optIdx < len; pair++)
+                {
+                    /* option */
+                    optLen = strlen((const char *)&buf[optIdx]);
+                    if (optLen >= (len - optIdx))
                     {
-                        return new TftpdMessage(
-                            (opCode == TFTP_OPCODE_RRQ)
-                            ? TFTPD_EVENT_READ_REQUEST
-                            : TFTPD_EVENT_WRITE_REQUEST,
-                            fileName, mode);
+                        optParseError = true;
+                        break;
                     }
+                    else
+                        optName = wxString::FromAscii(&buf[optIdx], optLen);
+
+                    optIdx += (optLen + 1);
+
+                    /* value */
+                    valueLen = strlen((const char *)&buf[optIdx]);
+                    if (valueLen >= (len - optIdx))
+                    {
+                        optParseError = true;
+                        break;
+                    }
+                    else
+                    {
+                        optValue = wxString::FromAscii(&buf[optIdx], valueLen);
+                        optValue.ToLong(&longTemp);
+                    }
+
+                    optIdx += (valueLen + 1);
+
+                    if (!optName.CmpNoCase(wxT("timeout")))
+                    {
+                        _optResendTimeout = true;
+                        _valResendTimeout = longTemp;
+                    }
+                    else if (!optName.CmpNoCase(wxT("tsize")))
+                    {
+                        _optTransferSize = true;
+                        _valTransferSize = longTemp;
+                    }
+                    else if (!optName.CmpNoCase(wxT("blksize")))
+                    {
+                        _optBlockSize = true;
+                        _valBlockSize = longTemp;
+                    }
+                    else
+                    {
+                        optParseError = true;
+                        break;
+                    }
+                }
+
+                if (optParseError)
+                    break;
+
+                if (mode != TFTPD_TRANSFER_MODE_INVALID)
+                {
+                    return new TftpdMessage(
+                        (opCode == TFTP_OPCODE_RRQ)
+                        ? TFTPD_EVENT_READ_REQUEST
+                        : TFTPD_EVENT_WRITE_REQUEST,
+                        fileName, mode);
                 }
             }
             break;
@@ -257,33 +330,6 @@ bool TftpdServerThread::IsSingleNullTerminatedString(unsigned char *buf,
     return true;
 }
 
-bool TftpdServerThread::IsTwoNullTerminatedString(unsigned char *buf,
-                                                  unsigned int len,
-                                                  unsigned char **str2)
-{
-    unsigned int str1Len, str2Len;
-
-    if (str2 == NULL)
-        return false;
-    else
-        *str2 = NULL;
-
-    if (len <= 2)
-        return false;
-
-    str1Len = strlen((const char *)&buf[0]);
-    if (str1Len >= (len - 2))
-        return false;
-
-    str2Len = strlen((const char *)&buf[str1Len + 1]);
-    if ((str1Len + str2Len) != (len - 2))
-        return false;
-    else
-        *str2 = &buf[str1Len + 1];
-
-    return true;
-}
-
 void TftpdServerThread::DoStartTransmissionThread(
     const wxIPV4address &remote, const wxString &file,
     const int mode, bool rrq)
@@ -310,6 +356,24 @@ void TftpdServerThread::DoStartTransmissionThread(
     }
     else
     {
+        /* init transmission options */
+        if (_optBlockSize)
+        {
+            pTransmission->SetBlockSize(_valBlockSize);
+            _optBlockSize = false;
+        }
+        if (_optResendTimeout)
+        {
+            pTransmission->SetRetransmitInterval(_valResendTimeout * 1000);
+            _optResendTimeout = false;
+        }
+        if (_optTransferSize)
+        {
+            pTransmission->SetTransferSize(_valTransferSize);
+            _optTransferSize = false;
+        }
+
+        /* start transfer thread */
         if (pTransmission->Run() != wxTHREAD_NO_ERROR)
         {
             wxLogError(wxT("Can't run the tftp transmission thread!"));
@@ -348,11 +412,13 @@ TftpdTransmissionThread::TftpdTransmissionThread(wxEvtHandler *handler,
     /* init socket */
     _udpTransmissionSocket = new wxDatagramSocket(local, wxSOCKET_NOWAIT);
 
-    /* internal value */
+    /* internal default value */
     _dataBlock = 1;
     _ackBlock = 0;
-    _rexmt = 5000;
-    _timeout = 25000;
+    _rexmt = -1;
+    _timeout = -1;
+    _blkSize = -1;
+    _transferSize = -1;
 }
 
 TftpdTransmissionThread::~TftpdTransmissionThread()
@@ -378,25 +444,9 @@ TftpdTransmissionThread::~TftpdTransmissionThread()
     wxDELETE(_udpTransmissionSocket);
 }
 
-void TftpdTransmissionThread::SetRetransmitInterval(long ms)
-{
-    wxASSERT_MSG((ms < _timeout),
-        wxT("Retransmit interval can not be larger than total timeout!"));
-
-    _rexmt = ms;
-}
-
-void TftpdTransmissionThread::SetTotalTimeout(long ms)
-{
-    wxASSERT_MSG((ms > _rexmt),
-        wxT("Total timeout can not be smaller than retransmit interval!"));
-
-    _timeout = ms;
-}
-
 wxThread::ExitCode TftpdTransmissionThread::Entry()
 {
-    unsigned char transferBuffer[1024];
+    unsigned char *pTransferBuffer;
     unsigned char receiveBuffer[1024];
     bool exist = wxFileName::FileExists(_file);
     wxString mode;
@@ -415,15 +465,19 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
             if (data.IsOk())
             {
                 wxFileOffset dataTotalLen = data.GetLength();
-                int totalBlocks = (dataTotalLen / 512) + 1;
-                int lastBlockSize = dataTotalLen % 512;
+
+                DoSendOptAckAndWaitAckIfNeed((long)dataTotalLen);
+                pTransferBuffer = new unsigned char [_blkSize];
+
+                int totalBlocks = (dataTotalLen / _blkSize) + 1;
+                int lastBlockSize = dataTotalLen % _blkSize;
 
                 for (int blk = 0; blk < totalBlocks; blk++)
                 {
                     last = (blk == totalBlocks - 1);
-                    int size = last ? lastBlockSize : 512;
-                    data.Read(&transferBuffer[0], size);
-                    txOk = DoSendOneBlockDataAndWaitAck(&transferBuffer[0], size);
+                    int size = last ? lastBlockSize : _blkSize;
+                    data.Read(pTransferBuffer, size);
+                    txOk = DoSendOneBlockDataAndWaitAck(pTransferBuffer, size);
                     if (txOk)
                     {
                         tftpEvent = last 
@@ -441,6 +495,8 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
                         break;
                     }
                 }
+
+                delete [] pTransferBuffer;
             }
         }
         else
@@ -496,6 +552,131 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
     }
 
     return (wxThread::ExitCode)0;
+}
+
+void TftpdTransmissionThread::DoSendOptAckAndWaitAckIfNeed(long fileLen)
+{
+    unsigned char txBuf[256], rxBuf[4];
+    size_t idx;
+    wxStopWatch stopWatch;
+    wxSocketError error = wxSOCKET_NOERROR;
+    int sendCnt;
+    long totalTime = 0, diffTime = 0;
+    wxUint32 count;
+    short opcode, block;
+    bool done = false, resend = false, timeout = false;
+    bool optBlkSize = false, optTimeout = false, optTSize = false;
+
+    /* init parameters per option negotiation or default value */
+    if (_blkSize != -1)
+        optBlkSize = true;
+    else
+        _blkSize = 512;
+    if (_rexmt != -1)
+        optTimeout = true;
+    else
+        _rexmt = 6 * 1000;
+    _timeout = _rexmt * 5;
+    if (_transferSize == 0)
+        optTSize = true;
+
+    /* if any option is used, send back option ack */
+    if (optBlkSize || optTimeout || optTSize)
+    {       
+        memset(&txBuf[0], 0, sizeof(txBuf));
+        txBuf[0] = (TFTP_OPCODE_OACK >> 8) & 0xFF;
+        txBuf[1] = TFTP_OPCODE_OACK & 0xFF;
+        idx = 2;
+        if (optBlkSize)
+        {
+            sprintf((char *)&txBuf[idx], "blksize");
+            idx = strlen((const char *)&txBuf[idx]) + idx + 1;
+            sprintf((char *)&txBuf[idx], "%ld", _blkSize);
+            idx = strlen((const char *)&txBuf[idx]) + idx + 1;
+        }
+        if (optTimeout)
+        {
+            sprintf((char *)&txBuf[idx], "timeout");
+            idx = strlen((const char *)&txBuf[idx]) + idx + 1;
+            sprintf((char *)&txBuf[idx], "%ld", _rexmt / 1000);
+            idx = strlen((const char *)&txBuf[idx]) + idx + 1;
+        }
+        if (optTSize)
+        {
+            sprintf((char *)&txBuf[idx], "tsize");
+            idx = strlen((const char *)&txBuf[idx]) + idx + 1;
+            sprintf((char *)&txBuf[idx], "%ld", fileLen);
+            idx = strlen((const char *)&txBuf[idx]) + idx + 1;
+        }
+
+        for (sendCnt = 1; true; sendCnt++)
+        {
+            _udpTransmissionSocket->SendTo(_remote, txBuf, idx);
+            if (!_udpTransmissionSocket->Error())
+            {
+                stopWatch.Start();
+
+                while (!TestDestroy())
+                {
+                    _udpTransmissionSocket->RecvFrom(_remote, rxBuf, 4);
+                    if (!_udpTransmissionSocket->Error())
+                    {
+                        count = _udpTransmissionSocket->LastCount();
+                        if (count == 4)
+                        {
+                            opcode = (rxBuf[0] << 8) + rxBuf[1];
+                            block = (rxBuf[2] << 8) + rxBuf[3];
+
+                            if ((opcode == TFTP_OPCODE_ACK)
+                                && (block == 0))
+                            {
+                                done = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        error = _udpTransmissionSocket->LastError();
+                        if (error == wxSOCKET_WOULDBLOCK)
+                        {
+                            diffTime = stopWatch.Time();
+                            if (diffTime > _rexmt)
+                            {
+                                resend = true;
+                                break;
+                            }
+                            else
+                                continue;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+
+
+            }
+            else
+            {
+                error = _udpTransmissionSocket->LastError();
+            }
+
+            totalTime += diffTime;
+            if (totalTime > _timeout)
+                timeout = true;
+
+            if (done)
+                break;
+            else if (timeout)
+                break;
+            else if (resend)
+                continue;
+            else
+                break;
+        }
+    }
 }
 
 //
