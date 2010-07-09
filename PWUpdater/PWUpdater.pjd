@@ -696,6 +696,89 @@
             <string name="language">""</string>
           </document>
         </document>
+        <document>
+          <string name="title">"SQLite"</string>
+          <string name="type">"html-folder-document"</string>
+          <string name="filename">""</string>
+          <string name="icon-name">"folder"</string>
+          <long name="is-transient">1</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <string name="created">"9/7/2010"</string>
+          <document>
+            <string name="title">"sqlite3.c"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"src/sqlite3.c"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"9/7/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"sqlite3.h"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"include/sqlite3.h"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"9/7/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"wxsqlite3.cpp"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"src/wxsqlite3.cpp"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"9/7/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"wxsqlite3.h"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"include/wx/wxsqlite3.h"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"9/7/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"wxsqlite3def.h"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"include/wx/wxsqlite3def.h"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"9/7/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"wxsqlite3opt.h"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"include/wx/wxsqlite3opt.h"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"9/7/2010"</string>
+            <string name="language">""</string>
+          </document>
+        </document>
       </document>
       <document>
         <string name="title">"Images"</string>
