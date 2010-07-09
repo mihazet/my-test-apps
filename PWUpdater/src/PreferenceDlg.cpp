@@ -11,6 +11,7 @@
 // Headers
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
+#include <wx/notebook.h>
 #include "PreferenceDlg.h"
 
 #define wxLOG_COMPONENT "PWUpdater/pref"
@@ -30,17 +31,24 @@ END_EVENT_TABLE()
 // ------------------------------------------------------------------------
 PrefDlg::PrefDlg(wxWindow *parent)
     : wxDialog(parent, wxID_ANY, _("Preference"), wxDefaultPosition,
-      wxDefaultSize, wxDEFAULT_DIALOG_STYLE)
+      wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
+    wxNotebook *prefNB = new wxNotebook(this, wxID_ANY);
+
+    /* tftp server page */
+    wxPanel *tftpPage = new wxPanel(prefNB, wxID_ANY);
+
+    /* flash chip page */
+    wxPanel *flashPage = new wxPanel(prefNB, wxID_ANY);
+
+    prefNB->AddPage(tftpPage, _("Tftp server"), true);
+    prefNB->AddPage(flashPage, _("Flash chip"), false);
+
     wxBoxSizer *dlgSizer = new wxBoxSizer(wxVERTICAL);
-
-    dlgSizer->Add(new wxButton(this, wxID_ANY, _("PressMe")), 1, wxALL | wxEXPAND , 5);
-
-    /* standard dialog button sizer */
+    dlgSizer->Add(prefNB, 1, wxALL | wxEXPAND, 5);
     dlgSizer->Add(
         CreateStdDialogButtonSizer(wxOK|wxCANCEL|wxAPPLY),
         0, wxALL | wxEXPAND, 5);
-
     SetSizerAndFit(dlgSizer);
 }
 
