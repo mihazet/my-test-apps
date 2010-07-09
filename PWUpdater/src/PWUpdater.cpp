@@ -17,6 +17,7 @@
 #include "TftpdThread.h"
 #include "DownloadPane.h"
 #include "LogPane.h"
+#include "PreferenceDlg.h"
 
 #define wxLOG_COMPONENT "PWUpdater/ui/frame"
 
@@ -50,6 +51,7 @@ bool PWUpdaterApp::OnInit()
 BEGIN_EVENT_TABLE(PWUpdaterFrame, wxFrame)
     EVT_CLOSE(PWUpdaterFrame::OnClose)
     EVT_MENU(wxID_EXIT, PWUpdaterFrame::OnQuit)
+    EVT_MENU(wxID_PREFERENCES, PWUpdaterFrame::OnPref)
 END_EVENT_TABLE()
 
 PWUpdaterFrame::PWUpdaterFrame(wxWindow *parent, wxWindowID id,
@@ -86,8 +88,12 @@ void PWUpdaterFrame::CreateControls()
     /* menu bar */
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_EXIT, _("&Quit"), _("Quit this program."));
+    wxMenu *view_menu = new wxMenu;
+    view_menu->Append(wxID_PREFERENCES, _("&Preferences"), _("Modify user configuration."));
+
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(file_menu, _("&File"));
+    menuBar->Append(view_menu, _("&View"));
     SetMenuBar(menuBar);
 
     /* tool bar */
@@ -177,3 +183,9 @@ void PWUpdaterFrame::OnQuit(wxCommandEvent &WXUNUSED(event))
     Close();
 }
 
+void PWUpdaterFrame::OnPref(wxCommandEvent &WXUNUSED(event))
+{
+    PrefDlg dlg(this);
+
+    dlg.ShowModal();
+}

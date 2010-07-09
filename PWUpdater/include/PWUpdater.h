@@ -67,6 +67,7 @@ private:
     /* event handler functions */
     void OnClose(wxCloseEvent &event);
     void OnQuit(wxCommandEvent &event);
+    void OnPref(wxCommandEvent &event);
 
     /* data members */
     wxAuiManager _auiMgr;
