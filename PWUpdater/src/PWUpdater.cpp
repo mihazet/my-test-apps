@@ -13,11 +13,16 @@
 #include <wx/wx.h>
 #include <wx/thread.h>
 #include <wx/socket.h>
+#include <wx/iconbndl.h>
 #include "PWUpdater.h"
 #include "TftpdThread.h"
 #include "DownloadPane.h"
 #include "LogPane.h"
 #include "PreferenceDlg.h"
+
+#include "xpm/ruby_16.xpm"
+#include "xpm/ruby_32.xpm"
+#include "xpm/ruby_48.xpm"
 
 #define wxLOG_COMPONENT "PWUpdater/ui/frame"
 
@@ -85,6 +90,13 @@ void PWUpdaterFrame::Init()
 
 void PWUpdaterFrame::CreateControls()
 {
+    /* icons */
+    wxIconBundle icons;
+    icons.AddIcon(wxIcon(ruby_16_xpm));
+    icons.AddIcon(wxIcon(ruby_32_xpm));
+    icons.AddIcon(wxIcon(ruby_48_xpm));
+    SetIcons(icons);
+
     /* menu bar */
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_EXIT, _("&Quit"), _("Quit this program."));
