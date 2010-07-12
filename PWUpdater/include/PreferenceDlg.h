@@ -23,6 +23,8 @@ private:
     virtual bool TransferDataToWindow();
     int CheckBoxLoad(const wxWindowID id, const wxString &opt);
     int CheckBoxSave(const wxWindowID id, const wxString &opt);
+    int TextCtrlLoad(const wxWindowID id, const wxString &opt);
+    int TextCtrlSave(const wxWindowID id, const wxString &opt);
 
     DECLARE_EVENT_TABLE()
 };

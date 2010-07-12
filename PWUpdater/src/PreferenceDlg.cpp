@@ -223,8 +223,21 @@ bool PrefDlg::TransferDataFromWindow()
     /* tftp page */
     DBGCALL2(CheckBoxSave(ID_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
     DBGCALL2(CheckBoxSave(ID_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
+    DBGCALL2(TextCtrlSave(ID_TFTP_TIMEOUT, wxT("Timeout")));
+    DBGCALL2(TextCtrlSave(ID_TFTP_RETRANSMIT, wxT("Retransmit")));
 
     /* flash page */
+    DBGCALL2(TextCtrlSave(ID_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
+    DBGCALL2(TextCtrlSave(ID_FLASH_SPI_UBOOT_OFFSET, wxT("UBootSPIOffset")));
+    DBGCALL2(TextCtrlSave(ID_FLASH_SPI_UBOOT_IMAGE, wxT("UBootSPIImage")));
+    DBGCALL2(TextCtrlSave(ID_FLASH_UBOOT_OFFSET, wxT("UBootOffset")));
+    DBGCALL2(TextCtrlSave(ID_FLASH_UBOOT_IMAGE, wxT("UBootImage")));
+    DBGCALL2(TextCtrlSave(ID_FLASH_KERNEL_OFFSET, wxT("KernelOffset")));
+    DBGCALL2(TextCtrlSave(ID_FLASH_KERNEL_IMAGE, wxT("KernelImage")));
+    DBGCALL2(TextCtrlSave(ID_FLASH_FS_OFFSET, wxT("FileSystemOffset")));
+    DBGCALL2(TextCtrlSave(ID_FLASH_FS_IMAGE, wxT("FileSystemImage")));
+    DBGCALL2(TextCtrlSave(ID_FLASH_SPLASH_OFFSET, wxT("SplashOffset")));
+    DBGCALL2(TextCtrlSave(ID_FLASH_SPLASH_IMAGE, wxT("SplashImage")));
 
     return true;
 }
@@ -238,8 +251,21 @@ bool PrefDlg::TransferDataToWindow()
     /* tftp page */
     DBGCALL(CheckBoxLoad(ID_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
     DBGCALL(CheckBoxLoad(ID_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
+    DBGCALL(TextCtrlLoad(ID_TFTP_TIMEOUT, wxT("Timeout")));
+    DBGCALL(TextCtrlLoad(ID_TFTP_RETRANSMIT, wxT("Retransmit")));
 
     /* flash page */
+    DBGCALL(TextCtrlLoad(ID_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
+    DBGCALL(TextCtrlLoad(ID_FLASH_SPI_UBOOT_OFFSET, wxT("UBootSPIOffset")));
+    DBGCALL(TextCtrlLoad(ID_FLASH_SPI_UBOOT_IMAGE, wxT("UBootSPIImage")));
+    DBGCALL(TextCtrlLoad(ID_FLASH_UBOOT_OFFSET, wxT("UBootOffset")));
+    DBGCALL(TextCtrlLoad(ID_FLASH_UBOOT_IMAGE, wxT("UBootImage")));
+    DBGCALL(TextCtrlLoad(ID_FLASH_KERNEL_OFFSET, wxT("KernelOffset")));
+    DBGCALL(TextCtrlLoad(ID_FLASH_KERNEL_IMAGE, wxT("KernelImage")));
+    DBGCALL(TextCtrlLoad(ID_FLASH_FS_OFFSET, wxT("FileSystemOffset")));
+    DBGCALL(TextCtrlLoad(ID_FLASH_FS_IMAGE, wxT("FileSystemImage")));
+    DBGCALL(TextCtrlLoad(ID_FLASH_SPLASH_OFFSET, wxT("SplashOffset")));
+    DBGCALL(TextCtrlLoad(ID_FLASH_SPLASH_IMAGE, wxT("SplashImage")));
 
     return true;
 }
@@ -280,6 +306,64 @@ int PrefDlg::CheckBoxSave(const wxWindowID id, const wxString &opt)
         else
         {
             return ERROR_SKIP_UPDATE;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::TextCtrlLoad(const wxWindowID id, const wxString &opt)
+{
+    wxString value;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxTextCtrl *textCtrl = wxDynamicCast(FindWindow(id), wxTextCtrl);
+
+    if (textCtrl)
+    {
+        if (pOpt->GetOption(opt, value))
+        {
+            textCtrl->ChangeValue(value);
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::TextCtrlSave(const wxWindowID id, const wxString &opt)
+{
+    wxString dbValue, uiValue;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxTextCtrl *textCtrl = wxDynamicCast(FindWindow(id), wxTextCtrl);
+
+    if (textCtrl)
+    {
+        if (pOpt->GetOption(opt, dbValue))
+        {
+            uiValue = textCtrl->GetValue();
+            if (dbValue != uiValue)
+            {
+                pOpt->SetOption(opt, uiValue);
+            }
+            else
+            {
+                return ERROR_SKIP_UPDATE;
+            }
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
         }
     }
     else
