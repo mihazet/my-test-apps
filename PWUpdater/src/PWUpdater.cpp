@@ -50,6 +50,11 @@ void PWUpdaterApp::Init()
     m_pOpt = new AppOptions;
 }
 
+void PWUpdaterApp::Term()
+{
+    wxDELETE(m_pOpt);
+}
+
 bool PWUpdaterApp::OnInit()
 {
     /* create main frame */

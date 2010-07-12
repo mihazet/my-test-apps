@@ -24,7 +24,7 @@ class PWUpdaterApp : public wxApp
 {
 public:
     PWUpdaterApp() { Init(); }
-    ~PWUpdaterApp() {}
+    ~PWUpdaterApp() { Term(); }
 
     /* tftpd server thread managment */
     TftpdServerThread *m_pTftpdServerThread;
@@ -39,6 +39,7 @@ public:
 
 private:
     void Init();
+    void Term();
     virtual bool OnInit();
 };
 
