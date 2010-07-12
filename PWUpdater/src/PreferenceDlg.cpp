@@ -17,6 +17,7 @@
 #include <wx/gbsizer.h>
 #include "AppOptions.h"
 #include "PreferenceDlg.h"
+#include "PWUpdater.h"
 
 #define wxLOG_COMPONENT "PWUpdater/pref"
 
@@ -50,6 +51,31 @@ enum
     ID_FLASH_SPLASH_OFFSET,
     ID_FLASH_SPLASH_IMAGE,
 };
+
+/* error code for data transfer from/to database */
+#define ERROR_NO_ERROR                  0
+#define ERROR_SKIP_UPDATE               -1 // no change, skip update
+#define ERROR_WIDGET_ID                 -2 // ui widget id is invalid
+#define ERROR_DB_ENTRY                  -3 // db entry is invalid
+
+/* debug macro */
+#define DBGCALL(x)                                                      \
+    do {                                                                \
+        int __t = x;                                                    \
+        if (__t != ERROR_NO_ERROR)                                      \
+        {                                                               \
+            wxLogMessage(wxT("Call %s fail! Error = %d"), #x, __t);     \
+        }                                                               \
+    } while (0)
+
+#define DBGCALL2(x)                                                     \
+    do {                                                                \
+        int __t = x;                                                    \
+        if ((__t != ERROR_NO_ERROR) && (__t != ERROR_SKIP_UPDATE))      \
+        {                                                               \
+            wxLogMessage(wxT("Call %s fail! Error = %d"), #x, __t);     \
+        }                                                               \
+    } while (0)
 
 BEGIN_EVENT_TABLE(PrefDlg, wxDialog)
 END_EVENT_TABLE()
@@ -190,14 +216,77 @@ PrefDlg::~PrefDlg()
 
 bool PrefDlg::TransferDataFromWindow()
 {
-    wxLogMessage(wxT("transfer data from window"));
+    /* ui page */
+    DBGCALL2(CheckBoxSave(ID_UI_LAYOUT_MEMORY, wxT("LoadPerspective")));
+    DBGCALL2(CheckBoxSave(ID_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
+
+    /* tftp page */
+    DBGCALL2(CheckBoxSave(ID_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
+    DBGCALL2(CheckBoxSave(ID_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
+
+    /* flash page */
 
     return true;
 }
 
 bool PrefDlg::TransferDataToWindow()
 {
-    wxLogMessage(wxT("transfer data to window"));
+    /* ui page */
+    DBGCALL(CheckBoxLoad(ID_UI_LAYOUT_MEMORY, wxT("LoadPerspective")));
+    DBGCALL(CheckBoxLoad(ID_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
+
+    /* tftp page */
+    DBGCALL(CheckBoxLoad(ID_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
+    DBGCALL(CheckBoxLoad(ID_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
+
+    /* flash page */
 
     return true;
 }
+
+int PrefDlg::CheckBoxLoad(const wxWindowID id, const wxString &opt)
+{
+    bool dbValue;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxCheckBox *chkBox = wxDynamicCast(FindWindow(id), wxCheckBox);
+
+    if (chkBox)
+    {
+        pOpt->GetOption(opt, &dbValue);
+        chkBox->SetValue(dbValue);
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::CheckBoxSave(const wxWindowID id, const wxString &opt)
+{
+    bool dbValue, uiValue;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxCheckBox *chkBox = wxDynamicCast(FindWindow(id), wxCheckBox);
+
+    if (chkBox)
+    {
+        pOpt->GetOption(opt, &dbValue);
+        uiValue = chkBox->GetValue();
+        if (dbValue != uiValue)
+        {
+            pOpt->SetOption(opt, uiValue);
+        }
+        else
+        {
+            return ERROR_SKIP_UPDATE;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
