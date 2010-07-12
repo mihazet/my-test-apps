@@ -268,6 +268,7 @@
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
           <bool name="Enable .sln generation">1</bool>
+          <bool name="Generate manifest">1</bool>
         </document>
         <document>
           <string name="title">"VC++ Project Unicode Release"</string>
@@ -348,6 +349,7 @@
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
           <bool name="Enable .sln generation">1</bool>
+          <bool name="Generate manifest">1</bool>
         </document>
         <document>
           <string name="title">"GCC Unicode Debug"</string>
@@ -835,6 +837,41 @@
             <long name="title-mode">1</long>
             <long name="locked">0</long>
             <string name="created">"12/7/2010"</string>
+            <string name="language">""</string>
+          </document>
+        </document>
+        <document>
+          <string name="title">"Rockey4"</string>
+          <string name="type">"html-folder-document"</string>
+          <string name="filename">""</string>
+          <string name="icon-name">"folder"</string>
+          <long name="is-transient">1</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <string name="created">"13/7/2010"</string>
+          <document>
+            <string name="title">"RockeyThread.cpp"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"src/RockeyThread.cpp"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"13/7/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"RockeyThread.h"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"include/RockeyThread.h"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"13/7/2010"</string>
             <string name="language">""</string>
           </document>
         </document>
