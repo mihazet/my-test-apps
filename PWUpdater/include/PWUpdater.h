@@ -12,6 +12,7 @@
 #include <wx/thread.h>
 #include <wx/aui/framemanager.h>
 #include <wx/vector.h>
+#include "AppOptions.h"
 
 class TftpdServerThread;
 class TftpdTransmissionThread;
@@ -32,6 +33,9 @@ public:
     /* tftpd transmission threads management */
     wxVector<TftpdTransmissionThread *> m_tftpdTransmissionThreads;
     wxCriticalSection m_transmissionCS;
+
+    /* Application options */
+    AppOptions *m_pOpt;
 
 private:
     void Init();

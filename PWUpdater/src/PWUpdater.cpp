@@ -40,6 +40,14 @@ void PWUpdaterApp::Init()
     m_transmissionCS.Enter();
     m_tftpdTransmissionThreads.clear();
     m_transmissionCS.Leave();
+
+    /* application information */
+    SetVendorName(wxT("delta"));
+    SetVendorDisplayName(wxT("Delta Electronics, Inc."));
+    SetAppName(wxT("pwupdater"));
+    SetAppDisplayName(wxT("PixelWorks Ruby Platform Updater"));
+
+    m_pOpt = new AppOptions;
 }
 
 bool PWUpdaterApp::OnInit()

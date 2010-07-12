@@ -803,6 +803,41 @@
             <string name="language">""</string>
           </document>
         </document>
+        <document>
+          <string name="title">"Options"</string>
+          <string name="type">"html-folder-document"</string>
+          <string name="filename">""</string>
+          <string name="icon-name">"folder"</string>
+          <long name="is-transient">1</long>
+          <long name="owns-file">1</long>
+          <long name="title-mode">0</long>
+          <long name="locked">0</long>
+          <string name="created">"12/7/2010"</string>
+          <document>
+            <string name="title">"AppOptions.cpp"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"src/AppOptions.cpp"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"12/7/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"AppOptions.h"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"include/AppOptions.h"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"12/7/2010"</string>
+            <string name="language">""</string>
+          </document>
+        </document>
       </document>
       <document>
         <string name="title">"Images"</string>
