@@ -37,6 +37,23 @@ IMPLEMENT_APP(PWUpdaterApp)
 
 void PWUpdaterApp::Init()
 {
+    /* application information */
+    SetVendorName(wxT("delta"));
+    SetVendorDisplayName(wxT("Delta Electronics, Inc."));
+    SetAppName(wxT("pwupdater"));
+    SetAppDisplayName(wxT("PixelWorks Ruby Platform Updater"));
+
+    /* database */
+    m_pOpt = new AppOptions;
+
+    /* network adapter list */
+    m_adapterList.clear();
+    _adapterInfo = NULL;
+
+    /* usb key state */
+    m_keyFound = false;
+
+    /* threads management */
     m_serverCS.Enter();
     m_pTftpdServerThread = NULL;
     m_serverCS.Leave();
@@ -47,16 +64,7 @@ void PWUpdaterApp::Init()
 
     m_rockeyCS.Enter();
     m_pRockeyThread = NULL;
-    m_rockeyCS.Leave();
-
-    /* application information */
-    SetVendorName(wxT("delta"));
-    SetVendorDisplayName(wxT("Delta Electronics, Inc."));
-    SetAppName(wxT("pwupdater"));
-    SetAppDisplayName(wxT("PixelWorks Ruby Platform Updater"));
-
-    m_pOpt = new AppOptions;
-    m_keyFound = false;
+    m_rockeyCS.Leave();   
 }
 
 void PWUpdaterApp::Term()
@@ -66,10 +74,188 @@ void PWUpdaterApp::Term()
 
 bool PWUpdaterApp::OnInit()
 {
+    /* collect network adapter info */
+    if (DetectNetAdapter())
+    {
+        if (m_adapterList.empty())
+        {
+            wxLogError(_("No network adapter is availabled, tftp server is force stopped!"));
+            m_pOpt->SetOption(wxT("TftpdAutoStart"), false);
+        }
+    }
+    else
+    {
+        wxLogError(_("Failed to detect network adapters info, tftp server is force stopped!"));
+        m_pOpt->SetOption(wxT("TftpdAutoStart"), false);
+    }
+
+    /* 
+       use default (the first) active interface when 
+       (1) database is new created, or
+       (2) interface store in database doesn't exist now
+     */
+    bool useDefaultInterface = false;
+    wxString ifName = m_pOpt->GetOption(wxT("ActivedInterface"));
+    if (ifName.IsEmpty())
+        useDefaultInterface = true;
+    else
+    {
+        wxVector<NetAdapter>::iterator it;
+        for (it = m_adapterList.begin(); it != m_adapterList.end(); ++it)
+        {
+            if (ifName == it->GetName())
+                break;
+        }
+
+        if (it == m_adapterList.end())
+            useDefaultInterface = true;
+    }
+    if (useDefaultInterface && (m_adapterList.size() > 0))
+        m_pOpt->SetOption(wxT("ActivedInterface"), m_adapterList.at(0).GetName());
+
     /* create main frame */
     PWUpdaterFrame *frame = new PWUpdaterFrame(NULL);
     frame->Show();
     return true;
+}
+
+//^^
+// Description:
+//      This function use platform-specific method to detect network adapter
+//      information.
+// Return:
+//      true - successful detect network adapter info.
+//      false - failed to detect network adapter info.
+//
+bool PWUpdaterApp::DetectNetAdapter()
+{
+#ifdef __WXMSW__
+    DWORD dwRetVal = 0;
+    ULONG ulOutBufLen = sizeof(IP_ADAPTER_INFO);
+
+    _adapterInfo = (IP_ADAPTER_INFO *)malloc(ulOutBufLen);
+    if (_adapterInfo == NULL)
+    {
+        wxLogError(_("Fail to allocate memory space for GetAdaptersInfo."));
+        return false;
+    }
+
+    /* get network adapter list */
+    if (GetAdaptersInfo(_adapterInfo, &ulOutBufLen) == ERROR_BUFFER_OVERFLOW)
+    {
+        free(_adapterInfo);
+        _adapterInfo = (IP_ADAPTER_INFO *)malloc(ulOutBufLen);
+        if (_adapterInfo == NULL)
+        {
+            wxLogError(_("Fail to allocate memory space for GetAdaptersInfo."));
+            return false;
+        }
+
+        if ((dwRetVal = GetAdaptersInfo(_adapterInfo, &ulOutBufLen)) != NO_ERROR)
+        {
+            wxLogError(_("GetAdaptersInfo failed with error code = %d"), dwRetVal);
+            return false;
+        }
+    }
+
+    /* iterate list to retrieve info */
+    IP_ADDR_STRING *pIpAddrString = NULL;
+    wxString name, ip, netmask;
+    for (IP_ADAPTER_INFO *pAdapter = _adapterInfo;
+        pAdapter != NULL;
+        pAdapter = pAdapter->Next)
+    {
+        if (pAdapter->Type == MIB_IF_TYPE_ETHERNET)
+        {
+            name = wxString(pAdapter->Description, *wxConvCurrent);
+            /* iterate ip address list */
+            for (pIpAddrString = &pAdapter->IpAddressList;
+                pIpAddrString != NULL;
+                pIpAddrString = pIpAddrString->Next)
+            {
+                ip = wxString(pIpAddrString->IpAddress.String, *wxConvCurrent);
+                netmask = wxString(pIpAddrString->IpMask.String, *wxConvCurrent);
+                if (ip.Cmp(wxEmptyString) && ip.Cmp(wxT("0.0.0.0"))
+                    && netmask.Cmp(wxEmptyString) && netmask.Cmp(wxT("0.0.0.0")))
+                {
+                    NetAdapter *temp = new NetAdapter(name, ip, netmask);
+                    m_adapterList.push_back(*temp);
+                }
+            }
+        }
+    }
+
+    return true;
+#elif defined (__WXGTK__)
+    wxString name, ip, netmask;
+#define MAX_INTERFACE   10
+    struct ifconf ifc;
+    struct ifreq *ifr;
+    int socketFd;
+    size_t numInterfaces, idx;
+    char ipBuf[INET_ADDRSTRLEN];
+
+    socketFd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (socketFd == -1)
+    {
+        wxLogError(_("Fail to create UDP socket. errno = %d"), errno);
+        return false;
+    }
+
+    /* get the active interface list */
+    _adapterInfo = (struct ifreq *)malloc(sizeof(struct ifreq) * MAX_INTERFACE);
+    ifc.ifc_buf = (char *)_adapterInfo;
+    ifc.ifc_len = sizeof(struct ifreq) * MAX_INTERFACE;
+    if (ioctl(socketFd, SIOCGIFCONF, &ifc) != 0)
+    {
+        wxLogError(_("Fail to retrieve interface configuration."));
+        free(ifc.ifc_buf);
+        return false;
+    }
+
+    /* retrieve info from list */
+    numInterfaces = ifc.ifc_len / sizeof(struct ifreq);
+    for (idx = 0; idx < numInterfaces; idx++)
+    {
+        ifr = &ifc.ifc_req[idx];
+
+        /* name */
+        name = wxString(ifr->ifr_name, *wxConvCurrent);
+        
+        if (!name.Cmp(wxT("lo")))
+            continue;
+
+        /* ip */
+        memset(ipBuf, 0, INET_ADDRSTRLEN);
+        struct sockaddr *addr = &(ifr->ifr_addr);
+        inet_ntop(AF_INET, &(((struct sockaddr_in *)addr)->sin_addr),
+            ipBuf, INET_ADDRSTRLEN);
+        ip = wxString(ipBuf, *wxConvCurrent);
+
+        /* netmask */
+        if (ioctl(socketFd, SIOCGIFNETMASK, ifr) != 0)
+        {
+            wxLogError(_("Fail to get netmask address!"));
+            return false;
+        }
+        memset(ipBuf, 0, INET_ADDRSTRLEN);
+        addr = &(ifr->ifr_netmask);
+        inet_ntop(AF_INET, &(((struct sockaddr_in *)addr)->sin_addr),
+            ipBuf, INET_ADDRSTRLEN);
+        netmask = wxString(ipBuf, *wxConvCurrent);
+
+        if (ip.Cmp(wxEmptyString) && ip.Cmp(wxT("0.0.0.0"))
+            && netmask.Cmp(wxEmptyString) && netmask.Cmp(wxT("0.0.0.0")))
+        {
+            NetAdapter *temp = new NetAdapter(name, ip, netmask);
+            m_adapterList.push_back(*temp);
+        }
+    }
+
+    return true;
+#else
+    return false;
+#endif
 }
 
 // ------------------------------------------------------------------------

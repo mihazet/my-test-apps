@@ -273,6 +273,7 @@ bool PrefDlg::TransferDataFromWindow()
     DBGCALL2(CheckBoxSave(myID_PREF_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
 
     /* tftp page */
+    DBGCALL2(InterfaceSave());
     DBGCALL2(CheckBoxSave(myID_PREF_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
     DBGCALL2(CheckBoxSave(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
     DBGCALL2(TextCtrlSave(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
@@ -301,6 +302,7 @@ bool PrefDlg::TransferDataToWindow()
     DBGCALL(CheckBoxLoad(myID_PREF_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
 
     /* tftp page */
+    DBGCALL(InterfaceLoad());
     DBGCALL(CheckBoxLoad(myID_PREF_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
     DBGCALL(CheckBoxLoad(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
     DBGCALL(TextCtrlLoad(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
@@ -411,6 +413,77 @@ int PrefDlg::TextCtrlSave(const wxWindowID id, const wxString &opt)
             else
             {
                 return ERROR_SKIP_UPDATE;
+            }
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::InterfaceLoad()
+{
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxChoice *pIntf = wxDynamicCast(FindWindow(myID_PREF_TFTP_INTERFACE), wxChoice);
+    wxString selectedInterface;
+    wxVector<NetAdapter> &adapterList = wxGetApp().m_adapterList;
+    wxVector<NetAdapter>::iterator it;
+    int selected;
+
+    if (pIntf)
+    {
+        /* remove all */
+        pIntf->Clear();
+
+        /* re-create item */
+        if (pOpt->GetOption(wxT("ActivedInterface"), selectedInterface))
+        {
+            for (it = adapterList.begin(), selected = 0;
+                it != adapterList.end();
+                ++it, ++selected)
+            {
+                pIntf->Append(it->GetName());
+                if (!selectedInterface.Cmp(it->GetName()))
+                    pIntf->SetSelection(selected);
+            }
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::InterfaceSave()
+{
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxChoice *pIntf = wxDynamicCast(FindWindow(myID_PREF_TFTP_INTERFACE), wxChoice);
+    wxString dbValue, uiValue;
+    wxVector<NetAdapter> &adapterList = wxGetApp().m_adapterList;
+    wxVector<NetAdapter>::iterator it;
+    int selected;
+
+    if (pIntf)
+    {
+        if (pOpt->GetOption(wxT("ActivedInterface"), dbValue))
+        {
+            uiValue = pIntf->GetStringSelection();
+            if (dbValue != uiValue)
+            {
+                pOpt->SetOption(wxT("ActivedInterface"), uiValue);
             }
         }
         else

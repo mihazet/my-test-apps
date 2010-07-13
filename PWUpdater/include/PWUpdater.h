@@ -12,7 +12,21 @@
 #include <wx/thread.h>
 #include <wx/aui/framemanager.h>
 #include <wx/vector.h>
+#ifdef __WXMSW__
+#include <iphlpapi.h>
+#elif defined (__WXGTK__)
+#include <stdio.h>
+#include <dtdlib.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <arpa/inet.h>
+#include <net/if.h>
+#include <netinet/in.h>
+#endif
 #include "AppOptions.h"
+#include "NetAdapter.h"
 
 class TftpdServerThread;
 class TftpdTransmissionThread;
@@ -42,11 +56,20 @@ public:
     /* Application options */
     AppOptions *m_pOpt;
     bool m_keyFound;
+    wxVector<NetAdapter> m_adapterList;
 
 private:
     void Init();
     void Term();
     virtual bool OnInit();
+    bool DetectNetAdapter();
+
+#ifdef __WXMSW__
+    IP_ADAPTER_INFO
+#elif defined (__WXGTK__)
+    struct ifreq
+#endif
+        *_adapterInfo;
 };
 
 DECLARE_APP(PWUpdaterApp)
