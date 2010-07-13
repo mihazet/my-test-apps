@@ -263,7 +263,7 @@
           <string name="Project rebuild command">"%AUTO%"</string>
           <string name="Project clean command">"%AUTO%"</string>
           <string name="Project debug command">"%AUTO%"</string>
-          <string name="Pre-build command">"%AUTO%"</string>
+          <string name="Pre-build command">"SubWcRev . include\version.in.h include\version.h"</string>
           <string name="Post-build command">"%AUTO%"</string>
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
@@ -344,7 +344,7 @@
           <string name="Project rebuild command">"%AUTO%"</string>
           <string name="Project clean command">"%AUTO%"</string>
           <string name="Project debug command">"%AUTO%"</string>
-          <string name="Pre-build command">"%AUTO%"</string>
+          <string name="Pre-build command">"SubWcRev . include\version.in.h include\version.h"</string>
           <string name="Post-build command">"%AUTO%"</string>
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
@@ -898,6 +898,18 @@
             <string name="created">"13/7/2010"</string>
             <string name="language">""</string>
           </document>
+        </document>
+        <document>
+          <string name="title">"version.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/version.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"14/7/2010"</string>
+          <string name="language">""</string>
         </document>
       </document>
       <document>
