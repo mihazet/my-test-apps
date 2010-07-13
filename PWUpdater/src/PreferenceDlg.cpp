@@ -36,6 +36,7 @@
 #define ERROR_DB_ENTRY                  -3 // db entry is invalid
 
 /* debug macro */
+#if 0
 #define DBGCALL(x)                                                      \
     do {                                                                \
         int __t = x;                                                    \
@@ -53,6 +54,10 @@
             wxLogMessage(wxT("Call %s fail! Error = %d"), #x, __t);     \
         }                                                               \
     } while (0)
+#else
+#define DBGCALL(x) do { x; } while (0)
+#define DBGCALL2(x) DBGCALL(x)
+#endif
 
 BEGIN_EVENT_TABLE(PrefDlg, wxDialog)
 END_EVENT_TABLE()
@@ -60,14 +65,54 @@ END_EVENT_TABLE()
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
-PrefDlg::PrefDlg(wxWindow *parent, wxWindowID id)
+PrefDlg::PrefDlg(wxWindow *parent, wxWindowID id, bool auth)
     : wxDialog(parent, id, _("Preference"), wxDefaultPosition,
       wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
-    wxNotebook *prefNB = new wxNotebook(this, wxID_ANY);
+    wxNotebook *prefNB = new wxNotebook(this, myID_PREF_NOTEBOOK);
 
-    /* ui page */
-    wxPanel *uiPage = new wxPanel(prefNB, wxID_ANY);
+    AddUiPage();
+    AddTftpPage();
+    AddFlashPage();
+
+    /* remove unauth page(s) */
+    if (!auth)
+        RemoveAuthorizedPage();
+
+    /* dialog organization */
+    wxBoxSizer *dlgSizer = new wxBoxSizer(wxVERTICAL);
+    dlgSizer->Add(prefNB, 1, wxALL | wxEXPAND, 5);
+    dlgSizer->Add(
+        CreateStdDialogButtonSizer(wxOK|wxCANCEL|wxAPPLY),
+        0, wxALL | wxEXPAND, 5);
+    SetSizerAndFit(dlgSizer);
+}
+
+PrefDlg::~PrefDlg()
+{
+
+}
+
+void PrefDlg::AddAuthorizedPage()
+{
+    AddFlashPage();
+    SetSize(GetBestSize()); // force size to re-calculate
+    TransferDataToWindow(); // force data retrieved from db again
+}
+
+void PrefDlg::RemoveAuthorizedPage()
+{
+    RemovePage(myID_PREF_FLASH_PAGE);
+}
+
+void PrefDlg::AddUiPage()
+{
+    wxNotebook *prefNB = wxDynamicCast(FindWindow(myID_PREF_NOTEBOOK), wxNotebook);
+
+    if (!prefNB)
+        return;
+
+    wxPanel *uiPage = new wxPanel(prefNB, myID_PREF_UI_PAGE);
 
     wxStaticBoxSizer *langSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Language selection"));
     langSizer->Add(new wxChoice(uiPage, myID_PREF_UI_LANG), 0, wxALL | wxEXPAND, 5);
@@ -81,8 +126,17 @@ PrefDlg::PrefDlg(wxWindow *parent, wxWindowID id)
     uiSizer->Add(memSizer, 0, wxALL | wxEXPAND, 5);
     uiPage->SetSizer(uiSizer);
 
-    /* tftp server page */
-    wxPanel *tftpPage = new wxPanel(prefNB, wxID_ANY);
+    prefNB->AddPage(uiPage, _("User interface"), false);
+}
+
+void PrefDlg::AddTftpPage()
+{
+    wxNotebook *prefNB = wxDynamicCast(FindWindow(myID_PREF_NOTEBOOK), wxNotebook);
+
+    if (!prefNB)
+        return;
+
+    wxPanel *tftpPage = new wxPanel(prefNB, myID_PREF_TFTP_PAGE);
 
     wxStaticBoxSizer *bgServiceSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("Background service"));
     bgServiceSizer->Add(new wxCheckBox(tftpPage, myID_PREF_TFTP_AUTOSTART, _("Enable build-in TFTPD server.")), 0, wxALL | wxEXPAND, 5);
@@ -123,8 +177,17 @@ PrefDlg::PrefDlg(wxWindow *parent, wxWindowID id)
     tftpSizer->Add(tftpOptSizer, 0, wxALL | wxEXPAND, 5);
     tftpPage->SetSizer(tftpSizer);
 
-    /* flash chip page */
-    wxPanel *flashPage = new wxPanel(prefNB, wxID_ANY);
+    prefNB->AddPage(tftpPage, _("Tftp server"), false);
+}
+
+void PrefDlg::AddFlashPage()
+{
+    wxNotebook *prefNB = wxDynamicCast(FindWindow(myID_PREF_NOTEBOOK), wxNotebook);
+
+    if (!prefNB)
+        return;
+
+    wxPanel *flashPage = new wxPanel(prefNB, myID_PREF_FLASH_PAGE);
 
     wxStaticBoxSizer *ddrSizer = new wxStaticBoxSizer(wxVERTICAL, flashPage, _("DDR memory layout"));
     wxFlexGridSizer *ddrGridSizer = new wxFlexGridSizer(2, 1, 5);
@@ -172,23 +235,35 @@ PrefDlg::PrefDlg(wxWindow *parent, wxWindowID id)
     flashSizer->Add(spiSizer, 0, wxALL | wxEXPAND, 5);
     flashPage->SetSizer(flashSizer);
 
-    /* pages organization */
-    prefNB->AddPage(uiPage, _("User interface"), true);
-    prefNB->AddPage(tftpPage, _("Tftp server"), false);
     prefNB->AddPage(flashPage, _("Flash chip"), false);
-
-    /* dialog organization */
-    wxBoxSizer *dlgSizer = new wxBoxSizer(wxVERTICAL);
-    dlgSizer->Add(prefNB, 1, wxALL | wxEXPAND, 5);
-    dlgSizer->Add(
-        CreateStdDialogButtonSizer(wxOK|wxCANCEL|wxAPPLY),
-        0, wxALL | wxEXPAND, 5);
-    SetSizerAndFit(dlgSizer);
 }
 
-PrefDlg::~PrefDlg()
+void PrefDlg::RemovePage(wxWindowID id)
 {
+    wxNotebook *prefNB = wxDynamicCast(FindWindow(myID_PREF_NOTEBOOK), wxNotebook);
+    bool found = false;
+    wxWindow *page = NULL;
+    size_t pageId;
 
+    if (!prefNB)
+        return;
+
+    for (pageId = prefNB->GetPageCount() - 1; pageId >= 0; pageId--)
+    {
+        page = prefNB->GetPage(pageId);
+        if (page->GetId() == id)
+        {
+            found = true;
+            break;
+        }
+    }
+
+    if (found)
+    {
+        if (prefNB->GetCurrentPage() == page)
+            prefNB->ChangeSelection(0);
+        prefNB->DeletePage(pageId);
+    }
 }
 
 bool PrefDlg::TransferDataFromWindow()

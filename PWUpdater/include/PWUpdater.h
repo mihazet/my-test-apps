@@ -41,6 +41,7 @@ public:
 
     /* Application options */
     AppOptions *m_pOpt;
+    bool m_keyFound;
 
 private:
     void Init();

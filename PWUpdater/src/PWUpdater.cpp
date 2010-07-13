@@ -56,6 +56,7 @@ void PWUpdaterApp::Init()
     SetAppDisplayName(wxT("PixelWorks Ruby Platform Updater"));
 
     m_pOpt = new AppOptions;
+    m_keyFound = false;
 }
 
 void PWUpdaterApp::Term()
@@ -274,7 +275,7 @@ void PWUpdaterFrame::OnQuit(wxCommandEvent &WXUNUSED(event))
 
 void PWUpdaterFrame::OnPref(wxCommandEvent &WXUNUSED(event))
 {
-    PrefDlg dlg(this, myID_PREF_DLG);
+    PrefDlg dlg(this, myID_PREF_DLG, wxGetApp().m_keyFound);
 
     dlg.ShowModal();
 }
@@ -284,5 +285,26 @@ void PWUpdaterFrame::OnRockey(wxThreadEvent &event)
     RockeyMessage msg = event.GetPayload<RockeyMessage>();
     int evt = msg.GetEvent();
 
-    wxLogMessage(wxT("Rockey event = %d"), evt);    
+    /* iterate all top level windows to check if PrefDilg is on */
+    wxWindowList::iterator it;
+    for (it = wxTopLevelWindows.begin(); it != wxTopLevelWindows.end(); ++it)
+    {
+        wxWindow *tlw = *it;
+        if (tlw && (tlw->GetId() == myID_PREF_DLG))
+        {
+            PrefDlg *dlg = wxDynamicCast(tlw, PrefDlg);
+
+            if (evt == ROCKEY_EVENT_KEY_INSERTED)
+                dlg->AddAuthorizedPage();
+            else if (evt == ROCKEY_EVENT_KEY_REMOVED)
+                dlg->RemoveAuthorizedPage();
+            break;
+        }
+    }
+
+    /* update global flag in frame */
+    if (evt == ROCKEY_EVENT_KEY_INSERTED)
+        wxGetApp().m_keyFound = true;
+    else if (evt == ROCKEY_EVENT_KEY_REMOVED)
+        wxGetApp().m_keyFound = false;
 }

@@ -32,6 +32,7 @@
 enum
 {
     ROCKEY_STATE_NOT_FOUND,
+    ROCKEY_STATE_FOUND,
     ROCKEY_STATE_OPENED,
 };
 
@@ -67,6 +68,9 @@ wxThread::ExitCode RockeyThread::Entry()
     wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
     RockeyMessage msg;
 
+    u16BasicPW1 = 0xAC31;
+    u16BasicPW2 = 0x9C9C;
+
     while (!TestDestroy())
     {
         switch (_state)
@@ -74,20 +78,25 @@ wxThread::ExitCode RockeyThread::Entry()
         default:
         case ROCKEY_STATE_NOT_FOUND:
             
-            u16BasicPW1 = 0xAC31;
-            u16BasicPW2 = 0x9C9C;
             u16Result = ROCKEY(RY_FIND, &u16Handle, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
             if (u16Result == ERR_SUCCESS)
             {
-                msg.SetEvent(0);
+                msg.SetEvent(ROCKEY_EVENT_KEY_INSERTED);
                 event.SetPayload<RockeyMessage>(msg);
                 wxQueueEvent(_pHandler, event.Clone());
+                _state = ROCKEY_STATE_FOUND;
             }
-            else
+            break;
+
+        case ROCKEY_STATE_FOUND:
+
+            u16Result = ROCKEY(RY_FIND, &u16Handle, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
+            if (u16Result != ERR_SUCCESS)
             {
-                msg.SetEvent(1);
+                msg.SetEvent(ROCKEY_EVENT_KEY_REMOVED);
                 event.SetPayload<RockeyMessage>(msg);
                 wxQueueEvent(_pHandler, event.Clone());
+                _state = ROCKEY_STATE_NOT_FOUND;
             }
             break;
         }
