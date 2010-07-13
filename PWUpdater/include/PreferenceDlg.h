@@ -14,7 +14,7 @@
 class PrefDlg : public wxDialog
 {
 public:
-    PrefDlg(wxWindow *parent);
+    PrefDlg(wxWindow *parent, wxWindowID id = wxID_ANY);
     ~PrefDlg();
 
 

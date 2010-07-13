@@ -18,6 +18,7 @@
 #include "AppOptions.h"
 #include "PreferenceDlg.h"
 #include "PWUpdater.h"
+#include "WidgetsId.h"
 
 #define wxLOG_COMPONENT "PWUpdater/pref"
 
@@ -28,30 +29,6 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
-enum
-{
-    ID_UI_LANG = wxID_HIGHEST + 1,
-    ID_UI_LAYOUT_MEMORY,
-    ID_UI_POS_SIZE_MEMORY,
-    ID_TFTP_AUTOSTART,
-    ID_TFTP_INTERFACE,
-    ID_TFTP_ROOTPATH,
-    ID_TFTP_TIMEOUT,
-    ID_TFTP_RETRANSMIT,
-    ID_TFTP_NEGOTIATION,
-    ID_FLASH_DL_OFFSET,
-    ID_FLASH_SPI_UBOOT_OFFSET,
-    ID_FLASH_SPI_UBOOT_IMAGE,
-    ID_FLASH_UBOOT_OFFSET,
-    ID_FLASH_UBOOT_IMAGE,
-    ID_FLASH_KERNEL_OFFSET,
-    ID_FLASH_KERNEL_IMAGE,
-    ID_FLASH_FS_OFFSET,
-    ID_FLASH_FS_IMAGE,
-    ID_FLASH_SPLASH_OFFSET,
-    ID_FLASH_SPLASH_IMAGE,
-};
-
 /* error code for data transfer from/to database */
 #define ERROR_NO_ERROR                  0
 #define ERROR_SKIP_UPDATE               -1 // no change, skip update
@@ -83,8 +60,8 @@ END_EVENT_TABLE()
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
-PrefDlg::PrefDlg(wxWindow *parent)
-    : wxDialog(parent, wxID_ANY, _("Preference"), wxDefaultPosition,
+PrefDlg::PrefDlg(wxWindow *parent, wxWindowID id)
+    : wxDialog(parent, id, _("Preference"), wxDefaultPosition,
       wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
     wxNotebook *prefNB = new wxNotebook(this, wxID_ANY);
@@ -93,11 +70,11 @@ PrefDlg::PrefDlg(wxWindow *parent)
     wxPanel *uiPage = new wxPanel(prefNB, wxID_ANY);
 
     wxStaticBoxSizer *langSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Language selection"));
-    langSizer->Add(new wxChoice(uiPage, ID_UI_LANG), 0, wxALL | wxEXPAND, 5);
+    langSizer->Add(new wxChoice(uiPage, myID_PREF_UI_LANG), 0, wxALL | wxEXPAND, 5);
 
     wxStaticBoxSizer *memSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Memory"));
-    memSizer->Add(new wxCheckBox(uiPage, ID_UI_LAYOUT_MEMORY, _("Remember application layout.")), 0, wxALL, 5);
-    memSizer->Add(new wxCheckBox(uiPage, ID_UI_POS_SIZE_MEMORY, _("Remember application size and position.")), 0, wxALL, 5);
+    memSizer->Add(new wxCheckBox(uiPage, myID_PREF_UI_LAYOUT_MEMORY, _("Remember application layout.")), 0, wxALL, 5);
+    memSizer->Add(new wxCheckBox(uiPage, myID_PREF_UI_POS_SIZE_MEMORY, _("Remember application size and position.")), 0, wxALL, 5);
     
     wxBoxSizer *uiSizer = new wxBoxSizer(wxVERTICAL);
     uiSizer->Add(langSizer, 0, wxALL | wxEXPAND, 5);
@@ -108,7 +85,7 @@ PrefDlg::PrefDlg(wxWindow *parent)
     wxPanel *tftpPage = new wxPanel(prefNB, wxID_ANY);
 
     wxStaticBoxSizer *bgServiceSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("Background service"));
-    bgServiceSizer->Add(new wxCheckBox(tftpPage, ID_TFTP_AUTOSTART, _("Enable build-in TFTPD server.")), 0, wxALL | wxEXPAND, 5);
+    bgServiceSizer->Add(new wxCheckBox(tftpPage, myID_PREF_TFTP_AUTOSTART, _("Enable build-in TFTPD server.")), 0, wxALL | wxEXPAND, 5);
 
     wxStaticBoxSizer *tftpOptSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("Tftp server option"));
     wxGridBagSizer *optGridSizer = new wxGridBagSizer(5, 5);
@@ -120,25 +97,25 @@ PrefDlg::PrefDlg(wxWindow *parent)
     span.SetColspan(2);
     optGridSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("Bind tftp service on this interface:")), pos, span, wxALIGN_CENTER_VERTICAL);
     pos.SetRow(pos.GetRow() + 1);
-    optGridSizer->Add(new wxChoice(tftpPage, ID_TFTP_INTERFACE), pos, span, wxEXPAND);
+    optGridSizer->Add(new wxChoice(tftpPage, myID_PREF_TFTP_INTERFACE), pos, span, wxEXPAND);
     pos.SetRow(pos.GetRow() + 1);
     optGridSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("Tftp server root path:")), pos, span, wxALIGN_CENTER_VERTICAL);
     pos.SetRow(pos.GetRow() + 1);
-    optGridSizer->Add(new wxDirPickerCtrl(tftpPage, ID_TFTP_ROOTPATH, wxEmptyString, wxDirSelectorPromptStr, wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE & ~wxDIRP_DIR_MUST_EXIST), pos, span, wxEXPAND);
+    optGridSizer->Add(new wxDirPickerCtrl(tftpPage, myID_PREF_TFTP_ROOTPATH, wxEmptyString, wxDirSelectorPromptStr, wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE & ~wxDIRP_DIR_MUST_EXIST), pos, span, wxEXPAND);
     pos.SetRow(pos.GetRow() + 1);
     span.SetColspan(1);
     optGridSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("Transmit timeout (unit: second)")), pos, span, wxALIGN_CENTER_VERTICAL);
     pos.SetCol(1);
-    optGridSizer->Add(new wxTextCtrl(tftpPage, ID_TFTP_TIMEOUT), pos, span, wxALIGN_RIGHT);
+    optGridSizer->Add(new wxTextCtrl(tftpPage, myID_PREF_TFTP_TIMEOUT), pos, span, wxALIGN_RIGHT);
     pos.SetRow(pos.GetRow() + 1);
     pos.SetCol(0);
     optGridSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("Retransmit maximum count")), pos, span, wxALIGN_CENTER_VERTICAL);
     pos.SetCol(1);
-    optGridSizer->Add(new wxTextCtrl(tftpPage, ID_TFTP_RETRANSMIT), pos, span, wxALIGN_RIGHT);
+    optGridSizer->Add(new wxTextCtrl(tftpPage, myID_PREF_TFTP_RETRANSMIT), pos, span, wxALIGN_RIGHT);
     pos.SetRow(pos.GetRow() + 1);
     pos.SetCol(0);
     span.SetColspan(2);
-    optGridSizer->Add(new wxCheckBox(tftpPage, ID_TFTP_NEGOTIATION, _("Allow option negotiation. (See RFC2347, RFC2348 and RFC2349 for detail)")), pos, span);
+    optGridSizer->Add(new wxCheckBox(tftpPage, myID_PREF_TFTP_NEGOTIATION, _("Allow option negotiation. (See RFC2347, RFC2348 and RFC2349 for detail)")), pos, span);
     tftpOptSizer->Add(optGridSizer, 1, wxALL | wxEXPAND, 5);
 
     wxBoxSizer *tftpSizer = new wxBoxSizer(wxVERTICAL);
@@ -155,7 +132,7 @@ PrefDlg::PrefDlg(wxWindow *parent)
     ddrGridSizer->AddSpacer(0);
     ddrGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("offset")), 0, wxALL | wxALIGN_CENTER, 0);
     ddrGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("Temporary storage")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 0);
-    ddrGridSizer->Add(new wxTextCtrl(flashPage, ID_FLASH_DL_OFFSET), 0, wxALL, 0);
+    ddrGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_DL_OFFSET), 0, wxALL, 0);
     ddrSizer->Add(ddrGridSizer, 0, wxALL | wxEXPAND, 5);
 
     wxStaticBoxSizer *norSizer = new wxStaticBoxSizer(wxVERTICAL, flashPage, _("NOR flash memory layout"));
@@ -165,17 +142,17 @@ PrefDlg::PrefDlg(wxWindow *parent)
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("name")), 0, wxALL | wxALIGN_CENTER, 0);
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("offset")), 0, wxALL | wxALIGN_CENTER, 0);
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("Bootloader")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 0);
-    norGridSizer->Add(new wxTextCtrl(flashPage, ID_FLASH_UBOOT_IMAGE), 0, wxALL, 0);
-    norGridSizer->Add(new wxTextCtrl(flashPage, ID_FLASH_UBOOT_OFFSET), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_UBOOT_IMAGE), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_UBOOT_OFFSET), 0, wxALL, 0);
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("Linux Kernel")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 0);
-    norGridSizer->Add(new wxTextCtrl(flashPage, ID_FLASH_KERNEL_IMAGE), 0, wxALL, 0);
-    norGridSizer->Add(new wxTextCtrl(flashPage, ID_FLASH_KERNEL_OFFSET), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_KERNEL_IMAGE), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_KERNEL_OFFSET), 0, wxALL, 0);
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("Root File System")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 0);
-    norGridSizer->Add(new wxTextCtrl(flashPage, ID_FLASH_FS_IMAGE), 0, wxALL, 0);
-    norGridSizer->Add(new wxTextCtrl(flashPage, ID_FLASH_FS_OFFSET), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_FS_IMAGE), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_FS_OFFSET), 0, wxALL, 0);
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("Splash")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 0);
-    norGridSizer->Add(new wxTextCtrl(flashPage, ID_FLASH_SPLASH_IMAGE), 0, wxALL, 0);
-    norGridSizer->Add(new wxTextCtrl(flashPage, ID_FLASH_SPLASH_OFFSET), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_SPLASH_IMAGE), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_SPLASH_OFFSET), 0, wxALL, 0);
     norSizer->Add(norGridSizer, 0, wxALL | wxEXPAND, 5);
 
     wxStaticBoxSizer *spiSizer = new wxStaticBoxSizer(wxVERTICAL, flashPage, _("SPI flash memory layout"));
@@ -185,8 +162,8 @@ PrefDlg::PrefDlg(wxWindow *parent)
     spiGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("name")), 0, wxALL | wxALIGN_CENTER, 0);
     spiGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("offset")), 0, wxALL | wxALIGN_CENTER, 0);
     spiGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("Bootloader")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 0);
-    spiGridSizer->Add(new wxTextCtrl(flashPage, ID_FLASH_SPI_UBOOT_IMAGE), 0, wxALL, 0);
-    spiGridSizer->Add(new wxTextCtrl(flashPage, ID_FLASH_SPI_UBOOT_OFFSET), 0, wxALL, 0);
+    spiGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_SPI_UBOOT_IMAGE), 0, wxALL, 0);
+    spiGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_SPI_UBOOT_OFFSET), 0, wxALL, 0);
     spiSizer->Add(spiGridSizer, 0, wxALL | wxEXPAND, 5);
 
     wxBoxSizer *flashSizer = new wxBoxSizer(wxVERTICAL);
@@ -217,27 +194,27 @@ PrefDlg::~PrefDlg()
 bool PrefDlg::TransferDataFromWindow()
 {
     /* ui page */
-    DBGCALL2(CheckBoxSave(ID_UI_LAYOUT_MEMORY, wxT("LoadPerspective")));
-    DBGCALL2(CheckBoxSave(ID_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
+    DBGCALL2(CheckBoxSave(myID_PREF_UI_LAYOUT_MEMORY, wxT("LoadPerspective")));
+    DBGCALL2(CheckBoxSave(myID_PREF_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
 
     /* tftp page */
-    DBGCALL2(CheckBoxSave(ID_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
-    DBGCALL2(CheckBoxSave(ID_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
-    DBGCALL2(TextCtrlSave(ID_TFTP_TIMEOUT, wxT("Timeout")));
-    DBGCALL2(TextCtrlSave(ID_TFTP_RETRANSMIT, wxT("Retransmit")));
+    DBGCALL2(CheckBoxSave(myID_PREF_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
+    DBGCALL2(CheckBoxSave(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
+    DBGCALL2(TextCtrlSave(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
+    DBGCALL2(TextCtrlSave(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
 
     /* flash page */
-    DBGCALL2(TextCtrlSave(ID_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
-    DBGCALL2(TextCtrlSave(ID_FLASH_SPI_UBOOT_OFFSET, wxT("UBootSPIOffset")));
-    DBGCALL2(TextCtrlSave(ID_FLASH_SPI_UBOOT_IMAGE, wxT("UBootSPIImage")));
-    DBGCALL2(TextCtrlSave(ID_FLASH_UBOOT_OFFSET, wxT("UBootOffset")));
-    DBGCALL2(TextCtrlSave(ID_FLASH_UBOOT_IMAGE, wxT("UBootImage")));
-    DBGCALL2(TextCtrlSave(ID_FLASH_KERNEL_OFFSET, wxT("KernelOffset")));
-    DBGCALL2(TextCtrlSave(ID_FLASH_KERNEL_IMAGE, wxT("KernelImage")));
-    DBGCALL2(TextCtrlSave(ID_FLASH_FS_OFFSET, wxT("FileSystemOffset")));
-    DBGCALL2(TextCtrlSave(ID_FLASH_FS_IMAGE, wxT("FileSystemImage")));
-    DBGCALL2(TextCtrlSave(ID_FLASH_SPLASH_OFFSET, wxT("SplashOffset")));
-    DBGCALL2(TextCtrlSave(ID_FLASH_SPLASH_IMAGE, wxT("SplashImage")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_SPI_UBOOT_OFFSET, wxT("UBootSPIOffset")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_SPI_UBOOT_IMAGE, wxT("UBootSPIImage")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_UBOOT_OFFSET, wxT("UBootOffset")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_UBOOT_IMAGE, wxT("UBootImage")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_KERNEL_OFFSET, wxT("KernelOffset")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_KERNEL_IMAGE, wxT("KernelImage")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_FS_OFFSET, wxT("FileSystemOffset")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_FS_IMAGE, wxT("FileSystemImage")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_SPLASH_OFFSET, wxT("SplashOffset")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_SPLASH_IMAGE, wxT("SplashImage")));
 
     return true;
 }
@@ -245,27 +222,27 @@ bool PrefDlg::TransferDataFromWindow()
 bool PrefDlg::TransferDataToWindow()
 {
     /* ui page */
-    DBGCALL(CheckBoxLoad(ID_UI_LAYOUT_MEMORY, wxT("LoadPerspective")));
-    DBGCALL(CheckBoxLoad(ID_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
+    DBGCALL(CheckBoxLoad(myID_PREF_UI_LAYOUT_MEMORY, wxT("LoadPerspective")));
+    DBGCALL(CheckBoxLoad(myID_PREF_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
 
     /* tftp page */
-    DBGCALL(CheckBoxLoad(ID_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
-    DBGCALL(CheckBoxLoad(ID_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
-    DBGCALL(TextCtrlLoad(ID_TFTP_TIMEOUT, wxT("Timeout")));
-    DBGCALL(TextCtrlLoad(ID_TFTP_RETRANSMIT, wxT("Retransmit")));
+    DBGCALL(CheckBoxLoad(myID_PREF_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
+    DBGCALL(CheckBoxLoad(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
+    DBGCALL(TextCtrlLoad(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
+    DBGCALL(TextCtrlLoad(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
 
     /* flash page */
-    DBGCALL(TextCtrlLoad(ID_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
-    DBGCALL(TextCtrlLoad(ID_FLASH_SPI_UBOOT_OFFSET, wxT("UBootSPIOffset")));
-    DBGCALL(TextCtrlLoad(ID_FLASH_SPI_UBOOT_IMAGE, wxT("UBootSPIImage")));
-    DBGCALL(TextCtrlLoad(ID_FLASH_UBOOT_OFFSET, wxT("UBootOffset")));
-    DBGCALL(TextCtrlLoad(ID_FLASH_UBOOT_IMAGE, wxT("UBootImage")));
-    DBGCALL(TextCtrlLoad(ID_FLASH_KERNEL_OFFSET, wxT("KernelOffset")));
-    DBGCALL(TextCtrlLoad(ID_FLASH_KERNEL_IMAGE, wxT("KernelImage")));
-    DBGCALL(TextCtrlLoad(ID_FLASH_FS_OFFSET, wxT("FileSystemOffset")));
-    DBGCALL(TextCtrlLoad(ID_FLASH_FS_IMAGE, wxT("FileSystemImage")));
-    DBGCALL(TextCtrlLoad(ID_FLASH_SPLASH_OFFSET, wxT("SplashOffset")));
-    DBGCALL(TextCtrlLoad(ID_FLASH_SPLASH_IMAGE, wxT("SplashImage")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_SPI_UBOOT_OFFSET, wxT("UBootSPIOffset")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_SPI_UBOOT_IMAGE, wxT("UBootSPIImage")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_UBOOT_OFFSET, wxT("UBootOffset")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_UBOOT_IMAGE, wxT("UBootImage")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_KERNEL_OFFSET, wxT("KernelOffset")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_KERNEL_IMAGE, wxT("KernelImage")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_FS_OFFSET, wxT("FileSystemOffset")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_FS_IMAGE, wxT("FileSystemImage")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_SPLASH_OFFSET, wxT("SplashOffset")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_SPLASH_IMAGE, wxT("SplashImage")));
 
     return true;
 }

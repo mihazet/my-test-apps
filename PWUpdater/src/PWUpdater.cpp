@@ -20,6 +20,7 @@
 #include "DownloadPane.h"
 #include "LogPane.h"
 #include "PreferenceDlg.h"
+#include "WidgetsId.h"
 
 #include "xpm/ruby_16.xpm"
 #include "xpm/ruby_32.xpm"
@@ -273,7 +274,7 @@ void PWUpdaterFrame::OnQuit(wxCommandEvent &WXUNUSED(event))
 
 void PWUpdaterFrame::OnPref(wxCommandEvent &WXUNUSED(event))
 {
-    PrefDlg dlg(this);
+    PrefDlg dlg(this, myID_PREF_DLG);
 
     dlg.ShowModal();
 }
