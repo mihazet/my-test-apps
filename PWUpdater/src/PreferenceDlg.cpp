@@ -472,9 +472,6 @@ int PrefDlg::InterfaceSave()
     AppOptions *&pOpt = wxGetApp().m_pOpt;
     wxChoice *pIntf = wxDynamicCast(FindWindow(myID_PREF_TFTP_INTERFACE), wxChoice);
     wxString dbValue, uiValue;
-    wxVector<NetAdapter> &adapterList = wxGetApp().m_adapterList;
-    wxVector<NetAdapter>::iterator it;
-    int selected;
 
     if (pIntf)
     {
