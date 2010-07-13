@@ -16,6 +16,7 @@
 #include <wx/iconbndl.h>
 #include "PWUpdater.h"
 #include "TftpdThread.h"
+#include "RockeyThread.h"
 #include "DownloadPane.h"
 #include "LogPane.h"
 #include "PreferenceDlg.h"
@@ -25,6 +26,8 @@
 #include "xpm/ruby_48.xpm"
 
 #define wxLOG_COMPONENT "PWUpdater/ui/frame"
+
+#define ID_THREAD_ROCKEY    wxID_HIGHEST + 1
 
 // ------------------------------------------------------------------------
 // Application implementation
@@ -40,6 +43,10 @@ void PWUpdaterApp::Init()
     m_transmissionCS.Enter();
     m_tftpdTransmissionThreads.clear();
     m_transmissionCS.Leave();
+
+    m_rockeyCS.Enter();
+    m_pRockeyThread = NULL;
+    m_rockeyCS.Leave();
 
     /* application information */
     SetVendorName(wxT("delta"));
@@ -70,6 +77,7 @@ BEGIN_EVENT_TABLE(PWUpdaterFrame, wxFrame)
     EVT_CLOSE(PWUpdaterFrame::OnClose)
     EVT_MENU(wxID_EXIT, PWUpdaterFrame::OnQuit)
     EVT_MENU(wxID_PREFERENCES, PWUpdaterFrame::OnPref)
+    EVT_THREAD(ID_THREAD_ROCKEY, PWUpdaterFrame::OnRockey)
 END_EVENT_TABLE()
 
 PWUpdaterFrame::PWUpdaterFrame(wxWindow *parent, wxWindowID id,
@@ -91,8 +99,12 @@ bool PWUpdaterFrame::Create(wxWindow *parent, wxWindowID id,
 {
     bool result;
 
+    /* create gui */
     result = wxFrame::Create(parent, id, caption, pos, size, style);
     CreateControls();
+
+    /* create threads */
+    StartRockeyThread();
 
     return result;
 }
@@ -141,6 +153,40 @@ void PWUpdaterFrame::CreateControls()
     _auiMgr.Update();
 }
 
+void PWUpdaterFrame::StartRockeyThread()
+{
+    wxCriticalSection &cs = wxGetApp().m_rockeyCS;
+    RockeyThread *&pRockey = wxGetApp().m_pRockeyThread;
+
+    cs.Enter();
+
+    /* check if another rockey thread is running... */
+    if (pRockey)
+    {
+        cs.Leave();
+        wxLogWarning(_("Rockey thread is already running!"));
+        return;
+    }
+
+    pRockey = new RockeyThread(this, ID_THREAD_ROCKEY);
+
+    if (pRockey->Create() != wxTHREAD_NO_ERROR)
+    {
+        wxLogError(_("Can't create rockey thread!"));
+        wxDELETE(pRockey);
+    }
+    else
+    {
+        if (pRockey->Run() != wxTHREAD_NO_ERROR)
+        {
+            wxLogError(_("Can't run the rockey thread!"));
+            wxDELETE(pRockey);
+        }
+    }
+
+    cs.Leave();
+}
+
 void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
 {
     wxCriticalSection &cs = wxGetApp().m_serverCS;
@@ -149,8 +195,11 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
     wxVector<TftpdTransmissionThread *> &transmissions
         = wxGetApp().m_tftpdTransmissionThreads;
     wxVector<TftpdTransmissionThread *>::iterator it;
+    wxCriticalSection &cs3 = wxGetApp().m_rockeyCS;
+    RockeyThread *&pRockey = wxGetApp().m_pRockeyThread;
     bool serverTerminated = false;
     bool allTransmissionTerminated = false;
+    bool rockeyTerminated = false;
 
     /* delete tftp server thread if it is still running... */
     cs.Enter();
@@ -166,6 +215,12 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
             (*it)->Delete();
     }
     cs2.Leave();
+
+    /* delete rockey thread if it is still running... */
+    cs3.Enter();
+    if (pRockey)
+        pRockey->Delete();
+    cs3.Leave();
 
     /* make sure tftp server and transmissions terminated. */
     while (true)
@@ -193,7 +248,15 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
             cs2.Leave();
         }
 
-        if (serverTerminated && allTransmissionTerminated)
+        if (!rockeyTerminated)
+        {
+            cs3.Enter();
+            if (!pRockey)
+                rockeyTerminated = true;
+            cs3.Leave();
+        }
+
+        if (serverTerminated && allTransmissionTerminated && rockeyTerminated)
             break;
 
         /* give the tftp server a chance to terminated. */
@@ -213,4 +276,12 @@ void PWUpdaterFrame::OnPref(wxCommandEvent &WXUNUSED(event))
     PrefDlg dlg(this);
 
     dlg.ShowModal();
+}
+
+void PWUpdaterFrame::OnRockey(wxThreadEvent &event)
+{
+    RockeyMessage msg = event.GetPayload<RockeyMessage>();
+    int evt = msg.GetEvent();
+
+    wxLogMessage(wxT("Rockey event = %d"), evt);    
 }

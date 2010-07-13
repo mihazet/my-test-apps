@@ -31,6 +31,7 @@ public:
     RockeyMessage() { _event = ROCKEY_EVENT_INVALID; }
     RockeyMessage(int event) { _event = event; }
     int GetEvent() { return _event; }
+    void SetEvent(int event) { _event = event; };
 private:
     int _event;
 };
@@ -49,6 +50,7 @@ private:
 
     wxEvtHandler *_pHandler;
     int _threadEventId;
+    int _state;
 };
 
 #endif /* _ROCKEY_THREAD_H_ */

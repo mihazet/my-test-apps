@@ -250,8 +250,8 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
-          <string name="Library path">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% Rockey4ND.lib"</string>
+          <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource"</string>
           <string name="Resource flags">"%AUTO%"</string>
@@ -331,8 +331,8 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
-          <string name="Library path">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% Rockey4ND.lib"</string>
+          <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource"</string>
           <string name="Resource flags">"%AUTO%"</string>
@@ -850,6 +850,18 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="created">"13/7/2010"</string>
+          <document>
+            <string name="title">"Rockey4_ND_32.h"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"include/Rockey4_ND_32.h"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"13/7/2010"</string>
+            <string name="language">""</string>
+          </document>
           <document>
             <string name="title">"RockeyThread.cpp"</string>
             <string name="type">"source-editor-document"</string>

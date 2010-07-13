@@ -16,6 +16,7 @@
 
 class TftpdServerThread;
 class TftpdTransmissionThread;
+class RockeyThread;
 
 // ========================================================================
 // Application class
@@ -33,6 +34,10 @@ public:
     /* tftpd transmission threads management */
     wxVector<TftpdTransmissionThread *> m_tftpdTransmissionThreads;
     wxCriticalSection m_transmissionCS;
+
+    /* rockey thread management */
+    RockeyThread *m_pRockeyThread;
+    wxCriticalSection m_rockeyCS;
 
     /* Application options */
     AppOptions *m_pOpt;
@@ -68,11 +73,13 @@ private:
     /* helper functions */
     void Init();
     void CreateControls();
+    void StartRockeyThread();
     
     /* event handler functions */
     void OnClose(wxCloseEvent &event);
     void OnQuit(wxCommandEvent &event);
     void OnPref(wxCommandEvent &event);
+    void OnRockey(wxThreadEvent &event);
 
     /* data members */
     wxAuiManager _auiMgr;

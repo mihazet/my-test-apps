@@ -11,7 +11,14 @@
 // Headers
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
+#include "PWUpdater.h"
 #include "RockeyThread.h"
+
+#ifdef __WXMSW__
+#include "Rockey4_ND_32.h"
+#define ROCKEY  Rockey
+#else
+#endif
 
 #define wxLOG_COMPONENT "PWUpdater/rockey"
 
@@ -22,6 +29,11 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
+enum
+{
+    ROCKEY_STATE_NOT_FOUND,
+    ROCKEY_STATE_OPENED,
+};
 
 // ------------------------------------------------------------------------
 // Implementation
@@ -31,18 +43,55 @@ RockeyThread::RockeyThread(wxEvtHandler *handler, const int id)
     _threadEventId(id),
     wxThread(wxTHREAD_DETACHED)
 {
+    _state = ROCKEY_STATE_NOT_FOUND;
 }
 
 RockeyThread::~RockeyThread()
 {
+    wxCriticalSection &cs = wxGetApp().m_rockeyCS;
+    RockeyThread *&pRockey = wxGetApp().m_pRockeyThread;
+
+    cs.Enter();
+    if (pRockey == this)
+        pRockey = NULL;
+    cs.Leave();
 }
 
 wxThread::ExitCode RockeyThread::Entry()
 {
-    //wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
+    unsigned short u16Handle, u16Result, u16Ignore;
+    unsigned short u16BasicPW1, u16BasicPW2, u16AdvPW1, u16AdvPW2;
+    unsigned long u32Ignore, u32HwId;
+    unsigned char buf[1024];
+
+    wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
+    RockeyMessage msg;
 
     while (!TestDestroy())
     {
+        switch (_state)
+        {
+        default:
+        case ROCKEY_STATE_NOT_FOUND:
+            
+            u16BasicPW1 = 0xAC31;
+            u16BasicPW2 = 0x9C9C;
+            u16Result = ROCKEY(RY_FIND, &u16Handle, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
+            if (u16Result == ERR_SUCCESS)
+            {
+                msg.SetEvent(0);
+                event.SetPayload<RockeyMessage>(msg);
+                wxQueueEvent(_pHandler, event.Clone());
+            }
+            else
+            {
+                msg.SetEvent(1);
+                event.SetPayload<RockeyMessage>(msg);
+                wxQueueEvent(_pHandler, event.Clone());
+            }
+            break;
+        }
+
         wxMilliSleep(1000);
     }
 
