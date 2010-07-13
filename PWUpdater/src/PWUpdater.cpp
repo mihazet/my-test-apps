@@ -14,6 +14,8 @@
 #include <wx/thread.h>
 #include <wx/socket.h>
 #include <wx/iconbndl.h>
+#include <wx/stdpaths.h>
+#include <wx/filename.h>
 #include "PWUpdater.h"
 #include "TftpdThread.h"
 #include "RockeyThread.h"
@@ -112,6 +114,27 @@ bool PWUpdaterApp::OnInit()
     }
     if (useDefaultInterface && (m_adapterList.size() > 0))
         m_pOpt->SetOption(wxT("ActivedInterface"), m_adapterList.at(0).GetName());
+
+    /*
+       use current working path when
+       (1) database is new created (empty), or
+       (2) path stored in database doesn't exist now
+     */
+    bool useCurrentPath = false;
+    wxString rootPath = m_pOpt->GetOption(wxT("TftpdRoot"));
+    if (rootPath.empty())
+        useCurrentPath = true;
+    else
+    {
+        if (!wxFileName::DirExists(rootPath))
+            useCurrentPath = true;
+    }
+    if (useCurrentPath)
+    {
+        wxStandardPaths &stdPaths = wxStandardPaths::Get();
+        wxFileName exec = wxFileName(stdPaths.GetExecutablePath());
+        m_pOpt->SetOption(wxT("TftpdRoot"), exec.GetPath(wxPATH_GET_VOLUME));
+    }
 
     /* create main frame */
     PWUpdaterFrame *frame = new PWUpdaterFrame(NULL);
