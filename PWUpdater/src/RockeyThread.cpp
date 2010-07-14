@@ -53,8 +53,7 @@ RockeyThread::~RockeyThread()
     RockeyThread *&pRockey = wxGetApp().m_pRockeyThread;
 
     cs.Enter();
-    if (pRockey == this)
-        pRockey = NULL;
+    pRockey = NULL;
     cs.Leave();
 }
 
