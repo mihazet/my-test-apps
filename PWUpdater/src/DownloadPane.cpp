@@ -56,12 +56,12 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
     wxPanel::Create(parent, id, pos, size, style);
     CreateControls();
 
-    /* start tftp server if need */
-    bool tftpAutoStart = false;
+    /* start internal tftp server if need */
+    bool useInternalTftp = false;
     AppOptions *&pOpt = wxGetApp().m_pOpt;
     wxVector<NetAdapter> &adapterList = wxGetApp().m_adapterList;
     wxVector<NetAdapter>::iterator it;
-    if ((pOpt->GetOption(wxT("TftpdAutoStart"), &tftpAutoStart)) && tftpAutoStart)
+    if ((pOpt->GetOption(wxT("UseInternalTftp"), &useInternalTftp)) && useInternalTftp)
     {
         wxString intf, tftpRoot;
         if ((pOpt->GetOption(wxT("ActivedInterface"), intf))
@@ -76,6 +76,12 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
                 }
             }
         }
+    }
+    else
+    {
+        /* TODO: create a tftp client thread here to communicate with 
+           external tftp server and establish the download file list.
+         */
     }
 
     return true;

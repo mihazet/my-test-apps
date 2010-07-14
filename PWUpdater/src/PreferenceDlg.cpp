@@ -138,10 +138,15 @@ void PrefDlg::AddTftpPage()
 
     wxPanel *tftpPage = new wxPanel(prefNB, myID_PREF_TFTP_PAGE);
 
-    wxStaticBoxSizer *bgServiceSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("Background service"));
-    bgServiceSizer->Add(new wxCheckBox(tftpPage, myID_PREF_TFTP_AUTOSTART, _("Enable build-in TFTPD server.")), 0, wxALL | wxEXPAND, 5);
+    wxStaticBoxSizer *bgServiceSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("TFTP Server"));
+    bgServiceSizer->Add(new wxCheckBox(tftpPage, myID_PREF_TFTP_USE_INTERNAL, _("Enable internal TFTP server.")), 0, wxALL | wxEXPAND, 5);
+    wxBoxSizer *extSizer = new wxBoxSizer(wxHORIZONTAL);
+    extSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("External TFTP server address:")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
+    extSizer->AddStretchSpacer();
+    extSizer->Add(new wxTextCtrl(tftpPage, myID_PREF_TFTP_EXTERNAL_ADDRESS), 0, wxALL | wxEXPAND, 5);
+    bgServiceSizer->Add(extSizer, 0, wxALL | wxEXPAND, 0);
 
-    wxStaticBoxSizer *tftpOptSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("Tftp server option"));
+    wxStaticBoxSizer *tftpOptSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("Internal TFTP server option"));
     wxGridBagSizer *optGridSizer = new wxGridBagSizer(5, 5);
     optGridSizer->AddGrowableCol(0);
     wxGBPosition pos;
@@ -275,7 +280,8 @@ bool PrefDlg::TransferDataFromWindow()
     /* tftp page */
     DBGCALL2(InterfaceSave());
     DBGCALL2(TftpRootSave());
-    DBGCALL2(CheckBoxSave(myID_PREF_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
+    DBGCALL2(CheckBoxSave(myID_PREF_TFTP_USE_INTERNAL, wxT("UseInternalTftp")));
+    DBGCALL2(TextCtrlSave(myID_PREF_TFTP_EXTERNAL_ADDRESS, wxT("ExternalTftpAddress")));
     DBGCALL2(CheckBoxSave(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
     DBGCALL2(TextCtrlSave(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
     DBGCALL2(TextCtrlSave(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
@@ -305,7 +311,8 @@ bool PrefDlg::TransferDataToWindow()
     /* tftp page */
     DBGCALL(InterfaceLoad());
     DBGCALL(TftpRootLoad());
-    DBGCALL(CheckBoxLoad(myID_PREF_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
+    DBGCALL(CheckBoxLoad(myID_PREF_TFTP_USE_INTERNAL, wxT("UseInternalTftp")));
+    DBGCALL(TextCtrlLoad(myID_PREF_TFTP_EXTERNAL_ADDRESS, wxT("ExternalTftpAddress")));
     DBGCALL(CheckBoxLoad(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
     DBGCALL(TextCtrlLoad(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
     DBGCALL(TextCtrlLoad(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));

@@ -81,14 +81,14 @@ bool PWUpdaterApp::OnInit()
     {
         if (m_adapterList.empty())
         {
-            wxLogError(_("No network adapter is availabled, tftp server is force stopped!"));
-            m_pOpt->SetOption(wxT("TftpdAutoStart"), false);
+            wxLogError(_("No network adapter is availabled, force to use external tftp server!"));
+            m_pOpt->SetOption(wxT("UseInternalTftp"), false);
         }
     }
     else
     {
-        wxLogError(_("Failed to detect network adapters info, tftp server is force stopped!"));
-        m_pOpt->SetOption(wxT("TftpdAutoStart"), false);
+        wxLogError(_("Failed to detect network adapters info, application will be terminated!"));
+        return false;
     }
 
     /* 
