@@ -32,6 +32,8 @@ private:
     int TextCtrlSave(const wxWindowID id, const wxString &opt);
     int InterfaceLoad();
     int InterfaceSave();
+    int TftpRootLoad();
+    int TftpRootSave();
 
     DECLARE_EVENT_TABLE()
 };

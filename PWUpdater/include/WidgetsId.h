@@ -10,8 +10,6 @@ enum
     /* frame - menu bar */
 
     /* download pane */
-    myID_BTN_START_TFTP,
-    myID_BTN_STOP_TFTP,
 
     /* preference dialog */
     myID_PREF_DLG,

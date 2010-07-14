@@ -274,6 +274,7 @@ bool PrefDlg::TransferDataFromWindow()
 
     /* tftp page */
     DBGCALL2(InterfaceSave());
+    DBGCALL2(TftpRootSave());
     DBGCALL2(CheckBoxSave(myID_PREF_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
     DBGCALL2(CheckBoxSave(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
     DBGCALL2(TextCtrlSave(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
@@ -303,6 +304,7 @@ bool PrefDlg::TransferDataToWindow()
 
     /* tftp page */
     DBGCALL(InterfaceLoad());
+    DBGCALL(TftpRootLoad());
     DBGCALL(CheckBoxLoad(myID_PREF_TFTP_AUTOSTART, wxT("TftpdAutoStart")));
     DBGCALL(CheckBoxLoad(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
     DBGCALL(TextCtrlLoad(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
@@ -481,6 +483,68 @@ int PrefDlg::InterfaceSave()
             if (dbValue != uiValue)
             {
                 pOpt->SetOption(wxT("ActivedInterface"), uiValue);
+            }
+            else
+            {
+                return ERROR_SKIP_UPDATE;
+            }
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::TftpRootLoad()
+{
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxDirPickerCtrl *pRoot = wxDynamicCast(FindWindow(myID_PREF_TFTP_ROOTPATH), wxDirPickerCtrl);
+    wxString tftpRoot;
+
+    if (pRoot)
+    {
+        if (pOpt->GetOption(wxT("TftpdRoot"), tftpRoot))
+        {
+            pRoot->SetPath(tftpRoot);
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::TftpRootSave()
+{
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxDirPickerCtrl *pRoot = wxDynamicCast(FindWindow(myID_PREF_TFTP_ROOTPATH), wxDirPickerCtrl);
+    wxString dbValue, uiValue;
+
+    if (pRoot)
+    {
+        if (pOpt->GetOption(wxT("TftpdRoot"), dbValue))
+        {
+            uiValue = pRoot->GetPath();
+            if (dbValue != uiValue)
+            {
+                pOpt->SetOption(wxT("TftpdRoot"), uiValue);
+            }
+            else
+            {
+                return ERROR_SKIP_UPDATE;
             }
         }
         else

@@ -26,7 +26,8 @@ private:
     // helper methods
     void Init();
     void CreateControls();
-    void DoStartTftpServerThread();
+    void DoStartTftpServerThread(const wxString &ipAddr = wxEmptyString,
+        const wxString &root = wxEmptyString);
     void DoStopTftpServerThread();
 
     // event handlers

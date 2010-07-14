@@ -7,6 +7,9 @@
 #include "DownloadPane.h"
 #include "WidgetsId.h"
 #include "TftpdThread.h"
+#include "PWUpdater.h"
+#include "AppOptions.h"
+#include "NetAdapter.h"
 
 // ------------------------------------------------------------------------
 // Resources
@@ -21,8 +24,6 @@
 // Implementation
 // ------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
-    EVT_BUTTON(myID_BTN_START_TFTP, DownloadPane::OnButtonStartTftp)
-    EVT_BUTTON(myID_BTN_STOP_TFTP, DownloadPane::OnButtonStopTftp)
     EVT_THREAD(myID_THREAD_TFTPD, DownloadPane::OnThreadTftpd)
 END_EVENT_TABLE()
 
@@ -51,9 +52,32 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
                          const wxPoint &pos, const wxSize &size,
                          long style)
 {
+    /* create ui */
     wxPanel::Create(parent, id, pos, size, style);
     CreateControls();
-    Center();
+
+    /* start tftp server if need */
+    bool tftpAutoStart = false;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxVector<NetAdapter> &adapterList = wxGetApp().m_adapterList;
+    wxVector<NetAdapter>::iterator it;
+    if ((pOpt->GetOption(wxT("TftpdAutoStart"), &tftpAutoStart)) && tftpAutoStart)
+    {
+        wxString intf, tftpRoot;
+        if ((pOpt->GetOption(wxT("ActivedInterface"), intf))
+            && (pOpt->GetOption(wxT("TftpdRoot"), tftpRoot)))
+        {
+            for (it = adapterList.begin(); it != adapterList.end(); ++it)
+            {
+                if (it->GetName() == intf)
+                {
+                    DoStartTftpServerThread(it->GetIp(), tftpRoot);
+                    break;
+                }
+            }
+        }
+    }
+
     return true;
 }
 
@@ -61,24 +85,21 @@ void DownloadPane::CreateControls()
 {
     wxBoxSizer *paneSizer = new wxBoxSizer(wxVERTICAL);
 
-    paneSizer->Add(new wxButton(this, myID_BTN_START_TFTP, wxT("Start Server")), 0, wxALL, 5);
-    paneSizer->Add(new wxButton(this, myID_BTN_STOP_TFTP, wxT("Stop Server")), 0, wxALL, 5);
-
     SetSizerAndFit(paneSizer);
 }
 
-void DownloadPane::DoStartTftpServerThread()
+void DownloadPane::DoStartTftpServerThread(const wxString &ipAddr,
+                                           const wxString &root)
 {
     wxIPV4address local;
-    wxString root;
     wxCriticalSection &cs = wxGetApp().m_serverCS;
     TftpdServerThread *&pServer = wxGetApp().m_pTftpdServerThread;
     
     /* assign preferred interface */
-    local.AnyAddress();
-
-    /* assign root path. Use wxEmptyString for current working path. */
-    root = wxEmptyString;
+    if (ipAddr.empty())
+        local.AnyAddress();
+    else
+        local.Hostname(ipAddr);
 
     cs.Enter();
 
@@ -133,18 +154,6 @@ void DownloadPane::DoStopTftpServerThread()
 //
 // event handlers
 //
-void DownloadPane::OnButtonStartTftp(wxCommandEvent &WXUNUSED(event))
-{
-    wxLogMessage(wxT("Start tftp server thread..."));
-    DoStartTftpServerThread();
-}
-
-void DownloadPane::OnButtonStopTftp(wxCommandEvent &WXUNUSED(event))
-{
-    wxLogMessage(wxT("Stop tftp server thread..."));
-    DoStopTftpServerThread();
-}
-
 void DownloadPane::OnThreadTftpd(wxThreadEvent &event)
 {
     TftpdMessage msg = event.GetPayload<TftpdMessage>();
