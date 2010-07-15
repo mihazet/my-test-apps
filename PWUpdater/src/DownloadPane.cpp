@@ -5,6 +5,8 @@
 #include <wx/thread.h>
 #include <wx/dataview.h>
 #include <wx/renderer.h>
+#include <wx/tokenzr.h>
+#include <wx/filename.h>
 #include "PWUpdater.h"
 #include "DownloadPane.h"
 #include "WidgetsId.h"
@@ -260,6 +262,8 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
                 }
             }
         }
+
+        DoSearchLocalImageFiles();
     }
     else
     {
@@ -365,6 +369,108 @@ void DownloadPane::DoStopTftpServerThread()
         wxLogError(wxT("Can't delete tftp server thread!"));
 
     cs.Leave();
+}
+
+void DownloadPane::DoSearchLocalImageFiles()
+{
+    wxStringTokenizer tokenizr;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    bool &keyFound = wxGetApp().m_keyFound;
+    wxVector<wxString> fileOrder;
+    wxVector<wxString> fileAuth;
+    wxVector<wxString>::iterator it, it2;
+    wxString dbValue, token, rootPath, fileName, dbEntry, strTemp;
+    wxFileName fn;
+    bool needAuth;
+    int column;
+    wxVector<wxVariant> data;
+    unsigned long startAddr, endAddr, fileLength;
+
+    /* load image files search order */
+    dbValue = pOpt->GetOption(wxT("ImageFilesSearchOrder"));
+    tokenizr.SetString(dbValue, wxT(";"));
+    while (tokenizr.HasMoreTokens())
+    {
+        token = tokenizr.GetNextToken();
+        fileOrder.push_back(token);
+    }
+
+    /* load image files need auth */
+    dbValue = pOpt->GetOption(wxT("ImageFilesNeedAuth"));
+    tokenizr.SetString(dbValue, wxT(";"));
+    while (tokenizr.HasMoreTokens())
+    {
+        token = tokenizr.GetNextToken();
+        fileAuth.push_back(token);
+    }
+
+    /* start to search files */
+    DownloadFileList *dfl = wxDynamicCast(FindWindow(myID_DOWNLOAD_FILE_LIST), DownloadFileList);
+    wxDataViewListStore *store = dfl ? static_cast<wxDataViewListStore *>(dfl->GetModel()) : NULL;
+    rootPath = pOpt->GetOption(wxT("TftpdRoot"));
+    for (it = fileOrder.begin(); it != fileOrder.end(); ++it)
+    {
+        needAuth = false;
+        for (it2 = fileAuth.begin(); it2 != fileAuth.end(); ++it2)
+        {
+            if (!it->Cmp(*it2))
+            {
+                needAuth = true;
+                break;
+            }
+        }
+
+        if ((needAuth && keyFound) || !needAuth)
+        {
+            fn.Clear();
+            fileName = pOpt->GetOption(*it);
+            fn.Assign(rootPath, fileName);
+            if (fn.IsFileReadable())
+            {
+                if (dfl && store)
+                {
+                    dbEntry = *it;
+                    dbEntry.Replace(wxT("Image"), wxT("Offset"));
+                    pOpt->GetOption(dbEntry, strTemp);
+                    strTemp.ToULong(&startAddr, 16);
+                    fileLength = wxFileName::GetSize(fn.GetFullPath()).ToULong();
+                    endAddr = startAddr + fileLength;
+
+                    for (column = 0; column < DownloadFileList::DFL_COL_MAX; column++)
+                    {
+                        switch (column)
+                        {
+                        case DownloadFileList::DFL_COL_UPDATE:
+                            data.push_back(false);
+                            break;
+                        case DownloadFileList::DFL_COL_FILE:
+                            data.push_back(fileName);
+                            break;
+                        case DownloadFileList::DFL_COL_START:
+                            data.push_back(wxString::Format(wxT("0x%lX"), startAddr));
+                            break;
+                        case DownloadFileList::DFL_COL_END:
+                            data.push_back(wxString::Format(wxT("0x%lX"), endAddr));
+                            break;
+                        case DownloadFileList::DFL_COL_LENGTH:
+                            data.push_back(wxString::Format(wxT("%lu"), fileLength));
+                            break;
+                        case DownloadFileList::DFL_COL_PROGRESS:
+                            data.push_back(wxEmptyString);
+                            break;
+                        case DownloadFileList::DFL_COL_RESULT:
+                            data.push_back(wxEmptyString);
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                    dfl->AppendItem(data);
+                    data.clear();
+                }
+            }
+        }
+    }
 }
 
 //

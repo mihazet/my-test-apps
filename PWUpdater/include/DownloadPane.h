@@ -29,6 +29,7 @@ private:
     void DoStartTftpServerThread(const wxString &ipAddr = wxEmptyString,
         const wxString &root = wxEmptyString);
     void DoStopTftpServerThread();
+    void DoSearchLocalImageFiles();
 
     // event handlers
     void OnButtonStartTftp(wxCommandEvent &event);

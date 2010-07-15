@@ -70,6 +70,8 @@ void AppOptions::DB_Init()
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"Retransmit\", \"5\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"AllowOptionNegotiation\", \"true\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"RubyDownloadMemory\", \"0x1000000\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"ImageFilesSearchOrder\", \"\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"ImageFilesNeedAuth\", \"UBootSPIImage;UBootImage\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"UBootSPIOffset\", \"0x0\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"UBootSPIImage\", \"u-boot.spi-boot\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"UBootOffset\", \"0x80000000\");")
@@ -81,8 +83,12 @@ void AppOptions::DB_Init()
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"SplashOffset\", \"0x81000000\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"SplashImage\", \"splash.uImage\");")
         << wxT("COMMIT TRANSACTION;");
-
     _db->ExecuteUpdate(sql);
+
+    /* force update */
+    wxString forceValue = wxT("UBootSPIImage;UBootImage;KernelImage;FileSystemImage;SplashImage");
+    if (forceValue != GetOption(wxT("ImageFilesSearchOrder")))
+        SetOption(wxT("ImageFilesSearchOrder"), forceValue);
 }
 
 bool AppOptions::SetOption(const wxString &option, const wxString &value)
