@@ -3,6 +3,8 @@
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
 #include <wx/thread.h>
+#include <wx/dataview.h>
+#include <wx/renderer.h>
 #include "PWUpdater.h"
 #include "DownloadPane.h"
 #include "WidgetsId.h"
@@ -14,15 +16,197 @@
 // ------------------------------------------------------------------------
 // Resources
 // ------------------------------------------------------------------------
+#include "xpm/delta.xpm"
+#include "xpm/download_to_chip2_64.xpm"
 
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
+class DownloadFileList : public wxDataViewListCtrl
+{
+public:
+    DownloadFileList(wxWindow *parent, wxWindowID id = wxID_ANY);
 
+    enum
+    {
+        DFL_COL_UPDATE,
+        DFL_COL_FILE,
+        DFL_COL_START,
+        DFL_COL_END,
+        DFL_COL_LENGTH,
+        DFL_COL_PROGRESS,
+        DFL_COL_RESULT,
+
+        DFL_COL_MAX
+    };
+};
+
+class MyCustomToggleRenderer : public wxDataViewCustomRenderer
+{
+public:
+    MyCustomToggleRenderer()
+        : wxDataViewCustomRenderer(wxT("bool"),
+            wxDATAVIEW_CELL_ACTIVATABLE)
+    { m_toggle = false; }
+
+    virtual bool Render(wxRect cell, wxDC *dc, int WXUNUSED(state))
+    {
+        int flags = 0;
+        if (m_toggle)
+            flags |= wxCONTROL_CHECKED;
+        if (GetMode() != wxDATAVIEW_CELL_ACTIVATABLE)
+            flags |= wxCONTROL_DISABLED;
+
+        // check boxes we draw must always have the same, standard size (if it's
+        // bigger than the cell size the checkbox will be truncated because the
+        // caller had set the clipping rectangle to prevent us from drawing outside
+        // the cell)
+        cell.SetSize(GetSize());
+
+        wxRendererNative::Get().DrawCheckBox(
+                GetOwner()->GetOwner(),
+                *dc,
+                cell,
+                flags );
+
+        return true;
+    }
+
+    virtual bool Activate(wxRect WXUNUSED(cell), wxDataViewModel *model,
+        const wxDataViewItem &item, unsigned int col)
+    {
+        model->ChangeValue(!m_toggle, item, col);
+        return false;
+    }
+
+    virtual bool LeftClick(wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell),
+        wxDataViewModel *model, const wxDataViewItem &item,
+        unsigned int col)
+    {
+        model->ChangeValue(!m_toggle, item, col);
+        return false;
+    }
+
+    virtual wxSize GetSize() const
+    {
+        // the window parameter is not used by GetCheckBoxSize() so it's
+        // safe to pass NULL
+        return wxRendererNative::Get().GetCheckBoxSize(NULL);
+    }
+
+    virtual bool SetValue(const wxVariant &value)
+    {
+        m_toggle = value.GetBool();
+        return true;
+    }
+
+    virtual bool GetValue(wxVariant &WXUNUSED(value)) const { return true; }
+
+    virtual int GetAlignment() const { return wxALIGN_CENTER; };
+
+private:
+    bool m_toggle;
+};
+
+class MyCustomUpdateResultRenderer : public wxDataViewCustomRenderer
+{
+public:
+    MyCustomUpdateResultRenderer()
+        : wxDataViewCustomRenderer(wxT("string"),
+            wxDATAVIEW_CELL_INERT)
+    {
+        m_result = wxEmptyString;
+        m_ok = wxT("OK");
+        m_error = wxT("ERROR");
+        m_empty = true;
+    }
+
+    virtual bool Render(wxRect cell, wxDC *dc, int state)
+    {
+        long longValue = 0;
+
+        if (!m_empty && m_result.ToLong(&longValue))
+        {
+            if (longValue)
+                dc->SetBrush(*wxRED_BRUSH);
+            else
+                dc->SetBrush(*wxGREEN_BRUSH);
+            dc->SetPen(*wxTRANSPARENT_PEN);
+
+            cell.Deflate(2);
+            dc->DrawRoundedRectangle(cell, 5);
+            RenderText(longValue ? m_error : m_ok,
+                0,
+                wxRect(dc->GetTextExtent(longValue ? m_error : m_ok)).CenterIn(cell),
+                dc,
+                state);
+        }
+        else
+        {
+            RenderText(wxEmptyString, 0, cell, dc, state);
+        }
+        return true;
+    }
+
+    virtual wxSize GetSize() const
+    {
+        return wxSize(50, 20);
+    }
+
+    virtual bool SetValue(const wxVariant &value)
+    {
+        m_result = value.GetString();
+        m_empty = m_result.empty();
+        return true;
+    }
+
+    virtual bool GetValue(wxVariant &WXUNUSED(value)) const { return true; }
+
+private:
+    wxString m_result, m_ok, m_error;
+    bool m_empty;
+};
 
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
+DownloadFileList::DownloadFileList(wxWindow *parent, wxWindowID id)
+    : wxDataViewListCtrl(parent, id, wxDefaultPosition, wxDefaultSize,
+    wxDV_SINGLE | wxDV_HORIZ_RULES | wxDV_VERT_RULES)
+{
+    int col;
+
+    for (col = 0; col < DFL_COL_MAX; col++)
+    {
+        switch (col)
+        {
+        case DFL_COL_UPDATE:
+            AppendColumn(new wxDataViewColumn(_("Update?"), new MyCustomToggleRenderer, col, 60));
+            break;
+        case DFL_COL_FILE:
+            AppendColumn(new wxDataViewColumn(_("File"), new wxDataViewTextRenderer, col, 80, wxALIGN_LEFT));
+            break;
+        case DFL_COL_START:
+            AppendColumn(new wxDataViewColumn(_("Start"), new wxDataViewTextRenderer, col, 80, wxALIGN_LEFT));
+            break;
+        case DFL_COL_END:
+            AppendColumn(new wxDataViewColumn(_("End"), new wxDataViewTextRenderer, col, 80, wxALIGN_LEFT));
+            break;
+        case DFL_COL_LENGTH:
+            AppendColumn(new wxDataViewColumn(_("Length"), new wxDataViewTextRenderer, col, 80, wxALIGN_LEFT));
+            break;
+        case DFL_COL_PROGRESS:
+            AppendColumn(new wxDataViewColumn(_("Progress"), new wxDataViewProgressRenderer, col, 140, wxALIGN_LEFT));
+            break;
+        case DFL_COL_RESULT:
+            AppendColumn(new wxDataViewColumn(_("Result"), new MyCustomUpdateResultRenderer, col, 80, wxALIGN_LEFT));
+            break;
+        default:
+            break;
+        }
+    }
+}
+
 BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_THREAD(myID_THREAD_TFTPD, DownloadPane::OnThreadTftpd)
 END_EVENT_TABLE()
@@ -89,7 +273,33 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
 
 void DownloadPane::CreateControls()
 {
-    wxBoxSizer *paneSizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer *paneSizer = new wxBoxSizer(wxHORIZONTAL);
+
+    /* logo and com port */
+    wxBoxSizer *logoSizer = new wxBoxSizer(wxVERTICAL);
+    logoSizer->Add(new wxStaticText(this, wxID_STATIC, _("COM Port")), 0, wxALL | wxALIGN_CENTER, 5);
+    logoSizer->Add(new wxChoice(this, myID_CHOICE_COMPORT, wxDefaultPosition, wxSize(80, -1)), 0, wxALL, 5);
+    logoSizer->AddStretchSpacer();
+    logoSizer->Add(new wxStaticBitmap(this, wxID_ANY, wxBitmap(delta_xpm)));
+    paneSizer->Add(logoSizer, 0, wxALL | wxEXPAND, 0);
+
+    /* download file list and operation */
+    wxBoxSizer *downloadSizer = new wxBoxSizer(wxVERTICAL);
+    downloadSizer->Add(new wxStaticText(this, wxID_STATIC, _("Files To Download")), 0, wxALL, 5);
+    downloadSizer->Add(new DownloadFileList(this, myID_DOWNLOAD_FILE_LIST), 1, wxALL | wxEXPAND, 5);
+
+    wxBoxSizer *opSizer = new wxBoxSizer(wxHORIZONTAL);
+    downloadSizer->Add(opSizer, 0, wxALL | wxEXPAND, 0);
+    wxStaticBoxSizer *optSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Options"));
+    opSizer->Add(optSizer, 1, wxALL | wxEXPAND, 5);
+    optSizer->Add(new wxCheckBox(this, myID_CHKBOX_NOTIFY_ON_COMPLETED, _("Notify On Completion")), 0, wxALL, 5);
+    optSizer->Add(new wxCheckBox(this, myID_CHKBOX_RESET_TARGET_AFTER_DOWNLOAD, _("Reset Target After Download")), 0, wxALL, 5);
+    wxButton *downloadBtn = new wxButton(this, myID_BTN_DOWNLOAD, _("Download selected"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
+    downloadBtn->SetBitmap(wxBitmap(download_to_chip2_64_xpm));
+    downloadBtn->SetBitmapDisabled(wxBitmap(wxImage(download_to_chip2_64_xpm).ConvertToGreyscale()));
+    opSizer->Add(downloadBtn, 0, wxALL | wxEXPAND, 10);
+    
+    paneSizer->Add(downloadSizer, 1, wxALL | wxEXPAND, 0);
 
     SetSizerAndFit(paneSizer);
 }

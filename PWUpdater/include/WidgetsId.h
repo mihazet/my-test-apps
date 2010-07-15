@@ -10,6 +10,11 @@ enum
     /* frame - menu bar */
 
     /* download pane */
+    myID_CHOICE_COMPORT,
+    myID_DOWNLOAD_FILE_LIST,
+    myID_CHKBOX_NOTIFY_ON_COMPLETED,
+    myID_CHKBOX_RESET_TARGET_AFTER_DOWNLOAD,
+    myID_BTN_DOWNLOAD,
 
     /* preference dialog */
     myID_PREF_DLG,
