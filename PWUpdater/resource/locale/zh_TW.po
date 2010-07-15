@@ -1,0 +1,275 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PWUpdater\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-07-16 01:57+0800\n"
+"PO-Revision-Date: 2010-07-16 02:00+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: TAIWAN\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-SearchPath-0: ../../src\n"
+"X-Poedit-SearchPath-1: ../../include\n"
+
+#: ../../src/DownloadPane.cpp:186
+msgid "Update?"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:189
+msgid "File"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:192
+msgid "Start"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:195
+msgid "End"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:198
+msgid "Length"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:201
+msgid "Progress"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:204
+msgid "Result"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:284
+msgid "COM Port"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:292
+msgid "Files To Download"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:297
+msgid "Options"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:299
+msgid "Notify On Completion"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:300
+msgid "Reset Target After Download"
+msgstr ""
+
+#: ../../src/DownloadPane.cpp:301
+msgid "Download selected"
+msgstr ""
+
+#: ../../src/LogPane.cpp:74
+msgid "Save log text to file"
+msgstr ""
+
+#: ../../src/LogPane.cpp:77
+msgid "Erase all log text"
+msgstr ""
+
+#: ../../src/LogPane.cpp:106
+msgid "Log files"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:69
+msgid "Preference"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:117
+msgid "Language selection"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:120
+msgid "Memory"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:121
+msgid "Remember application layout."
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:122
+msgid "Remember application size and position."
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:129
+msgid "User interface"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:141
+msgid "TFTP Server"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:142
+msgid "Enable internal TFTP server."
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:144
+msgid "External TFTP server address:"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:149
+msgid "Internal TFTP server option"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:157
+msgid "Bind tftp service on this interface:"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:161
+msgid "Tftp server root path:"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:166
+msgid "Transmit timeout (unit: second)"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:171
+msgid "Retransmit maximum count"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:177
+msgid "Allow option negotiation. (See RFC2347, RFC2348 and RFC2349 for detail)"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:185
+msgid "Tftp server"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:197
+msgid "DDR memory layout"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:201
+#: ../../src/PreferenceDlg.cpp:211
+#: ../../src/PreferenceDlg.cpp:231
+msgid "offset"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:202
+msgid "Temporary storage"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:206
+msgid "NOR flash memory layout"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:210
+#: ../../src/PreferenceDlg.cpp:230
+msgid "name"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:212
+#: ../../src/PreferenceDlg.cpp:232
+msgid "Bootloader"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:215
+msgid "Linux Kernel"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:218
+msgid "Root File System"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:221
+msgid "Splash"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:226
+msgid "SPI flash memory layout"
+msgstr ""
+
+#: ../../src/PreferenceDlg.cpp:243
+msgid "Flash chip"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:84
+msgid "No network adapter is availabled, force to use external tftp server!"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:90
+msgid "Failed to detect network adapters info, application will be terminated!"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:162
+#: ../../src/PWUpdater.cpp:173
+msgid "Fail to allocate memory space for GetAdaptersInfo."
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:179
+#, c-format
+msgid "GetAdaptersInfo failed with error code = %d"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:224
+#, c-format
+msgid "Fail to create UDP socket. errno = %d"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:234
+msgid "Fail to retrieve interface configuration."
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:261
+msgid "Fail to get netmask address!"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:338
+msgid "&Quit"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:338
+msgid "Quit this program."
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:340
+msgid "&Preferences"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:340
+msgid "Modify user configuration."
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:343
+msgid "&File"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:344
+msgid "&View"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:356
+msgid "Log Window"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:378
+msgid "Rockey thread is already running!"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:386
+msgid "Can't create rockey thread!"
+msgstr ""
+
+#: ../../src/PWUpdater.cpp:393
+msgid "Can't run the rockey thread!"
+msgstr ""
+
+#: ../../src/wxsqlite3.cpp:3479
+msgid "Regular expression invalid: '"
+msgstr ""
+
+#: ../../src/wxsqlite3.cpp:3484
+#, c-format
+msgid "REGEXP called with wrong number of arguments: %d instead of 2."
+msgstr ""
+
