@@ -7,6 +7,9 @@ enum
 {
     myID_DUMMY = wxID_HIGHEST + 1,
     
+    /* frame */
+    myID_FRAME,
+
     /* frame - menu bar */
 
     /* frame - status bar */

@@ -130,7 +130,7 @@ bool PWUpdaterApp::OnInit()
         m_pOpt->SetOption(wxT("TftpdRoot"), wxString(wxEmptyString));
 
     /* create main frame */
-    PWUpdaterFrame *frame = new PWUpdaterFrame(NULL);
+    PWUpdaterFrame *frame = new PWUpdaterFrame(NULL, myID_FRAME);
     frame->Show();
     return true;
 }
@@ -277,15 +277,6 @@ bool PWUpdaterApp::DetectNetAdapter()
 // ------------------------------------------------------------------------
 // Main frame implementation
 // ------------------------------------------------------------------------
-enum
-{
-    STATBAR_FLD_GENERAL,
-    STATBAR_FLD_TFTP,
-    STATBAR_FLD_COMPORT,
-    
-    STATBAR_FLD_MAX
-};
-
 BEGIN_EVENT_TABLE(PWUpdaterFrame, wxFrame)
     EVT_CLOSE(PWUpdaterFrame::OnClose)
     EVT_MENU(wxID_EXIT, PWUpdaterFrame::OnQuit)

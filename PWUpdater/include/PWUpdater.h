@@ -93,6 +93,15 @@ public:
         const wxSize &size = wxDefaultSize,
         long style = wxDEFAULT_FRAME_STYLE);
 
+    enum
+    {
+        STATBAR_FLD_GENERAL,
+        STATBAR_FLD_TFTP,
+        STATBAR_FLD_COMPORT,
+        
+        STATBAR_FLD_MAX
+    };
+
 private:
     /* helper functions */
     void Init();
