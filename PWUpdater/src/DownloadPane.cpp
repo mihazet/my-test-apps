@@ -249,9 +249,8 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
     wxVector<NetAdapter>::iterator it;
     if ((pOpt->GetOption(wxT("UseInternalTftp"), &useInternalTftp)) && useInternalTftp)
     {
-        wxString intf, tftpRoot;
-        if ((pOpt->GetOption(wxT("ActivedInterface"), intf))
-            && (pOpt->GetOption(wxT("TftpdRoot"), tftpRoot)))
+        wxString intf, tftpRoot = pOpt->GetOption(wxT("TftpdRoot"));
+        if (pOpt->GetOption(wxT("ActivedInterface"), intf))
         {
             for (it = adapterList.begin(); it != adapterList.end(); ++it)
             {
@@ -408,6 +407,7 @@ void DownloadPane::DoSearchLocalImageFiles()
     DownloadFileList *dfl = wxDynamicCast(FindWindow(myID_DOWNLOAD_FILE_LIST), DownloadFileList);
     wxDataViewListStore *store = dfl ? static_cast<wxDataViewListStore *>(dfl->GetModel()) : NULL;
     rootPath = pOpt->GetOption(wxT("TftpdRoot"));
+    if (rootPath.empty()) rootPath = wxGetCwd();
     for (it = fileOrder.begin(); it != fileOrder.end(); ++it)
     {
         needAuth = false;

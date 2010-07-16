@@ -117,24 +117,17 @@ bool PWUpdaterApp::OnInit()
 
     /*
        use current working path when
-       (1) database is new created (empty), or
-       (2) path stored in database doesn't exist now
+       (1) path stored in database doesn't exist now any more
      */
     bool useCurrentPath = false;
     wxString rootPath = m_pOpt->GetOption(wxT("TftpdRoot"));
-    if (rootPath.empty())
-        useCurrentPath = true;
-    else
+    if (!rootPath.empty())
     {
         if (!wxFileName::DirExists(rootPath))
             useCurrentPath = true;
     }
     if (useCurrentPath)
-    {
-        wxStandardPaths &stdPaths = wxStandardPaths::Get();
-        wxFileName exec = wxFileName(stdPaths.GetExecutablePath());
-        m_pOpt->SetOption(wxT("TftpdRoot"), exec.GetPath(wxPATH_GET_VOLUME));
-    }
+        m_pOpt->SetOption(wxT("TftpdRoot"), wxEmptyString);
 
     /* create main frame */
     PWUpdaterFrame *frame = new PWUpdaterFrame(NULL);

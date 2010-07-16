@@ -131,6 +131,7 @@ void PrefDlg::AddUiPage()
 
 void PrefDlg::AddTftpPage()
 {
+    wxString toolTip;
     wxNotebook *prefNB = wxDynamicCast(FindWindow(myID_PREF_NOTEBOOK), wxNotebook);
 
     if (!prefNB)
@@ -160,7 +161,14 @@ void PrefDlg::AddTftpPage()
     pos.SetRow(pos.GetRow() + 1);
     optGridSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("Tftp server root path:")), pos, span, wxALIGN_CENTER_VERTICAL);
     pos.SetRow(pos.GetRow() + 1);
-    optGridSizer->Add(new wxDirPickerCtrl(tftpPage, myID_PREF_TFTP_ROOTPATH, wxEmptyString, wxDirSelectorPromptStr, wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE & ~wxDIRP_DIR_MUST_EXIST), pos, span, wxEXPAND);
+    wxDirPickerCtrl *dirPicker = new wxDirPickerCtrl(tftpPage, myID_PREF_TFTP_ROOTPATH, wxEmptyString, wxDirSelectorPromptStr, wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE & ~wxDIRP_DIR_MUST_EXIST);
+    toolTip.clear();
+    toolTip 
+        << _("If you assign a directory here, it will be treat as the root path for the internal tftp server. ")
+        << _("If you leave this setting blank, the current working directory will be treat as the root path. ")
+        << _("The current working directory is: ") << wxGetCwd();
+    dirPicker->SetToolTip(toolTip);
+    optGridSizer->Add(dirPicker, pos, span, wxEXPAND);
     pos.SetRow(pos.GetRow() + 1);
     span.SetColspan(1);
     optGridSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("Transmit timeout (unit: second)")), pos, span, wxALIGN_CENTER_VERTICAL);
