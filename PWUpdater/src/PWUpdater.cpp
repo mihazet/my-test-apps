@@ -127,7 +127,7 @@ bool PWUpdaterApp::OnInit()
             useCurrentPath = true;
     }
     if (useCurrentPath)
-        m_pOpt->SetOption(wxT("TftpdRoot"), wxEmptyString);
+        m_pOpt->SetOption(wxT("TftpdRoot"), wxString(wxEmptyString));
 
     /* create main frame */
     PWUpdaterFrame *frame = new PWUpdaterFrame(NULL);
