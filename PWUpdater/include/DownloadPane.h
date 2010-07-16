@@ -26,6 +26,8 @@ private:
     // helper methods
     void Init();
     void CreateControls();
+    bool StartInternalTftpIfNeed();
+    void SearchImageFiles();
     void DoStartTftpServerThread(const wxString &ipAddr = wxEmptyString,
         const wxString &root = wxEmptyString);
     void DoStopTftpServerThread();

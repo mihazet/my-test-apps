@@ -242,34 +242,8 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
     wxPanel::Create(parent, id, pos, size, style);
     CreateControls();
 
-    /* start internal tftp server if need */
-    bool useInternalTftp = false;
-    AppOptions *&pOpt = wxGetApp().m_pOpt;
-    wxVector<NetAdapter> &adapterList = wxGetApp().m_adapterList;
-    wxVector<NetAdapter>::iterator it;
-    if ((pOpt->GetOption(wxT("UseInternalTftp"), &useInternalTftp)) && useInternalTftp)
-    {
-        wxString intf, tftpRoot = pOpt->GetOption(wxT("TftpdRoot"));
-        if (pOpt->GetOption(wxT("ActivedInterface"), intf))
-        {
-            for (it = adapterList.begin(); it != adapterList.end(); ++it)
-            {
-                if (it->GetName() == intf)
-                {
-                    DoStartTftpServerThread(it->GetIp(), tftpRoot);
-                    break;
-                }
-            }
-        }
-
-        DoSearchLocalImageFiles();
-    }
-    else
-    {
-        /* TODO: create a tftp client thread here to communicate with 
-           external tftp server and establish the download file list.
-         */
-    }
+    StartInternalTftpIfNeed();
+    SearchImageFiles();
 
     return true;
 }
@@ -305,6 +279,43 @@ void DownloadPane::CreateControls()
     paneSizer->Add(downloadSizer, 1, wxALL | wxEXPAND, 0);
 
     SetSizerAndFit(paneSizer);
+}
+
+bool DownloadPane::StartInternalTftpIfNeed()
+{
+    bool useInternalTftp = false;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxVector<NetAdapter> &adapterList = wxGetApp().m_adapterList;
+    wxVector<NetAdapter>::iterator it;
+    if ((pOpt->GetOption(wxT("UseInternalTftp"), &useInternalTftp)) && useInternalTftp)
+    {
+        wxString intf, tftpRoot = pOpt->GetOption(wxT("TftpdRoot"));
+        if (pOpt->GetOption(wxT("ActivedInterface"), intf))
+        {
+            for (it = adapterList.begin(); it != adapterList.end(); ++it)
+            {
+                if (it->GetName() == intf)
+                {
+                    DoStartTftpServerThread(it->GetIp(), tftpRoot);
+                    break;
+                }
+            }
+        }
+    }
+
+    return useInternalTftp;
+}
+
+void DownloadPane::SearchImageFiles()
+{
+    bool useInternalTftp = false;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    if ((pOpt->GetOption(wxT("UseInternalTftp"), &useInternalTftp)) && useInternalTftp)
+        DoSearchLocalImageFiles();
+    else
+    {
+        /* search image files in the external tftp server */
+    }
 }
 
 void DownloadPane::DoStartTftpServerThread(const wxString &ipAddr,
