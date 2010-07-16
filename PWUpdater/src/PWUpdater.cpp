@@ -277,6 +277,15 @@ bool PWUpdaterApp::DetectNetAdapter()
 // ------------------------------------------------------------------------
 // Main frame implementation
 // ------------------------------------------------------------------------
+enum
+{
+    STATBAR_FLD_GENERAL,
+    STATBAR_FLD_TFTP,
+    STATBAR_FLD_COMPORT,
+    
+    STATBAR_FLD_MAX
+};
+
 BEGIN_EVENT_TABLE(PWUpdaterFrame, wxFrame)
     EVT_CLOSE(PWUpdaterFrame::OnClose)
     EVT_MENU(wxID_EXIT, PWUpdaterFrame::OnQuit)
@@ -340,6 +349,11 @@ void PWUpdaterFrame::CreateControls()
     /* tool bar */
 
     /* status bar */
+    wxStatusBar *statBar = new wxStatusBar(this, myID_FRAME_STATUSBAR, wxSTB_DEFAULT_STYLE);
+    int stBarWidths[STATBAR_FLD_MAX] = { -1, -1, 80 };
+    statBar->SetFieldsCount(STATBAR_FLD_MAX);
+    statBar->SetStatusWidths(STATBAR_FLD_MAX, stBarWidths);
+    SetStatusBar(statBar);
 
     /* aui manager & panes */
     _auiMgr.SetManagedWindow(this);

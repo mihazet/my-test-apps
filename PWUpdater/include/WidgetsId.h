@@ -9,6 +9,9 @@ enum
     
     /* frame - menu bar */
 
+    /* frame - status bar */
+    myID_FRAME_STATUSBAR,
+
     /* download pane */
     myID_CHOICE_COMPORT,
     myID_DOWNLOAD_FILE_LIST,
