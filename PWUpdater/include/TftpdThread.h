@@ -17,6 +17,10 @@
 //
 enum
 {
+    TFTPD_EVENT_SERVER_STARTED,
+        // _str = server root,
+        // _num1 = server ip address high nibble
+        // _num2 = server ip address low nibble
     TFTPD_EVENT_READ_REQUEST,
         // _num1 = file tranfer mode
         // _str = transfer file name
@@ -128,6 +132,8 @@ private:
     wxDatagramSocket *_udpServerSocket;
     bool _optResendTimeout, _optTransferSize, _optBlockSize;
     long _valResendTimeout, _valTransferSize, _valBlockSize;
+    int _localIpHighNibble;
+    int _localIpLowNibble;
 };
 
 

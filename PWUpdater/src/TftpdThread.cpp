@@ -25,6 +25,7 @@
 #include <wx/filename.h>
 #include <wx/wfstream.h>
 #include <wx/stopwatch.h>
+#include <wx/tokenzr.h>
 #include "TftpdThread.h"
 #include "PWUpdater.h"
 
@@ -84,6 +85,35 @@ TftpdServerThread::TftpdServerThread(wxEvtHandler *handler, const int id,
     /* RFC2347/2348/2349 - option negotiation for transmission */
     _optResendTimeout = _optTransferSize = _optBlockSize = false;
     _valResendTimeout = _valTransferSize = _valBlockSize = -1;
+
+    /* record ip address for later use */
+    int loop = 0;
+    long longTemp = 0;
+    _localIpHighNibble = _localIpLowNibble = 0;
+    wxStringTokenizer tokenzr(local.IPAddress(), wxT("."));
+    while (tokenzr.HasMoreTokens())
+    {
+        wxString token = tokenzr.GetNextToken();
+        switch (loop++)
+        {
+        case 0:
+            token.ToLong(&longTemp);
+            _localIpHighNibble = (longTemp & 0xFF) << 8;
+            break;
+        case 1:
+            token.ToLong(&longTemp);
+            _localIpHighNibble += (longTemp & 0xFF);
+            break;
+        case 2:
+            token.ToLong(&longTemp);
+            _localIpLowNibble = (longTemp & 0xFF) << 8;
+            break;
+        case 3:
+            token.ToLong(&longTemp);
+            _localIpLowNibble += (longTemp & 0xFF);
+            break;
+        }
+    }
 }
 
 TftpdServerThread::~TftpdServerThread()
@@ -132,6 +162,13 @@ wxThread::ExitCode TftpdServerThread::Entry()
         wxDELETE(msg);
         return (wxThread::ExitCode)0;
     }
+
+    /* notify main thread, we are starting... */
+    msg = new TftpdMessage(TFTPD_EVENT_SERVER_STARTED, _rootPath,
+        _localIpHighNibble, _localIpLowNibble);
+    event.SetPayload<TftpdMessage>(*msg);
+    wxQueueEvent(_pHandler, event.Clone());
+    wxDELETE(msg);
 
     while (!TestDestroy())
     {

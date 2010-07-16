@@ -491,10 +491,28 @@ void DownloadPane::OnThreadTftpd(wxThreadEvent &event)
 {
     TftpdMessage msg = event.GetPayload<TftpdMessage>();
     int transferMode, errorCode, currentBlock, totalBlock;
-    wxString fileName, errorMessage;
+    wxString fileName, errorMessage, statusText;
+    PWUpdaterFrame *frame = NULL;
+    wxStatusBar *bar = NULL;
 
     switch (msg.GetEvent())
     {
+    case TFTPD_EVENT_SERVER_STARTED:
+        if (NULL != (frame = wxDynamicCast(FindWindowById(myID_FRAME), PWUpdaterFrame)))
+        {
+            if (NULL != (bar = frame->GetStatusBar()))
+            {
+                statusText = _("Internal TFTP") + 
+                    wxString::Format(wxT(" [%d.%d.%d.%d] "),
+                        (msg.GetNum1() >> 8) & 0xFF,
+                        (msg.GetNum1() & 0xFF),
+                        (msg.GetNum2() >> 8) & 0xFF,
+                        (msg.GetNum2() & 0xFF)) +
+                    _("Root Dir") + wxT(" [") + msg.GetString() + wxT("]");
+                bar->SetStatusText(statusText, PWUpdaterFrame::STATBAR_FLD_TFTP);
+            }
+        }
+        break;
     case TFTPD_EVENT_READ_REQUEST:
         transferMode = msg.GetNum1();
         fileName = msg.GetString();
