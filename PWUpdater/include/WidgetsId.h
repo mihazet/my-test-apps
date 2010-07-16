@@ -16,6 +16,7 @@ enum
     myID_FRAME_STATUSBAR,
 
     /* download pane */
+    myID_PANE_DOWNLOAD,
     myID_CHOICE_COMPORT,
     myID_DOWNLOAD_FILE_LIST,
     myID_CHKBOX_NOTIFY_ON_COMPLETED,

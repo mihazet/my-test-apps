@@ -248,6 +248,11 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
+void DownloadPane::RescanImageFiles()
+{
+    SearchImageFiles();
+}
+
 void DownloadPane::CreateControls()
 {
     wxBoxSizer *paneSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -419,6 +424,7 @@ void DownloadPane::DoSearchLocalImageFiles()
     wxDataViewListStore *store = dfl ? static_cast<wxDataViewListStore *>(dfl->GetModel()) : NULL;
     rootPath = pOpt->GetOption(wxT("TftpdRoot"));
     if (rootPath.empty()) rootPath = wxGetCwd();
+    if (store) store->DeleteAllItems();
     for (it = fileOrder.begin(); it != fileOrder.end(); ++it)
     {
         needAuth = false;

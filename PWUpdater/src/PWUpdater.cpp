@@ -354,7 +354,7 @@ void PWUpdaterFrame::CreateControls()
         wxAuiPaneInfo().Name(wxT("LogPane")).Caption(_("Log Window")).
         CloseButton(true).DestroyOnClose(false).MinSize(560, 420).
         Float());
-    _auiMgr.AddPane(new DownloadPane(this),
+    _auiMgr.AddPane(new DownloadPane(this, myID_PANE_DOWNLOAD),
         wxAuiPaneInfo().Name(wxT("DownloadPane")).CaptionVisible(false).
         Center().CloseButton(false).DestroyOnClose(false).
         MaximizeButton(true));
@@ -489,6 +489,7 @@ void PWUpdaterFrame::OnPref(wxCommandEvent &WXUNUSED(event))
 
 void PWUpdaterFrame::OnRockey(wxThreadEvent &event)
 {
+    DownloadPane *pDownloadPane = wxDynamicCast(FindWindow(myID_PANE_DOWNLOAD), DownloadPane);
     RockeyMessage msg = event.GetPayload<RockeyMessage>();
     int evt = msg.GetEvent();
 
@@ -514,4 +515,7 @@ void PWUpdaterFrame::OnRockey(wxThreadEvent &event)
         wxGetApp().m_keyFound = true;
     else if (evt == ROCKEY_EVENT_KEY_REMOVED)
         wxGetApp().m_keyFound = false;
+
+    /* key state changed, need to rescan download files */
+    if (pDownloadPane) pDownloadPane->RescanImageFiles();
 }
