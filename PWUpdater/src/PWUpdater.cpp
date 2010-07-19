@@ -24,7 +24,7 @@
 #include "LogPane.h"
 #include "PreferenceDlg.h"
 #include "WidgetsId.h"
-#include "Version.h"
+#include "version.h"
 
 #include "xpm/ruby_16.xpm"
 #include "xpm/ruby_32.xpm"

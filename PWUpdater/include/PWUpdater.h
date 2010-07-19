@@ -16,7 +16,7 @@
 #include <iphlpapi.h>
 #elif defined (__WXGTK__)
 #include <stdio.h>
-#include <dtdlib.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/socket.h>
