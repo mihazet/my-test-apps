@@ -413,8 +413,8 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
-          <string name="Library path">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% -lRockey4ND"</string>
+          <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO% -Iinclude -Iresource"</string>
           <string name="Resource flags">"%AUTO%"</string>
@@ -490,8 +490,8 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO%"</string>
-          <string name="Library path">"%AUTO%"</string>
+          <string name="Libraries">"%AUTO% -lRockey4ND"</string>
+          <string name="Library path">"%AUTO%,lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO% -Iinclude -Iresource"</string>
           <string name="Resource flags">"%AUTO%"</string>
