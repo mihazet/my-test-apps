@@ -65,7 +65,11 @@ wxThread::ExitCode RockeyThread::Entry()
 {
     unsigned short u16Handle, u16Result, u16Ignore;
     unsigned short u16BasicPW1, u16BasicPW2, u16AdvPW1, u16AdvPW2;
+#if defined (__WXMSW__)
+    unsigned long u32Ignore, u32HwId, u32UserDataLen;
+#elif defined (__WXGTK__)
     unsigned int u32Ignore, u32HwId, u32UserDataLen;
+#endif
     unsigned char buf[1024];
     unsigned short u16Pos, u16Len;
     wxString userData, user, contact, sn;
