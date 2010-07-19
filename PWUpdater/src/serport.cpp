@@ -483,7 +483,7 @@ int wxSerialPort::Write(char *buf, size_t len)
 
 #elif defined (__WXGTK__)
 
-#include "wx/ctb/linux/serport.h"
+#include "wx/ctb/serport.h"
 
 #include <errno.h>
 #include <fcntl.h>
