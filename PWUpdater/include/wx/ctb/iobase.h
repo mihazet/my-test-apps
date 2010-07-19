@@ -25,7 +25,8 @@ const unsigned int wxTIMEOUT_INFINITY = 0xFFFFFFFF;
   Defines the ioctl calls for derivated classes. The following Ioctl 
   calls are valid for all from wxIOBase derivated classes.
 */
-enum wxIOBaseIoctls {
+enum wxIOBaseIoctls
+{
     /*!
       Reset the connected device. For a serial (RS232) connection,
       a break is send. For GPIB the IFC (Interface Clear) line is
@@ -53,15 +54,16 @@ class wxIOBase
 {
 protected:
     /*!
-	 \brief internal fifo (first in, first out queue) to put back
-	 already readed bytes into the reading stream. After put back a single
-	 byte or sequence of characters, you can read them again with the
-	 next Read call.
-	*/
-    fifo* m_fifo;
-    enum {
-	   /// fifosize of the putback fifo 
-	   fifoSize = 256
+     \brief internal fifo (first in, first out queue) to put back
+     already readed bytes into the reading stream. After put back a single
+     byte or sequence of characters, you can read them again with the
+     next Read call.
+    */
+    fifo *m_fifo;
+    enum
+    {
+        /// fifosize of the putback fifo 
+        fifoSize = 256
     };
     /*!
       Close the interface (internally the file descriptor, which was
@@ -86,32 +88,34 @@ protected:
       \sa struct dcs_devCUA (data struct for the serail com ports)
       \return zero on success, otherwise -1
     */
-    virtual int OpenDevice(const char* devname, void* dcs = 0L) = 0;
+    virtual int OpenDevice(const char *devname, void *dcs = 0L) = 0;
 public:
     /*!
       Default constructor
     */
-    wxIOBase() {
-	   m_fifo = new fifo(fifoSize);
+    wxIOBase()
+    {
+        m_fifo = new fifo(fifoSize);
     };
 
     /*!
       Default destructor
     */
-    virtual ~wxIOBase() {
-	   delete m_fifo;
+    virtual ~wxIOBase()
+    {
+        delete m_fifo;
     };
     /*!
-	 \brief A little helper function to detect the class name
-	 \return the name of the class
-	*/
-    virtual const char* ClassName() {return "wxIOBase";};
+     \brief A little helper function to detect the class name
+     \return the name of the class
+    */
+    virtual const char *ClassName() { return "wxIOBase"; }
     /*!
       Closed the interface. Internally it calls the CloseDevice()
       method, which must be defined in the derivated class.
       \return zero on success, or -1 if an error occurred.
     */
-    int Close() {return CloseDevice();};
+    int Close() { return CloseDevice(); }
 
     /*!
       In this method we can do all things, which are different
@@ -130,11 +134,11 @@ public:
       \param args typeless parameter pointer for the command above.
       \return zero on success, or -1 if an error occurred.
     */    
-    virtual int Ioctl(int , void *) { return -1; }
+    virtual int Ioctl(int, void *) { return -1; }
 
     /*!
-	 Returns the current state of the device.
-	 \return 1 if device is valid and open, otherwise 0
+     Returns the current state of the device.
+     \return 1 if device is valid and open, otherwise 0
     */
     virtual int IsOpen() = 0;
 
@@ -151,22 +155,24 @@ public:
       things like parity, word length and count of stop bits,
       a IEEE class adress and EOS character).
     */
-    int Open(const char* devname,void* dcs=0L) {
-	return OpenDevice(devname,dcs);
-    };
+    int Open(const char *devname, void *dcs = 0L)
+    {
+        return OpenDevice(devname, dcs);
+    }
 
     /*!
-	 \brief In some circumstances you want to put back a already
-	 readed byte (for instance, you have overreaded it and like to
-	 parse the recieving bytes again).
-	 The internal fifo stores fifoSize characters until you
-	 have to read again.
-	 \param ch the character to put back in the input stream
-	 \return 1, if successful, otherwise 0
-	*/
-    int PutBack(char ch) {
-	   return m_fifo->put(ch);
-    };
+     \brief In some circumstances you want to put back a already
+     readed byte (for instance, you have overreaded it and like to
+     parse the recieving bytes again).
+     The internal fifo stores fifoSize characters until you
+     have to read again.
+     \param ch the character to put back in the input stream
+     \return 1, if successful, otherwise 0
+    */
+    int PutBack(char ch)
+    {
+        return m_fifo->put(ch);
+    }
 
     /*!
       Read attempt to read len bytes from the interface into the buffer
@@ -176,66 +182,66 @@ public:
       \param len count of bytes, we want to read
       \return -1 on fails, otherwise the count of readed bytes
     */
-    virtual int Read(char* buf,size_t len) = 0;
+    virtual int Read(char *buf, size_t len) = 0;
 
     /*!
-	 \brief
-	 ReadUntilEos read bytes from the interface until the EOS string
-	 was received or a timeout occurs.
-	 ReadUntilEos returns the count of bytes been readed. The received
-	 bytes are stored on the heap point by the readbuf pointer and
-	 must delete by the caller.
-	 \param readbuf points to the start of the readed bytes. You must
-	        delete them, also if you received no byte.
-	 \param readedBytes A pointer to the variable that receives the number
-	        of bytes read.
-	 \param eosString is the null terminated end of string sequence.
-	        Default is the linefeed character.
-	 \param timeout_in_ms the function returns after this time, also
-	        if no eos occured (default is 1s).
-	 \param quota defines a character between those an EOS doesn't
-	        terminate the string
-	 \return 1 on sucess (the operation ends successfull without a timeout),
-	         0 if a timeout occurred and -1 otherwise 
+     \brief
+     ReadUntilEos read bytes from the interface until the EOS string
+     was received or a timeout occurs.
+     ReadUntilEos returns the count of bytes been readed. The received
+     bytes are stored on the heap point by the readbuf pointer and
+     must delete by the caller.
+     \param readbuf points to the start of the readed bytes. You must
+            delete them, also if you received no byte.
+     \param readedBytes A pointer to the variable that receives the number
+            of bytes read.
+     \param eosString is the null terminated end of string sequence.
+            Default is the linefeed character.
+     \param timeout_in_ms the function returns after this time, also
+            if no eos occured (default is 1s).
+     \param quota defines a character between those an EOS doesn't
+            terminate the string
+     \return 1 on sucess (the operation ends successfull without a timeout),
+             0 if a timeout occurred and -1 otherwise 
     */
-    virtual int ReadUntilEOS(char*& readbuf,
-					    size_t* readedBytes,
-					    char* eosString = "\n",
-					    long timeout_in_ms = 1000L,
-					    char quota = 0);
+    virtual int ReadUntilEOS(char *& readbuf,
+                             size_t *readedBytes,
+                             char *eosString = "\n",
+                             long timeout_in_ms = 1000L,
+                             char quota = 0);
 
     /*!
-      \brief
+     \brief
       readv() attempts to read up to len bytes from the interface
       into the buffer starting at buf.
       readv() is blocked till len bytes are readed or the given 
-	 timeout in milliseconds was reached.
-      \param buf starting address of the buffer
-      \param len count bytes, we want to read
-      \param timeout_in_ms in milliseconds. If you don't want any timeout,
-	 you give the wxTIMEOUT_INFINITY here. 
-	 But think of it: In this case, this function comes never 
-	 back, if there a not enough bytes to read.
-	 \return the number of data bytes successfully  read
+      timeout in milliseconds was reached.
+     \param buf starting address of the buffer
+     \param len count bytes, we want to read
+     \param timeout_in_ms in milliseconds. If you don't want any timeout,
+     you give the wxTIMEOUT_INFINITY here. 
+     But think of it: In this case, this function comes never 
+     back, if there a not enough bytes to read.
+     \return the number of data bytes successfully  read
     */
-    int Readv(char* buf,size_t len,unsigned int timeout_in_ms);
+    int Readv(char *buf, size_t len, unsigned int timeout_in_ms);
 
     /*!
-      \brief
+     \brief
       readv() attempts to read up to len bytes from the interface
       into the buffer starting at buf.
       readv() is blocked till len bytes are readed or the timeout_flag
       points on a int greater then zero.
-      \param buf starting adress of the buffer
-      \param len count bytes, we want to read
-      \param timeout_flag a pointer to an integer. If you don't want
-	 any timeout, you given a null pointer here.
-	 But think of it: In this case, this function comes never
-	 back, if there a not enough bytes to read.
-	 \param nice if true go to sleep for one ms (reduce CPU last),
-	 if there is no byte available (default is false)
+     \param buf starting adress of the buffer
+     \param len count bytes, we want to read
+     \param timeout_flag a pointer to an integer. If you don't want
+     any timeout, you given a null pointer here.
+     But think of it: In this case, this function comes never
+     back, if there a not enough bytes to read.
+     \param nice if true go to sleep for one ms (reduce CPU last),
+     if there is no byte available (default is false)
     */
-    int Readv(char* buf,size_t len,int* timeout_flag,bool nice=false);
+    int Readv(char *buf, size_t len, int *timeout_flag, bool nice = false);
     
     /*!
       Write writes up to len bytes from the buffer starting with buf
@@ -245,21 +251,21 @@ public:
       \return on success, the number of bytes written are returned 
       (zero indicates nothing was written).  On error, -1 is returned.
     */
-    virtual int Write(char* buf,size_t len) = 0;
+    virtual int Write(char *buf, size_t len) = 0;
 
     /*!
       Writev() writes up to len bytes to the interface from the buffer,
       starting at buf.
       Also Writev() blocks till all bytes are written or the given 
-	 timeout in milliseconds was reached.
+      timeout in milliseconds was reached.
       \param buf starting address of the buffer
       \param len count bytes, we want to write
       \param timeout_in_ms timeout in milliseconds. If you give 
-	 wxTIMEOUT_INFINITY here, the function blocks, till all data was
-	 written.
-	 \return the number of data bytes successfully written.
+     wxTIMEOUT_INFINITY here, the function blocks, till all data was
+     written.
+     \return the number of data bytes successfully written.
     */
-    int Writev(char* buf,size_t len,unsigned int timeout_in_ms);
+    int Writev(char *buf, size_t len, unsigned int timeout_in_ms);
 
     /*!
       Writev() writes up to len bytes to the interface from the buffer,
@@ -269,15 +275,13 @@ public:
       \param buf starting adress of the buffer
       \param len count bytes, we want to write
       \param timeout_flag a pointer to an integer. You also can give a null
-	 pointer here. This blocks, til all data is writen.
-	 \param nice if true go to sleep for one ms (reduce CPU last),
-	 if there is no byte available (default is false)
+     pointer here. This blocks, til all data is writen.
+     \param nice if true go to sleep for one ms (reduce CPU last),
+     if there is no byte available (default is false)
     */
-    int Writev(char* buf,size_t len,int* timeout_flag,bool nice = false);
+    int Writev(char *buf, size_t len, int *timeout_flag, bool nice = false);
 
 };
 
 #endif
-
-
 

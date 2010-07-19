@@ -59,16 +59,16 @@ protected:
     wxSerialPort_EINFO einfo;
     
     /*!
-	 \brief The win32 API doesn't have any function to detect the
-	 current state of the output lines RST and DTR (if someone knows
-	 some function, please contact me).
-	 So we save the state always after changing one or both lines
-	 (for example, on Open, SetLineState and ChangeLineState)
+     \brief The win32 API doesn't have any function to detect the
+     current state of the output lines RST and DTR (if someone knows
+     some function, please contact me).
+     So we save the state always after changing one or both lines
+     (for example, on Open, SetLineState and ChangeLineState)
     */
     int m_rtsdtr_state;
 
     int CloseDevice();
-    int OpenDevice(const char* devname, void* dcs);
+    int OpenDevice(const char *devname, void *dcs);
 public:
     wxSerialPort();
     ~wxSerialPort();
@@ -76,13 +76,13 @@ public:
     int ChangeLineState(wxSerialLineState flags);
     int ClrLineState(wxSerialLineState flags);
     int GetLineState();
-    int Ioctl(int cmd,void* args);
+    int Ioctl(int cmd, void *args);
     int IsOpen();
-    int Read(char* buf,size_t len);
+    int Read(char *buf, size_t len);
     int SendBreak(int duration);
     int SetBaudRate(wxBaud baudrate);
     int SetLineState(wxSerialLineState flags);
-    int Write(char* buf,size_t len);
+    int Write(char *buf, size_t len);
 };
 #elif defined (__WXGTK__)
 
@@ -136,7 +136,7 @@ protected:
     speed_t AdaptBaudrate(wxBaud baud);
     
     int CloseDevice();
-    int OpenDevice(const char* devname, void* dcs);
+    int OpenDevice(const char *devname, void *dcs);
 public:
     wxSerialPort();
     ~wxSerialPort();
@@ -144,13 +144,13 @@ public:
     int ChangeLineState(wxSerialLineState flags);
     int ClrLineState(wxSerialLineState flags);
     int GetLineState();
-    int Ioctl(int cmd,void* args);
+    int Ioctl(int cmd, void *args);
     int IsOpen();
-    int Read(char* buf,size_t len);
+    int Read(char *buf, size_t len);
     int SendBreak(int duration);
     int SetBaudRate(wxBaud baudrate);
     int SetLineState(wxSerialLineState flags);
-    int Write(char* buf,size_t len);
+    int Write(char *buf, size_t len);
 };
 
 #endif

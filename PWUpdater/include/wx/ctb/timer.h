@@ -35,7 +35,7 @@ struct timer_control
       covers the adress of the exit function. NULL, if
       there was no exit function.
     */
-    void* (*exitfnc)(void*);
+    void *(*exitfnc)(void *);
 };
 
 /*!
@@ -99,7 +99,7 @@ public:
       \param exitfnc A function, which was called after msec.
       If you don't want this, refer a NULL pointer.
     */
-    timer(unsigned int msec,int* exitflag,void*(*exitfnc)(void*));
+    timer(unsigned int msec, int *exitflag, void *(*exitfnc)(void *));
     /*!
       the destructor. If his was called (for example by leaving the
       valid range of the timer object), the timer thread automaticaly
@@ -155,7 +155,7 @@ struct timer_control
       covers the adress of the exit function. NULL, if
       there was no exit function.
     */
-    void* (*exitfnc)(void*);
+    void *(*exitfnc)(void *);
 };
 
 /*!
@@ -224,7 +224,7 @@ public:
       \param exitfnc A function, which was called after msec.
       If you don't want this, refer a NULL pointer.
     */
-    timer(unsigned int msec,int* exitflag,void*(*exitfnc)(void*));
+    timer(unsigned int msec, int *exitflag, void *(*exitfnc)(void *));
     /*!
       the destructor. If his was called (for example by leaving the
       valid range of the timer object), the timer thread automaticaly
