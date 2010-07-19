@@ -361,7 +361,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"GCC"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"GCC"</string>
           <string name="Build mode">"Debug"</string>
@@ -369,7 +369,7 @@
           <string name="Shared mode">"Static"</string>
           <string name="Modularity">"Modular"</string>
           <string name="GUI mode">"GUI"</string>
-          <string name="Toolkit">"wxMSW"</string>
+          <string name="Toolkit">"wxGTK+2"</string>
           <string name="Processor type">"Default"</string>
           <string name="Runtime linking">"Dynamic"</string>
           <string name="Use exceptions">"Yes"</string>
@@ -438,7 +438,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"GCC"</string>
-          <bool name="dirty">1</bool>
+          <bool name="dirty">0</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"GCC"</string>
           <string name="Build mode">"Release"</string>
@@ -446,7 +446,7 @@
           <string name="Shared mode">"Static"</string>
           <string name="Modularity">"Modular"</string>
           <string name="GUI mode">"GUI"</string>
-          <string name="Toolkit">"wxMSW"</string>
+          <string name="Toolkit">"wxGTK+2"</string>
           <string name="Processor type">"Default"</string>
           <string name="Runtime linking">"Dynamic"</string>
           <string name="Use exceptions">"Yes"</string>
