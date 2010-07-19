@@ -53,6 +53,10 @@ public:
     RockeyThread *m_pRockeyThread;
     wxCriticalSection m_rockeyCS;
 
+    /* key info */
+    wxString m_user;
+    wxString m_contact;
+
     /* Application options */
     AppOptions *m_pOpt;
     bool m_keyFound;
@@ -112,6 +116,7 @@ private:
     void OnClose(wxCloseEvent &event);
     void OnQuit(wxCommandEvent &event);
     void OnPref(wxCommandEvent &event);
+    void OnAbout(wxCommandEvent &event);
     void OnRockey(wxThreadEvent &event);
 
     /* data members */

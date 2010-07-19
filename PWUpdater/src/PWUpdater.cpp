@@ -16,6 +16,7 @@
 #include <wx/iconbndl.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
+#include <wx/aboutdlg.h>
 #include "PWUpdater.h"
 #include "TftpdThread.h"
 #include "RockeyThread.h"
@@ -23,6 +24,7 @@
 #include "LogPane.h"
 #include "PreferenceDlg.h"
 #include "WidgetsId.h"
+#include "Version.h"
 
 #include "xpm/ruby_16.xpm"
 #include "xpm/ruby_32.xpm"
@@ -281,6 +283,7 @@ BEGIN_EVENT_TABLE(PWUpdaterFrame, wxFrame)
     EVT_CLOSE(PWUpdaterFrame::OnClose)
     EVT_MENU(wxID_EXIT, PWUpdaterFrame::OnQuit)
     EVT_MENU(wxID_PREFERENCES, PWUpdaterFrame::OnPref)
+    EVT_MENU(wxID_ABOUT, PWUpdaterFrame::OnAbout)
     EVT_THREAD(ID_THREAD_ROCKEY, PWUpdaterFrame::OnRockey)
 END_EVENT_TABLE()
 
@@ -331,10 +334,13 @@ void PWUpdaterFrame::CreateControls()
     file_menu->Append(wxID_EXIT, _("&Quit"), _("Quit this program."));
     wxMenu *view_menu = new wxMenu;
     view_menu->Append(wxID_PREFERENCES, _("&Preferences"), _("Modify user configuration."));
+    wxMenu *help_menu = new wxMenu;
+    help_menu->Append(wxID_ABOUT, _("&About"), _("About this program."));
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(file_menu, _("&File"));
     menuBar->Append(view_menu, _("&View"));
+    menuBar->Append(help_menu, _("&Help"));
     SetMenuBar(menuBar);
 
     /* tool bar */
@@ -487,6 +493,42 @@ void PWUpdaterFrame::OnPref(wxCommandEvent &WXUNUSED(event))
     dlg.ShowModal();
 }
 
+void PWUpdaterFrame::OnAbout(wxCommandEvent &WXUNUSED(event))
+{
+    wxAboutDialogInfo info;
+    wxString copyright, description, version, longVersion;
+    wxString &user = wxGetApp().m_user;
+    wxString &contact = wxGetApp().m_contact;
+
+    copyright
+        << _("Copyright 2010 (c), Delta Electronics, Inc. All Rights Reserved.");
+    description
+        << _("This program is able to upgrade the firmware and/or bootloader\n")
+        << _("into flash memory chips for the Pixelworks Ruby platform.\n")
+        << wxT("\n") << _("Operator: ");
+    if (!user.empty() || !contact.empty())
+        description << user;
+    else
+    {
+        description 
+            << _("anonymous") << wxT("\n\n")
+            << _("No valid USB dongle inserted, the following features are disabled\n")
+            << _("1. Manage flash layout setting\n")
+            << _("2. Upgrade bootloader\n");
+    }
+    version
+        << VER_MAJOR_STRING << "." << VER_MINOR_STRING << "." << VER_RELEASE_STRING;
+    longVersion = version + "." + VER_BUILD_STRING;
+
+    info.SetDescription(description);
+    info.SetCopyright(copyright);
+    info.SetIcon(wxIcon(ruby_48_xpm));
+    info.SetName(wxT("PWUpdater"));
+    info.SetVersion(version, longVersion);
+
+    wxAboutBox(info, this);
+}
+
 void PWUpdaterFrame::OnRockey(wxThreadEvent &event)
 {
     DownloadPane *pDownloadPane = wxDynamicCast(FindWindow(myID_PANE_DOWNLOAD), DownloadPane);
@@ -512,9 +554,17 @@ void PWUpdaterFrame::OnRockey(wxThreadEvent &event)
 
     /* update global flag in frame */
     if (evt == ROCKEY_EVENT_KEY_INSERTED)
+    {
         wxGetApp().m_keyFound = true;
+        wxGetApp().m_user = msg.GetUser();
+        wxGetApp().m_contact = msg.GetContact();
+    }
     else if (evt == ROCKEY_EVENT_KEY_REMOVED)
+    {
         wxGetApp().m_keyFound = false;
+        wxGetApp().m_user = wxEmptyString;
+        wxGetApp().m_contact = msg.GetContact();
+    }
 
     /* key state changed, need to rescan download files */
     if (pDownloadPane) pDownloadPane->RescanImageFiles();

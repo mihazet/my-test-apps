@@ -28,12 +28,30 @@ class RockeyMessage
 {
 public:
     // default ctor is required by wx internal storage, wxAny...
-    RockeyMessage() { _event = ROCKEY_EVENT_INVALID; }
-    RockeyMessage(int event) { _event = event; }
+    RockeyMessage() 
+    { 
+        _event = ROCKEY_EVENT_INVALID;
+        _user = _contact = wxEmptyString;
+    }
+    RockeyMessage(int event,
+        const wxString &user = wxEmptyString,
+        const wxString &contact = wxEmptyString)
+    { 
+        _event = event; 
+        _user = user;
+        _contact = contact;
+    }
     int GetEvent() { return _event; }
-    void SetEvent(int event) { _event = event; };
+    void SetEvent(int event) { _event = event; }
+    wxString GetUser() { return _user; }
+    void SetUser(const wxString &user) { _user = user; }
+    wxString GetContact() { return _contact; }
+    void SetContact(const wxString &contact) { _contact = contact; }
+
 private:
     int _event;
+    wxString _user;
+    wxString _contact;
 };
 
 //
@@ -47,6 +65,8 @@ public:
 
 private:
     virtual wxThread::ExitCode Entry();
+    void PostInsertedEvent(const wxString &user, const wxString &contact);
+    void PostRemovedEvent();
 
     wxEvtHandler *_pHandler;
     int _threadEventId;
