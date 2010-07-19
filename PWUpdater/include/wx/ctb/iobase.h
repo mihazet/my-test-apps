@@ -130,7 +130,7 @@ public:
       \param args typeless parameter pointer for the command above.
       \return zero on success, or -1 if an error occurred.
     */    
-    virtual int Ioctl(int cmd,void* args) {return -1;};
+    virtual int Ioctl(int , void *) { return -1; }
 
     /*!
 	 Returns the current state of the device.
