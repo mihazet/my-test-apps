@@ -3,6 +3,7 @@
 
 #include <wx/wx.h>
 #include <wx/socket.h>
+#include <wx/ctb/serport.h>
 
 class DownloadPane : public wxPanel
 {
@@ -34,6 +35,7 @@ private:
         const wxString &root = wxEmptyString);
     void DoStopTftpServerThread();
     void DoSearchLocalImageFiles();
+    void DoSearchFreeSerialPort();
 
     // event handlers
     void OnButtonStartTftp(wxCommandEvent &event);
@@ -41,6 +43,7 @@ private:
     void OnThreadTftpd(wxThreadEvent &event);
 
     // data member
+    wxVector<int> _freePort;
 
     DECLARE_EVENT_TABLE()
 };

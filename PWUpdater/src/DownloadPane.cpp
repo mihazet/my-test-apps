@@ -7,6 +7,9 @@
 #include <wx/renderer.h>
 #include <wx/tokenzr.h>
 #include <wx/filename.h>
+#ifdef __WXGTK__
+#include <glob.h>
+#endif
 #include "PWUpdater.h"
 #include "DownloadPane.h"
 #include "WidgetsId.h"
@@ -232,6 +235,7 @@ DownloadPane::~DownloadPane()
 
 void DownloadPane::Init()
 {
+    _freePort.clear();
 }
 
 bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
@@ -488,6 +492,52 @@ void DownloadPane::DoSearchLocalImageFiles()
             }
         }
     }
+}
+
+void DownloadPane::DoSearchFreeSerialPort()
+{
+    char port[16];
+    wxSerialPort com;
+    int id;
+
+#if defined (__WXMSW__)
+    for (id = 0; id < 100; id++)
+    {
+        COMMCONFIG cc;
+        DWORD dwSize = sizeof(cc);
+        if (id < 10)
+            sprintf(&port[0], "com%d", id);
+        else
+            sprintf(&port[0], "\\\\.\\com%d", id);
+
+        if (::GetDefaultCommConfigA(port, &cc, &dwSize))
+        {
+            if (cc.dwProviderSubType == PST_RS232)
+            {
+                if (com.Open(port) < 0)
+                    continue;
+                _freePort.push_back(id);
+            }
+        }
+    }
+#elif defined (__WXGTK__)
+
+    glob_t globbuf;
+
+    // search standard serial port
+    strcpy(&port[0], "/dev/ttyS*");
+    if (0 == glob(port, GLOB_ERR, NULL, &globbuf))
+    {
+        // no error, glob was successful
+        for (id = 0; id < globbuf.gl_pathc; id++)
+        {
+            if (com.Open(globbuf.gl_pathv[id]) < 0)
+                continue;
+            _freePort.push_back(id);
+        }
+    }
+    globfree(&globbuf);
+#endif
 }
 
 //
