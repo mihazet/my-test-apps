@@ -224,21 +224,21 @@ int wxSerialPort::OpenDevice(const char *devname, void *dcs)
 
     m_rtsdtr_state = wxSERIAL_LINESTATE_NULL;
 
-    // Specifies whether the CTS (clear-to-send) signal is monitored 
+    // Specifies whether the CTS (clear-to-send) signal is monitored
     // for output flow control. If this member is TRUE and CTS is turned
     // off, output is suspended until CTS is sent again.
     dcb.fOutxCtsFlow = m_dcs.rtscts;
 
-    // Specifies the DTR (data-terminal-ready) flow control. 
+    // Specifies the DTR (data-terminal-ready) flow control.
     // This member can be one of the following values:
-    // DTR_CONTROL_DISABLE   Disables the DTR line when the device is 
-    //                       opened and leaves it disabled. 
-    // DTR_CONTROL_ENABLE    Enables the DTR line when the device is 
-    //                       opened and leaves it on. 
-    // DTR_CONTROL_HANDSHAKE Enables DTR handshaking. If handshaking is 
+    // DTR_CONTROL_DISABLE   Disables the DTR line when the device is
+    //                       opened and leaves it disabled.
+    // DTR_CONTROL_ENABLE    Enables the DTR line when the device is
+    //                       opened and leaves it on.
+    // DTR_CONTROL_HANDSHAKE Enables DTR handshaking. If handshaking is
     //                       enabled, it is an error for the application
-    //                       to adjust the line by using the 
-    //                       EscapeCommFunction function.  
+    //                       to adjust the line by using the
+    //                       EscapeCommFunction function.
     dcb.fDtrControl = DTR_CONTROL_ENABLE;
     m_rtsdtr_state |= wxSERIAL_LINESTATE_DTR;
     // Specifies the RTS flow control. If this value is zero, the
@@ -256,7 +256,7 @@ int wxSerialPort::OpenDevice(const char *devname, void *dcs)
     //                       full. If handshaking is enabled, it is an
     //                       error for the application to adjust the
     //                       line by using the EscapeCommFunction function.
-    // RTS_CONTROL_TOGGLE    Specifies that the RTS line will be high if 
+    // RTS_CONTROL_TOGGLE    Specifies that the RTS line will be high if
     //                       bytes are available for transmission. After
     //                       all buffered bytes have been send, the RTS
     //                       line will be low.
@@ -304,7 +304,7 @@ int wxSerialPort::OpenDevice(const char *devname, void *dcs)
     // we need a event object, which inform us about the
     // end of an operation (here reading device)
     m_ov.hEvent = CreateEvent(NULL, // LPSECURITY_ATTRIBUTES lpsa
-        TRUE,                       // BOOL fManualReset 
+        TRUE,                       // BOOL fManualReset
         TRUE,                       // BOOL fInitialState
         NULL);                      // LPTSTR lpszEventName
     if (m_ov.hEvent == INVALID_HANDLE_VALUE)
@@ -323,7 +323,7 @@ int wxSerialPort::OpenDevice(const char *devname, void *dcs)
         return -5;
 
     // for a better performance with win95/98 I increased the internal
-    // buffer to wxSERIALPORT_BUFSIZE (normal size is 1024, but this can 
+    // buffer to wxSERIALPORT_BUFSIZE (normal size is 1024, but this can
     // be a little bit to small, if you use a higher baudrate like 115200)
     if (!SetupComm(fd, wxSERIALPORT_BUFSIZE, wxSERIALPORT_BUFSIZE))
         return -6;
@@ -530,7 +530,7 @@ int wxSerialPort::CloseDevice()
     int err = 0;
     // only close an open file handle
     if (fd < 0) return EBADF;
-    // With some systems, it is recommended to flush the serial port's 
+    // With some systems, it is recommended to flush the serial port's
     // Output before closing it, in order to avoid a possible hang of
     // the process...
     // Thanks to Germain (I couldn't answer you, because your email
@@ -657,9 +657,9 @@ int wxSerialPort::OpenDevice(const char *devname, void *dcs)
         cfsetispeed(&t, AdaptBaudrate(m_dcs.baud));
         cfsetospeed(&t, AdaptBaudrate(m_dcs.baud));
         // parity settings
-        if (m_dcs.parity == wxPARITY_NONE) 
+        if (m_dcs.parity == wxPARITY_NONE)
             t.c_cflag &= ~PARENB;
-        else 
+        else
         {
             t.c_cflag |= PARENB;
             if (m_dcs.parity == wxPARITY_ODD)
@@ -725,8 +725,8 @@ int wxSerialPort::Read(char *buf, size_t len)
     {
         return m_fifo->read(buf, len);
     }
-    // Read() (using read() ) will return an 'error' EAGAIN as it is 
-    // set to non-blocking. This is not a true error within the 
+    // Read() (using read() ) will return an 'error' EAGAIN as it is
+    // set to non-blocking. This is not a true error within the
     // functionality of Read, and thus should be handled by the caller.
     int n = read(fd, buf, len);
     if ((n < 0) && (errno == EAGAIN)) return 0;
@@ -764,12 +764,12 @@ int wxSerialPort::SetLineState(wxSerialLineState flags)
 
 int wxSerialPort::Write(char *buf, size_t len)
 {
-    // Write() (using write() ) will return an 'error' EAGAIN as it is 
-    // set to non-blocking. This is not a true error within the 
+    // Write() (using write() ) will return an 'error' EAGAIN as it is
+    // set to non-blocking. This is not a true error within the
     // functionality of Write, and thus should be handled by the caller.
     int n = write(fd, buf, len);
     if ((n < 0) && (errno == EAGAIN)) return 0;
     return n;
 };
 
-#endif 
+#endif

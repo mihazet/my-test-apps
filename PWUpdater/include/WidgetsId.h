@@ -6,7 +6,7 @@
 enum
 {
     myID_DUMMY = wxID_HIGHEST + 1,
-    
+
     /* frame */
     myID_FRAME,
 
@@ -58,4 +58,3 @@ enum
 
 #endif /* _WIDGETS_ID_H_ */
 
-    

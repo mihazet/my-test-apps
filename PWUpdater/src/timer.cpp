@@ -14,17 +14,17 @@
 
 #ifdef WIN32
 #include <windows.h>
-# ifndef DWORD_PTR 
+# ifndef DWORD_PTR
 #  define DWORD_PTR DWORD*
 # endif
 #endif
 
 #include "wx/ctb/timer.h"
 
-static void WINAPI timer_fnc(UINT /*uTimerID*/, 
-                             UINT /*uMsg*/, 
+static void WINAPI timer_fnc(UINT /*uTimerID*/,
+                             UINT /*uMsg*/,
                              DWORD_PTR dwUser,
-                             DWORD_PTR /*dw1*/, 
+                             DWORD_PTR /*dw1*/,
                              DWORD_PTR /*dw2*/)
 {
     timer_control *tc = (timer_control *)dwUser;
@@ -102,7 +102,7 @@ static void *timer_fnc(void *arg)
     pthread_cleanup_push(timer_exit, NULL);
     timer_control *tc = (timer_control *)arg;
     // linux allows a real sleep, means the timer thread will
-    // be sleeping (no reduce of the system performance) 
+    // be sleeping (no reduce of the system performance)
     usleep(tc->usecs);
     // time is over, system reawake the thread.
     // if there is an exit function, calling it

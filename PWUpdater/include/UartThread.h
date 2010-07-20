@@ -27,13 +27,13 @@ class UartMessage
 {
 public:
     // default ctor is required by wx internal storage, wxAny...
-    UartMessage() 
-    { 
+    UartMessage()
+    {
         _event = UART_EVENT_INVALID;
     }
     UartMessage(int event)
-    { 
-        _event = event; 
+    {
+        _event = event;
     }
     int GetEvent() { return _event; }
     void SetEvent(int event) { _event = event; }

@@ -120,7 +120,7 @@ void PrefDlg::AddUiPage()
     wxStaticBoxSizer *memSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Memory"));
     memSizer->Add(new wxCheckBox(uiPage, myID_PREF_UI_LAYOUT_MEMORY, _("Remember application layout.")), 0, wxALL, 5);
     memSizer->Add(new wxCheckBox(uiPage, myID_PREF_UI_POS_SIZE_MEMORY, _("Remember application size and position.")), 0, wxALL, 5);
-    
+
     wxBoxSizer *uiSizer = new wxBoxSizer(wxVERTICAL);
     uiSizer->Add(langSizer, 0, wxALL | wxEXPAND, 5);
     uiSizer->Add(memSizer, 0, wxALL | wxEXPAND, 5);
@@ -163,7 +163,7 @@ void PrefDlg::AddTftpPage()
     pos.SetRow(pos.GetRow() + 1);
     wxDirPickerCtrl *dirPicker = new wxDirPickerCtrl(tftpPage, myID_PREF_TFTP_ROOTPATH, wxEmptyString, wxDirSelectorPromptStr, wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE & ~wxDIRP_DIR_MUST_EXIST);
     toolTip.clear();
-    toolTip 
+    toolTip
         << _("If you assign a directory here, it will be treat as the root path for the internal tftp server. ")
         << _("If you leave this setting blank, the current working directory will be treat as the root path. ")
         << _("The current working directory is: ") << wxGetCwd();

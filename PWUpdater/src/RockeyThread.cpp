@@ -93,7 +93,7 @@ wxThread::ExitCode RockeyThread::Entry()
                 PostRemovedEvent();
                 keyInserted = false;
             }
-            
+
             u16Result = ROCKEY(RY_FIND, &u16Handle, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
             if (u16Result == ERR_SUCCESS)
                 _state = ROCKEY_STATE_FOUND;

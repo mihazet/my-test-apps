@@ -121,9 +121,9 @@ bool AppOptions::GetOption(const wxString &option, wxString &value)
     wxString sqlQuery;
     bool result = false;
 
-    sqlQuery 
+    sqlQuery
         << wxT("SELECT OptionValue FROM AppOptions WHERE OptionName = '")
-        << option 
+        << option
         << wxT("'");
     set = _db->ExecuteQuery(sqlQuery);
     if (set.NextRow())
@@ -149,7 +149,7 @@ wxString AppOptions::GetOption(const wxString &option)
 long AppOptions::GetOption(const wxString &option, long *value)
 {
     long result = 0;
-    
+
     GetOption(option).ToLong(&result);
     if (value)
         *value = result;

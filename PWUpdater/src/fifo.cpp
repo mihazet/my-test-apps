@@ -74,7 +74,7 @@ int fifo::put(char ch)
     // for a thread safe operation, the write of a data byte must be
     // atomic. So we first assign the current position of the write
     // pointer to a temporary pointer.
-    // Increment it for the comparison with the end of the internal 
+    // Increment it for the comparison with the end of the internal
     // buffer and the read pointer
     char *tmp_wrptr = m_wrptr + 1;
     if (tmp_wrptr >= m_end)
@@ -92,7 +92,7 @@ int fifo::put(char ch)
     m_wrptr = tmp_wrptr;
     return 1;
 };
-    
+
 int fifo::read(char *data, int n)
 {
     int nresult = 0;

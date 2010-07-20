@@ -1,9 +1,9 @@
-// High order characters 
+// High order characters
 #ifndef _ROCKEY4_ND_32_
 #define _ROCKEY4_ND_32_
 //function id
 /* Basic format :
-(1) Search locks 
+(1) Search locks
     input parameters:
     function = 0
     *p1 = pass1
@@ -70,8 +70,8 @@
     *handle = lock handle
     return:
     *p1,*p2,*p3,*p4 = random number
-     0 :success, others:error code	
-    
+     0 :success, others:error code
+
 (8) seeds code
     function = 7
     *handle = lock handle
@@ -106,13 +106,13 @@
      return:
      0 :success, others:error code
 
-(12) Check the validity of modules 
+(12) Check the validity of modules
      function = 11
      *handle = lock handle
      *p1 = module number
      return:
      *p2 = 1 this module effective
-     *p3 = 1 this module can be reduced 
+     *p3 = 1 this module can be reduced
      0 :success, others:error code
 
 (13) write algorithm [*]
@@ -122,7 +122,7 @@
      buffer = algorithm directive string
      return:
      0 :success, others:error code
-     
+
 (14) compute 1(module characters, high ID , low ID , random number)
      function = 13
      *handle = lock handle
@@ -173,7 +173,7 @@
      return:
      0 :success, others:error code
 
-(17) Decreasing 
+(17) Decreasing
      function = 16
      *handle = lock handle
      *p1 = module number
@@ -190,16 +190,16 @@
 #define  RY_SEED                        8		//produce seeds code
 #define  RY_WRITE_USERID				9		//write user's ID
 #define  RY_READ_USERID					10		//read user's ID
-#define  RY_SET_MODULE					11		//set module characters 
+#define  RY_SET_MODULE					11		//set module characters
 #define  RY_CHECK_MODULE				12		//check module state
-#define  RY_WRITE_ARITHMETIC            13		//write algorithm 
+#define  RY_WRITE_ARITHMETIC            13		//write algorithm
 #define  RY_CALCULATE1					14		//compute 1
 #define  RY_CALCULATE2					15		//compute 2
 #define  RY_CALCULATE3					16		//compute 3
 #define  RY_DECREASE					17		//decreasing module unit
 
 // error code
-#define ERR_SUCCESS				0 //correct 
+#define ERR_SUCCESS				0 //correct
 #define ERR_NO_ROCKEY			3 // no ROCKEY
 #define ERR_INVALID_PASSWORD	4 //ROCKEY is exist,but the basic password is wrong.
 #define ERR_INVALID_PASSWORD_OR_ID	5 //wrong password or hardware ID
@@ -214,7 +214,7 @@
 #define ERR_CALCULATE			14 //computing error
 #define ERR_NO_OPEN				15 //don't open lock before operation
 #define ERR_OPEN_OVERFLOW		16 //open too many locks(>16)
-#define ERR_NOMORE				17 // search locks no more 
+#define ERR_NOMORE				17 // search locks no more
 #define ERR_NEED_FIND			18 // no find,use findnext
 #define ERR_DECREASE			19 //decreasing error
 #define ERR_AR_BADCOMMAND		20 //algorithm command error

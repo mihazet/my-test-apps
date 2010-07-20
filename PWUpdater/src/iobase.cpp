@@ -12,7 +12,7 @@
 #include "wx/ctb/iobase.h"
 #include "wx/ctb/timer.h"
 
-#define DELTA_BUFSIZE 512 
+#define DELTA_BUFSIZE 512
 
 int wxIOBase::Readv(char *buf, size_t len, unsigned int timeout_in_ms)
 {
@@ -140,7 +140,7 @@ int wxIOBase::ReadUntilEOS(char *&readbuf,
             // This doesn't work right and is only a little workaround
             // because the received eos chars are lost
             PutBack(ch);
-            // because we doesn't match the eos string, we must 'reset' 
+            // because we doesn't match the eos string, we must 'reset'
             // the eos match
             eos = eosString;
             continue;

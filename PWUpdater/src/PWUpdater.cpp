@@ -69,8 +69,8 @@ void PWUpdaterApp::Init()
 
     m_rockeyCS.Enter();
     m_pRockeyThread = NULL;
-    m_rockeyCS.Leave();   
-    
+    m_rockeyCS.Leave();
+
     m_uartCS.Enter();
     m_pUartThread = NULL;
     m_uartCS.Leave();
@@ -98,8 +98,8 @@ bool PWUpdaterApp::OnInit()
         return false;
     }
 
-    /* 
-       use default (the first) active interface when 
+    /*
+       use default (the first) active interface when
        (1) database is new created, or
        (2) interface store in database doesn't exist now
      */
@@ -244,7 +244,7 @@ bool PWUpdaterApp::DetectNetAdapter()
 
         /* name */
         name = wxString(ifr->ifr_name, *wxConvCurrent);
-        
+
         if (!name.Cmp(wxT("lo")))
             continue;
 
@@ -444,7 +444,7 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
     if (pRockey)
         pRockey->Delete();
     cs3.Leave();
-    
+
     /* delete uart thread if it is still running... */
     cs4.Enter();
     if (pUart)
@@ -484,7 +484,7 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
                 rockeyTerminated = true;
             cs3.Leave();
         }
-        
+
         if (!uartTerminated)
         {
             cs4.Enter();
@@ -493,7 +493,7 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
             cs4.Leave();
         }
 
-        if (serverTerminated && allTransmissionTerminated 
+        if (serverTerminated && allTransmissionTerminated
             && rockeyTerminated && uartTerminated)
             break;
 
@@ -533,7 +533,7 @@ void PWUpdaterFrame::OnAbout(wxCommandEvent &WXUNUSED(event))
         description << user;
     else
     {
-        description 
+        description
             << _("anonymous") << wxT("\n\n")
             << _("No valid USB dongle inserted, the following features are disabled\n")
             << _("1. Manage flash layout setting\n")

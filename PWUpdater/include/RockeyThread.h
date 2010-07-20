@@ -28,16 +28,16 @@ class RockeyMessage
 {
 public:
     // default ctor is required by wx internal storage, wxAny...
-    RockeyMessage() 
-    { 
+    RockeyMessage()
+    {
         _event = ROCKEY_EVENT_INVALID;
         _user = _contact = wxEmptyString;
     }
     RockeyMessage(int event,
         const wxString &user = wxEmptyString,
         const wxString &contact = wxEmptyString)
-    { 
-        _event = event; 
+    {
+        _event = event;
         _user = user;
         _contact = contact;
     }

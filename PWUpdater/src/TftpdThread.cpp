@@ -167,7 +167,7 @@ wxThread::ExitCode TftpdServerThread::Entry()
     while (!TestDestroy())
     {
         /*
-         * When we read from a non-blocking socket and there is no data 
+         * When we read from a non-blocking socket and there is no data
          * available immediately, wxSOCKET_WOULDBLOCK will be retruned.
          * In MSW, it means WSAGetLastError() = WSAEWOULDBLOCK
          * (resource temporarily unavailable)
@@ -373,7 +373,7 @@ void TftpdServerThread::DoStartTransmissionThread(
     TftpdTransmissionThread *pTransmission;
     bool done = true;
     wxFileName rp = wxFileName::DirName(_rootPath);
-    wxString fullName 
+    wxString fullName
         = rp.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR) + file;
 
     cs.Enter();
@@ -457,7 +457,7 @@ TftpdTransmissionThread::TftpdTransmissionThread(wxEvtHandler *handler,
 TftpdTransmissionThread::~TftpdTransmissionThread()
 {
     wxCriticalSection &cs = wxGetApp().m_transmissionCS;
-    wxVector<TftpdTransmissionThread *> &transmissions 
+    wxVector<TftpdTransmissionThread *> &transmissions
         = wxGetApp().m_tftpdTransmissionThreads;
     wxVector<TftpdTransmissionThread *>::iterator it;
 
@@ -513,7 +513,7 @@ wxThread::ExitCode TftpdTransmissionThread::Entry()
                     txOk = DoSendOneBlockDataAndWaitAck(pTransferBuffer, size);
                     if (txOk)
                     {
-                        tftpEvent = last 
+                        tftpEvent = last
                             ? TFTPD_EVENT_READ_TRANSFER_DONE
                             : TFTPD_EVENT_READ_TRANSFER_UPDATE;
                         NotifyMainThread(tftpEvent, _file, _dataBlock, totalBlocks);
@@ -615,7 +615,7 @@ void TftpdTransmissionThread::DoSendOptAckAndWaitAckIfNeed(long fileLen)
 
     /* if any option is used, send back option ack */
     if (optBlkSize || optTimeout || optTSize)
-    {       
+    {
         memset(&txBuf[0], 0, sizeof(txBuf));
         txBuf[0] = (TFTP_OPCODE_OACK >> 8) & 0xFF;
         txBuf[1] = TFTP_OPCODE_OACK & 0xFF;
@@ -743,7 +743,7 @@ bool TftpdTransmissionThread::DoSendOneBlockDataAndWaitAck(void *data, long len)
     txBuf[3] = _dataBlock & 0xFF;
     if (len > 0)
         memcpy(&txBuf[4], data, len);
-    
+
     for (int sendCount = 0; true; sendCount++)
     {
         _udpTransmissionSocket->SendTo(_remote, txBuf, len + 4);
@@ -842,7 +842,7 @@ bool TftpdTransmissionThread::DoSendAckAndWaitOneBlockData(void *data, long *len
     txBuf[1] = TFTP_OPCODE_ACK & 0xFF;
     txBuf[2] = (_ackBlock >> 8) & 0xFF;
     txBuf[3] = _ackBlock & 0xFF;
-    
+
     for (int sendCount = 1; true; sendCount++)
     {
         _udpTransmissionSocket->SendTo(_remote, txBuf, 4);

@@ -292,7 +292,7 @@ void DownloadPane::CreateControls()
     downloadBtn->SetBitmap(wxBitmap(download_to_chip2_64_xpm));
     downloadBtn->SetBitmapDisabled(wxBitmap(wxImage(download_to_chip2_64_xpm).ConvertToGreyscale()));
     opSizer->Add(downloadBtn, 0, wxALL | wxEXPAND, 10);
-    
+
     paneSizer->Add(downloadSizer, 1, wxALL | wxEXPAND, 0);
 
     SetSizerAndFit(paneSizer);
@@ -341,7 +341,7 @@ void DownloadPane::DoStartTftpServerThread(const wxString &ipAddr,
     wxIPV4address local;
     wxCriticalSection &cs = wxGetApp().m_serverCS;
     TftpdServerThread *&pServer = wxGetApp().m_pTftpdServerThread;
-    
+
     /* assign preferred interface */
     if (ipAddr.empty())
         local.AnyAddress();
@@ -587,7 +587,7 @@ void DownloadPane::OnThreadTftpd(wxThreadEvent &event)
         {
             if (NULL != (bar = frame->GetStatusBar()))
             {
-                statusText = _("Internal TFTP") + 
+                statusText = _("Internal TFTP") +
                     wxString::Format(wxT(" [%d.%d.%d.%d] "),
                         (msg.GetNum1() >> 8) & 0xFF,
                         (msg.GetNum1() & 0xFF),

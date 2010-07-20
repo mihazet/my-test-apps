@@ -107,7 +107,7 @@ public:
         STATBAR_FLD_GENERAL,
         STATBAR_FLD_TFTP,
         STATBAR_FLD_COMPORT,
-        
+
         STATBAR_FLD_MAX
     };
 
@@ -116,7 +116,7 @@ private:
     void Init();
     void CreateControls();
     void StartRockeyThread();
-    
+
     /* event handler functions */
     void OnClose(wxCloseEvent &event);
     void OnQuit(wxCommandEvent &event);
