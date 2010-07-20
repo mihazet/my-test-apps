@@ -66,10 +66,11 @@ wxThread::ExitCode RockeyThread::Entry()
     unsigned short u16Handle, u16Result, u16Ignore;
     unsigned short u16BasicPW1, u16BasicPW2, u16AdvPW1, u16AdvPW2;
 #if defined (__WXMSW__)
-    unsigned long u32Ignore, u32HwId, u32UserDataLen;
+    unsigned long u32Ignore, u32HwId;
 #elif defined (__WXGTK__)
-    unsigned int u32Ignore, u32HwId, u32UserDataLen;
+    unsigned int u32Ignore, u32HwId;
 #endif
+    unsigned long u32UserDataLen;
     unsigned char buf[1024];
     unsigned short u16Pos, u16Len;
     wxString userData, user, contact, sn;
@@ -118,7 +119,7 @@ wxThread::ExitCode RockeyThread::Entry()
                 wxString lenStr;
                 lenStr = wxString::From8BitData((const char *)&buf[0], 3);
                 u32UserDataLen = 0;
-                lenStr.ToULong((unsigned long *)&u32UserDataLen);
+                lenStr.ToULong(&u32UserDataLen);
                 if (u32UserDataLen)
                     _state = ROCKEY_STATE_READ_USER_DATA;
                 else
