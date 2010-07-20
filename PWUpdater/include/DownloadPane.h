@@ -39,6 +39,7 @@ private:
 
     // event handlers
     void OnThreadTftpd(wxThreadEvent &event);
+    void OnButtonSerialPortRefresh(wxCommandEvent &event);
 
     // data member
     wxVector<int> _serialPort;

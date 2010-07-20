@@ -215,6 +215,7 @@ DownloadFileList::DownloadFileList(wxWindow *parent, wxWindowID id)
 
 BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_THREAD(myID_THREAD_TFTPD, DownloadPane::OnThreadTftpd)
+    EVT_BUTTON(myID_BTN_COMPORT_REFRESH, DownloadPane::OnButtonSerialPortRefresh)
 END_EVENT_TABLE()
 
 DownloadPane::DownloadPane()
@@ -636,3 +637,9 @@ void DownloadPane::OnThreadTftpd(wxThreadEvent &event)
         return;
     }
 }
+
+void DownloadPane::OnButtonSerialPortRefresh(wxCommandEvent &WXUNUSED(event))
+{
+    DoSearchFreeSerialPort(true);
+}
+
