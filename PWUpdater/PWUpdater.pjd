@@ -900,7 +900,7 @@
           </document>
         </document>
         <document>
-          <string name="title">"ctb"</string>
+          <string name="title">"Uart"</string>
           <string name="type">"html-folder-document"</string>
           <string name="filename">""</string>
           <string name="icon-name">"folder"</string>
@@ -909,6 +909,30 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="created">"19/7/2010"</string>
+          <document>
+            <string name="title">"UartThread.cpp"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"src/UartThread.cpp"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"20/7/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"UartThread.h"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"include/UartThread.h"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"20/7/2010"</string>
+            <string name="language">""</string>
+          </document>
           <document>
             <string name="title">"fifo.cpp"</string>
             <string name="type">"source-editor-document"</string>

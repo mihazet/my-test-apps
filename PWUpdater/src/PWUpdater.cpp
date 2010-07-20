@@ -20,6 +20,7 @@
 #include "PWUpdater.h"
 #include "TftpdThread.h"
 #include "RockeyThread.h"
+#include "UartThread.h"
 #include "DownloadPane.h"
 #include "LogPane.h"
 #include "PreferenceDlg.h"
@@ -69,6 +70,10 @@ void PWUpdaterApp::Init()
     m_rockeyCS.Enter();
     m_pRockeyThread = NULL;
     m_rockeyCS.Leave();   
+    
+    m_uartCS.Enter();
+    m_pUartThread = NULL;
+    m_uartCS.Leave();
 }
 
 void PWUpdaterApp::Term()
@@ -412,9 +417,12 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
     wxVector<TftpdTransmissionThread *>::iterator it;
     wxCriticalSection &cs3 = wxGetApp().m_rockeyCS;
     RockeyThread *&pRockey = wxGetApp().m_pRockeyThread;
+    wxCriticalSection &cs4 = wxGetApp().m_uartCS;
+    UartThread *&pUart = wxGetApp().m_pUartThread;
     bool serverTerminated = false;
     bool allTransmissionTerminated = false;
     bool rockeyTerminated = false;
+    bool uartTerminated = false;
 
     /* delete tftp server thread if it is still running... */
     cs.Enter();
@@ -436,6 +444,12 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
     if (pRockey)
         pRockey->Delete();
     cs3.Leave();
+    
+    /* delete uart thread if it is still running... */
+    cs4.Enter();
+    if (pUart)
+        pUart->Delete();
+    cs4.Leave();
 
     /* make sure tftp server and transmissions terminated. */
     while (true)
@@ -470,8 +484,17 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
                 rockeyTerminated = true;
             cs3.Leave();
         }
+        
+        if (!uartTerminated)
+        {
+            cs4.Enter();
+            if (!pUart)
+                uartTerminated = true;
+            cs4.Leave();
+        }
 
-        if (serverTerminated && allTransmissionTerminated && rockeyTerminated)
+        if (serverTerminated && allTransmissionTerminated 
+            && rockeyTerminated && uartTerminated)
             break;
 
         /* give the tftp server a chance to terminated. */

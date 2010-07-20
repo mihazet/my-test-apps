@@ -31,6 +31,7 @@
 class TftpdServerThread;
 class TftpdTransmissionThread;
 class RockeyThread;
+class UartThread;
 
 // ========================================================================
 // Application class
@@ -52,6 +53,10 @@ public:
     /* rockey thread management */
     RockeyThread *m_pRockeyThread;
     wxCriticalSection m_rockeyCS;
+
+    /* uart thread management */
+    UartThread *m_pUartThread;
+    wxCriticalSection m_uartCS;
 
     /* key info */
     wxString m_user;
