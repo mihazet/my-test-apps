@@ -541,7 +541,7 @@ int DownloadPane::DoSearchFreeSerialPort(bool update)
         {
             if (com.Open(globbuf.gl_pathv[id]) < 0)
                 continue;
-            _freePort.push_back(id);
+            _serialPort.push_back(id);
             com.Close();
         }
     }
