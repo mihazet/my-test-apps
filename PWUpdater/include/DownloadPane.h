@@ -38,8 +38,6 @@ private:
     int DoSearchFreeSerialPort(bool update = true);
 
     // event handlers
-    void OnButtonStartTftp(wxCommandEvent &event);
-    void OnButtonStopTftp(wxCommandEvent &event);
     void OnThreadTftpd(wxThreadEvent &event);
 
     // data member
