@@ -125,7 +125,7 @@ int wxSerialPort::Ioctl(int cmd, void *args)
     COMSTAT comstat;
     DWORD errors;
     int result = 0;
-    bool brk;
+
     switch (cmd)
     {
     case CTB_RESET:
@@ -211,7 +211,7 @@ int wxSerialPort::OpenDevice(const char *devname, void *dcs)
         return -1;
     }
     // save the device name
-    strncpy(m_devname, (char *)devname, sizeof(m_devname));
+    strncpy_s(m_devname, (char *)devname, sizeof(m_devname));
     // we write an eos to avoid a buffer overflow
     m_devname[sizeof(m_devname) - 1] = '\0';
 

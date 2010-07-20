@@ -15,7 +15,7 @@
 #include "wx/ctb/iobase.h"
 
 #if defined (WIN32)
-# define snprintf _snprintf
+# define snprintf _snprintf_s
 #endif
 
 /**
@@ -335,7 +335,7 @@ public:
       Please note, that an invalid memory location or size involving
       a buffer overflow or segmention fault!
     */
-    virtual int Ioctl(int cmd, void *args) { return -1; }
+    virtual int Ioctl(int , void *) { return -1; }
 
     /*!
       \brief Sendbreak transmits a continuous stream of zero-valued
