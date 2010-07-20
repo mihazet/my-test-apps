@@ -35,7 +35,7 @@ private:
         const wxString &root = wxEmptyString);
     void DoStopTftpServerThread();
     void DoSearchLocalImageFiles();
-    void DoSearchFreeSerialPort();
+    int DoSearchFreeSerialPort(bool update = true);
 
     // event handlers
     void OnButtonStartTftp(wxCommandEvent &event);
@@ -43,7 +43,7 @@ private:
     void OnThreadTftpd(wxThreadEvent &event);
 
     // data member
-    wxVector<int> _freePort;
+    wxVector<int> _serialPort;
 
     DECLARE_EVENT_TABLE()
 };

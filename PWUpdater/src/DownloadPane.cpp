@@ -235,7 +235,7 @@ DownloadPane::~DownloadPane()
 
 void DownloadPane::Init()
 {
-    _freePort.clear();
+    _serialPort.clear();
 }
 
 bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
@@ -248,6 +248,9 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
 
     StartInternalTftpIfNeed();
     SearchImageFiles();
+
+    /* scan serial port */
+    DoSearchFreeSerialPort();
 
     return true;
 }
@@ -496,32 +499,35 @@ void DownloadPane::DoSearchLocalImageFiles()
     }
 }
 
-void DownloadPane::DoSearchFreeSerialPort()
+int DownloadPane::DoSearchFreeSerialPort(bool update)
 {
     char port[16];
     wxSerialPort com;
     int id;
+
+    _serialPort.clear();
 
 #if defined (__WXMSW__)
     for (id = 0; id < 100; id++)
     {
         COMMCONFIG cc;
         DWORD dwSize = sizeof(cc);
-        if (id < 10)
-            sprintf(&port[0], "com%d", id);
-        else
-            sprintf(&port[0], "\\\\.\\com%d", id);
 
+        sprintf(&port[0], "COM%d", id);
         if (::GetDefaultCommConfigA(port, &cc, &dwSize))
         {
             if (cc.dwProviderSubType == PST_RS232)
             {
+                if (id >= 10)
+                    sprintf(&port[0], "\\\\.\\COM%d", id);
                 if (com.Open(port) < 0)
                     continue;
-                _freePort.push_back(id);
+                _serialPort.push_back(id);
+                com.Close();
             }
         }
     }
+
 #elif defined (__WXGTK__)
 
     glob_t globbuf;
@@ -536,10 +542,26 @@ void DownloadPane::DoSearchFreeSerialPort()
             if (com.Open(globbuf.gl_pathv[id]) < 0)
                 continue;
             _freePort.push_back(id);
+            com.Close();
         }
     }
     globfree(&globbuf);
+
 #endif
+
+    if (update)
+    {
+        wxChoice *portSel = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
+        wxVector<int>::iterator it;
+        if (portSel)
+        {
+            portSel->Clear();
+            for (it = _serialPort.begin(); it < _serialPort.end(); ++it)
+                portSel->Append(wxString::Format(wxT("COM%d"), *it));
+        }
+    }
+
+    return _serialPort.size();
 }
 
 //
