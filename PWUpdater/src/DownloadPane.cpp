@@ -385,7 +385,9 @@ void DownloadPane::DoStopTftpServerThread()
     }
 
     if (pServer->Delete() != wxTHREAD_NO_ERROR)
+    {
         wxLogError(wxT("Can't delete tftp server thread!"));
+    }
 
     cs.Leave();
 }

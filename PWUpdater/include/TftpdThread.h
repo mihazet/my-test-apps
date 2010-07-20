@@ -166,11 +166,11 @@ private:
 
     wxEvtHandler *_pHandler;
     wxDatagramSocket *_udpTransmissionSocket;
+    int _threadEventId;
     wxIPV4address _remote;
     wxString _file;
     bool _read;
     int _mode;
-    int _threadEventId;
     short _dataBlock;
     short _ackBlock;
     long _rexmt;

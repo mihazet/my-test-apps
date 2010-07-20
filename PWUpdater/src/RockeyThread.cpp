@@ -44,9 +44,9 @@ enum
 // Implementation
 // ------------------------------------------------------------------------
 RockeyThread::RockeyThread(wxEvtHandler *handler, const int id)
-    : _pHandler(handler),
-    _threadEventId(id),
-    wxThread(wxTHREAD_DETACHED)
+    : wxThread(wxTHREAD_DETACHED),
+    _pHandler(handler),
+    _threadEventId(id)
 {
     _state = ROCKEY_STATE_NOT_FOUND;
 }

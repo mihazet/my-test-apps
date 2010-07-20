@@ -53,9 +53,9 @@ enum
 TftpdServerThread::TftpdServerThread(wxEvtHandler *handler, const int id,
                                      wxIPV4address &local,
                                      const wxString &rootPath)
-    : _pHandler(handler),
-    _threadEventId(id),
-    wxThread(wxTHREAD_DETACHED)
+    : wxThread(wxTHREAD_DETACHED),
+    _pHandler(handler),
+    _threadEventId(id)
 {
     /*
        Setup root directory for the tftpd.
@@ -204,7 +204,9 @@ wxThread::ExitCode TftpdServerThread::Entry()
         {
             error = _udpServerSocket->LastError();
             if (error != wxSOCKET_WOULDBLOCK)
+            {
                 wxLogMessage(wxT("Socket read error = %d"), error);
+            }
         }
 
         //wxLogMessage(wxT("tftp server running..."));
