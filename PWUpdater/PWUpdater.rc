@@ -35,7 +35,7 @@ BEGIN
             VALUE "FileDescription",  "PixelWorks PW950/PW980 platform firmware updater\0"
             VALUE "FileVersion",      VER_MAJOR_STRING "." VER_MINOR_STRING "." VER_RELEASE_STRING "." VER_BUILD_STRING "\0"
             VALUE "InternalName",     "Ruby Updater\0"
-            VALUE "LegalCopyright",   "Copyright 2010 (c) Delta Electronics, Inc.\0"
+            VALUE "LegalCopyright",   "Copyright (c) 2010 Delta Electronics, Inc.\0"
             //VALUE "LegalTrademarks",  "\0"
             VALUE "OriginalFilename", "pwupdater.exe\0"
             VALUE "ProductName",      "PWUpdater\0"

@@ -501,7 +501,7 @@ void PWUpdaterFrame::OnAbout(wxCommandEvent &WXUNUSED(event))
     wxString &contact = wxGetApp().m_contact;
 
     copyright
-        << _("Copyright 2010 (c), Delta Electronics, Inc. All Rights Reserved.");
+        << _("Copyright (c) 2010, Delta Electronics, Inc. All Rights Reserved.");
     description
         << _("This program is able to upgrade the firmware and/or bootloader\n")
         << _("into flash memory chips for the Pixelworks Ruby platform.\n")
