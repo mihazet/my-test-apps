@@ -180,58 +180,58 @@
      0 :success, others:error code
 */
 
-#define  RY_FIND                        1		//search lock
-#define  RY_FIND_NEXT					2		//search next lock
-#define  RY_OPEN                        3		//open lock
-#define  RY_CLOSE                       4		//close lock
-#define  RY_READ                        5		//read lock
-#define  RY_WRITE                       6		//write lock
-#define  RY_RANDOM                      7		//produce random numbers
-#define  RY_SEED                        8		//produce seeds code
-#define  RY_WRITE_USERID				9		//write user's ID
-#define  RY_READ_USERID					10		//read user's ID
-#define  RY_SET_MODULE					11		//set module characters
-#define  RY_CHECK_MODULE				12		//check module state
-#define  RY_WRITE_ARITHMETIC            13		//write algorithm
-#define  RY_CALCULATE1					14		//compute 1
-#define  RY_CALCULATE2					15		//compute 2
-#define  RY_CALCULATE3					16		//compute 3
-#define  RY_DECREASE					17		//decreasing module unit
+#define  RY_FIND                    1       //search lock
+#define  RY_FIND_NEXT               2       //search next lock
+#define  RY_OPEN                    3       //open lock
+#define  RY_CLOSE                   4       //close lock
+#define  RY_READ                    5       //read lock
+#define  RY_WRITE                   6       //write lock
+#define  RY_RANDOM                  7       //produce random numbers
+#define  RY_SEED                    8       //produce seeds code
+#define  RY_WRITE_USERID            9       //write user's ID
+#define  RY_READ_USERID             10      //read user's ID
+#define  RY_SET_MODULE              11      //set module characters
+#define  RY_CHECK_MODULE            12      //check module state
+#define  RY_WRITE_ARITHMETIC        13      //write algorithm
+#define  RY_CALCULATE1              14      //compute 1
+#define  RY_CALCULATE2              15      //compute 2
+#define  RY_CALCULATE3              16      //compute 3
+#define  RY_DECREASE                17      //decreasing module unit
 
 // error code
-#define ERR_SUCCESS				0 //correct
-#define ERR_NO_ROCKEY			3 // no ROCKEY
-#define ERR_INVALID_PASSWORD	4 //ROCKEY is exist,but the basic password is wrong.
-#define ERR_INVALID_PASSWORD_OR_ID	5 //wrong password or hardware ID
-#define ERR_SETID				6 //set wrong hardware ID
-#define ERR_INVALID_ADDR_OR_SIZE	7 //wrong address or size in read or write
-#define ERR_UNKNOWN_COMMAND		8 //no this  command
-#define ERR_NOTBELEVEL3			9 //Internal error
-#define ERR_READ				10 //read data error
-#define ERR_WRITE				11 //write data error
-#define ERR_RANDOM				12 //random code error
-#define ERR_SEED				13 //seeds code error
-#define ERR_CALCULATE			14 //computing error
-#define ERR_NO_OPEN				15 //don't open lock before operation
-#define ERR_OPEN_OVERFLOW		16 //open too many locks(>16)
-#define ERR_NOMORE				17 // search locks no more
-#define ERR_NEED_FIND			18 // no find,use findnext
-#define ERR_DECREASE			19 //decreasing error
-#define ERR_AR_BADCOMMAND		20 //algorithm command error
-#define ERR_AR_UNKNOWN_OPCODE	21 //algorithm opertion symbols error
-#define ERR_AR_WRONGBEGIN		22 //there is constants in the first algorithm  command
-#define ERR_AR_WRONG_END		23 //there is constants in the last algorithm  command
-#define ERR_AR_VALUEOVERFLOW	24 //constants value > 63
-#define ERR_TOOMUCHTHREAD		25 //thread numbers with opening lock at  the same process> 100
-#define ERR_RECEIVE_NULL		0x100 //receive nothing
-#define ERR_UNKNOWN_SYSTEM		0x102 //unknown os
-#define ERR_UNKNOWN				0xffff //unknown error
+#define ERR_SUCCESS                 0 //correct
+#define ERR_NO_ROCKEY               3 // no ROCKEY
+#define ERR_INVALID_PASSWORD        4 //ROCKEY is exist,but the basic password is wrong.
+#define ERR_INVALID_PASSWORD_OR_ID  5 //wrong password or hardware ID
+#define ERR_SETID                   6 //set wrong hardware ID
+#define ERR_INVALID_ADDR_OR_SIZE    7 //wrong address or size in read or write
+#define ERR_UNKNOWN_COMMAND         8 //no this  command
+#define ERR_NOTBELEVEL3             9 //Internal error
+#define ERR_READ                    10 //read data error
+#define ERR_WRITE                   11 //write data error
+#define ERR_RANDOM                  12 //random code error
+#define ERR_SEED                    13 //seeds code error
+#define ERR_CALCULATE               14 //computing error
+#define ERR_NO_OPEN                 15 //don't open lock before operation
+#define ERR_OPEN_OVERFLOW           16 //open too many locks(>16)
+#define ERR_NOMORE                  17 // search locks no more
+#define ERR_NEED_FIND               18 // no find,use findnext
+#define ERR_DECREASE                19 //decreasing error
+#define ERR_AR_BADCOMMAND           20 //algorithm command error
+#define ERR_AR_UNKNOWN_OPCODE       21 //algorithm opertion symbols error
+#define ERR_AR_WRONGBEGIN           22 //there is constants in the first algorithm  command
+#define ERR_AR_WRONG_END            23 //there is constants in the last algorithm  command
+#define ERR_AR_VALUEOVERFLOW        24 //constants value > 63
+#define ERR_TOOMUCHTHREAD           25 //thread numbers with opening lock at  the same process> 100
+#define ERR_RECEIVE_NULL            0x100 //receive nothing
+#define ERR_UNKNOWN_SYSTEM          0x102 //unknown os
+#define ERR_UNKNOWN                 0xffff //unknown error
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-short rockey(unsigned short function, unsigned short * handle, unsigned int * lp1,  unsigned int * lp2, unsigned short * p1, unsigned short * p2, unsigned short * p3, unsigned short * p4,unsigned char* buffer);
+short rockey(unsigned short function, unsigned short *handle, unsigned int *lp1,  unsigned int *lp2, unsigned short *p1, unsigned short *p2, unsigned short *p3, unsigned short *p4,unsigned char *buffer);
 
 #ifdef __cplusplus
 }
