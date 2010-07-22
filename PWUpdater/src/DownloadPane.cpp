@@ -14,6 +14,7 @@
 #include "DownloadPane.h"
 #include "WidgetsId.h"
 #include "TftpdThread.h"
+#include "UartThread.h"
 #include "PWUpdater.h"
 #include "AppOptions.h"
 #include "NetAdapter.h"
@@ -216,6 +217,7 @@ DownloadFileList::DownloadFileList(wxWindow *parent, wxWindowID id)
 BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_THREAD(myID_THREAD_TFTPD, DownloadPane::OnThreadTftpd)
     EVT_BUTTON(myID_BTN_COMPORT_REFRESH, DownloadPane::OnButtonSerialPortRefresh)
+    EVT_BUTTON(myID_BTN_DOWNLOAD, DownloadPane::OnButtonDownload)
 END_EVENT_TABLE()
 
 DownloadPane::DownloadPane()
@@ -253,6 +255,8 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
 
     /* scan serial port */
     DoSearchFreeSerialPort(true);
+
+    DoStartUartThread();
 
     return true;
 }
@@ -395,6 +399,41 @@ void DownloadPane::DoStopTftpServerThread()
     if (pServer->Delete() != wxTHREAD_NO_ERROR)
     {
         wxLogError(wxT("Can't delete tftp server thread!"));
+    }
+
+    cs.Leave();
+}
+
+void DownloadPane::DoStartUartThread()
+{
+    wxCriticalSection &cs = wxGetApp().m_uartCS;
+    UartThread *&pUart = wxGetApp().m_pUartThread;
+
+    cs.Enter();
+
+
+    /* check if another uart thread is running... */
+    if (pUart)
+    {
+        cs.Leave();
+        wxLogWarning(wxT("There is another uart thread running!"));
+        return;
+    }
+
+    pUart = new UartThread(this, wxID_ANY);
+
+    if (pUart->Create() != wxTHREAD_NO_ERROR)
+    {
+        wxLogError(wxT("Can't create uart thread!"));
+        wxDELETE(pUart);
+    }
+    else
+    {
+        if (pUart->Run() != wxTHREAD_NO_ERROR)
+        {
+            wxLogError(wxT("Can't run the uart thread!"));
+            wxDELETE(pUart);
+        }
     }
 
     cs.Leave();
@@ -643,3 +682,28 @@ void DownloadPane::OnButtonSerialPortRefresh(wxCommandEvent &WXUNUSED(event))
     DoSearchFreeSerialPort(true);
 }
 
+void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
+{
+    ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
+    UartMessage message;
+    static int test = 0;
+
+    switch (test++)
+    {
+    case 0:
+    case 1:
+        message.SetEvent(UART_EVENT_CONNECT);
+        break;
+    case 2:
+        message.SetEvent(UART_EVENT_DISCONNECT);
+        break;
+    case 3:
+        message.SetEvent(UART_EVENT_CONNECT);
+        break;
+    default:
+    case 4:
+        message.SetEvent(UART_EVENT_QUIT);
+        break;
+    }
+    pQueue->EnQueue(message);
+}

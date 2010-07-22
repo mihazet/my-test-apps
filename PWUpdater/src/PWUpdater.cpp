@@ -74,11 +74,15 @@ void PWUpdaterApp::Init()
     m_uartCS.Enter();
     m_pUartThread = NULL;
     m_uartCS.Leave();
+
+    /* thread queue */
+    m_pUartQueue = new ThreadSafeQueue<UartMessage>;
 }
 
 void PWUpdaterApp::Term()
 {
     wxDELETE(m_pOpt);
+    wxDELETE(m_pUartQueue);
 }
 
 bool PWUpdaterApp::OnInit()
@@ -424,6 +428,10 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
     bool rockeyTerminated = false;
     bool uartTerminated = false;
 
+    /* for uart thread, send event to notify quit... */
+    ThreadSafeQueue<UartMessage> *&pUartQueue = wxGetApp().m_pUartQueue;
+    UartMessage message;
+
     /* delete tftp server thread if it is still running... */
     cs.Enter();
     if (pServer)
@@ -447,9 +455,11 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
 
     /* delete uart thread if it is still running... */
     cs4.Enter();
-    if (pUart)
-        pUart->Delete();
+    //if (pUart)
+    //    pUart->Delete();
     cs4.Leave();
+    message.SetEvent(UART_EVENT_QUIT);
+    pUartQueue->EnQueue(message);
 
     /* make sure tftp server and transmissions terminated. */
     while (true)

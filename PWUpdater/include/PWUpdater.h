@@ -8,6 +8,7 @@
 #ifndef _PWUPDATER_H_
 #define _PWUPDATER_H_
 
+#include <queue>
 #include <wx/wx.h>
 #include <wx/thread.h>
 #include <wx/aui/framemanager.h>
@@ -27,11 +28,11 @@
 #endif
 #include "AppOptions.h"
 #include "NetAdapter.h"
+#include "UartThread.h"
 
 class TftpdServerThread;
 class TftpdTransmissionThread;
 class RockeyThread;
-class UartThread;
 
 // ========================================================================
 // Application class
@@ -57,6 +58,9 @@ public:
     /* uart thread management */
     UartThread *m_pUartThread;
     wxCriticalSection m_uartCS;
+
+    /* uart thread queue */
+    ThreadSafeQueue<UartMessage> *m_pUartQueue;
 
     /* key info */
     wxString m_user;

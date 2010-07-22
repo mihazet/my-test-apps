@@ -46,6 +46,49 @@ UartThread::~UartThread()
 
 wxThread::ExitCode UartThread::Entry()
 {
+    ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
+    UartMessage message;
+    int evt;
+
+    pQueue->SetConsumer(); // I am consumer of this queue
+
+    wxLogMessage(wxT("Uart thread started..."));
+
+    while (1)
+    {
+        pQueue->Wait();
+        //wxLogMessage(wxT("wake up from wait"));
+        message = pQueue->DeQueue();
+        //wxLogMessage(wxT("Something in queue"));
+
+        /* process message */
+        evt = message.GetEvent();
+        if (evt == UART_EVENT_QUIT)
+        {
+            //if (TestDestroy())
+                break;
+        }
+        else
+        {
+            if (evt == UART_EVENT_CONNECT)
+                wxLogMessage(wxT("Connect event"));
+            else if (evt == UART_EVENT_DISCONNECT)
+                wxLogMessage(wxT("Disconnect event"));
+        }
+
+        while (1)
+        {
+            if (!pQueue->Empty())
+            {
+                message = pQueue->DeQueue();
+
+                /* process message */
+            }
+            else
+                break;
+        }
+    }
+
     return (wxThread::ExitCode)0;
 }
 

@@ -16,7 +16,15 @@
 //
 enum
 {
+    /* main -> uart */
+    UART_EVENT_CONNECT,
+    UART_EVENT_DISCONNECT,
+    UART_EVENT_QUIT,
+
+    /* uart -> main */
     UART_EVENT_PORT_DETECTION,
+
+    /* last */
     UART_EVENT_INVALID
 };
 
@@ -40,6 +48,70 @@ public:
 
 private:
     int _event;
+};
+
+//
+// Thread safe queue
+//
+template<typename T>
+class ThreadSafeQueue
+{
+public:
+    ThreadSafeQueue()
+    {
+        _pCondition = new wxCondition(_mutexCond);
+    }
+
+    ~ThreadSafeQueue()
+    {
+        wxDELETE(_pCondition);
+    }
+
+    void SetConsumer()
+    {
+        _mutexCond.Lock();
+    }
+
+    void EnQueue(const T &data)
+    {
+        _mutexQ.Lock();
+        _Q.push(data);
+        _mutexQ.Unlock();
+        _mutexCond.Lock();
+        wxCondError cerr = _pCondition->Signal();
+        _mutexCond.Unlock();
+        if (cerr != wxCOND_NO_ERROR)
+            wxLogMessage(wxT("signal condition error"));
+    }
+
+    T DeQueue()
+    {
+        _mutexQ.Lock();
+        T elem(_Q.front());
+        _Q.pop();
+        _mutexQ.Unlock();
+        return elem;
+    }
+
+    bool Empty()
+    {
+        _mutexQ.Lock();
+        bool result = _Q.empty();
+        _mutexQ.Unlock();
+
+        return result;
+    }
+
+    void Wait()
+    {
+        _pCondition->Wait();
+    }
+
+private:
+    std::queue<T> _Q;
+    wxMutex _mutexQ;
+    wxMutex _mutexCond;
+    wxCondition *_pCondition;
 };
 
 //

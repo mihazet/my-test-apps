@@ -34,12 +34,14 @@ private:
     void DoStartTftpServerThread(const wxString &ipAddr = wxEmptyString,
         const wxString &root = wxEmptyString);
     void DoStopTftpServerThread();
+    void DoStartUartThread();
     void DoSearchLocalImageFiles();
     int DoSearchFreeSerialPort(bool update = true);
 
     // event handlers
     void OnThreadTftpd(wxThreadEvent &event);
     void OnButtonSerialPortRefresh(wxCommandEvent &event);
+    void OnButtonDownload(wxCommandEvent &event);
 
     // data member
     wxVector<int> _serialPort;
