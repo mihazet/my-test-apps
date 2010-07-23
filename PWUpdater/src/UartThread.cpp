@@ -11,6 +11,9 @@
 // Headers
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
+#ifdef __WXGTK__
+#include <glob.h>
+#endif
 #include "PWUpdater.h"
 #include "UartThread.h"
 

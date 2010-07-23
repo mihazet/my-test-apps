@@ -7,9 +7,6 @@
 #include <wx/renderer.h>
 #include <wx/tokenzr.h>
 #include <wx/filename.h>
-#ifdef __WXGTK__
-#include <glob.h>
-#endif
 #include "PWUpdater.h"
 #include "DownloadPane.h"
 #include "WidgetsId.h"
