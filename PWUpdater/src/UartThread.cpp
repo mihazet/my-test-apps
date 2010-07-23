@@ -86,19 +86,60 @@ bool UartThread::ProcessMessage(const UartMessage &message)
 {
     bool result = false;
     int evt = message.event;
+    UartMessage response;
+    wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
+    wxString paramString;
+    long longTemp;
 
     switch (evt)
     {
     case UART_EVENT_QUIT:
+
         result = true;
         break;
+
     case UART_EVENT_CONNECT:
+
+        /* verify parameters */
+        if (message.payload.size() != 1)
+            break;
+
+        /* do connect */
+        paramString = message.payload.at(0);
+#if defined (__WXMSW__)
+        if (paramString.length() > 4)
+        {
+            wxString numString = paramString.Right(paramString.length() - 3);
+            numString.ToLong(&longTemp);
+            paramString.Printf(wxT("\\\\.\\COM%ld"), longTemp);
+        }
+#elif defined (__WXGTK__)
+        paramString.Prepend(wxT("/dev/"));
+#endif
+        _comPort.Open(paramString.ToAscii());
+
+        /* generate feedback to main thread */
+        response.event = UART_EVENT_CONNECTED;
+        response.payload.push_back(message.payload.at(0));
+        event.SetPayload<UartMessage>(response);
+        wxQueueEvent(_pHandler, event.Clone());        
         break;
+
     case UART_EVENT_DISCONNECT:
+
+        /* do disconnect */
+
+        /* generate feedback to main thread */
+        response.event = UART_EVENT_DISCONNECTED;
+        event.SetPayload<UartMessage>(response);
+        wxQueueEvent(_pHandler, event.Clone());
         break;
+
     case UART_EVENT_PORT_SCAN:
+
         DetectSerialPort(true);
         break;
+
     default:
         wxLogError(wxT("Undefined uart event: %d"), evt);
         break;

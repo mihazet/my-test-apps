@@ -215,6 +215,7 @@ BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_THREAD(myID_THREAD_TFTPD, DownloadPane::OnThreadTftpd)
     EVT_THREAD(myID_THREAD_UART, DownloadPane::OnThreadUart)
     EVT_BUTTON(myID_BTN_COMPORT_REFRESH, DownloadPane::OnButtonSerialPortRefresh)
+    EVT_BUTTON(myID_BTN_CONNECTION, DownloadPane::OnButtonConnection)
     EVT_BUTTON(myID_BTN_DOWNLOAD, DownloadPane::OnButtonDownload)
 END_EVENT_TABLE()
 
@@ -275,7 +276,9 @@ void DownloadPane::CreateControls()
     wxChoice *portChoice = new wxChoice(this, myID_CHOICE_COMPORT, wxDefaultPosition, wxSize(60, -1));
     portChoice->Disable();
     refreshSizer->Add(portChoice, 0, wxALL | wxALIGN_CENTER, 0);
-    refreshSizer->Add(new wxBitmapButton(this, myID_BTN_COMPORT_REFRESH, wxBitmap(refresh_16_xpm)), 0, wxALL, 0);
+    wxBitmapButton *refreshBtn = new wxBitmapButton(this, myID_BTN_COMPORT_REFRESH, wxBitmap(refresh_16_xpm));
+    refreshBtn->SetBitmapDisabled(wxBitmap(wxImage(refresh_16_xpm).ConvertToGreyscale()));
+    refreshSizer->Add(refreshBtn, 0, wxALL, 0);
     logoSizer->Add(new wxButton(this, myID_BTN_CONNECTION, _("Connect")), 0, wxRIGHT | wxLEFT | wxEXPAND, 5);
     logoSizer->AddStretchSpacer();
     logoSizer->Add(new wxStaticBitmap(this, wxID_ANY, wxBitmap(delta_xpm)));
@@ -617,11 +620,18 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
     int evt = message.event;
     wxVector<wxString>::iterator it;
     wxChoice *portChoice;
+    wxButton *portConnection;
+    wxBitmapButton *portRefresh;
+    ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    bool autoConnect;
+    wxString lastUsedPort;
 
     switch (evt)
     {
     case UART_EVENT_PORT_DETECTION:
 
+        /* update ui */
         portChoice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
         if (portChoice)
         {
@@ -630,6 +640,57 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
                 portChoice->AppendString(*it);
             portChoice->Enable();
         }
+
+        /* auto connect? */
+        pOpt->GetOption(wxT("UartAutoConnect"), &autoConnect);
+        pOpt->GetOption(wxT("LastUsedUartPort"), lastUsedPort);
+        if (autoConnect && !lastUsedPort.empty())
+        {
+            /* check if the last used port is available or not */
+            for (it = message.payload.begin(); it != message.payload.end(); ++it)
+            {
+                if (*it == lastUsedPort)
+                    break;
+            }
+            if (it != message.payload.end())
+            {
+                UartMessage msg(UART_EVENT_CONNECT);
+                msg.payload.push_back(*it);
+                pQueue->EnQueue(msg);
+            }
+        }
+
+        break;
+
+    case UART_EVENT_CONNECTED:
+
+        portChoice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
+        if (portChoice)
+        {
+            portChoice->SetStringSelection(message.payload.at(0));
+            portChoice->Disable();
+        }
+        portConnection = wxDynamicCast(FindWindow(myID_BTN_CONNECTION), wxButton);
+        if (portConnection)
+            portConnection->SetLabel(_("Disconnect"));
+        portRefresh = wxDynamicCast(FindWindow(myID_BTN_COMPORT_REFRESH), wxBitmapButton);
+        if (portRefresh)
+            portRefresh->Disable();
+
+        break;
+
+    case UART_EVENT_DISCONNECTED:
+
+        portChoice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
+        if (portChoice)
+            portChoice->Enable();
+        portConnection = wxDynamicCast(FindWindow(myID_BTN_CONNECTION), wxButton);
+        if (portConnection)
+            portConnection->SetLabel(_("Connect"));
+        portRefresh = wxDynamicCast(FindWindow(myID_BTN_COMPORT_REFRESH), wxBitmapButton);
+        if (portRefresh)
+            portRefresh->Enable();
+
         break;
 
     default:
@@ -651,28 +712,28 @@ void DownloadPane::OnButtonSerialPortRefresh(wxCommandEvent &WXUNUSED(event))
     }
 }
 
-void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
+void DownloadPane::OnButtonConnection(wxCommandEvent &event)
 {
+    wxChoice *portChoice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
     ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
     UartMessage message;
-    static int test = 0;
 
-    switch (test++)
+    if (portChoice && portChoice->IsEnabled()) // connect
     {
-    case 0:
-    case 1:
         message.event = UART_EVENT_CONNECT;
-        break;
-    case 2:
-        message.event = UART_EVENT_DISCONNECT;
-        break;
-    case 3:
-        message.event = UART_EVENT_CONNECT;
-        break;
-    default:
-    case 4:
-        message.event = UART_EVENT_QUIT;
-        break;
+        if (!portChoice->GetStringSelection().empty())
+        {
+            message.payload.push_back(portChoice->GetStringSelection());
+            pQueue->EnQueue(message);
+        }
     }
-    pQueue->EnQueue(message);
+    else if (portChoice && !portChoice->IsEnabled()) // disconnect
+    {
+        message.event = UART_EVENT_DISCONNECT;
+        pQueue->EnQueue(message);
+    }
+}
+
+void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
+{
 }

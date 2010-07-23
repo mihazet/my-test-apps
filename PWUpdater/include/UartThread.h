@@ -25,6 +25,8 @@ enum
 
     /* uart -> main */
     UART_EVENT_PORT_DETECTION,
+    UART_EVENT_CONNECTED,
+    UART_EVENT_DISCONNECTED,
 
     /* last */
     UART_EVENT_INVALID
@@ -134,6 +136,7 @@ private:
 
     wxEvtHandler *_pHandler;
     int _threadEventId;
+    wxSerialPort _comPort;
 };
 
 #endif /* _UART_THREAD_H_ */

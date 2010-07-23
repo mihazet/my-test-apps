@@ -41,6 +41,7 @@ private:
     void OnThreadTftpd(wxThreadEvent &event);
     void OnThreadUart(wxThreadEvent &event);
     void OnButtonSerialPortRefresh(wxCommandEvent &event);
+    void OnButtonConnection(wxCommandEvent &event);
     void OnButtonDownload(wxCommandEvent &event);
 
     // data member
