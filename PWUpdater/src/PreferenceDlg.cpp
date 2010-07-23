@@ -73,6 +73,7 @@ PrefDlg::PrefDlg(wxWindow *parent, wxWindowID id, bool auth)
 
     AddUiPage();
     AddTftpPage();
+    AddUartPage();
     AddFlashPage();
 
     /* remove unauth page(s) */
@@ -193,6 +194,26 @@ void PrefDlg::AddTftpPage()
     prefNB->AddPage(tftpPage, _("Tftp server"), false);
 }
 
+void PrefDlg::AddUartPage()
+{
+    wxNotebook *prefNB = wxDynamicCast(FindWindow(myID_PREF_NOTEBOOK), wxNotebook);
+
+    if (!prefNB)
+        return;
+
+    wxPanel *uartPage = new wxPanel(prefNB, myID_PREF_UART_PAGE);
+
+    wxStaticBoxSizer *portSizer = new wxStaticBoxSizer(wxVERTICAL, uartPage, _("Serial port"));
+    portSizer->Add(new wxCheckBox(uartPage, myID_PREF_UART_AUTO_CONNECT, _("Auto connect last used port?")), 0, wxALL, 5);
+
+
+    wxBoxSizer *uartSizer = new wxBoxSizer(wxVERTICAL);
+    uartSizer->Add(portSizer, 0, wxALL | wxEXPAND, 5);
+    uartPage->SetSizer(uartSizer);
+
+    prefNB->AddPage(uartPage, _("Uart setting"), false);
+}
+
 void PrefDlg::AddFlashPage()
 {
     wxNotebook *prefNB = wxDynamicCast(FindWindow(myID_PREF_NOTEBOOK), wxNotebook);
@@ -294,6 +315,9 @@ bool PrefDlg::TransferDataFromWindow()
     DBGCALL2(TextCtrlSave(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
     DBGCALL2(TextCtrlSave(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
 
+    /* uart page */
+    DBGCALL2(CheckBoxSave(myID_PREF_UART_AUTO_CONNECT, wxT("UartAutoConnect")));
+
     /* flash page */
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_SPI_UBOOT_OFFSET, wxT("UBootSPIOffset")));
@@ -324,6 +348,9 @@ bool PrefDlg::TransferDataToWindow()
     DBGCALL(CheckBoxLoad(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
     DBGCALL(TextCtrlLoad(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
     DBGCALL(TextCtrlLoad(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
+
+    /* uart page */
+    DBGCALL(CheckBoxLoad(myID_PREF_UART_AUTO_CONNECT, wxT("UartAutoConnect")));
 
     /* flash page */
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
