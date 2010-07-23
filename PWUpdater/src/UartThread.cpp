@@ -116,7 +116,7 @@ int UartThread::DetectSerialPort(bool notify)
     UartMessage message(UART_EVENT_PORT_DETECTION);
     char port[16];
     wxSerialPort com;
-    int id;
+    unsigned int id;
 
 #if defined (__WXMSW__)
     for (id = 0; id < 100; id++)
@@ -124,18 +124,18 @@ int UartThread::DetectSerialPort(bool notify)
         COMMCONFIG cc;
         DWORD dwSize = sizeof(cc);
 
-        sprintf(&port[0], "COM%d", id);
+        sprintf(&port[0], "COM%u", id);
         if (::GetDefaultCommConfigA(port, &cc, &dwSize))
         {
             if (cc.dwProviderSubType == PST_RS232)
             {
                 if (id >= 10)
-                    sprintf(&port[0], "\\\\.\\COM%d", id);
+                    sprintf(&port[0], "\\\\.\\COM%u", id);
                 if (com.Open(port) < 0)
                     continue;
                 com.Close();
 
-                message.payload.push_back(wxString::Format(wxT("COM%d"), id));
+                message.payload.push_back(wxString::Format(wxT("COM%u"), id));
             }
         }
     }
@@ -153,7 +153,7 @@ int UartThread::DetectSerialPort(bool notify)
                 continue;
             com.Close();
 
-            message.payload.push_back(wxString::Format(wxT("ttyS%d"), id));
+            message.payload.push_back(wxString::Format(wxT("ttyS%u"), id));
         }
     }
     globfree(&globbuf);
@@ -168,7 +168,7 @@ int UartThread::DetectSerialPort(bool notify)
                 continue;
             com.Close();
 
-            message.payload.push_back(wxString::Format(wxT("ttyUSB%d"), id));
+            message.payload.push_back(wxString::Format(wxT("ttyUSB%u"), id));
         }
     }
     globfree(&globbuf);
