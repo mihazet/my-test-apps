@@ -43,7 +43,7 @@ public:
     {
         _event = event;
     }
-    int GetEvent() { return _event; }
+    int GetEvent() const { return _event; }
     void SetEvent(int event) { _event = event; }
 
 private:
@@ -69,23 +69,25 @@ public:
 
     void SetConsumer()
     {
+        // TODO: check only one consumer
         _mutexCond.Lock();
     }
 
     void EnQueue(const T &data)
     {
+        /* push data into queue */
         _mutexQ.Lock();
         _Q.push(data);
         _mutexQ.Unlock();
+        /* signal condition variable */
         _mutexCond.Lock();
-        wxCondError cerr = _pCondition->Signal();
+        _pCondition->Signal();
         _mutexCond.Unlock();
-        if (cerr != wxCOND_NO_ERROR)
-            wxLogMessage(wxT("signal condition error"));
     }
 
     T DeQueue()
     {
+        /* pop data out of queue */
         _mutexQ.Lock();
         T elem(_Q.front());
         _Q.pop();
@@ -125,6 +127,7 @@ public:
 
 private:
     virtual wxThread::ExitCode Entry();
+    bool ProcessMessage(const UartMessage &message);
 
     wxEvtHandler *_pHandler;
     int _threadEventId;

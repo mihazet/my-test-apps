@@ -48,41 +48,24 @@ wxThread::ExitCode UartThread::Entry()
 {
     ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
     UartMessage message;
-    int evt;
+    bool quit = false;
 
     pQueue->SetConsumer(); // I am consumer of this queue
 
-    wxLogMessage(wxT("Uart thread started..."));
-
-    while (1)
+    while (!quit)
     {
         pQueue->Wait();
-        //wxLogMessage(wxT("wake up from wait"));
         message = pQueue->DeQueue();
-        //wxLogMessage(wxT("Something in queue"));
 
-        /* process message */
-        evt = message.GetEvent();
-        if (evt == UART_EVENT_QUIT)
-        {
-            //if (TestDestroy())
-                break;
-        }
-        else
-        {
-            if (evt == UART_EVENT_CONNECT)
-                wxLogMessage(wxT("Connect event"));
-            else if (evt == UART_EVENT_DISCONNECT)
-                wxLogMessage(wxT("Disconnect event"));
-        }
+        quit = ProcessMessage(message);
 
-        while (1)
+        while (!quit)
         {
             if (!pQueue->Empty())
             {
                 message = pQueue->DeQueue();
 
-                /* process message */
+                quit = ProcessMessage(message);
             }
             else
                 break;
@@ -90,5 +73,27 @@ wxThread::ExitCode UartThread::Entry()
     }
 
     return (wxThread::ExitCode)0;
+}
+
+bool UartThread::ProcessMessage(const UartMessage &message)
+{
+    bool result = false;
+    int evt = message.GetEvent();
+
+    switch (evt)
+    {
+    case UART_EVENT_CONNECT:
+        break;
+    case UART_EVENT_DISCONNECT:
+        break;
+    case UART_EVENT_QUIT:
+        result = true;
+        break;
+    default:
+        wxLogError(wxT("Undefined uart event: %d"), evt);
+        break;
+    }
+
+    return result;
 }
 

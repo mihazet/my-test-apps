@@ -428,9 +428,9 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
     bool rockeyTerminated = false;
     bool uartTerminated = false;
 
-    /* for uart thread, send event to notify quit... */
+    /* for uart thread termination, we send custom event to queue instead of wxThread::Delete() */
     ThreadSafeQueue<UartMessage> *&pUartQueue = wxGetApp().m_pUartQueue;
-    UartMessage message;
+    UartMessage message(UART_EVENT_QUIT);
 
     /* delete tftp server thread if it is still running... */
     cs.Enter();
@@ -454,11 +454,6 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
     cs3.Leave();
 
     /* delete uart thread if it is still running... */
-    cs4.Enter();
-    //if (pUart)
-    //    pUart->Delete();
-    cs4.Leave();
-    message.SetEvent(UART_EVENT_QUIT);
     pUartQueue->EnQueue(message);
 
     /* make sure tftp server and transmissions terminated. */
