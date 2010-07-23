@@ -38,16 +38,21 @@ public:
     UartMessage()
     {
         _event = UART_EVENT_INVALID;
+        _payload.clear();
     }
-    UartMessage(int event)
+    UartMessage(int event, const wxString &payload = wxEmptyString)
     {
         _event = event;
+        _payload = payload;
     }
     int GetEvent() const { return _event; }
     void SetEvent(int event) { _event = event; }
+    wxString GetPayload() const { return _payload; }
+    void SetPayload(const wxString &payload) { _payload = payload; }
 
 private:
     int _event;
+    wxString _payload;
 };
 
 //
