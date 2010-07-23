@@ -271,11 +271,12 @@ void DownloadPane::CreateControls()
     wxBoxSizer *logoSizer = new wxBoxSizer(wxVERTICAL);
     logoSizer->Add(new wxStaticText(this, wxID_STATIC, _("COM Port")), 0, wxALL | wxALIGN_CENTER, 5);
     wxBoxSizer *refreshSizer = new wxBoxSizer(wxHORIZONTAL);
-    logoSizer->Add(refreshSizer, 0, wxALL | wxEXPAND, 5);
+    logoSizer->Add(refreshSizer, 0, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, 5);
     wxChoice *portChoice = new wxChoice(this, myID_CHOICE_COMPORT, wxDefaultPosition, wxSize(60, -1));
     portChoice->Disable();
     refreshSizer->Add(portChoice, 0, wxALL | wxALIGN_CENTER, 0);
     refreshSizer->Add(new wxBitmapButton(this, myID_BTN_COMPORT_REFRESH, wxBitmap(refresh_16_xpm)), 0, wxALL, 0);
+    logoSizer->Add(new wxButton(this, myID_BTN_CONNECTION, _("Connect")), 0, wxRIGHT | wxLEFT | wxEXPAND, 5);
     logoSizer->AddStretchSpacer();
     logoSizer->Add(new wxStaticBitmap(this, wxID_ANY, wxBitmap(delta_xpm)));
     paneSizer->Add(logoSizer, 0, wxALL | wxEXPAND, 0);
