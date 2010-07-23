@@ -10,6 +10,7 @@
 
 #include <wx/wx.h>
 #include <wx/thread.h>
+#include <wx/ctb/serport.h>
 
 //
 // Definition of event
@@ -17,9 +18,10 @@
 enum
 {
     /* main -> uart */
+    UART_EVENT_QUIT,
     UART_EVENT_CONNECT,
     UART_EVENT_DISCONNECT,
-    UART_EVENT_QUIT,
+    UART_EVENT_PORT_SCAN,
 
     /* uart -> main */
     UART_EVENT_PORT_DETECTION,
@@ -37,22 +39,17 @@ public:
     // default ctor is required by wx internal storage, wxAny...
     UartMessage()
     {
-        _event = UART_EVENT_INVALID;
-        _payload.clear();
+        event = UART_EVENT_INVALID;
+        payload.clear();
     }
-    UartMessage(int event, const wxString &payload = wxEmptyString)
+    UartMessage(int evt)
     {
-        _event = event;
-        _payload = payload;
+        event = evt;
+        payload.clear();;
     }
-    int GetEvent() const { return _event; }
-    void SetEvent(int event) { _event = event; }
-    wxString GetPayload() const { return _payload; }
-    void SetPayload(const wxString &payload) { _payload = payload; }
 
-private:
-    int _event;
-    wxString _payload;
+    int event;
+    wxVector<wxString> payload;
 };
 
 //
@@ -133,6 +130,7 @@ public:
 private:
     virtual wxThread::ExitCode Entry();
     bool ProcessMessage(const UartMessage &message);
+    int DetectSerialPort(bool notify = true);
 
     wxEvtHandler *_pHandler;
     int _threadEventId;

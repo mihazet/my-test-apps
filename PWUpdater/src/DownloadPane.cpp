@@ -216,6 +216,7 @@ DownloadFileList::DownloadFileList(wxWindow *parent, wxWindowID id)
 
 BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_THREAD(myID_THREAD_TFTPD, DownloadPane::OnThreadTftpd)
+    EVT_THREAD(myID_THREAD_UART, DownloadPane::OnThreadUart)
     EVT_BUTTON(myID_BTN_COMPORT_REFRESH, DownloadPane::OnButtonSerialPortRefresh)
     EVT_BUTTON(myID_BTN_DOWNLOAD, DownloadPane::OnButtonDownload)
 END_EVENT_TABLE()
@@ -250,13 +251,12 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
     wxPanel::Create(parent, id, pos, size, style);
     CreateControls();
 
+    /* start tftp worker thread */
     StartInternalTftpIfNeed();
     SearchImageFiles();
 
-    /* scan serial port */
-    DoSearchFreeSerialPort(true);
-
-    DoStartUartThread();
+    /* start uart worker thread */
+    StartUartThread();
 
     return true;
 }
@@ -275,7 +275,9 @@ void DownloadPane::CreateControls()
     logoSizer->Add(new wxStaticText(this, wxID_STATIC, _("COM Port")), 0, wxALL | wxALIGN_CENTER, 5);
     wxBoxSizer *refreshSizer = new wxBoxSizer(wxHORIZONTAL);
     logoSizer->Add(refreshSizer, 0, wxALL | wxEXPAND, 5);
-    refreshSizer->Add(new wxChoice(this, myID_CHOICE_COMPORT, wxDefaultPosition, wxSize(60, -1)), 0, wxALL | wxALIGN_CENTER, 0);
+    wxChoice *portChoice = new wxChoice(this, myID_CHOICE_COMPORT, wxDefaultPosition, wxSize(60, -1));
+    portChoice->Disable();
+    refreshSizer->Add(portChoice, 0, wxALL | wxALIGN_CENTER, 0);
     refreshSizer->Add(new wxBitmapButton(this, myID_BTN_COMPORT_REFRESH, wxBitmap(refresh_16_xpm)), 0, wxALL, 0);
     logoSizer->AddStretchSpacer();
     logoSizer->Add(new wxStaticBitmap(this, wxID_ANY, wxBitmap(delta_xpm)));
@@ -404,13 +406,12 @@ void DownloadPane::DoStopTftpServerThread()
     cs.Leave();
 }
 
-void DownloadPane::DoStartUartThread()
+void DownloadPane::StartUartThread()
 {
     wxCriticalSection &cs = wxGetApp().m_uartCS;
     UartThread *&pUart = wxGetApp().m_pUartThread;
 
     cs.Enter();
-
 
     /* check if another uart thread is running... */
     if (pUart)
@@ -420,7 +421,7 @@ void DownloadPane::DoStartUartThread()
         return;
     }
 
-    pUart = new UartThread(this, wxID_ANY);
+    pUart = new UartThread(this, myID_THREAD_UART);
 
     if (pUart->Create() != wxTHREAD_NO_ERROR)
     {
@@ -543,71 +544,6 @@ void DownloadPane::DoSearchLocalImageFiles()
     }
 }
 
-int DownloadPane::DoSearchFreeSerialPort(bool update)
-{
-    char port[16];
-    wxSerialPort com;
-    int id;
-
-    _serialPort.clear();
-
-#if defined (__WXMSW__)
-    for (id = 0; id < 100; id++)
-    {
-        COMMCONFIG cc;
-        DWORD dwSize = sizeof(cc);
-
-        sprintf(&port[0], "COM%d", id);
-        if (::GetDefaultCommConfigA(port, &cc, &dwSize))
-        {
-            if (cc.dwProviderSubType == PST_RS232)
-            {
-                if (id >= 10)
-                    sprintf(&port[0], "\\\\.\\COM%d", id);
-                if (com.Open(port) < 0)
-                    continue;
-                _serialPort.push_back(id);
-                com.Close();
-            }
-        }
-    }
-
-#elif defined (__WXGTK__)
-
-    glob_t globbuf;
-
-    // search standard serial port
-    strcpy(&port[0], "/dev/ttyS*");
-    if (0 == glob(port, GLOB_ERR, NULL, &globbuf))
-    {
-        // no error, glob was successful
-        for (id = 0; id < globbuf.gl_pathc; id++)
-        {
-            if (com.Open(globbuf.gl_pathv[id]) < 0)
-                continue;
-            _serialPort.push_back(id);
-            com.Close();
-        }
-    }
-    globfree(&globbuf);
-
-#endif
-
-    if (update)
-    {
-        wxChoice *portSel = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
-        wxVector<int>::iterator it;
-        if (portSel)
-        {
-            portSel->Clear();
-            for (it = _serialPort.begin(); it < _serialPort.end(); ++it)
-                portSel->Append(wxString::Format(wxT("COM%d"), *it));
-        }
-    }
-
-    return _serialPort.size();
-}
-
 //
 // event handlers
 //
@@ -677,9 +613,44 @@ void DownloadPane::OnThreadTftpd(wxThreadEvent &event)
     }
 }
 
+void DownloadPane::OnThreadUart(wxThreadEvent &event)
+{
+    UartMessage message = event.GetPayload<UartMessage>();
+    int evt = message.event;
+    wxVector<wxString>::iterator it;
+    wxChoice *portChoice;
+
+    switch (evt)
+    {
+    case UART_EVENT_PORT_DETECTION:
+
+        portChoice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
+        if (portChoice)
+        {
+            portChoice->Clear();
+            for (it = message.payload.begin(); it != message.payload.end(); ++it)
+                portChoice->AppendString(*it);
+            portChoice->Enable();
+        }
+        break;
+
+    default:
+        wxLogError(wxT("Uart event %d is not handled by main thread"), evt);
+        break;
+    }
+}
+
 void DownloadPane::OnButtonSerialPortRefresh(wxCommandEvent &WXUNUSED(event))
 {
-    DoSearchFreeSerialPort(true);
+    wxChoice *portChoice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
+    UartMessage message(UART_EVENT_PORT_SCAN);
+    ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
+
+    if (portChoice && pQueue)
+    {
+        portChoice->Disable();
+        pQueue->EnQueue(message);
+    }
 }
 
 void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
@@ -692,17 +663,17 @@ void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
     {
     case 0:
     case 1:
-        message.SetEvent(UART_EVENT_CONNECT);
+        message.event = UART_EVENT_CONNECT;
         break;
     case 2:
-        message.SetEvent(UART_EVENT_DISCONNECT);
+        message.event = UART_EVENT_DISCONNECT;
         break;
     case 3:
-        message.SetEvent(UART_EVENT_CONNECT);
+        message.event = UART_EVENT_CONNECT;
         break;
     default:
     case 4:
-        message.SetEvent(UART_EVENT_QUIT);
+        message.event = UART_EVENT_QUIT;
         break;
     }
     pQueue->EnQueue(message);
