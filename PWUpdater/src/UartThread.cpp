@@ -117,6 +117,7 @@ bool UartThread::ProcessMessage(const UartMessage &message)
         paramString.Prepend(wxT("/dev/"));
 #endif
         _comPort.Open(paramString.ToAscii());
+        _comPort.SetBaudRate(wxBAUD_115200);
 
         /* generate feedback to main thread */
         response.event = UART_EVENT_CONNECTED;
@@ -128,6 +129,8 @@ bool UartThread::ProcessMessage(const UartMessage &message)
     case UART_EVENT_DISCONNECT:
 
         /* do disconnect */
+        if (_comPort.IsOpen())
+            _comPort.Close();
 
         /* generate feedback to main thread */
         response.event = UART_EVENT_DISCONNECTED;

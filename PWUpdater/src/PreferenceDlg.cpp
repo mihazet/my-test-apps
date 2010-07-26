@@ -204,8 +204,14 @@ void PrefDlg::AddUartPage()
     wxPanel *uartPage = new wxPanel(prefNB, myID_PREF_UART_PAGE);
 
     wxStaticBoxSizer *portSizer = new wxStaticBoxSizer(wxVERTICAL, uartPage, _("Serial port"));
-    portSizer->Add(new wxCheckBox(uartPage, myID_PREF_UART_AUTO_CONNECT, _("Auto connect last used port?")), 0, wxALL, 5);
-
+    portSizer->Add(new wxCheckBox(uartPage, myID_PREF_UART_AUTO_CONNECT, _("Auto connect to the most recent used port?")), 0, wxALL, 5);
+    wxBoxSizer *lastPortSizer = new wxBoxSizer(wxHORIZONTAL);
+    lastPortSizer->Add(new wxStaticText(uartPage, wxID_STATIC, _("The most recent used port")), 0, wxALL | wxALIGN_CENTER, 0);
+    lastPortSizer->AddStretchSpacer();
+    wxTextCtrl *mruPort = new wxTextCtrl(uartPage, myID_PREF_UART_LAST_PORT);
+    mruPort->Disable();
+    lastPortSizer->Add(mruPort, 0, wxALL, 0);
+    portSizer->Add(lastPortSizer, 0, wxALL | wxEXPAND, 5);
 
     wxBoxSizer *uartSizer = new wxBoxSizer(wxVERTICAL);
     uartSizer->Add(portSizer, 0, wxALL | wxEXPAND, 5);
@@ -317,6 +323,7 @@ bool PrefDlg::TransferDataFromWindow()
 
     /* uart page */
     DBGCALL2(CheckBoxSave(myID_PREF_UART_AUTO_CONNECT, wxT("UartAutoConnect")));
+    //DBGCALL2(TextCtrlSave(myID_PREF_UART_LAST_PORT, wxT("LastUsedUartPort")));
 
     /* flash page */
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
@@ -351,6 +358,7 @@ bool PrefDlg::TransferDataToWindow()
 
     /* uart page */
     DBGCALL(CheckBoxLoad(myID_PREF_UART_AUTO_CONNECT, wxT("UartAutoConnect")));
+    DBGCALL(TextCtrlLoad(myID_PREF_UART_LAST_PORT, wxT("LastUsedUartPort")));
 
     /* flash page */
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));

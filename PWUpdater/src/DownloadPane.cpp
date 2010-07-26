@@ -664,32 +664,41 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
 
     case UART_EVENT_CONNECTED:
 
+        /* update com port choice - disable ui */
         portChoice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
         if (portChoice)
         {
             portChoice->SetStringSelection(message.payload.at(0));
             portChoice->Disable();
         }
+        /* update connection button label */
         portConnection = wxDynamicCast(FindWindow(myID_BTN_CONNECTION), wxButton);
         if (portConnection)
             portConnection->SetLabel(_("Disconnect"));
+        /* update com port refresh button - disable ui */
         portRefresh = wxDynamicCast(FindWindow(myID_BTN_COMPORT_REFRESH), wxBitmapButton);
         if (portRefresh)
             portRefresh->Disable();
+        /* update last used com port in database */
+        pOpt->SetOption(wxT("LastUsedUartPort"), message.payload.at(0));
 
         break;
 
     case UART_EVENT_DISCONNECTED:
 
+        /* update com port choice - enable ui */
         portChoice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
         if (portChoice)
             portChoice->Enable();
+        /* update connection button label */
         portConnection = wxDynamicCast(FindWindow(myID_BTN_CONNECTION), wxButton);
         if (portConnection)
             portConnection->SetLabel(_("Connect"));
+        /* update com port refresh button - enable ui */
         portRefresh = wxDynamicCast(FindWindow(myID_BTN_COMPORT_REFRESH), wxBitmapButton);
         if (portRefresh)
             portRefresh->Enable();
+        /* update last used com port in database? erase it? current no action */
 
         break;
 
