@@ -19,14 +19,35 @@ enum
 {
     /* main -> uart */
     UART_EVENT_QUIT,
+        // no payload
     UART_EVENT_CONNECT,
+        // payload.at(0): port connect to
     UART_EVENT_DISCONNECT,
+        // no payload
     UART_EVENT_PORT_SCAN,
+        // no payload
+    UART_EVENT_DOWNLOAD,
+        // payload.at(0): ddr temp memory
+        // n = 0, 1, 2, ...
+        // payload.at(3n + 1): image name
+        // payload.at(3n + 2): image offset
+        // payload.at(3n + 3): image size
 
     /* uart -> main */
     UART_EVENT_PORT_DETECTION,
+        // payload.at(n): available port n
     UART_EVENT_CONNECTED,
+        // payload.at(0): port connected
     UART_EVENT_DISCONNECTED,
+        // no payload
+    UART_EVENT_DOWNLOAD_PROGRESS,
+        // payload.at(0): image name
+        // payload.at(1): progress
+    UART_EVENT_DOWNLOAD_RESULT,
+        // payload.at(0): image name
+        // payload.at(1): result
+    UART_EVENT_DOWNLOAD_COMPLETE,
+        // no payload
 
     /* last */
     UART_EVENT_INVALID
