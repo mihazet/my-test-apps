@@ -53,7 +53,6 @@ void PWUpdaterApp::Init()
 
     /* network adapter list */
     m_adapterList.clear();
-    _adapterInfo = NULL;
 
     /* usb key state */
     m_keyFound = false;
@@ -157,29 +156,31 @@ bool PWUpdaterApp::OnInit()
 bool PWUpdaterApp::DetectNetAdapter()
 {
 #ifdef __WXMSW__
+    IP_ADAPTER_INFO *pAdapterInfo = NULL;
     DWORD dwRetVal = 0;
     ULONG ulOutBufLen = sizeof(IP_ADAPTER_INFO);
 
-    _adapterInfo = (IP_ADAPTER_INFO *)malloc(ulOutBufLen);
-    if (_adapterInfo == NULL)
+    pAdapterInfo = (IP_ADAPTER_INFO *)malloc(ulOutBufLen);
+    if (pAdapterInfo == NULL)
     {
         wxLogError(_("Fail to allocate memory space for GetAdaptersInfo."));
         return false;
     }
 
     /* get network adapter list */
-    if (GetAdaptersInfo(_adapterInfo, &ulOutBufLen) == ERROR_BUFFER_OVERFLOW)
+    if (GetAdaptersInfo(pAdapterInfo, &ulOutBufLen) == ERROR_BUFFER_OVERFLOW)
     {
-        free(_adapterInfo);
-        _adapterInfo = (IP_ADAPTER_INFO *)malloc(ulOutBufLen);
-        if (_adapterInfo == NULL)
+        free(pAdapterInfo);
+        pAdapterInfo = (IP_ADAPTER_INFO *)malloc(ulOutBufLen);
+        if (pAdapterInfo == NULL)
         {
             wxLogError(_("Fail to allocate memory space for GetAdaptersInfo."));
             return false;
         }
 
-        if ((dwRetVal = GetAdaptersInfo(_adapterInfo, &ulOutBufLen)) != NO_ERROR)
+        if ((dwRetVal = GetAdaptersInfo(pAdapterInfo, &ulOutBufLen)) != NO_ERROR)
         {
+            free(pAdapterInfo);
             wxLogError(_("GetAdaptersInfo failed with error code = %d"), dwRetVal);
             return false;
         }
@@ -188,7 +189,7 @@ bool PWUpdaterApp::DetectNetAdapter()
     /* iterate list to retrieve info */
     IP_ADDR_STRING *pIpAddrString = NULL;
     wxString name, ip, netmask;
-    for (IP_ADAPTER_INFO *pAdapter = _adapterInfo;
+    for (IP_ADAPTER_INFO *pAdapter = pAdapterInfo;
         pAdapter != NULL;
         pAdapter = pAdapter->Next)
     {
@@ -207,15 +208,18 @@ bool PWUpdaterApp::DetectNetAdapter()
                 {
                     NetAdapter *temp = new NetAdapter(name, ip, netmask);
                     m_adapterList.push_back(*temp);
+                    delete temp;
                 }
             }
         }
     }
 
+    free(pAdapterInfo);
     return true;
 #elif defined (__WXGTK__)
     wxString name, ip, netmask;
 #define MAX_INTERFACE   10
+    struct ifreq *pAdapterInfo = NULL;
     struct ifconf ifc;
     struct ifreq *ifr;
     int socketFd;
@@ -230,8 +234,8 @@ bool PWUpdaterApp::DetectNetAdapter()
     }
 
     /* get the active interface list */
-    _adapterInfo = (struct ifreq *)malloc(sizeof(struct ifreq) * MAX_INTERFACE);
-    ifc.ifc_buf = (char *)_adapterInfo;
+    pAdapterInfo = (struct ifreq *)malloc(sizeof(struct ifreq) * MAX_INTERFACE);
+    ifc.ifc_buf = (char *)pAdapterInfo;
     ifc.ifc_len = sizeof(struct ifreq) * MAX_INTERFACE;
     if (ioctl(socketFd, SIOCGIFCONF, &ifc) != 0)
     {
@@ -262,6 +266,7 @@ bool PWUpdaterApp::DetectNetAdapter()
         /* netmask */
         if (ioctl(socketFd, SIOCGIFNETMASK, ifr) != 0)
         {
+            free(pAdapterInfo);
             wxLogError(_("Fail to get netmask address!"));
             return false;
         }
@@ -276,9 +281,11 @@ bool PWUpdaterApp::DetectNetAdapter()
         {
             NetAdapter *temp = new NetAdapter(name, ip, netmask);
             m_adapterList.push_back(*temp);
+            delete temp;
         }
     }
 
+    free(pAdapterInfo);
     return true;
 #else
     return false;

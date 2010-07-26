@@ -76,13 +76,6 @@ private:
     void Term();
     virtual bool OnInit();
     bool DetectNetAdapter();
-
-#ifdef __WXMSW__
-    IP_ADAPTER_INFO
-#elif defined (__WXGTK__)
-    struct ifreq
-#endif
-        *_adapterInfo;
 };
 
 DECLARE_APP(PWUpdaterApp)
