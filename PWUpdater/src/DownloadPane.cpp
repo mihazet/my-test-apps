@@ -217,6 +217,7 @@ BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_BUTTON(myID_BTN_COMPORT_REFRESH, DownloadPane::OnButtonSerialPortRefresh)
     EVT_BUTTON(myID_BTN_CONNECTION, DownloadPane::OnButtonConnection)
     EVT_BUTTON(myID_BTN_DOWNLOAD, DownloadPane::OnButtonDownload)
+    EVT_UPDATE_UI(myID_BTN_DOWNLOAD, DownloadPane::OnUpdateUIButtonDownload)
 END_EVENT_TABLE()
 
 DownloadPane::DownloadPane()
@@ -745,4 +746,30 @@ void DownloadPane::OnButtonConnection(wxCommandEvent &event)
 
 void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
 {
+}
+
+void DownloadPane::OnUpdateUIButtonDownload(wxUpdateUIEvent &event)
+{
+    wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_FILE_LIST), wxDataViewListCtrl);
+    wxDataViewListStore *store;
+    bool at_least_one_is_checked = false;
+    unsigned int row, nRow;
+    wxVariant data;
+
+    if (lc)
+    {
+        store = lc->GetStore();
+        nRow = store->GetCount();
+        for (row = 0; row < nRow; row++)
+        {
+            store->GetValueByRow(data, row, DownloadFileList::DFL_COL_UPDATE);
+            if (data.GetBool())
+            {
+                at_least_one_is_checked = true;
+                break;
+            }
+        }
+
+        event.Enable(at_least_one_is_checked == true);
+    }
 }
