@@ -627,6 +627,8 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
     AppOptions *&pOpt = wxGetApp().m_pOpt;
     bool autoConnect;
     wxString lastUsedPort;
+    PWUpdaterFrame *frame = NULL;
+    wxStatusBar *bar = NULL;
 
     switch (evt)
     {
@@ -682,6 +684,10 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
             portRefresh->Disable();
         /* update last used com port in database */
         pOpt->SetOption(wxT("LastUsedUartPort"), message.payload.at(0));
+        /* update frame status bar */
+        if (NULL != (frame = wxDynamicCast(FindWindowById(myID_FRAME), PWUpdaterFrame)))
+            if (NULL != (bar = frame->GetStatusBar()))
+                bar->SetStatusText(message.payload.at(0), PWUpdaterFrame::STATBAR_FLD_COMPORT);
 
         break;
 
@@ -700,6 +706,10 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
         if (portRefresh)
             portRefresh->Enable();
         /* update last used com port in database? erase it? current no action */
+        /* update frame status bar */
+        if (NULL != (frame = wxDynamicCast(FindWindowById(myID_FRAME), PWUpdaterFrame)))
+            if (NULL != (bar = frame->GetStatusBar()))
+                bar->SetStatusText(wxEmptyString, PWUpdaterFrame::STATBAR_FLD_COMPORT);
 
         break;
 
