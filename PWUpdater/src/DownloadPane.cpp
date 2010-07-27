@@ -546,6 +546,83 @@ void DownloadPane::DoSearchLocalImageFiles()
     }
 }
 
+wxString DownloadPane::GetNextDownloadFile(const wxString &currentFile)
+{
+    wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_FILE_LIST), wxDataViewListCtrl);
+    wxDataViewListStore *store;
+    unsigned int row, nRow;
+    wxVariant data;
+    wxVector<wxString> files;
+    bool findFile = true;
+
+    /* check dvc */
+    if (!lc || ((store = lc->GetStore()) == NULL))
+        return wxEmptyString;
+
+    /* first? */
+    if (currentFile.empty())
+        findFile = false;
+
+    nRow = store->GetCount();
+    for (row = 0; row < nRow; row++)
+    {
+        if (findFile)
+        {
+            store->GetValueByRow(data, row, DownloadFileList::DFL_COL_FILE);
+            if (data.GetString() == currentFile)
+                findFile = false;
+        }
+        else
+        {
+            store->GetValueByRow(data, row, DownloadFileList::DFL_COL_UPDATE);
+            if (data.GetBool())
+            {
+                store->GetValueByRow(data, row, DownloadFileList::DFL_COL_FILE);
+                return data.GetString();
+            }
+        }
+    }
+
+    return wxEmptyString;
+}
+
+void DownloadPane::GetFileInfo(const wxString &file, unsigned long *offset, unsigned long *size)
+{
+    wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_FILE_LIST), wxDataViewListCtrl);
+    wxDataViewListStore *store;
+    unsigned int row, nRow;
+    wxVariant data;
+    unsigned long longTemp;
+
+    /* parameters check */
+    if (!offset || !size)
+        return;
+
+    /* init parameters */
+    *offset = *size = 0;
+
+    if (lc && ((store = lc->GetStore()) != NULL))
+    {
+        nRow = store->GetCount();
+        for (row = 0; row < nRow; row++)
+        {
+            store->GetValueByRow(data, row, DownloadFileList::DFL_COL_FILE);
+            if (data.GetString() == file)
+            {
+                /* offset */
+                store->GetValueByRow(data, row, DownloadFileList::DFL_COL_START);
+                data.GetString().ToULong(&longTemp, 16);
+                *offset = longTemp;
+                /* size */
+                store->GetValueByRow(data, row, DownloadFileList::DFL_COL_LENGTH);
+                data.GetString().ToULong(&longTemp);
+                *size = longTemp;
+                break;
+            }
+        }
+    }
+}
+
 //
 // event handlers
 //

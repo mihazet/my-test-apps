@@ -36,6 +36,8 @@ private:
     void DoStopTftpServerThread();
     void StartUartThread();
     void DoSearchLocalImageFiles();
+    wxString GetNextDownloadFile(const wxString &currentFile = wxEmptyString);
+    void GetFileInfo(const wxString &file, unsigned long *offset, unsigned long *size);
 
     // event handlers
     void OnThreadTftpd(wxThreadEvent &event);
