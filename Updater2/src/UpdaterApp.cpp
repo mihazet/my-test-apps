@@ -239,6 +239,7 @@ bool UpdaterApp::DetectNetAdapter(bool *changed)
                     broadcast = CalculateSubnetBroadcastAddress(ip, netmask);
                     NetAdapter *temp = new NetAdapter(name, ip, netmask, broadcast);
                     m_Adapters.push_back(*temp);
+                    delete temp;
                 }
             }
         }
@@ -323,6 +324,7 @@ bool UpdaterApp::DetectNetAdapter(bool *changed)
         {
             NetAdapter *temp = new NetAdapter(name, ip, netmask, broadcast);
             m_Adapters.push_back(*temp);
+            delete temp;
         }
     }
 
