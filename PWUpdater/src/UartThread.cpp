@@ -11,6 +11,7 @@
 // Headers
 // ------------------------------------------------------------------------
 #include <wx/wx.h>
+#include <wx/stopwatch.h>
 #ifdef __WXGTK__
 #include <glob.h>
 #endif
@@ -26,6 +27,8 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
+#define RX_BUF_SIZE     4096
+#define UBOOT_BOOTUP_MESSAGE    "Hit any key to stop autoboot:"
 
 // ------------------------------------------------------------------------
 // Implementation
@@ -90,6 +93,12 @@ bool UartThread::ProcessMessage(const UartMessage &message)
     wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
     wxString paramString;
     long longTemp;
+    char *rxBuf = NULL;
+    int readCnt, readTotal, parseIndex, downloadError = UART_ERR_NO_ERROR;
+    size_t parseThreshold;
+    bool foundBootUpMessage = false;
+    unsigned long dbg_read_cnt, dbg_cmp_cnt;
+    wxStopWatch stopWatch;
 
     switch (evt)
     {
@@ -141,6 +150,93 @@ bool UartThread::ProcessMessage(const UartMessage &message)
     case UART_EVENT_PORT_SCAN:
 
         DetectSerialPort(true);
+        break;
+
+    case UART_EVENT_DOWNLOAD_FIRST:
+
+        /* verify parameters */
+        if (message.payload.size() != 4)
+            break;
+
+        /* wait for u-boot reboot message */
+        rxBuf = new char[RX_BUF_SIZE];
+        parseThreshold = strlen(UBOOT_BOOTUP_MESSAGE);
+        readTotal = 0;
+        parseIndex = 0;
+        dbg_read_cnt = dbg_cmp_cnt = 0;
+        stopWatch.Start();
+        while (true)
+        {
+            readCnt = _comPort.Readv(&rxBuf[readTotal], RX_BUF_SIZE - readTotal, 10);
+            dbg_read_cnt++;
+            if (readCnt > 0)
+            {
+                readTotal += readCnt;
+                while ((readTotal - parseIndex) >= (int)parseThreshold)
+                {
+                    dbg_cmp_cnt++;
+                    if (memcmp(&rxBuf[parseIndex], UBOOT_BOOTUP_MESSAGE, parseThreshold))
+                        parseIndex++;
+                    else
+                    {
+                        foundBootUpMessage = true;
+                        break;
+                    }
+                }
+
+                if (foundBootUpMessage)
+                    break;
+
+                if (readTotal >= RX_BUF_SIZE)
+                {
+                    downloadError = UART_ERR_NO_UBOOT;
+                    break;
+                }
+            }
+            else if (readCnt == -1)
+            {
+                wxLogError(_("Fail to read data from serial port"));
+                downloadError = UART_ERR_READ;
+                break;
+            }
+            // data is not available or enough, try again if not timeout
+            if (stopWatch.Time() >= 30 * 1000)
+            {
+                downloadError = UART_ERR_NO_UBOOT;
+                break;
+            }
+        }
+        wxLogMessage(wxT("read cnt = %lu, cmp cnt = %lu"), dbg_read_cnt, dbg_cmp_cnt);
+        
+        if (foundBootUpMessage)
+        {
+            /* send any key to stop autoboot */
+            _comPort.Write("\r\n", 2);
+
+            /* fflush serial buffer */
+            do
+            {
+                readCnt = _comPort.Readv(&rxBuf[0], RX_BUF_SIZE, 100);
+            } while (readCnt == RX_BUF_SIZE);
+        }
+        delete [] rxBuf;
+
+        /* generate feedback to main thread */
+        response.event = UART_EVENT_DOWNLOAD_RESULT;
+        response.payload.push_back(message.payload.at(1));
+        response.payload.push_back(wxString::Format(wxT("%d"), downloadError));
+        event.SetPayload<UartMessage>(response);
+        wxQueueEvent(_pHandler, event.Clone());
+        break;
+
+    case UART_EVENT_DOWNLOAD_NEXT:
+
+        /* verify parameters */
+        if (message.payload.size() != 4)
+            break;
+
+
+
         break;
 
     default:

@@ -703,9 +703,10 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
     ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
     AppOptions *&pOpt = wxGetApp().m_pOpt;
     bool autoConnect;
-    wxString lastUsedPort;
+    wxString lastUsedPort, nextDownloadFile;
     PWUpdaterFrame *frame = NULL;
     wxStatusBar *bar = NULL;
+    unsigned long offset, size, longTemp;
 
     switch (evt)
     {
@@ -790,6 +791,30 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
 
         break;
 
+    case UART_EVENT_DOWNLOAD_PROGRESS:
+
+        break;
+
+    case UART_EVENT_DOWNLOAD_RESULT:
+
+        nextDownloadFile = GetNextDownloadFile(message.payload.at(0));
+        wxLogMessage(wxT("download result = %s"), message.payload.at(1));
+        if (!nextDownloadFile.empty())
+        {
+            GetFileInfo(nextDownloadFile, &offset, &size);
+            UartMessage msg(UART_EVENT_DOWNLOAD_NEXT);
+            pOpt->GetOption(wxT("RubyDownloadMemory")).ToULong(&longTemp, 16);
+            msg.payload.push_back(wxString::Format(wxT("0x%X"), longTemp));
+            msg.payload.push_back(nextDownloadFile);
+            msg.payload.push_back(wxString::Format(wxT("0x%X"), offset));
+            msg.payload.push_back(wxString::Format(wxT("%lu"), size));
+            pQueue->EnQueue(msg);
+            wxLogMessage(wxT("Main -> worker: %s 0x%lx %lu"),
+                nextDownloadFile, offset, size);
+        }
+
+        break;
+
     default:
         wxLogError(wxT("Uart event %d is not handled by main thread"), evt);
         break;
@@ -833,6 +858,24 @@ void DownloadPane::OnButtonConnection(wxCommandEvent &event)
 
 void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
 {
+    wxString file;
+    unsigned long offset, size, longTemp;
+    ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    UartMessage message(UART_EVENT_DOWNLOAD_FIRST);
+
+    file = GetNextDownloadFile();
+    if (!file.empty())
+    {
+        pOpt->GetOption(wxT("RubyDownloadMemory")).ToULong(&longTemp, 16);
+        GetFileInfo(file, &offset, &size);
+        message.payload.push_back(wxString::Format(wxT("0x%X"), longTemp));
+        message.payload.push_back(file);
+        message.payload.push_back(wxString::Format(wxT("0x%X"), offset));
+        message.payload.push_back(wxString::Format(wxT("%lu"), size));
+        pQueue->EnQueue(message);
+        wxLogMessage(wxT("Main -> worker: %s 0x%lx %lu"), file, offset, size);
+    }
 }
 
 void DownloadPane::OnUpdateUIButtonDownload(wxUpdateUIEvent &event)

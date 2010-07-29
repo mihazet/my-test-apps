@@ -13,6 +13,13 @@
 #include <wx/ctb/serport.h>
 
 //
+// Definition of download error code
+//
+#define UART_ERR_NO_ERROR           0
+#define UART_ERR_NO_UBOOT           -1
+#define UART_ERR_READ               -2
+
+//
 // Definition of event
 //
 enum
@@ -26,12 +33,12 @@ enum
         // no payload
     UART_EVENT_PORT_SCAN,
         // no payload
-    UART_EVENT_DOWNLOAD,
+    UART_EVENT_DOWNLOAD_FIRST,
+    UART_EVENT_DOWNLOAD_NEXT,
         // payload.at(0): ddr temp memory
-        // n = 0, 1, 2, ...
-        // payload.at(3n + 1): image name
-        // payload.at(3n + 2): image offset
-        // payload.at(3n + 3): image size
+        // payload.at(1): image name
+        // payload.at(2): image offset
+        // payload.at(3): image size
 
     /* uart -> main */
     UART_EVENT_PORT_DETECTION,
@@ -46,8 +53,6 @@ enum
     UART_EVENT_DOWNLOAD_RESULT,
         // payload.at(0): image name
         // payload.at(1): result
-    UART_EVENT_DOWNLOAD_COMPLETE,
-        // no payload
 
     /* last */
     UART_EVENT_INVALID
