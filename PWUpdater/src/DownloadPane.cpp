@@ -215,7 +215,6 @@ BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_THREAD(myID_THREAD_TFTPD, DownloadPane::OnThreadTftpd)
     EVT_THREAD(myID_THREAD_UART, DownloadPane::OnThreadUart)
     EVT_BUTTON(myID_BTN_COMPORT_REFRESH, DownloadPane::OnButtonSerialPortRefresh)
-    EVT_BUTTON(myID_BTN_CONNECTION, DownloadPane::OnButtonConnection)
     EVT_BUTTON(myID_BTN_DOWNLOAD, DownloadPane::OnButtonDownload)
     EVT_UPDATE_UI(myID_BTN_DOWNLOAD, DownloadPane::OnUpdateUIButtonDownload)
 END_EVENT_TABLE()
@@ -280,7 +279,6 @@ void DownloadPane::CreateControls()
     wxBitmapButton *refreshBtn = new wxBitmapButton(this, myID_BTN_COMPORT_REFRESH, wxBitmap(refresh_16_xpm));
     refreshBtn->SetBitmapDisabled(wxBitmap(wxImage(refresh_16_xpm).ConvertToGreyscale()));
     refreshSizer->Add(refreshBtn, 0, wxALL, 0);
-    logoSizer->Add(new wxButton(this, myID_BTN_CONNECTION, _("Connect")), 0, wxRIGHT | wxLEFT | wxEXPAND, 5);
     logoSizer->AddStretchSpacer();
     logoSizer->Add(new wxStaticBitmap(this, wxID_ANY, wxBitmap(delta_xpm)));
     paneSizer->Add(logoSizer, 0, wxALL | wxEXPAND, 0);
@@ -408,6 +406,30 @@ void DownloadPane::DoStopTftpServerThread()
     cs.Leave();
 }
 
+wxString DownloadPane::GetTftpServerIpAddress()
+{
+    bool useInternalTftp = false;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxVector<NetAdapter> &adapterList = wxGetApp().m_adapterList;
+    wxVector<NetAdapter>::iterator it;
+    if ((pOpt->GetOption(wxT("UseInternalTftp"), &useInternalTftp)) && useInternalTftp)
+    {
+        wxString intf;
+        if (pOpt->GetOption(wxT("ActivedInterface"), intf))
+        {
+            for (it = adapterList.begin(); it != adapterList.end(); ++it)
+            {
+                if (it->GetName() == intf)
+                    return it->GetIp();
+            }
+        }
+    }
+    else
+    {
+        return pOpt->GetOption(wxT("ExternalTftpAddress"));
+    }
+}
+
 void DownloadPane::StartUartThread()
 {
     wxCriticalSection &cs = wxGetApp().m_uartCS;
@@ -507,7 +529,13 @@ void DownloadPane::DoSearchLocalImageFiles()
                     pOpt->GetOption(dbEntry, strTemp);
                     strTemp.ToULong(&startAddr, 16);
                     fileLength = wxFileName::GetSize(fn.GetFullPath()).ToULong();
+#if 1 // endAddr = block end address
+                    dbEntry.Replace(wxT("Offset"), wxT("End"));
+                    pOpt->GetOption(dbEntry, strTemp);
+                    strTemp.ToULong(&endAddr, 16);
+#else // endAddr = block start address + file length
                     endAddr = startAddr + fileLength;
+#endif
 
                     for (column = 0; column < DownloadFileList::DFL_COL_MAX; column++)
                     {
@@ -663,6 +691,7 @@ void DownloadPane::OnThreadTftpd(wxThreadEvent &event)
         currentBlock = msg.GetNum1();
         totalBlock = msg.GetNum2();
         fileName = msg.GetString();
+        if (msg.GetEvent() == TFTPD_EVENT_READ_TRANSFER_DONE)
         wxLogMessage(wxT("Read update: file %s, current = %d, total = %d"),
             fileName, currentBlock, totalBlock);
         break;
@@ -698,14 +727,10 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
     int evt = message.event;
     wxVector<wxString>::iterator it;
     wxChoice *portChoice;
-    wxButton *portConnection;
     wxBitmapButton *portRefresh;
     ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
     AppOptions *&pOpt = wxGetApp().m_pOpt;
-    bool autoConnect;
     wxString lastUsedPort, nextDownloadFile;
-    PWUpdaterFrame *frame = NULL;
-    wxStatusBar *bar = NULL;
     unsigned long offset, size, longTemp;
 
     switch (evt)
@@ -720,24 +745,19 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
             for (it = message.payload.begin(); it != message.payload.end(); ++it)
                 portChoice->AppendString(*it);
             portChoice->Enable();
-        }
 
-        /* auto connect? */
-        pOpt->GetOption(wxT("UartAutoConnect"), &autoConnect);
-        pOpt->GetOption(wxT("LastUsedUartPort"), lastUsedPort);
-        if (autoConnect && !lastUsedPort.empty())
-        {
-            /* check if the last used port is available or not */
-            for (it = message.payload.begin(); it != message.payload.end(); ++it)
+            /* auto select last used port */
+            pOpt->GetOption(wxT("LastUsedUartPort"), lastUsedPort);
+            if (!lastUsedPort.empty())
             {
-                if (*it == lastUsedPort)
-                    break;
-            }
-            if (it != message.payload.end())
-            {
-                UartMessage msg(UART_EVENT_CONNECT);
-                msg.payload.push_back(*it);
-                pQueue->EnQueue(msg);
+                /* check if the last used port is available or not */
+                for (it = message.payload.begin(); it != message.payload.end(); ++it)
+                {
+                    if (*it == lastUsedPort)
+                        break;
+                }
+                if (it != message.payload.end())
+                    portChoice->SetStringSelection(*it);
             }
         }
 
@@ -752,20 +772,12 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
             portChoice->SetStringSelection(message.payload.at(0));
             portChoice->Disable();
         }
-        /* update connection button label */
-        portConnection = wxDynamicCast(FindWindow(myID_BTN_CONNECTION), wxButton);
-        if (portConnection)
-            portConnection->SetLabel(_("Disconnect"));
         /* update com port refresh button - disable ui */
         portRefresh = wxDynamicCast(FindWindow(myID_BTN_COMPORT_REFRESH), wxBitmapButton);
         if (portRefresh)
             portRefresh->Disable();
         /* update last used com port in database */
         pOpt->SetOption(wxT("LastUsedUartPort"), message.payload.at(0));
-        /* update frame status bar */
-        if (NULL != (frame = wxDynamicCast(FindWindowById(myID_FRAME), PWUpdaterFrame)))
-            if (NULL != (bar = frame->GetStatusBar()))
-                bar->SetStatusText(message.payload.at(0), PWUpdaterFrame::STATBAR_FLD_COMPORT);
 
         break;
 
@@ -775,19 +787,11 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
         portChoice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
         if (portChoice)
             portChoice->Enable();
-        /* update connection button label */
-        portConnection = wxDynamicCast(FindWindow(myID_BTN_CONNECTION), wxButton);
-        if (portConnection)
-            portConnection->SetLabel(_("Connect"));
         /* update com port refresh button - enable ui */
         portRefresh = wxDynamicCast(FindWindow(myID_BTN_COMPORT_REFRESH), wxBitmapButton);
         if (portRefresh)
             portRefresh->Enable();
         /* update last used com port in database? erase it? current no action */
-        /* update frame status bar */
-        if (NULL != (frame = wxDynamicCast(FindWindowById(myID_FRAME), PWUpdaterFrame)))
-            if (NULL != (bar = frame->GetStatusBar()))
-                bar->SetStatusText(wxEmptyString, PWUpdaterFrame::STATBAR_FLD_COMPORT);
 
         break;
 
@@ -834,28 +838,6 @@ void DownloadPane::OnButtonSerialPortRefresh(wxCommandEvent &WXUNUSED(event))
     }
 }
 
-void DownloadPane::OnButtonConnection(wxCommandEvent &event)
-{
-    wxChoice *portChoice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
-    ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
-    UartMessage message;
-
-    if (portChoice && portChoice->IsEnabled()) // connect
-    {
-        message.event = UART_EVENT_CONNECT;
-        if (!portChoice->GetStringSelection().empty())
-        {
-            message.payload.push_back(portChoice->GetStringSelection());
-            pQueue->EnQueue(message);
-        }
-    }
-    else if (portChoice && !portChoice->IsEnabled()) // disconnect
-    {
-        message.event = UART_EVENT_DISCONNECT;
-        pQueue->EnQueue(message);
-    }
-}
-
 void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
 {
     wxString file;
@@ -863,18 +845,31 @@ void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
     ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
     AppOptions *&pOpt = wxGetApp().m_pOpt;
     UartMessage message(UART_EVENT_DOWNLOAD_FIRST);
+    wxString tftpIpAddress = GetTftpServerIpAddress();
+    wxChoice *choice = NULL;
 
     file = GetNextDownloadFile();
     if (!file.empty())
     {
-        pOpt->GetOption(wxT("RubyDownloadMemory")).ToULong(&longTemp, 16);
-        GetFileInfo(file, &offset, &size);
-        message.payload.push_back(wxString::Format(wxT("0x%X"), longTemp));
-        message.payload.push_back(file);
-        message.payload.push_back(wxString::Format(wxT("0x%X"), offset));
-        message.payload.push_back(wxString::Format(wxT("%lu"), size));
-        pQueue->EnQueue(message);
-        wxLogMessage(wxT("Main -> worker: %s 0x%lx %lu"), file, offset, size);
+        choice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
+        if (choice)
+        {
+            message.payload.push_back(choice->GetStringSelection());
+            if (tftpIpAddress.empty())
+            {
+                wxLogError(wxT("No valid tftp server address"));
+                return;
+            }
+            message.payload.push_back(tftpIpAddress);
+            pOpt->GetOption(wxT("RubyDownloadMemory")).ToULong(&longTemp, 16);
+            GetFileInfo(file, &offset, &size);
+            message.payload.push_back(wxString::Format(wxT("0x%X"), longTemp));
+            message.payload.push_back(file);
+            message.payload.push_back(wxString::Format(wxT("0x%X"), offset));
+            message.payload.push_back(wxString::Format(wxT("%lu"), size));
+            pQueue->EnQueue(message);
+            wxLogMessage(wxT("Main -> worker: %s 0x%lx %lu"), file, offset, size);
+        }
     }
 }
 

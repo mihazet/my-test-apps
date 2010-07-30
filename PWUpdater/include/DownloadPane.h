@@ -34,6 +34,7 @@ private:
     void DoStartTftpServerThread(const wxString &ipAddr = wxEmptyString,
         const wxString &root = wxEmptyString);
     void DoStopTftpServerThread();
+    wxString GetTftpServerIpAddress();
     void StartUartThread();
     void DoSearchLocalImageFiles();
     wxString GetNextDownloadFile(const wxString &currentFile = wxEmptyString);
@@ -43,7 +44,6 @@ private:
     void OnThreadTftpd(wxThreadEvent &event);
     void OnThreadUart(wxThreadEvent &event);
     void OnButtonSerialPortRefresh(wxCommandEvent &event);
-    void OnButtonConnection(wxCommandEvent &event);
     void OnButtonDownload(wxCommandEvent &event);
     void OnUpdateUIButtonDownload(wxUpdateUIEvent &event);
 
