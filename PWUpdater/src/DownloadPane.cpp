@@ -614,7 +614,8 @@ wxString DownloadPane::GetNextDownloadFile(const wxString &currentFile)
     return wxEmptyString;
 }
 
-void DownloadPane::GetFileInfo(const wxString &file, unsigned long *offset, unsigned long *size)
+void DownloadPane::GetFileInfo(const wxString &file, unsigned long *offset,
+                               unsigned long *end, unsigned long *size)
 {
     wxDataViewListCtrl *lc = wxDynamicCast(FindWindow(myID_DOWNLOAD_FILE_LIST), wxDataViewListCtrl);
     wxDataViewListStore *store;
@@ -623,11 +624,11 @@ void DownloadPane::GetFileInfo(const wxString &file, unsigned long *offset, unsi
     unsigned long longTemp;
 
     /* parameters check */
-    if (!offset || !size)
+    if (!offset || !end || !size)
         return;
 
     /* init parameters */
-    *offset = *size = 0;
+    *offset = *end = *size = 0;
 
     if (lc && ((store = lc->GetStore()) != NULL))
     {
@@ -641,6 +642,10 @@ void DownloadPane::GetFileInfo(const wxString &file, unsigned long *offset, unsi
                 store->GetValueByRow(data, row, DownloadFileList::DFL_COL_START);
                 data.GetString().ToULong(&longTemp, 16);
                 *offset = longTemp;
+                /* end */
+                store->GetValueByRow(data, row, DownloadFileList::DFL_COL_END);
+                data.GetString().ToULong(&longTemp, 16);
+                *end = longTemp;
                 /* size */
                 store->GetValueByRow(data, row, DownloadFileList::DFL_COL_LENGTH);
                 data.GetString().ToULong(&longTemp);
@@ -731,7 +736,8 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
     ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
     AppOptions *&pOpt = wxGetApp().m_pOpt;
     wxString lastUsedPort, nextDownloadFile;
-    unsigned long offset, size, longTemp;
+    unsigned long offset, end, size, longTemp;
+    long downloadResult = UART_ERR_NO_ERROR;
 
     switch (evt)
     {
@@ -801,20 +807,42 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
 
     case UART_EVENT_DOWNLOAD_RESULT:
 
-        nextDownloadFile = GetNextDownloadFile(message.payload.at(0));
-        wxLogMessage(wxT("download result = %s"), message.payload.at(1));
-        if (!nextDownloadFile.empty())
+        if (message.payload.size() != 2)
         {
-            GetFileInfo(nextDownloadFile, &offset, &size);
+            wxLogError(wxT("Incorrect number of parameters for UART_EVENT_DOWNLOAD_RESULT"));
+            break;
+        }
+
+        nextDownloadFile = GetNextDownloadFile(message.payload.at(0));
+        message.payload.at(1).ToLong(&downloadResult);
+        if ((downloadResult == UART_ERR_NO_ERROR) && !nextDownloadFile.empty())
+        {
+            GetFileInfo(nextDownloadFile, &offset, &end, &size);
             UartMessage msg(UART_EVENT_DOWNLOAD_NEXT);
             pOpt->GetOption(wxT("RubyDownloadMemory")).ToULong(&longTemp, 16);
-            msg.payload.push_back(wxString::Format(wxT("0x%X"), longTemp));
+            msg.payload.push_back(wxString::Format(wxT("0x%x"), longTemp));
             msg.payload.push_back(nextDownloadFile);
-            msg.payload.push_back(wxString::Format(wxT("0x%X"), offset));
+            msg.payload.push_back(wxString::Format(wxT("0x%x"), offset));
+            msg.payload.push_back(wxString::Format(wxT("0x%x"), end));
             msg.payload.push_back(wxString::Format(wxT("%lu"), size));
             pQueue->EnQueue(msg);
             wxLogMessage(wxT("Main -> worker: %s 0x%lx %lu"),
                 nextDownloadFile, offset, size);
+        }
+        else
+        {
+            if (downloadResult != UART_ERR_NO_ERROR) // error
+            {
+                wxLogMessage(wxT("Fail to download file [%s], error [%ld]"),
+                    message.payload.at(0), downloadResult);
+            }
+            else if (nextDownloadFile.empty()) // all images download completed
+            {
+
+            }
+
+            UartMessage msg(UART_EVENT_DISCONNECT);
+            pQueue->EnQueue(msg);
         }
 
         break;
@@ -841,7 +869,7 @@ void DownloadPane::OnButtonSerialPortRefresh(wxCommandEvent &WXUNUSED(event))
 void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
 {
     wxString file;
-    unsigned long offset, size, longTemp;
+    unsigned long offset, end, size, longTemp;
     ThreadSafeQueue<UartMessage> *&pQueue = wxGetApp().m_pUartQueue;
     AppOptions *&pOpt = wxGetApp().m_pOpt;
     UartMessage message(UART_EVENT_DOWNLOAD_FIRST);
@@ -862,10 +890,11 @@ void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
             }
             message.payload.push_back(tftpIpAddress);
             pOpt->GetOption(wxT("RubyDownloadMemory")).ToULong(&longTemp, 16);
-            GetFileInfo(file, &offset, &size);
-            message.payload.push_back(wxString::Format(wxT("0x%X"), longTemp));
+            GetFileInfo(file, &offset, &end, &size);
+            message.payload.push_back(wxString::Format(wxT("0x%x"), longTemp));
             message.payload.push_back(file);
-            message.payload.push_back(wxString::Format(wxT("0x%X"), offset));
+            message.payload.push_back(wxString::Format(wxT("0x%x"), offset));
+            message.payload.push_back(wxString::Format(wxT("0x%x"), end));
             message.payload.push_back(wxString::Format(wxT("%lu"), size));
             pQueue->EnQueue(message);
             wxLogMessage(wxT("Main -> worker: %s 0x%lx %lu"), file, offset, size);

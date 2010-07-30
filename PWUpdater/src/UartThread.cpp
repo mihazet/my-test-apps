@@ -27,8 +27,9 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
-#define RX_BUF_SIZE     4096
+#define RX_BUF_SIZE     (16 * 1024)
 #define UBOOT_BOOTUP_MESSAGE    "Hit any key to stop autoboot:"
+#define UBOOT_PROMPT_MESSAGE    "U-Boot> "
 
 // ------------------------------------------------------------------------
 // Implementation
@@ -91,151 +92,162 @@ bool UartThread::ProcessMessage(const UartMessage &message)
     int evt = message.event;
     UartMessage response;
     wxThreadEvent event(wxEVT_COMMAND_THREAD, _threadEventId);
-    wxString paramString;
-    long longTemp;
-    char *rxBuf = NULL;
-    int readCnt, readTotal, parseIndex, downloadError = UART_ERR_NO_ERROR;
-    size_t parseThreshold;
-    bool foundBootUpMessage = false;
-    unsigned long dbg_read_cnt, dbg_cmp_cnt;
+    wxString paramString, tempString;
+    int searchResult;
     wxStopWatch stopWatch;
+    long imageSize;
 
     switch (evt)
     {
     case UART_EVENT_QUIT:
 
+        //
+        // no payload
+        //
+        /* verify parameters */
+        if (message.payload.size() != 0)
+            break;
+
         result = true;
+
         break;
 
     case UART_EVENT_CONNECT:
 
+        //
+        // payload.at(0): uart port (COM* for Windows; ttyS* or ttyUSB* for Linux)
+        //
         /* verify parameters */
         if (message.payload.size() != 1)
             break;
 
-        /* do connect */
-        paramString = message.payload.at(0);
-#if defined (__WXMSW__)
-        if (paramString.length() > 4)
-        {
-            wxString numString = paramString.Right(paramString.length() - 3);
-            numString.ToLong(&longTemp);
-            paramString.Printf(wxT("\\\\.\\COM%ld"), longTemp);
-        }
-#elif defined (__WXGTK__)
-        paramString.Prepend(wxT("/dev/"));
-#endif
-        _comPort.Open(paramString.ToAscii());
-        _comPort.SetBaudRate(wxBAUD_115200);
+        ComPortConnect(message.payload.at(0), true);
 
-        /* generate feedback to main thread */
-        response.event = UART_EVENT_CONNECTED;
-        response.payload.push_back(message.payload.at(0));
-        event.SetPayload<UartMessage>(response);
-        wxQueueEvent(_pHandler, event.Clone());        
         break;
 
     case UART_EVENT_DISCONNECT:
 
-        /* do disconnect */
-        if (_comPort.IsOpen())
-            _comPort.Close();
+        //
+        // no payload
+        //
+        /* verify parameters */
+        if (message.payload.size() != 0)
+            break;
 
-        /* generate feedback to main thread */
-        response.event = UART_EVENT_DISCONNECTED;
-        event.SetPayload<UartMessage>(response);
-        wxQueueEvent(_pHandler, event.Clone());
+        ComPortDisconnect(true);
+
         break;
 
     case UART_EVENT_PORT_SCAN:
 
+        //
+        // no payload
+        //
+        /* verify parameters */
+        if (message.payload.size() != 0)
+            break;
+
         DetectSerialPort(true);
+
         break;
 
     case UART_EVENT_DOWNLOAD_FIRST:
 
+        //
+        // payload.at(0): uart port (COM* for Windows; ttyS* or ttyUSB* for Linux)
+        // payload.at(1): tftp server ip
+        // payload.at(2): ddr memory address (hex string)
+        // payload.at(3): image file
+        // payload.at(4): image offset (hex string)
+        // payload.at(5): image end (hex string)
+        // payload.at(6): image size (decimal string)
+        //
         /* verify parameters */
-        if (message.payload.size() != 4)
+        if (message.payload.size() != 7)
             break;
 
-        /* wait for u-boot reboot message */
-        rxBuf = new char[RX_BUF_SIZE];
-        parseThreshold = strlen(UBOOT_BOOTUP_MESSAGE);
-        readTotal = 0;
-        parseIndex = 0;
-        dbg_read_cnt = dbg_cmp_cnt = 0;
-        stopWatch.Start();
-        while (true)
+        if (!ComPortConnect(message.payload.at(0), true))
         {
-            readCnt = _comPort.Readv(&rxBuf[readTotal], RX_BUF_SIZE - readTotal, 10);
-            dbg_read_cnt++;
-            if (readCnt > 0)
-            {
-                readTotal += readCnt;
-                while ((readTotal - parseIndex) >= (int)parseThreshold)
-                {
-                    dbg_cmp_cnt++;
-                    if (memcmp(&rxBuf[parseIndex], UBOOT_BOOTUP_MESSAGE, parseThreshold))
-                        parseIndex++;
-                    else
-                    {
-                        foundBootUpMessage = true;
-                        break;
-                    }
-                }
-
-                if (foundBootUpMessage)
-                    break;
-
-                if (readTotal >= RX_BUF_SIZE)
-                {
-                    downloadError = UART_ERR_NO_UBOOT;
-                    break;
-                }
-            }
-            else if (readCnt == -1)
-            {
-                wxLogError(_("Fail to read data from serial port"));
-                downloadError = UART_ERR_READ;
-                break;
-            }
-            // data is not available or enough, try again if not timeout
-            if (stopWatch.Time() >= 30 * 1000)
-            {
-                downloadError = UART_ERR_NO_UBOOT;
-                break;
-            }
+            NotifyDownloadResult(message.payload.at(3), UART_ERR_CONNECTION);
+            break;
         }
-        wxLogMessage(wxT("read cnt = %lu, cmp cnt = %lu"), dbg_read_cnt, dbg_cmp_cnt);
-        
-        if (foundBootUpMessage)
+
+        searchResult = WaitUartMessage(UBOOT_BOOTUP_MESSAGE, 30);
+        if (searchResult != UART_ERR_MSG_FOUND)
         {
-            /* send any key to stop autoboot */
-            _comPort.Write("\r\n", 2);
-
-            /* fflush serial buffer */
-            do
-            {
-                readCnt = _comPort.Readv(&rxBuf[0], RX_BUF_SIZE, 100);
-            } while (readCnt == RX_BUF_SIZE);
+            NotifyDownloadResult(message.payload.at(3), searchResult);
+            break;
         }
-        delete [] rxBuf;
 
-        /* generate feedback to main thread */
-        response.event = UART_EVENT_DOWNLOAD_RESULT;
-        response.payload.push_back(message.payload.at(1));
-        response.payload.push_back(wxString::Format(wxT("%d"), downloadError));
-        event.SetPayload<UartMessage>(response);
-        wxQueueEvent(_pHandler, event.Clone());
+        SendUartMessage(" ");
+
+        searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, 3);
+        if (searchResult != UART_ERR_MSG_FOUND)
+        {
+            NotifyDownloadResult(message.payload.at(3), searchResult);
+            break;
+        }
+
+        SendUartMessage("setenv serverip %s\r\n", (const char *)message.payload.at(1).ToAscii());
+
+        searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, 5);
+        if (searchResult != UART_ERR_MSG_FOUND)
+        {
+            NotifyDownloadResult(message.payload.at(3), searchResult);
+            break;
+        }
+
+        SendUartMessage("tftpboot %s %s\r\n",
+            (const char *)message.payload.at(2).ToAscii(),
+            (const char *)message.payload.at(3).ToAscii());
+
+        message.payload.at(6).ToLong(&imageSize);
+        searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, imageSize / 10000);
+        if (searchResult != UART_ERR_MSG_FOUND)
+        {
+            NotifyDownloadResult(message.payload.at(3), searchResult);
+            break;
+        }
+
+        NotifyDownloadResult(message.payload.at(3), searchResult);
+
         break;
 
     case UART_EVENT_DOWNLOAD_NEXT:
 
+        //
+        // payload.at(0): ddr memory address (hex string)
+        // payload.at(1): image file
+        // payload.at(2): image offset (hex string)
+        // payload.at(3): image end (hex string)
+        // payload.at(4): image size (decimal string)
+        //
         /* verify parameters */
-        if (message.payload.size() != 4)
+        if (message.payload.size() != 5)
             break;
 
+        SendUartMessage(" \r\n");
 
+        searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, 3);
+        if (searchResult != UART_ERR_MSG_FOUND)
+        {
+            NotifyDownloadResult(message.payload.at(1), searchResult);
+            break;
+        }
+
+        SendUartMessage("tftpboot %s %s\r\n",
+            (const char *)message.payload.at(0).ToAscii(),
+            (const char *)message.payload.at(1).ToAscii());
+
+        message.payload.at(4).ToLong(&imageSize);
+        searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, imageSize / 10000);
+        if (searchResult != UART_ERR_MSG_FOUND)
+        {
+            NotifyDownloadResult(message.payload.at(1), searchResult);
+            break;
+        }
+
+        NotifyDownloadResult(message.payload.at(1), searchResult);
 
         break;
 
@@ -322,4 +334,174 @@ int UartThread::DetectSerialPort(bool notify)
     }
 
     return message.payload.size();
+}
+
+bool UartThread::ComPortConnect(const wxString &port, bool notify)
+{
+    int error;
+    wxString portString = port;
+#if defined (__WXMSW__)
+    long longTemp;
+    if (portString.length() > 4)
+    {
+        wxString numString = portString.Right(portString.length() - 3);
+        numString.ToLong(&longTemp);
+        portString.Printf(wxT("\\\\.\\COM%ld"), longTemp);
+    }
+#elif defined (__WXGTK__)
+    portString.Prepend(wxT("/dev/"));
+#endif
+
+    if (_comPort.IsOpen())
+        _comPort.Close();
+    error = _comPort.Open(portString.ToAscii());
+    if (_comPort.IsOpen())
+        _comPort.SetBaudRate(wxBAUD_115200);
+
+    /* generate feedback to main thread */
+    if (notify && (error == 0))
+    {
+        wxThreadEvent evt(wxEVT_COMMAND_THREAD, _threadEventId);
+        UartMessage response(UART_EVENT_CONNECTED);
+        response.payload.push_back(port);
+        evt.SetPayload<UartMessage>(response);
+        wxQueueEvent(_pHandler, evt.Clone());    
+    }
+
+    return (error == 0);
+}
+
+bool UartThread::ComPortDisconnect(bool notify)
+{
+    if (_comPort.IsOpen())
+        _comPort.Close();
+
+    /* generate feedback to main thread */
+    if (notify)
+    {
+        wxThreadEvent evt(wxEVT_COMMAND_THREAD, _threadEventId);
+        UartMessage response(UART_EVENT_DISCONNECTED);
+        evt.SetPayload<UartMessage>(response);
+        wxQueueEvent(_pHandler, evt.Clone());
+    }
+
+    return true;
+}
+
+int UartThread::WaitUartMessage(const char *msg, int timeout_second)
+{
+    int result = UART_ERR_MSG_NOT_FOUND;
+    char *rxBuf = NULL;
+    size_t msgLength;
+    bool msgFound = false;
+    int readTotal, readCnt, compareIndex;
+    unsigned long dbg_read_no_data_cnt, dbg_read_data_cnt, dbg_cmp_cnt;
+    wxStopWatch sw;
+
+    /* parameters check */
+    if (!msg)
+        return UART_ERR_PARAMS;
+    if (!_comPort.IsOpen())
+        return UART_ERR_CONNECTION;
+
+    /* allocate internal buffer */
+    rxBuf = new char [RX_BUF_SIZE];
+
+    /* start to read data and search message byte by byte */
+    msgLength = strlen(msg);
+    readTotal = compareIndex = 0;
+    dbg_read_no_data_cnt = dbg_read_data_cnt = dbg_cmp_cnt = 0;
+    sw.Start();
+    while (true)
+    {
+        readCnt = _comPort.Readv(&rxBuf[readTotal], RX_BUF_SIZE - readTotal, 10);
+        if (readCnt > 0)
+        {
+            dbg_read_data_cnt++;
+            readTotal += readCnt;
+            while ((readTotal - compareIndex) >= (int)msgLength)
+            {
+                dbg_cmp_cnt++;
+                if (memcmp(&rxBuf[compareIndex], msg, msgLength))
+                    compareIndex++;
+                else
+                {
+                    result = UART_ERR_MSG_FOUND;
+                    msgFound = true;
+                    break;
+                }
+            }
+
+            if (msgFound)
+                break;
+
+            if (readTotal >= RX_BUF_SIZE)
+            {
+                result = UART_ERR_MSG_NOT_FOUND;
+                break;
+            }
+        }
+        else if (readCnt == -1)
+        {
+            result = UART_ERR_READ;
+            wxLogError(wxT("Fail to read data from serial port"));
+            break;
+        }
+        else
+        {
+            dbg_read_no_data_cnt++;
+        }
+
+        if (sw.Time() >= (timeout_second * 1000))
+        {
+            result = UART_ERR_TIMEOUT;
+            break;
+        }
+    }
+
+    wxLogMessage(wxT("Wait [%s], Read cnt = %lu/%lu, Compare cnt = %lu, Used time = %ld"),
+        msg, dbg_read_data_cnt, dbg_read_no_data_cnt, dbg_cmp_cnt, sw.Time());
+
+    delete [] rxBuf;
+
+    return result;
+}
+
+int UartThread::SendUartMessage(const char *msg, ...)
+{
+    if (msg && _comPort.IsOpen())
+    {
+        size_t len;
+        char txBuf[256];
+        memset(txBuf, 0, sizeof(txBuf));
+        va_list var;
+        va_start(var, msg);
+        vsprintf(txBuf, msg, var);
+        va_end(var);
+        len = strlen(txBuf);
+        
+        return _comPort.Write((char *)txBuf, len < 256 ? len : 256);
+    }
+
+    return 0;
+}
+
+void UartThread::NotifyDownloadResult(const wxString &image, int error_code)
+{
+    wxThreadEvent evt(wxEVT_COMMAND_THREAD, _threadEventId);
+    UartMessage response(UART_EVENT_DOWNLOAD_RESULT);
+    response.payload.push_back(image);
+    response.payload.push_back(wxString::Format(wxT("%d"), error_code));
+    evt.SetPayload<UartMessage>(response);
+    wxQueueEvent(_pHandler, evt.Clone());
+}
+
+void UartThread::NotifyDownloadProgress(const wxString &image, int progress)
+{
+    wxThreadEvent evt(wxEVT_COMMAND_THREAD, _threadEventId);
+    UartMessage response(UART_EVENT_DOWNLOAD_PROGRESS);
+    response.payload.push_back(image);
+    response.payload.push_back(wxString::Format(wxT("%d"), progress));
+    evt.SetPayload<UartMessage>(response);
+    wxQueueEvent(_pHandler, evt.Clone());
 }

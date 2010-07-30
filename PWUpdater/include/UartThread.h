@@ -13,11 +13,15 @@
 #include <wx/ctb/serport.h>
 
 //
-// Definition of download error code
+// Definition of return code of some function in UartThread
 //
 #define UART_ERR_NO_ERROR           0
-#define UART_ERR_NO_UBOOT           -1
+#define UART_ERR_PARAMS             -1
 #define UART_ERR_READ               -2
+#define UART_ERR_CONNECTION         -3
+#define UART_ERR_TIMEOUT            -4
+#define UART_ERR_MSG_NOT_FOUND      -5
+#define UART_ERR_MSG_FOUND          UART_ERR_NO_ERROR
 
 //
 // Definition of event
@@ -34,11 +38,19 @@ enum
     UART_EVENT_PORT_SCAN,
         // no payload
     UART_EVENT_DOWNLOAD_FIRST,
+        // payload.at(0): com port connect to
+        // payload.at(1): tftp ip
+        // payload.at(2): ddr temp memory
+        // payload.at(3): image name
+        // payload.at(4): image offset
+        // payload.at(5): image end
+        // payload.at(6): image size
     UART_EVENT_DOWNLOAD_NEXT,
         // payload.at(0): ddr temp memory
         // payload.at(1): image name
         // payload.at(2): image offset
-        // payload.at(3): image size
+        // payload.at(3): image end
+        // payload.at(4): image size
 
     /* uart -> main */
     UART_EVENT_PORT_DETECTION,
@@ -159,6 +171,12 @@ private:
     virtual wxThread::ExitCode Entry();
     bool ProcessMessage(const UartMessage &message);
     int DetectSerialPort(bool notify = true);
+    bool ComPortConnect(const wxString &port, bool notify = false);
+    bool ComPortDisconnect(bool notify = false);
+    int WaitUartMessage(const char *msg, int timeout_second);
+    int SendUartMessage(const char *msg, ...);
+    void NotifyDownloadResult(const wxString &image, int error_code);
+    void NotifyDownloadProgress(const wxString &image, int progress);
 
     wxEvtHandler *_pHandler;
     int _threadEventId;
