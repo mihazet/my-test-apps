@@ -73,7 +73,6 @@ PrefDlg::PrefDlg(wxWindow *parent, wxWindowID id, bool auth)
 
     AddUiPage();
     AddTftpPage();
-    AddUartPage();
     AddFlashPage();
 
     /* remove unauth page(s) */
@@ -194,32 +193,6 @@ void PrefDlg::AddTftpPage()
     prefNB->AddPage(tftpPage, _("Tftp server"), false);
 }
 
-void PrefDlg::AddUartPage()
-{
-    wxNotebook *prefNB = wxDynamicCast(FindWindow(myID_PREF_NOTEBOOK), wxNotebook);
-
-    if (!prefNB)
-        return;
-
-    wxPanel *uartPage = new wxPanel(prefNB, myID_PREF_UART_PAGE);
-
-    wxStaticBoxSizer *portSizer = new wxStaticBoxSizer(wxVERTICAL, uartPage, _("Serial port"));
-    portSizer->Add(new wxCheckBox(uartPage, myID_PREF_UART_AUTO_CONNECT, _("Auto connect to the most recent used port?")), 0, wxALL, 5);
-    wxBoxSizer *lastPortSizer = new wxBoxSizer(wxHORIZONTAL);
-    lastPortSizer->Add(new wxStaticText(uartPage, wxID_STATIC, _("The most recent used port")), 0, wxALL | wxALIGN_CENTER, 0);
-    lastPortSizer->AddStretchSpacer();
-    wxTextCtrl *mruPort = new wxTextCtrl(uartPage, myID_PREF_UART_LAST_PORT);
-    mruPort->Disable();
-    lastPortSizer->Add(mruPort, 0, wxALL, 0);
-    portSizer->Add(lastPortSizer, 0, wxALL | wxEXPAND, 5);
-
-    wxBoxSizer *uartSizer = new wxBoxSizer(wxVERTICAL);
-    uartSizer->Add(portSizer, 0, wxALL | wxEXPAND, 5);
-    uartPage->SetSizer(uartSizer);
-
-    prefNB->AddPage(uartPage, _("Uart setting"), false);
-}
-
 void PrefDlg::AddFlashPage()
 {
     wxNotebook *prefNB = wxDynamicCast(FindWindow(myID_PREF_NOTEBOOK), wxNotebook);
@@ -239,34 +212,41 @@ void PrefDlg::AddFlashPage()
     ddrSizer->Add(ddrGridSizer, 0, wxALL | wxEXPAND, 5);
 
     wxStaticBoxSizer *norSizer = new wxStaticBoxSizer(wxVERTICAL, flashPage, _("NOR flash memory layout"));
-    wxFlexGridSizer *norGridSizer = new wxFlexGridSizer(3, 1, 5);
+    wxFlexGridSizer *norGridSizer = new wxFlexGridSizer(4, 1, 5);
     norGridSizer->AddGrowableCol(0, 1);
     norGridSizer->AddSpacer(0);
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("name")), 0, wxALL | wxALIGN_CENTER, 0);
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("offset")), 0, wxALL | wxALIGN_CENTER, 0);
+    norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("end")), 0, wxALL | wxALIGN_CENTER, 0);
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("Bootloader")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 0);
     norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_UBOOT_IMAGE), 0, wxALL, 0);
     norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_UBOOT_OFFSET), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_UBOOT_END), 0, wxALL, 0);
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("Linux Kernel")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 0);
     norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_KERNEL_IMAGE), 0, wxALL, 0);
     norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_KERNEL_OFFSET), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_KERNEL_END), 0, wxALL, 0);
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("Root File System")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 0);
     norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_FS_IMAGE), 0, wxALL, 0);
     norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_FS_OFFSET), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_FS_END), 0, wxALL, 0);
     norGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("Splash")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 0);
     norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_SPLASH_IMAGE), 0, wxALL, 0);
     norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_SPLASH_OFFSET), 0, wxALL, 0);
+    norGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_SPLASH_END), 0, wxALL, 0);
     norSizer->Add(norGridSizer, 0, wxALL | wxEXPAND, 5);
 
     wxStaticBoxSizer *spiSizer = new wxStaticBoxSizer(wxVERTICAL, flashPage, _("SPI flash memory layout"));
-    wxFlexGridSizer *spiGridSizer = new wxFlexGridSizer(3, 1, 5);
+    wxFlexGridSizer *spiGridSizer = new wxFlexGridSizer(4, 1, 5);
     spiGridSizer->AddGrowableCol(0, 1);
     spiGridSizer->AddSpacer(0);
     spiGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("name")), 0, wxALL | wxALIGN_CENTER, 0);
     spiGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("offset")), 0, wxALL | wxALIGN_CENTER, 0);
+    spiGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("end")), 0, wxALL | wxALIGN_CENTER, 0);
     spiGridSizer->Add(new wxStaticText(flashPage, wxID_STATIC, _("Bootloader")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 0);
     spiGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_SPI_UBOOT_IMAGE), 0, wxALL, 0);
     spiGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_SPI_UBOOT_OFFSET), 0, wxALL, 0);
+    spiGridSizer->Add(new wxTextCtrl(flashPage, myID_PREF_FLASH_SPI_UBOOT_END), 0, wxALL, 0);
     spiSizer->Add(spiGridSizer, 0, wxALL | wxEXPAND, 5);
 
     wxBoxSizer *flashSizer = new wxBoxSizer(wxVERTICAL);
@@ -321,21 +301,22 @@ bool PrefDlg::TransferDataFromWindow()
     DBGCALL2(TextCtrlSave(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
     DBGCALL2(TextCtrlSave(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
 
-    /* uart page */
-    DBGCALL2(CheckBoxSave(myID_PREF_UART_AUTO_CONNECT, wxT("UartAutoConnect")));
-    //DBGCALL2(TextCtrlSave(myID_PREF_UART_LAST_PORT, wxT("LastUsedUartPort")));
-
     /* flash page */
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_SPI_UBOOT_OFFSET, wxT("UBootSPIOffset")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_SPI_UBOOT_END, wxT("UBootSPIEnd")));
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_SPI_UBOOT_IMAGE, wxT("UBootSPIImage")));
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_UBOOT_OFFSET, wxT("UBootOffset")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_UBOOT_END, wxT("UBootEnd")));
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_UBOOT_IMAGE, wxT("UBootImage")));
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_KERNEL_OFFSET, wxT("KernelOffset")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_KERNEL_END, wxT("KernelEnd")));
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_KERNEL_IMAGE, wxT("KernelImage")));
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_FS_OFFSET, wxT("FileSystemOffset")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_FS_END, wxT("FileSystemEnd")));
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_FS_IMAGE, wxT("FileSystemImage")));
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_SPLASH_OFFSET, wxT("SplashOffset")));
+    DBGCALL2(TextCtrlSave(myID_PREF_FLASH_SPLASH_END, wxT("SplashEnd")));
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_SPLASH_IMAGE, wxT("SplashImage")));
 
     return true;
@@ -356,21 +337,22 @@ bool PrefDlg::TransferDataToWindow()
     DBGCALL(TextCtrlLoad(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
     DBGCALL(TextCtrlLoad(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
 
-    /* uart page */
-    DBGCALL(CheckBoxLoad(myID_PREF_UART_AUTO_CONNECT, wxT("UartAutoConnect")));
-    DBGCALL(TextCtrlLoad(myID_PREF_UART_LAST_PORT, wxT("LastUsedUartPort")));
-
     /* flash page */
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_SPI_UBOOT_OFFSET, wxT("UBootSPIOffset")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_SPI_UBOOT_END, wxT("UBootSPIEnd")));
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_SPI_UBOOT_IMAGE, wxT("UBootSPIImage")));
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_UBOOT_OFFSET, wxT("UBootOffset")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_UBOOT_END, wxT("UBootEnd")));
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_UBOOT_IMAGE, wxT("UBootImage")));
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_KERNEL_OFFSET, wxT("KernelOffset")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_KERNEL_END, wxT("KernelEnd")));
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_KERNEL_IMAGE, wxT("KernelImage")));
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_FS_OFFSET, wxT("FileSystemOffset")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_FS_END, wxT("FileSystemEnd")));
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_FS_IMAGE, wxT("FileSystemImage")));
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_SPLASH_OFFSET, wxT("SplashOffset")));
+    DBGCALL(TextCtrlLoad(myID_PREF_FLASH_SPLASH_END, wxT("SplashEnd")));
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_SPLASH_IMAGE, wxT("SplashImage")));
 
     return true;

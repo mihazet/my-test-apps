@@ -22,7 +22,6 @@ public:
 private:
     void AddUiPage();
     void AddTftpPage();
-    void AddUartPage();
     void AddFlashPage();
     void RemovePage(wxWindowID id);
     virtual bool TransferDataFromWindow();
