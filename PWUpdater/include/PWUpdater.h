@@ -117,6 +117,8 @@ private:
     /* event handler functions */
     void OnClose(wxCloseEvent &event);
     void OnQuit(wxCommandEvent &event);
+    void OnView(wxCommandEvent &event);
+    void OnUpdateUIView(wxUpdateUIEvent &event);
     void OnPref(wxCommandEvent &event);
     void OnAbout(wxCommandEvent &event);
     void OnRockey(wxThreadEvent &event);

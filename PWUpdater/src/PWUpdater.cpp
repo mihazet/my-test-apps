@@ -295,11 +295,16 @@ bool PWUpdaterApp::DetectNetAdapter()
 // ------------------------------------------------------------------------
 // Main frame implementation
 // ------------------------------------------------------------------------
+#define PANE_NAME_LOG       wxT("LogPane")
+#define PANE_NAME_DOWNLOAD  wxT("DownloadPane")
+
 BEGIN_EVENT_TABLE(PWUpdaterFrame, wxFrame)
     EVT_CLOSE(PWUpdaterFrame::OnClose)
     EVT_MENU(wxID_EXIT, PWUpdaterFrame::OnQuit)
     EVT_MENU(wxID_PREFERENCES, PWUpdaterFrame::OnPref)
     EVT_MENU(wxID_ABOUT, PWUpdaterFrame::OnAbout)
+    EVT_MENU_RANGE(myID_MBAR_VIEW_START, myID_MBAR_VIEW_END, PWUpdaterFrame::OnView)
+    EVT_UPDATE_UI_RANGE(myID_MBAR_VIEW_START, myID_MBAR_VIEW_END, PWUpdaterFrame::OnUpdateUIView)
     EVT_THREAD(ID_THREAD_ROCKEY, PWUpdaterFrame::OnRockey)
 END_EVENT_TABLE()
 
@@ -325,6 +330,7 @@ bool PWUpdaterFrame::Create(wxWindow *parent, wxWindowID id,
     /* create gui */
     result = wxFrame::Create(parent, id, caption, pos, size, style);
     CreateControls();
+    SetClientSize(740, 460);
 
     /* create threads */
     StartRockeyThread();
@@ -349,6 +355,8 @@ void PWUpdaterFrame::CreateControls()
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_EXIT, _("&Quit"), _("Quit this program."));
     wxMenu *view_menu = new wxMenu;
+    view_menu->AppendCheckItem(myID_MBAR_VIEW_LOG, _("Log Message\tCTRL+F1"), _("Show or hide the log message."));
+    view_menu->AppendSeparator();
     view_menu->Append(wxID_PREFERENCES, _("&Preferences"), _("Modify user configuration."));
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(wxID_ABOUT, _("&About"), _("About this program."));
@@ -373,13 +381,13 @@ void PWUpdaterFrame::CreateControls()
     _auiMgr.SetFlags(_auiMgr.GetFlags() | wxAUI_MGR_LIVE_RESIZE);
 
     _auiMgr.AddPane(new LogPane(this),
-        wxAuiPaneInfo().Name(wxT("LogPane")).Caption(_("Log Window")).
-        CloseButton(true).DestroyOnClose(false).MinSize(560, 420).
-        Float());
+        wxAuiPaneInfo().Name(PANE_NAME_LOG).Caption(_("Log Window")).
+        CloseButton(true).DestroyOnClose(false).MinSize(750, 120).
+        Bottom().LeftDockable(false).RightDockable(false).TopDockable(false).
+        Hide());
     _auiMgr.AddPane(new DownloadPane(this, myID_PANE_DOWNLOAD),
-        wxAuiPaneInfo().Name(wxT("DownloadPane")).CaptionVisible(false).
-        Center().CloseButton(false).DestroyOnClose(false).
-        MaximizeButton(true));
+        wxAuiPaneInfo().Name(PANE_NAME_DOWNLOAD).CaptionVisible(false).
+        CenterPane().CloseButton(false).DestroyOnClose(false));
 
     _auiMgr.Update();
 }
@@ -519,6 +527,49 @@ void PWUpdaterFrame::OnClose(wxCloseEvent &WXUNUSED(event))
 void PWUpdaterFrame::OnQuit(wxCommandEvent &WXUNUSED(event))
 {
     Close();
+}
+
+void PWUpdaterFrame::OnView(wxCommandEvent &event)
+{
+    int objId = event.GetId();
+    wxString paneName;
+    bool invalid = false;
+
+    switch (objId)
+    {
+    case myID_MBAR_VIEW_LOG:
+        paneName = PANE_NAME_LOG;
+        break;
+    default:
+        invalid = true;
+        break;
+    }
+
+    if (!invalid)
+    {
+        _auiMgr.GetPane(paneName).Show(event.IsChecked());
+        _auiMgr.Update();
+    }
+}
+
+void PWUpdaterFrame::OnUpdateUIView(wxUpdateUIEvent &event)
+{
+    int objId = event.GetId();
+    wxString paneName;
+    bool invalid = false;
+
+    switch (objId)
+    {
+    case myID_MBAR_VIEW_LOG:
+        paneName = PANE_NAME_LOG;
+        break;
+    default:
+        invalid = true;
+        break;
+    }
+
+    if (!invalid)
+        event.Check(_auiMgr.GetPane(paneName).IsShown());
 }
 
 void PWUpdaterFrame::OnPref(wxCommandEvent &WXUNUSED(event))

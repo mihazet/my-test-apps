@@ -11,6 +11,9 @@ enum
     myID_FRAME,
 
     /* frame - menu bar */
+    myID_MBAR_VIEW_START,
+    myID_MBAR_VIEW_LOG,
+    myID_MBAR_VIEW_END,
 
     /* frame - status bar */
     myID_FRAME_STATUSBAR,
