@@ -19,7 +19,8 @@
 // ------------------------------------------------------------------------
 // Resources
 // ------------------------------------------------------------------------
-#include "xpm/delta.xpm"
+#include "xpm/delta_zh_TW.xpm"
+#include "xpm/delta_en.xpm"
 #include "xpm/download_to_chip2_64.xpm"
 #include "xpm/refresh_16.xpm"
 
@@ -270,22 +271,25 @@ void DownloadPane::CreateControls()
 
     /* logo and com port */
     wxBoxSizer *logoSizer = new wxBoxSizer(wxVERTICAL);
-    logoSizer->Add(new wxStaticText(this, wxID_STATIC, _("COM Port")), 0, wxALL | wxALIGN_CENTER, 5);
+    logoSizer->Add(new wxStaticText(this, wxID_STATIC, _("COM Port")), 0, wxTOP | wxLEFT | wxRIGHT | wxALIGN_CENTER, 5);
     wxBoxSizer *refreshSizer = new wxBoxSizer(wxHORIZONTAL);
     logoSizer->Add(refreshSizer, 0, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, 5);
-    wxChoice *portChoice = new wxChoice(this, myID_CHOICE_COMPORT, wxDefaultPosition, wxSize(60, -1));
+    wxChoice *portChoice = new wxChoice(this, myID_CHOICE_COMPORT, wxDefaultPosition, wxSize(80, -1));
     portChoice->Disable();
     refreshSizer->Add(portChoice, 0, wxALL | wxALIGN_CENTER, 0);
     wxBitmapButton *refreshBtn = new wxBitmapButton(this, myID_BTN_COMPORT_REFRESH, wxBitmap(refresh_16_xpm));
     refreshBtn->SetBitmapDisabled(wxBitmap(wxImage(refresh_16_xpm).ConvertToGreyscale()));
     refreshSizer->Add(refreshBtn, 0, wxALL, 0);
     logoSizer->AddStretchSpacer();
-    logoSizer->Add(new wxStaticBitmap(this, wxID_ANY, wxBitmap(delta_xpm)));
+    if (wxT("zh_TW") == wxGetApp().m_pOpt->GetOption(wxT("Language")))
+        logoSizer->Add(new wxStaticBitmap(this, wxID_ANY, wxBitmap(delta_zh_TW_xpm)));
+    else
+        logoSizer->Add(new wxStaticBitmap(this, wxID_ANY, wxBitmap(delta_en_xpm)));
     paneSizer->Add(logoSizer, 0, wxALL | wxEXPAND, 0);
 
     /* download file list and operation */
     wxBoxSizer *downloadSizer = new wxBoxSizer(wxVERTICAL);
-    downloadSizer->Add(new wxStaticText(this, wxID_STATIC, _("Files To Download")), 0, wxALL, 5);
+    downloadSizer->Add(new wxStaticText(this, wxID_STATIC, _("Files To Download")), 0, wxTOP | wxLEFT | wxRIGHT, 5);
     downloadSizer->Add(new DownloadFileList(this, myID_DOWNLOAD_FILE_LIST), 1, wxALL | wxEXPAND, 5);
 
     wxBoxSizer *opSizer = new wxBoxSizer(wxHORIZONTAL);
