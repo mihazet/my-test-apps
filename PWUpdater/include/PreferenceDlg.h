@@ -30,6 +30,8 @@ private:
     int CheckBoxSave(const wxWindowID id, const wxString &opt);
     int TextCtrlLoad(const wxWindowID id, const wxString &opt);
     int TextCtrlSave(const wxWindowID id, const wxString &opt);
+    int LanguageLoad();
+    int LanguageSave();
     int InterfaceLoad();
     int InterfaceSave();
     int TftpRootLoad();

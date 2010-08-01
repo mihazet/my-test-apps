@@ -35,6 +35,28 @@
 
 #define ID_THREAD_ROCKEY    wxID_HIGHEST + 1
 
+typedef struct
+{
+    wxLanguage langId;
+    wxString iso639;
+    wxString description;
+} LanguageMap;
+
+static const LanguageMap gSupportedLanguageList[] =
+{
+    // langId                           iso639          description
+    { wxLANGUAGE_ENGLISH,               wxT("en"),      _("English")                },
+    { wxLANGUAGE_CHINESE_TRADITIONAL,   wxT("zh_TW"),   _("Traditional Chinese")    },
+    { wxLANGUAGE_CHINESE_SIMPLIFIED,    wxT("zh_CN"),   _("Simplified Chinese")     },
+    { wxLANGUAGE_FRENCH,                wxT("fr_FR"),   _("French")                 },
+    { wxLANGUAGE_GERMAN,                wxT("de_DE"),   _("German")                 },
+    { wxLANGUAGE_JAPANESE,              wxT("ja_JP"),   _("Japanese")               },
+    { wxLANGUAGE_KOREAN,                wxT("ko_KR"),   _("Korean")                 },
+    { wxLANGUAGE_RUSSIAN,               wxT("ru_RU"),   _("Russian")                },
+    { wxLANGUAGE_SPANISH,               wxT("es_ES"),   _("Spanish")                },
+    { wxLANGUAGE_UNKNOWN,               wxEmptyString,  wxEmptyString               }
+};
+
 // ------------------------------------------------------------------------
 // Application implementation
 // ------------------------------------------------------------------------
@@ -45,7 +67,7 @@ void PWUpdaterApp::Init()
     /* application information */
     SetVendorName(wxT("delta"));
     SetVendorDisplayName(wxT("Delta Electronics, Inc."));
-    SetAppName(wxT("pwupdater"));
+    SetAppName(wxT("PWUpdater"));
     SetAppDisplayName(wxT("PixelWorks Ruby Platform Updater"));
 
     /* database */
@@ -86,6 +108,9 @@ void PWUpdaterApp::Term()
 
 bool PWUpdaterApp::OnInit()
 {
+    /* init locale */
+    DetectInstalledLanguages();
+
     /* collect network adapter info */
     if (DetectNetAdapter())
     {
@@ -290,6 +315,67 @@ bool PWUpdaterApp::DetectNetAdapter()
 #else
     return false;
 #endif
+}
+
+wxLanguage PWUpdaterApp::DetectInstalledLanguages()
+{
+    wxStandardPaths &stdPaths = wxStandardPaths::Get();
+    wxString localePath = wxFileName(stdPaths.GetExecutablePath()).GetPath(true) + wxT("locale");
+    const LanguageMap *pLang;
+    wxString selectedLang = m_pOpt->GetOption(wxT("Language"));
+    wxLanguage result = wxLANGUAGE_ENGLISH;
+    bool selectedIsInstalled = false;
+
+    /* scan dir to check what language installed */
+    m_installedLanguage.clear();
+    for (pLang = &gSupportedLanguageList[0]; pLang->langId != wxLANGUAGE_UNKNOWN; pLang++)
+    {
+        if (wxFileName::DirExists(localePath + wxFileName::GetPathSeparator() + pLang->iso639))
+        {
+            m_installedLanguage.push_back(pLang->iso639);
+            if (selectedLang == pLang->iso639)
+            {
+                selectedIsInstalled = true;
+                result = pLang->langId;
+            }
+        }
+    }
+
+    if (!selectedIsInstalled)
+    {
+        m_installedLanguage.push_back(wxT("en"));
+        result = wxLANGUAGE_ENGLISH;
+    }
+
+    std::sort(m_installedLanguage.begin(), m_installedLanguage.end());
+
+    return result;
+}
+
+wxString PWUpdaterApp::GetLanguageDescriptionFromISO639Code(const wxString &iso639)
+{
+    const LanguageMap *pLang;
+
+    for (pLang = &gSupportedLanguageList[0]; pLang->langId != wxLANGUAGE_UNKNOWN; pLang++)
+    {
+        if (pLang->iso639 == iso639)
+            return pLang->description;
+    }
+
+    return wxEmptyString;
+}
+
+wxString PWUpdaterApp::GetLanguageISO639CodeFromDescription(const wxString &desc)
+{
+    const LanguageMap *pLang;
+
+    for (pLang = &gSupportedLanguageList[0]; pLang->langId != wxLANGUAGE_UNKNOWN; pLang++)
+    {
+        if (pLang->description == desc)
+            return pLang->iso639;
+    }
+
+    return wxEmptyString;
 }
 
 // ------------------------------------------------------------------------

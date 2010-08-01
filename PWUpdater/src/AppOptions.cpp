@@ -57,7 +57,7 @@ void AppOptions::DB_Init()
 
     sql << wxT("BEGIN TRANSACTION;")
         << wxT("CREATE TABLE IF NOT EXISTS AppOptions (OptionName TEXT UNIQUE, OptionValue TEXT);")
-        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"Language\", \"\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"Language\", \"en\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"LoadPerspective\", \"false\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"Perspective\", \"\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"LoadSizePosition\", \"false\");")

@@ -289,6 +289,7 @@ void PrefDlg::RemovePage(wxWindowID id)
 bool PrefDlg::TransferDataFromWindow()
 {
     /* ui page */
+    DBGCALL2(LanguageSave());
     DBGCALL2(CheckBoxSave(myID_PREF_UI_LAYOUT_MEMORY, wxT("LoadPerspective")));
     DBGCALL2(CheckBoxSave(myID_PREF_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
 
@@ -325,6 +326,7 @@ bool PrefDlg::TransferDataFromWindow()
 bool PrefDlg::TransferDataToWindow()
 {
     /* ui page */
+    DBGCALL(LanguageLoad());
     DBGCALL(CheckBoxLoad(myID_PREF_UI_LAYOUT_MEMORY, wxT("LoadPerspective")));
     DBGCALL(CheckBoxLoad(myID_PREF_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
 
@@ -443,6 +445,75 @@ int PrefDlg::TextCtrlSave(const wxWindowID id, const wxString &opt)
             if (dbValue != uiValue)
             {
                 pOpt->SetOption(opt, uiValue);
+            }
+            else
+            {
+                return ERROR_SKIP_UPDATE;
+            }
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::LanguageLoad()
+{
+    wxChoice *choice = wxDynamicCast(FindWindow(myID_PREF_UI_LANG), wxChoice);
+    wxVector<wxString> &installedLang = wxGetApp().m_installedLanguage;
+    wxVector<wxString>::iterator it;
+    wxString selectedLang, langDescription;
+
+    if (choice)
+    {
+        if (wxGetApp().m_pOpt->GetOption(wxT("Language"), selectedLang))
+        {
+            if (choice->GetCount())
+                choice->Clear();
+            for (it = installedLang.begin(); it != installedLang.end(); ++it)
+            {
+                langDescription = wxGetApp().GetLanguageDescriptionFromISO639Code(*it);
+                choice->Append(langDescription);
+                if (!selectedLang.empty() && (selectedLang == *it))
+                    choice->SetStringSelection(langDescription);
+                else if (selectedLang.empty() && (*it == wxT("en")))
+                    choice->SetStringSelection(langDescription);
+            }
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::LanguageSave()
+{
+    wxChoice *choice = wxDynamicCast(FindWindow(myID_PREF_UI_LANG), wxChoice);
+    wxString selectedLangDescription, selectedLangISO639, dbLangISO639;
+
+    if (choice)
+    {
+        selectedLangDescription = choice->GetStringSelection();
+        selectedLangISO639 = wxGetApp().GetLanguageISO639CodeFromDescription(selectedLangDescription);
+        if (wxGetApp().m_pOpt->GetOption(wxT("Language"), dbLangISO639))
+        {
+            if (dbLangISO639 != selectedLangISO639)
+            {
+                wxGetApp().m_pOpt->SetOption(wxT("Language"), selectedLangISO639);
             }
             else
             {

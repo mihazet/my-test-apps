@@ -42,6 +42,8 @@ class PWUpdaterApp : public wxApp
 public:
     PWUpdaterApp() { Init(); }
     ~PWUpdaterApp() { Term(); }
+    wxString GetLanguageDescriptionFromISO639Code(const wxString &iso639);
+    wxString GetLanguageISO639CodeFromDescription(const wxString &desc);
 
     /* tftpd server thread managment */
     TftpdServerThread *m_pTftpdServerThread;
@@ -65,17 +67,23 @@ public:
     /* key info */
     wxString m_user;
     wxString m_contact;
+    bool m_keyFound;
 
     /* Application options */
     AppOptions *m_pOpt;
-    bool m_keyFound;
+
+    /* network adapters */
     wxVector<NetAdapter> m_adapterList;
+
+    /* language translations */
+    wxVector<wxString> m_installedLanguage;
 
 private:
     void Init();
     void Term();
     virtual bool OnInit();
     bool DetectNetAdapter();
+    wxLanguage DetectInstalledLanguages();
 };
 
 DECLARE_APP(PWUpdaterApp)
