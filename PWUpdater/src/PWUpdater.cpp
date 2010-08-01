@@ -109,7 +109,15 @@ void PWUpdaterApp::Term()
 bool PWUpdaterApp::OnInit()
 {
     /* init locale */
-    DetectInstalledLanguages();
+    wxStandardPaths &stdPaths = wxStandardPaths::Get();
+    wxString localePath = wxFileName(stdPaths.GetExecutablePath()).GetPath(true) + wxT("locale");
+    if (!_locale.Init(DetectInstalledLanguages()))
+    {
+        wxLogWarning(wxT("Selected language is not supported by system."));
+    }
+    _locale.AddCatalogLookupPathPrefix(localePath);
+    _locale.AddCatalog(GetAppName());
+    _locale.AddCatalog(wxT("wxstd"));
 
     /* collect network adapter info */
     if (DetectNetAdapter())

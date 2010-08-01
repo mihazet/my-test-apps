@@ -84,6 +84,8 @@ private:
     virtual bool OnInit();
     bool DetectNetAdapter();
     wxLanguage DetectInstalledLanguages();
+
+    wxLocale _locale;
 };
 
 DECLARE_APP(PWUpdaterApp)
