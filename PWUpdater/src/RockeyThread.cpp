@@ -1,9 +1,11 @@
 /*
- *  RockeyThread.cpp - A thread to communicate with Rockey4 USE dongle.
+ *  RockeyThread.cpp - A thread to communicate with Rockey4 USB dongle.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  $Id$
  *
  */
 

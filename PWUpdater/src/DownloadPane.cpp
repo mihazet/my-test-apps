@@ -1,3 +1,14 @@
+/*
+ *  DownloadPane.cpp - Main GUI to process image download stuff.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  $Id$
+ *
+ */
+
 // ------------------------------------------------------------------------
 // Headers
 // ------------------------------------------------------------------------

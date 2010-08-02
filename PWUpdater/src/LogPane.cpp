@@ -1,3 +1,14 @@
+/*
+ *  LogPane.cpp - A pane includes a log text ctrl to display log message.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  $Id$
+ *
+ */
+
 // ------------------------------------------------------------------------
 // Headers
 // ------------------------------------------------------------------------
