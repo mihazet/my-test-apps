@@ -1012,7 +1012,8 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
             if (downloadResult != UART_ERR_NO_ERROR) // error
             {
                 /* notify? */
-                // TODO:
+                if (notifyOnCompletion)
+                    PlayNotificationSound();
 
                 wxLogMessage(wxT("Fail to download file [%s], error [%ld]"),
                     message.payload.at(0), downloadResult);
@@ -1020,7 +1021,8 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
             else if (nextDownloadFile.empty()) // all images download completed
             {
                 /* notify? */
-                // TODO:
+                if (notifyOnCompletion)
+                    PlayNotificationSound();
 
                 /* reset target */
                 pOpt->GetOption(wxT("ResetTargetAfterDownload"), &resetTargetAfterDownload);
