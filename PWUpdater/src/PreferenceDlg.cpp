@@ -123,7 +123,10 @@ void PrefDlg::AddUiPage()
     memSizer->Add(new wxCheckBox(uiPage, myID_PREF_UI_SAVE_DOWNLOAD_FILES, _("Remember which files are selected to download")), 0, wxALL, 5);
 
     wxStaticBoxSizer *soundSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Notification Sound"));
-    soundSizer->Add(new wxFilePickerCtrl(uiPage, myID_PREF_UI_NOTIFY_SOUND_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("WAVE file (*.wav)|*.wav"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE & ~wxFLP_FILE_MUST_EXIST), 0, wxALL | wxEXPAND, 5); 
+    soundSizer->Add(new wxStaticText(uiPage, wxID_STATIC, _("Successful")), 0, wxLEFT | wxRIGHT, 5);
+    soundSizer->Add(new wxFilePickerCtrl(uiPage, myID_PREF_UI_NOTIFY_SUCCESSFUL_SOUND_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("WAVE file (*.wav)|*.wav"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE & ~wxFLP_FILE_MUST_EXIST), 0, wxALL | wxEXPAND, 5);
+    soundSizer->Add(new wxStaticText(uiPage, wxID_STATIC, _("Failed")), 0, wxLEFT | wxRIGHT, 5);
+    soundSizer->Add(new wxFilePickerCtrl(uiPage, myID_PREF_UI_NOTIFY_FAILED_SOUND_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("WAVE file (*.wav)|*.wav"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE & ~wxFLP_FILE_MUST_EXIST), 0, wxALL | wxEXPAND, 5);
 
     wxBoxSizer *uiSizer = new wxBoxSizer(wxVERTICAL);
     uiSizer->Add(langSizer, 0, wxALL | wxEXPAND, 5);
@@ -296,7 +299,8 @@ bool PrefDlg::TransferDataFromWindow()
     /* ui page */
     DBGCALL2(LanguageSave());
     DBGCALL2(CheckBoxSave(myID_PREF_UI_SAVE_DOWNLOAD_FILES, wxT("SaveDownloadFiles")));
-    DBGCALL2(SoundFileSave());
+    DBGCALL2(SoundFileSave(true));
+    DBGCALL2(SoundFileSave(false));
 
     /* tftp page */
     DBGCALL2(InterfaceSave());
@@ -333,7 +337,8 @@ bool PrefDlg::TransferDataToWindow()
     /* ui page */
     DBGCALL(LanguageLoad());
     DBGCALL(CheckBoxLoad(myID_PREF_UI_SAVE_DOWNLOAD_FILES, wxT("SaveDownloadFiles")));
-    DBGCALL(SoundFileLoad());
+    DBGCALL(SoundFileLoad(true));
+    DBGCALL(SoundFileLoad(false));
 
     /* tftp page */
     DBGCALL(InterfaceLoad());
@@ -668,15 +673,17 @@ int PrefDlg::TftpRootSave()
     return ERROR_NO_ERROR;
 }
 
-int PrefDlg::SoundFileLoad()
+int PrefDlg::SoundFileLoad(bool success)
 {
+    int id = success ? myID_PREF_UI_NOTIFY_SUCCESSFUL_SOUND_FILE : myID_PREF_UI_NOTIFY_FAILED_SOUND_FILE;
+    wxString dbEntry = success ? wxT("NotifySuccessfulSoundFile") : wxT("NotifyFailedSoundFile");
     AppOptions *&pOpt = wxGetApp().m_pOpt;
-    wxFilePickerCtrl *pFile = wxDynamicCast(FindWindow(myID_PREF_UI_NOTIFY_SOUND_FILE), wxFilePickerCtrl);
+    wxFilePickerCtrl *pFile = wxDynamicCast(FindWindow(id), wxFilePickerCtrl);
     wxString soundFile;
 
     if (pFile)
     {
-        if (pOpt->GetOption(wxT("NotifySoundFile"), soundFile))
+        if (pOpt->GetOption(dbEntry, soundFile))
         {
             pFile->SetPath(soundFile);
         }
@@ -693,20 +700,22 @@ int PrefDlg::SoundFileLoad()
     return ERROR_NO_ERROR;
 }
 
-int PrefDlg::SoundFileSave()
+int PrefDlg::SoundFileSave(bool success)
 {
+    int id = success ? myID_PREF_UI_NOTIFY_SUCCESSFUL_SOUND_FILE : myID_PREF_UI_NOTIFY_FAILED_SOUND_FILE;
+    wxString dbEntry = success ? wxT("NotifySuccessfulSoundFile") : wxT("NotifyFailedSoundFile");
     AppOptions *&pOpt = wxGetApp().m_pOpt;
-    wxFilePickerCtrl *pFile = wxDynamicCast(FindWindow(myID_PREF_UI_NOTIFY_SOUND_FILE), wxFilePickerCtrl);
+    wxFilePickerCtrl *pFile = wxDynamicCast(FindWindow(id), wxFilePickerCtrl);
     wxString dbValue, uiValue;
 
     if (pFile)
     {
-        if (pOpt->GetOption(wxT("NotifySoundFile"), dbValue))
+        if (pOpt->GetOption(dbEntry, dbValue))
         {
             uiValue = pFile->GetPath();
             if (dbValue != uiValue)
             {
-                pOpt->SetOption(wxT("NotifySoundFile"), uiValue);
+                pOpt->SetOption(dbEntry, uiValue);
             }
             else
             {

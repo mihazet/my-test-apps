@@ -36,8 +36,8 @@ private:
     int InterfaceSave();
     int TftpRootLoad();
     int TftpRootSave();
-    int SoundFileLoad();
-    int SoundFileSave();
+    int SoundFileLoad(bool success);
+    int SoundFileSave(bool success);
 
     DECLARE_EVENT_TABLE()
 };

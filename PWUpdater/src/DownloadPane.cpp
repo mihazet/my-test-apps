@@ -748,13 +748,16 @@ void DownloadPane::GetFileInfo(const wxString &file, unsigned long *offset,
     }
 }
 
-void DownloadPane::PlayNotificationSound()
+void DownloadPane::PlayNotificationSound(bool success)
 {
     AppOptions *&pOpt = wxGetApp().m_pOpt;
     wxString soundFile;
+    wxString dbEntry = success 
+        ? wxT("NotifySuccessfulSoundFile") 
+        : wxT("NotifyFailedSoundFile");
     bool useBell = false;
 
-    soundFile = pOpt->GetOption(wxT("NotifySoundFile"));
+    soundFile = pOpt->GetOption(dbEntry);
     if (!soundFile.empty())
     {
         wxSound snd(soundFile);
@@ -1013,7 +1016,7 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
             {
                 /* notify? */
                 if (notifyOnCompletion)
-                    PlayNotificationSound();
+                    PlayNotificationSound(false);
 
                 wxLogMessage(wxT("Fail to download file [%s], error [%ld]"),
                     message.payload.at(0), downloadResult);
@@ -1022,7 +1025,7 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
             {
                 /* notify? */
                 if (notifyOnCompletion)
-                    PlayNotificationSound();
+                    PlayNotificationSound(true);
 
                 /* reset target */
                 pOpt->GetOption(wxT("ResetTargetAfterDownload"), &resetTargetAfterDownload);
