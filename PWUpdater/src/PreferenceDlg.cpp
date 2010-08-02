@@ -118,8 +118,7 @@ void PrefDlg::AddUiPage()
     langSizer->Add(new wxChoice(uiPage, myID_PREF_UI_LANG), 0, wxALL | wxEXPAND, 5);
 
     wxStaticBoxSizer *memSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Memory"));
-    memSizer->Add(new wxCheckBox(uiPage, myID_PREF_UI_LAYOUT_MEMORY, _("Remember application layout.")), 0, wxALL, 5);
-    memSizer->Add(new wxCheckBox(uiPage, myID_PREF_UI_POS_SIZE_MEMORY, _("Remember application size and position.")), 0, wxALL, 5);
+    memSizer->Add(new wxCheckBox(uiPage, myID_PREF_UI_SAVE_DOWNLOAD_FILES, _("Remember which files are selected to download")), 0, wxALL, 5);
 
     wxBoxSizer *uiSizer = new wxBoxSizer(wxVERTICAL);
     uiSizer->Add(langSizer, 0, wxALL | wxEXPAND, 5);
@@ -290,8 +289,7 @@ bool PrefDlg::TransferDataFromWindow()
 {
     /* ui page */
     DBGCALL2(LanguageSave());
-    DBGCALL2(CheckBoxSave(myID_PREF_UI_LAYOUT_MEMORY, wxT("LoadPerspective")));
-    DBGCALL2(CheckBoxSave(myID_PREF_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
+    DBGCALL2(CheckBoxSave(myID_PREF_UI_SAVE_DOWNLOAD_FILES, wxT("SaveDownloadFiles")));
 
     /* tftp page */
     DBGCALL2(InterfaceSave());
@@ -327,8 +325,7 @@ bool PrefDlg::TransferDataToWindow()
 {
     /* ui page */
     DBGCALL(LanguageLoad());
-    DBGCALL(CheckBoxLoad(myID_PREF_UI_LAYOUT_MEMORY, wxT("LoadPerspective")));
-    DBGCALL(CheckBoxLoad(myID_PREF_UI_POS_SIZE_MEMORY, wxT("LoadSizePosition")));
+    DBGCALL(CheckBoxLoad(myID_PREF_UI_SAVE_DOWNLOAD_FILES, wxT("SaveDownloadFiles")));
 
     /* tftp page */
     DBGCALL(InterfaceLoad());

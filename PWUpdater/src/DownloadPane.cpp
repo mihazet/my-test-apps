@@ -175,6 +175,14 @@ private:
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
+enum
+{
+    SEARCH_MODE_FROM_SCRATCH,
+    SEARCH_MODE_LOAD_MEMORY_FROM_DB,
+    SEARCH_MODE_LOAD_MEMORY_FROM_UI,
+    SEARCH_MODE_INVALID
+};
+
 DownloadFileList::DownloadFileList(wxWindow *parent, wxWindowID id)
     : wxDataViewListCtrl(parent, id, wxDefaultPosition, wxDefaultSize,
     wxDV_SINGLE | wxDV_HORIZ_RULES | wxDV_VERT_RULES)
@@ -247,13 +255,19 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
                          const wxPoint &pos, const wxSize &size,
                          long style)
 {
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    bool load = false;
+
     /* create ui */
     wxPanel::Create(parent, id, pos, size, style);
     CreateControls();
 
     /* start tftp worker thread */
     StartInternalTftpIfNeed();
-    SearchImageFiles(false);
+    if (pOpt->GetOption(wxT("SaveDownloadFiles"), &load) && load)
+        SearchImageFiles(SEARCH_MODE_LOAD_MEMORY_FROM_DB);
+    else
+        SearchImageFiles(SEARCH_MODE_FROM_SCRATCH);
 
     /* start uart worker thread */
     StartUartThread();
@@ -263,7 +277,7 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
 
 void DownloadPane::RescanImageFiles()
 {
-    SearchImageFiles(true);
+    SearchImageFiles(SEARCH_MODE_LOAD_MEMORY_FROM_UI);
 }
 
 void DownloadPane::CreateControls()
@@ -334,12 +348,12 @@ bool DownloadPane::StartInternalTftpIfNeed()
     return useInternalTftp;
 }
 
-void DownloadPane::SearchImageFiles(bool keep_old_selected)
+void DownloadPane::SearchImageFiles(int mode)
 {
     bool useInternalTftp = false;
     AppOptions *&pOpt = wxGetApp().m_pOpt;
     if ((pOpt->GetOption(wxT("UseInternalTftp"), &useInternalTftp)) && useInternalTftp)
-        DoSearchLocalImageFiles(keep_old_selected);
+        DoSearchLocalImageFiles(mode);
     else
     {
         /* search image files in the external tftp server */
@@ -471,7 +485,7 @@ void DownloadPane::StartUartThread()
     cs.Leave();
 }
 
-void DownloadPane::DoSearchLocalImageFiles(bool keep_old_selected)
+void DownloadPane::DoSearchLocalImageFiles(int mode)
 {
     wxStringTokenizer tokenizr;
     AppOptions *&pOpt = wxGetApp().m_pOpt;
@@ -511,11 +525,11 @@ void DownloadPane::DoSearchLocalImageFiles(bool keep_old_selected)
     wxDataViewListStore *store = dfl ? dfl->GetStore() : NULL;
 
     /* backup old selected files */
-    if (keep_old_selected)
+    oldSelectedFiles.clear();
+    if (mode == SEARCH_MODE_LOAD_MEMORY_FROM_UI)
     {
         if (dfl && store)
         {
-            oldSelectedFiles.clear();
             nRow = store->GetCount();
             for (row = 0; row < nRow; row++)
             {
@@ -526,6 +540,16 @@ void DownloadPane::DoSearchLocalImageFiles(bool keep_old_selected)
                     oldSelectedFiles.push_back(var.GetString());
                 }
             }
+        }
+    }
+    else if (mode == SEARCH_MODE_LOAD_MEMORY_FROM_DB)
+    {
+        dbValue = pOpt->GetOption(wxT("DownloadFiles"));
+        tokenizr.SetString(dbValue, wxT(";"));
+        while (tokenizr.HasMoreTokens())
+        {
+            token = tokenizr.GetNextToken();
+            oldSelectedFiles.push_back(token);
         }
     }
 
@@ -572,7 +596,7 @@ void DownloadPane::DoSearchLocalImageFiles(bool keep_old_selected)
                         switch (column)
                         {
                         case DownloadFileList::DFL_COL_UPDATE:
-                            if (keep_old_selected)
+                            if (oldSelectedFiles.size() != 0)
                             {
                                 for (it3 = oldSelectedFiles.begin(); it3 != oldSelectedFiles.end(); ++it3)
                                 {
@@ -789,6 +813,7 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
     wxDataViewListStore *store = NULL;
     wxVariant data;
     int row, nRow;
+    bool saveDownloadFiles = false;
 
     switch (evt)
     {
@@ -921,6 +946,14 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
             msg.payload.push_back(wxString::Format(wxT("0x%x"), end));
             msg.payload.push_back(wxString::Format(wxT("%lu"), size));
             pQueue->EnQueue(msg);
+
+            /* append download files? */
+            if (pOpt->GetOption(wxT("SaveDownloadFiles"), &saveDownloadFiles) && saveDownloadFiles)
+            {
+                wxString oldValue = pOpt->GetOption(wxT("DownloadFiles"));
+                oldValue << wxT(";") << nextDownloadFile;
+                pOpt->SetOption(wxT("DownloadFiles"), oldValue);
+            }
         }
         else
         {
@@ -976,6 +1009,7 @@ void DownloadPane::OnButtonDownload(wxCommandEvent &event)
     wxDataViewListStore *store = NULL;
     unsigned int row, nRow;
     wxVariant data;
+    bool saveDownloadFiles = false;
 
     file = GetNextDownloadFile();
     if (!file.empty())
@@ -1016,6 +1050,10 @@ void DownloadPane::OnButtonDownload(wxCommandEvent &event)
             /* disable button */
             _downloading = true;
             btn->Disable();
+
+            /* memory download file? */
+            if (pOpt->GetOption(wxT("SaveDownloadFiles"), &saveDownloadFiles) && saveDownloadFiles)
+                pOpt->SetOption(wxT("DownloadFiles"), file);
         }
     }
 }
