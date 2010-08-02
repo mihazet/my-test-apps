@@ -123,7 +123,7 @@ void PrefDlg::AddUiPage()
     memSizer->Add(new wxCheckBox(uiPage, myID_PREF_UI_SAVE_DOWNLOAD_FILES, _("Remember which files are selected to download")), 0, wxALL, 5);
 
     wxStaticBoxSizer *soundSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Notification Sound"));
-    soundSizer->Add(new wxFilePickerCtrl(uiPage, myID_PREF_UI_NOTIFY_SOUND_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("WAVE file (*.wav)|*.wav")), 0, wxALL | wxEXPAND, 5); 
+    soundSizer->Add(new wxFilePickerCtrl(uiPage, myID_PREF_UI_NOTIFY_SOUND_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("WAVE file (*.wav)|*.wav"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE & ~wxFLP_FILE_MUST_EXIST), 0, wxALL | wxEXPAND, 5); 
 
     wxBoxSizer *uiSizer = new wxBoxSizer(wxVERTICAL);
     uiSizer->Add(langSizer, 0, wxALL | wxEXPAND, 5);

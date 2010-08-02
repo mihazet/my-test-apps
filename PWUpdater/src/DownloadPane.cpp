@@ -18,6 +18,7 @@
 #include <wx/renderer.h>
 #include <wx/tokenzr.h>
 #include <wx/filename.h>
+#include <wx/sound.h>
 #include "PWUpdater.h"
 #include "DownloadPane.h"
 #include "WidgetsId.h"
@@ -744,6 +745,32 @@ void DownloadPane::GetFileInfo(const wxString &file, unsigned long *offset,
                 break;
             }
         }
+    }
+}
+
+void DownloadPane::PlayNotificationSound()
+{
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxString soundFile;
+    bool useBell = false;
+
+    soundFile = pOpt->GetOption(wxT("NotifySoundFile"));
+    if (!soundFile.empty())
+    {
+        wxSound snd(soundFile);
+        if (snd.IsOk())
+            snd.Play(wxSOUND_ASYNC);
+        else
+            useBell = true;
+    }
+    else
+    {
+        useBell = true;
+    }
+
+    if (useBell)
+    {
+        wxBell();
     }
 }
 
