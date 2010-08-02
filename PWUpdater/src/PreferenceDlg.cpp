@@ -122,9 +122,13 @@ void PrefDlg::AddUiPage()
     wxStaticBoxSizer *memSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Memory"));
     memSizer->Add(new wxCheckBox(uiPage, myID_PREF_UI_SAVE_DOWNLOAD_FILES, _("Remember which files are selected to download")), 0, wxALL, 5);
 
+    wxStaticBoxSizer *soundSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Notification Sound"));
+    soundSizer->Add(new wxFilePickerCtrl(uiPage, myID_PREF_UI_NOTIFY_SOUND_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("WAVE file (*.wav)|*.wav")), 0, wxALL | wxEXPAND, 5); 
+
     wxBoxSizer *uiSizer = new wxBoxSizer(wxVERTICAL);
     uiSizer->Add(langSizer, 0, wxALL | wxEXPAND, 5);
     uiSizer->Add(memSizer, 0, wxALL | wxEXPAND, 5);
+    uiSizer->Add(soundSizer, 0, wxALL | wxEXPAND, 5);
     uiPage->SetSizer(uiSizer);
 
     prefNB->AddPage(uiPage, _("User interface"), false);
@@ -292,6 +296,7 @@ bool PrefDlg::TransferDataFromWindow()
     /* ui page */
     DBGCALL2(LanguageSave());
     DBGCALL2(CheckBoxSave(myID_PREF_UI_SAVE_DOWNLOAD_FILES, wxT("SaveDownloadFiles")));
+    DBGCALL2(SoundFileSave());
 
     /* tftp page */
     DBGCALL2(InterfaceSave());
@@ -328,6 +333,7 @@ bool PrefDlg::TransferDataToWindow()
     /* ui page */
     DBGCALL(LanguageLoad());
     DBGCALL(CheckBoxLoad(myID_PREF_UI_SAVE_DOWNLOAD_FILES, wxT("SaveDownloadFiles")));
+    DBGCALL(SoundFileLoad());
 
     /* tftp page */
     DBGCALL(InterfaceLoad());
@@ -643,6 +649,64 @@ int PrefDlg::TftpRootSave()
             if (dbValue != uiValue)
             {
                 pOpt->SetOption(wxT("TftpdRoot"), uiValue);
+            }
+            else
+            {
+                return ERROR_SKIP_UPDATE;
+            }
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::SoundFileLoad()
+{
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxFilePickerCtrl *pFile = wxDynamicCast(FindWindow(myID_PREF_UI_NOTIFY_SOUND_FILE), wxFilePickerCtrl);
+    wxString soundFile;
+
+    if (pFile)
+    {
+        if (pOpt->GetOption(wxT("NotifySoundFile"), soundFile))
+        {
+            pFile->SetPath(soundFile);
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::SoundFileSave()
+{
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxFilePickerCtrl *pFile = wxDynamicCast(FindWindow(myID_PREF_UI_NOTIFY_SOUND_FILE), wxFilePickerCtrl);
+    wxString dbValue, uiValue;
+
+    if (pFile)
+    {
+        if (pOpt->GetOption(wxT("NotifySoundFile"), dbValue))
+        {
+            uiValue = pFile->GetPath();
+            if (dbValue != uiValue)
+            {
+                pOpt->SetOption(wxT("NotifySoundFile"), uiValue);
             }
             else
             {
