@@ -17,6 +17,7 @@
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
 #include <wx/aboutdlg.h>
+#include <algorithm>
 #include "PWUpdater.h"
 #include "TftpdThread.h"
 #include "RockeyThread.h"

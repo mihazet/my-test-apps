@@ -432,6 +432,8 @@ wxString DownloadPane::GetTftpServerIpAddress()
     {
         return pOpt->GetOption(wxT("ExternalTftpAddress"));
     }
+
+    return wxEmptyString;
 }
 
 void DownloadPane::StartUartThread()
@@ -701,8 +703,10 @@ void DownloadPane::OnThreadTftpd(wxThreadEvent &event)
         totalBlock = msg.GetNum2();
         fileName = msg.GetString();
         if (msg.GetEvent() == TFTPD_EVENT_READ_TRANSFER_DONE)
-        wxLogMessage(wxT("Read update: file %s, current = %d, total = %d"),
-            fileName, currentBlock, totalBlock);
+        {
+            wxLogMessage(wxT("Read update: file %s, current = %d, total = %d"),
+                fileName, currentBlock, totalBlock);
+        }
         break;
     case TFTPD_EVENT_WRITE_REQUEST:
         transferMode = msg.GetNum1();
