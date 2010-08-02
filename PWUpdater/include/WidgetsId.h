@@ -70,6 +70,7 @@ enum
     /* threads */
     myID_THREAD_TFTPD,
     myID_THREAD_UART,
+    myID_THREAD_ROCKEY,
 };
 
 #endif /* _WIDGETS_ID_H_ */

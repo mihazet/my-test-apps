@@ -36,8 +36,6 @@
 
 #define wxLOG_COMPONENT "PWUpdater/ui/frame"
 
-#define ID_THREAD_ROCKEY    wxID_HIGHEST + 1
-
 typedef struct
 {
     wxLanguage langId;
@@ -402,7 +400,7 @@ BEGIN_EVENT_TABLE(PWUpdaterFrame, wxFrame)
     EVT_MENU(wxID_ABOUT, PWUpdaterFrame::OnAbout)
     EVT_MENU_RANGE(myID_MBAR_VIEW_START, myID_MBAR_VIEW_END, PWUpdaterFrame::OnView)
     EVT_UPDATE_UI_RANGE(myID_MBAR_VIEW_START, myID_MBAR_VIEW_END, PWUpdaterFrame::OnUpdateUIView)
-    EVT_THREAD(ID_THREAD_ROCKEY, PWUpdaterFrame::OnRockey)
+    EVT_THREAD(myID_THREAD_ROCKEY, PWUpdaterFrame::OnRockey)
 END_EVENT_TABLE()
 
 PWUpdaterFrame::PWUpdaterFrame(wxWindow *parent, wxWindowID id,
@@ -504,7 +502,7 @@ void PWUpdaterFrame::StartRockeyThread()
         return;
     }
 
-    pRockey = new RockeyThread(this, ID_THREAD_ROCKEY);
+    pRockey = new RockeyThread(this, myID_THREAD_ROCKEY);
 
     if (pRockey->Create() != wxTHREAD_NO_ERROR)
     {
