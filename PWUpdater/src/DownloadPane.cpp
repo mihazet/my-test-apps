@@ -327,7 +327,7 @@ void DownloadPane::CreateControls()
     wxBoxSizer *opSizer = new wxBoxSizer(wxHORIZONTAL);
     downloadSizer->Add(opSizer, 0, wxALL | wxEXPAND, 0);
     wxStaticBoxSizer *optSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Options"));
-    opSizer->Add(optSizer, 1, wxALL | wxEXPAND, 5);
+    opSizer->Add(optSizer, 1, wxLEFT | wxBOTTOM | wxRIGHT | wxEXPAND, 5);
     wxCheckBox *cb1 = new wxCheckBox(this, myID_CHKBOX_NOTIFY_ON_COMPLETED, _("Notify On Completion"));
     pOpt->GetOption(wxT("NotifyOnCompleted"), &checked);
     cb1->SetValue(checked);
@@ -339,7 +339,7 @@ void DownloadPane::CreateControls()
     wxButton *downloadBtn = new wxButton(this, myID_BTN_DOWNLOAD, _("Download selected"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     downloadBtn->SetBitmap(wxBitmap(download_to_chip2_64_xpm));
     downloadBtn->SetBitmapDisabled(wxBitmap(wxImage(download_to_chip2_64_xpm).ConvertToGreyscale()));
-    opSizer->Add(downloadBtn, 0, wxALL | wxEXPAND, 10);
+    opSizer->Add(downloadBtn, 0, wxALL | wxEXPAND, 5);
 
     paneSizer->Add(downloadSizer, 1, wxALL | wxEXPAND, 0);
 
