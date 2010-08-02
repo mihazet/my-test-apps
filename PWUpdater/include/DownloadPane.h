@@ -47,6 +47,7 @@ private:
     void OnButtonSerialPortRefresh(wxCommandEvent &event);
     void OnButtonDownload(wxCommandEvent &event);
     void OnUpdateUIButtonDownload(wxUpdateUIEvent &event);
+    void OnCheckbox(wxCommandEvent &event);
 
     // data member
     wxVector<int> _serialPort;

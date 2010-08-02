@@ -226,6 +226,8 @@ BEGIN_EVENT_TABLE(DownloadPane, wxPanel)
     EVT_BUTTON(myID_BTN_COMPORT_REFRESH, DownloadPane::OnButtonSerialPortRefresh)
     EVT_BUTTON(myID_BTN_DOWNLOAD, DownloadPane::OnButtonDownload)
     EVT_UPDATE_UI(myID_BTN_DOWNLOAD, DownloadPane::OnUpdateUIButtonDownload)
+    EVT_CHECKBOX(myID_CHKBOX_NOTIFY_ON_COMPLETED, DownloadPane::OnCheckbox)
+    EVT_CHECKBOX(myID_CHKBOX_RESET_TARGET_AFTER_DOWNLOAD, DownloadPane::OnCheckbox)
 END_EVENT_TABLE()
 
 DownloadPane::DownloadPane()
@@ -282,6 +284,9 @@ void DownloadPane::RescanImageFiles()
 
 void DownloadPane::CreateControls()
 {
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    bool checked;
+
     wxBoxSizer *paneSizer = new wxBoxSizer(wxHORIZONTAL);
 
     /* logo and com port */
@@ -311,8 +316,14 @@ void DownloadPane::CreateControls()
     downloadSizer->Add(opSizer, 0, wxALL | wxEXPAND, 0);
     wxStaticBoxSizer *optSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Options"));
     opSizer->Add(optSizer, 1, wxALL | wxEXPAND, 5);
-    optSizer->Add(new wxCheckBox(this, myID_CHKBOX_NOTIFY_ON_COMPLETED, _("Notify On Completion")), 0, wxALL, 5);
-    optSizer->Add(new wxCheckBox(this, myID_CHKBOX_RESET_TARGET_AFTER_DOWNLOAD, _("Reset Target After Download")), 0, wxALL, 5);
+    wxCheckBox *cb1 = new wxCheckBox(this, myID_CHKBOX_NOTIFY_ON_COMPLETED, _("Notify On Completion"));
+    pOpt->GetOption(wxT("NotifyOnCompleted"), &checked);
+    cb1->SetValue(checked);
+    optSizer->Add(cb1, 0, wxALL, 5);
+    wxCheckBox *cb2 = new wxCheckBox(this, myID_CHKBOX_RESET_TARGET_AFTER_DOWNLOAD, _("Reset Target After Download"));
+    pOpt->GetOption(wxT("ResetTargetAfterDownload"), &checked);
+    cb2->SetValue(checked);
+    optSizer->Add(cb2, 0, wxALL, 5);
     wxButton *downloadBtn = new wxButton(this, myID_BTN_DOWNLOAD, _("Download selected"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
     downloadBtn->SetBitmap(wxBitmap(download_to_chip2_64_xpm));
     downloadBtn->SetBitmapDisabled(wxBitmap(wxImage(download_to_chip2_64_xpm).ConvertToGreyscale()));
@@ -1086,3 +1097,20 @@ void DownloadPane::OnUpdateUIButtonDownload(wxUpdateUIEvent &event)
         event.Enable((_downloading == false) && (at_least_one_is_checked == true));
     }
 }
+
+void DownloadPane::OnCheckbox(wxCommandEvent &event)
+{
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxString dbEntry;
+    int id = event.GetId();
+
+    if (id == myID_CHKBOX_NOTIFY_ON_COMPLETED)
+        dbEntry = wxT("NotifyOnCompleted");
+    else if (id == myID_CHKBOX_RESET_TARGET_AFTER_DOWNLOAD)
+        dbEntry = wxT("ResetTargetAfterDownload");
+    else
+        return;
+
+    pOpt->SetOption(dbEntry, event.IsChecked());
+}
+

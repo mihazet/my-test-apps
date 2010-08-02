@@ -86,6 +86,8 @@ void AppOptions::DB_Init()
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"SplashOffset\", \"0x81000000\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"SplashEnd\", \"0x810fffff\");")
         << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"SplashImage\", \"splash.uImage\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"NotifyOnCompleted\", \"false\");")
+        << wxT("INSERT OR IGNORE INTO AppOptions VALUES (\"ResetTargetAfterDownload\", \"false\");")
         << wxT("COMMIT TRANSACTION;");
     _db->ExecuteUpdate(sql);
 
