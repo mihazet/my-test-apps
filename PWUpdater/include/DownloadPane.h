@@ -50,6 +50,7 @@ private:
 
     // data member
     wxVector<int> _serialPort;
+    bool _downloading;
 
     DECLARE_EVENT_TABLE()
 };

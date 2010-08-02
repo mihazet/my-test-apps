@@ -240,6 +240,7 @@ DownloadPane::~DownloadPane()
 void DownloadPane::Init()
 {
     _serialPort.clear();
+    _downloading = false;
 }
 
 bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
@@ -879,6 +880,9 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
 
             UartMessage msg(UART_EVENT_DISCONNECT);
             pQueue->EnQueue(msg);
+
+            /* re-enable the button */
+            _downloading = false;
         }
 
         break;
@@ -902,7 +906,7 @@ void DownloadPane::OnButtonSerialPortRefresh(wxCommandEvent &WXUNUSED(event))
     }
 }
 
-void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
+void DownloadPane::OnButtonDownload(wxCommandEvent &event)
 {
     wxString file;
     unsigned long offset, end, size, longTemp;
@@ -911,12 +915,19 @@ void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
     UartMessage message(UART_EVENT_DOWNLOAD_FIRST);
     wxString tftpIpAddress = GetTftpServerIpAddress();
     wxChoice *choice = NULL;
+    wxButton *btn = NULL;
+    DownloadFileList *dfl = NULL;
+    wxDataViewListStore *store = NULL;
+    unsigned int row, nRow;
+    wxVariant data;
 
     file = GetNextDownloadFile();
     if (!file.empty())
     {
         choice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
-        if (choice)
+        dfl = wxDynamicCast(FindWindow(myID_DOWNLOAD_FILE_LIST), DownloadFileList);
+        btn = wxDynamicCast(event.GetEventObject(), wxButton);
+        if (choice && dfl && (NULL != (store = dfl->GetStore())) && btn)
         {
             message.payload.push_back(choice->GetStringSelection());
             if (tftpIpAddress.empty())
@@ -933,7 +944,22 @@ void DownloadPane::OnButtonDownload(wxCommandEvent &WXUNUSED(event))
             message.payload.push_back(wxString::Format(wxT("0x%x"), end));
             message.payload.push_back(wxString::Format(wxT("%lu"), size));
             pQueue->EnQueue(message);
-            wxLogMessage(wxT("Main -> worker: %s 0x%lx %lu"), file, offset, size);
+
+            /* clear old download progress and result */
+            nRow = store->GetCount();
+            for (row = 0; row < nRow; row++)
+            {
+                data = (long)0;
+                store->SetValueByRow(data, row, DownloadFileList::DFL_COL_PROGRESS);
+                store->RowValueChanged(row, DownloadFileList::DFL_COL_PROGRESS);
+                data = wxEmptyString;
+                store->SetValueByRow(data, row, DownloadFileList::DFL_COL_RESULT);
+                store->RowValueChanged(row, DownloadFileList::DFL_COL_RESULT);
+            }
+
+            /* disable button */
+            _downloading = true;
+            btn->Disable();
         }
     }
 }
@@ -948,18 +974,21 @@ void DownloadPane::OnUpdateUIButtonDownload(wxUpdateUIEvent &event)
 
     if (lc)
     {
-        store = lc->GetStore();
-        nRow = store->GetCount();
-        for (row = 0; row < nRow; row++)
+        if (_downloading == false)
         {
-            store->GetValueByRow(data, row, DownloadFileList::DFL_COL_UPDATE);
-            if (data.GetBool())
+            store = lc->GetStore();
+            nRow = store->GetCount();
+            for (row = 0; row < nRow; row++)
             {
-                at_least_one_is_checked = true;
-                break;
+                store->GetValueByRow(data, row, DownloadFileList::DFL_COL_UPDATE);
+                if (data.GetBool())
+                {
+                    at_least_one_is_checked = true;
+                    break;
+                }
             }
         }
 
-        event.Enable(at_least_one_is_checked == true);
+        event.Enable((_downloading == false) && (at_least_one_is_checked == true));
     }
 }
