@@ -253,7 +253,7 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
 
     /* start tftp worker thread */
     StartInternalTftpIfNeed();
-    SearchImageFiles();
+    SearchImageFiles(false);
 
     /* start uart worker thread */
     StartUartThread();
@@ -263,7 +263,7 @@ bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
 
 void DownloadPane::RescanImageFiles()
 {
-    SearchImageFiles();
+    SearchImageFiles(true);
 }
 
 void DownloadPane::CreateControls()
@@ -334,12 +334,12 @@ bool DownloadPane::StartInternalTftpIfNeed()
     return useInternalTftp;
 }
 
-void DownloadPane::SearchImageFiles()
+void DownloadPane::SearchImageFiles(bool keep_old_selected)
 {
     bool useInternalTftp = false;
     AppOptions *&pOpt = wxGetApp().m_pOpt;
     if ((pOpt->GetOption(wxT("UseInternalTftp"), &useInternalTftp)) && useInternalTftp)
-        DoSearchLocalImageFiles();
+        DoSearchLocalImageFiles(keep_old_selected);
     else
     {
         /* search image files in the external tftp server */
@@ -471,20 +471,23 @@ void DownloadPane::StartUartThread()
     cs.Leave();
 }
 
-void DownloadPane::DoSearchLocalImageFiles()
+void DownloadPane::DoSearchLocalImageFiles(bool keep_old_selected)
 {
     wxStringTokenizer tokenizr;
     AppOptions *&pOpt = wxGetApp().m_pOpt;
     bool &keyFound = wxGetApp().m_keyFound;
     wxVector<wxString> fileOrder;
     wxVector<wxString> fileAuth;
-    wxVector<wxString>::iterator it, it2;
+    wxVector<wxString>::iterator it, it2, it3;
     wxString dbValue, token, rootPath, fileName, dbEntry, strTemp;
     wxFileName fn;
     bool needAuth;
     int column;
     wxVector<wxVariant> data;
     unsigned long startAddr, endAddr, fileLength;
+    wxVector<wxString> oldSelectedFiles;
+    unsigned int row, nRow;
+    wxVariant var;
 
     /* load image files search order */
     dbValue = pOpt->GetOption(wxT("ImageFilesSearchOrder"));
@@ -504,9 +507,29 @@ void DownloadPane::DoSearchLocalImageFiles()
         fileAuth.push_back(token);
     }
 
-    /* start to search files */
     DownloadFileList *dfl = wxDynamicCast(FindWindow(myID_DOWNLOAD_FILE_LIST), DownloadFileList);
-    wxDataViewListStore *store = dfl ? static_cast<wxDataViewListStore *>(dfl->GetModel()) : NULL;
+    wxDataViewListStore *store = dfl ? dfl->GetStore() : NULL;
+
+    /* backup old selected files */
+    if (keep_old_selected)
+    {
+        if (dfl && store)
+        {
+            oldSelectedFiles.clear();
+            nRow = store->GetCount();
+            for (row = 0; row < nRow; row++)
+            {
+                store->GetValueByRow(var, row, DownloadFileList::DFL_COL_UPDATE);
+                if (var.GetBool())
+                {
+                    store->GetValueByRow(var, row, DownloadFileList::DFL_COL_FILE);
+                    oldSelectedFiles.push_back(var.GetString());
+                }
+            }
+        }
+    }
+
+    /* start to search files */
     rootPath = pOpt->GetOption(wxT("TftpdRoot"));
     if (rootPath.empty()) rootPath = wxGetCwd();
     if (store) store->DeleteAllItems();
@@ -549,7 +572,22 @@ void DownloadPane::DoSearchLocalImageFiles()
                         switch (column)
                         {
                         case DownloadFileList::DFL_COL_UPDATE:
-                            data.push_back(false);
+                            if (keep_old_selected)
+                            {
+                                for (it3 = oldSelectedFiles.begin(); it3 != oldSelectedFiles.end(); ++it3)
+                                {
+                                    if (*it3 == fileName)
+                                        break;
+                                }
+                                if (it3 != oldSelectedFiles.end())
+                                    data.push_back(true);
+                                else
+                                    data.push_back(false);
+                            }
+                            else
+                            {
+                                data.push_back(false);
+                            }
                             break;
                         case DownloadFileList::DFL_COL_FILE:
                             data.push_back(fileName);

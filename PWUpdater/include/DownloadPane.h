@@ -30,13 +30,13 @@ private:
     void Init();
     void CreateControls();
     bool StartInternalTftpIfNeed();
-    void SearchImageFiles();
+    void SearchImageFiles(bool keep_old_selected = false);
     void DoStartTftpServerThread(const wxString &ipAddr = wxEmptyString,
         const wxString &root = wxEmptyString);
     void DoStopTftpServerThread();
     wxString GetTftpServerIpAddress();
     void StartUartThread();
-    void DoSearchLocalImageFiles();
+    void DoSearchLocalImageFiles(bool keep_old_selected);
     wxString GetNextDownloadFile(const wxString &currentFile = wxEmptyString);
     void GetFileInfo(const wxString &file, unsigned long *offset,
         unsigned long *end, unsigned long *size);
