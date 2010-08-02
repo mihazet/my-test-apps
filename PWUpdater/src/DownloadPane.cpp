@@ -834,7 +834,7 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
                     message.payload.at(1).ToULong(&longTemp);
                     data = (long)longTemp;
                     store->SetValueByRow(data, row, DownloadFileList::DFL_COL_PROGRESS);
-                    store->RowChanged(row);
+                    store->RowValueChanged(row, DownloadFileList::DFL_COL_PROGRESS);
                     break;
                 }
             }
@@ -850,8 +850,28 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
             break;
         }
 
-        nextDownloadFile = GetNextDownloadFile(message.payload.at(0));
         message.payload.at(1).ToLong(&downloadResult);
+
+        /* update download result */
+        dfl = wxDynamicCast(FindWindow(myID_DOWNLOAD_FILE_LIST), DownloadFileList);
+        if (dfl && (NULL != (store = dfl->GetStore())))
+        {
+            nRow = store->GetCount();
+            for (row = 0; row < nRow; row++)
+            {
+                store->GetValueByRow(data, row, DownloadFileList::DFL_COL_FILE);
+                if (data.GetString() == message.payload.at(0))
+                {
+                    data = wxString::Format(wxT("%ld"), downloadResult);
+                    store->SetValueByRow(data, row, DownloadFileList::DFL_COL_RESULT);
+                    store->RowValueChanged(row, DownloadFileList::DFL_COL_RESULT);
+                    break;
+                }
+            }
+        }
+
+        /* continue? */
+        nextDownloadFile = GetNextDownloadFile(message.payload.at(0));
         if ((downloadResult == UART_ERR_NO_ERROR) && !nextDownloadFile.empty())
         {
             GetFileInfo(nextDownloadFile, &offset, &end, &size);
@@ -863,8 +883,6 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
             msg.payload.push_back(wxString::Format(wxT("0x%x"), end));
             msg.payload.push_back(wxString::Format(wxT("%lu"), size));
             pQueue->EnQueue(msg);
-            wxLogMessage(wxT("Main -> worker: %s 0x%lx %lu"),
-                nextDownloadFile, offset, size);
         }
         else
         {
