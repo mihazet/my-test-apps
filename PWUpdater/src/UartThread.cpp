@@ -68,16 +68,17 @@ wxThread::ExitCode UartThread::Entry()
     while (!quit)
     {
         pQueue->Wait();
-        message = pQueue->DeQueue();
-
-        quit = ProcessMessage(message);
+        if (!pQueue->Empty())
+        {
+            message = pQueue->DeQueue();
+            quit = ProcessMessage(message);
+        }
 
         while (!quit)
         {
             if (!pQueue->Empty())
             {
                 message = pQueue->DeQueue();
-
                 quit = ProcessMessage(message);
             }
             else
@@ -99,6 +100,7 @@ bool UartThread::ProcessMessage(const UartMessage &message)
     wxStopWatch stopWatch;
     long imageSize;
     unsigned long sectorStart, sectorEnd, sectorSize;
+    bool originalConnection;
 
     switch (evt)
     {
@@ -323,6 +325,26 @@ bool UartThread::ProcessMessage(const UartMessage &message)
         }
 
         NotifyDownloadResult(message.payload.at(1), searchResult);
+
+        break;
+
+    case UART_EVENT_RESET_TARGET:
+
+        //
+        // payload.at(0): com port
+        //
+        /* verify parameters */
+        if (message.payload.size() != 1)
+            break;
+
+        originalConnection = _comPort.IsOpen() ? true : false;
+        if (originalConnection == false)
+            ComPortConnect(message.payload.at(0), false);
+
+        SendUartMessage("reset\r");
+
+        if (originalConnection == false)
+            ComPortDisconnect(false);
 
         break;
 

@@ -825,6 +825,7 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
     wxVariant data;
     int row, nRow;
     bool saveDownloadFiles = false;
+    bool notifyOnCompletion = false, resetTargetAfterDownload = false;
 
     switch (evt)
     {
@@ -968,14 +969,33 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
         }
         else
         {
+            pOpt->GetOption(wxT("NotifyOnCompleted"), &notifyOnCompletion);
+
             if (downloadResult != UART_ERR_NO_ERROR) // error
             {
+                /* notify? */
+                // TODO:
+
                 wxLogMessage(wxT("Fail to download file [%s], error [%ld]"),
                     message.payload.at(0), downloadResult);
             }
             else if (nextDownloadFile.empty()) // all images download completed
             {
+                /* notify? */
+                // TODO:
 
+                /* reset target */
+                pOpt->GetOption(wxT("ResetTargetAfterDownload"), &resetTargetAfterDownload);
+                if (resetTargetAfterDownload)
+                {
+                    wxChoice *choice = wxDynamicCast(FindWindow(myID_CHOICE_COMPORT), wxChoice);
+                    if (choice)
+                    {
+                        UartMessage reset(UART_EVENT_RESET_TARGET);
+                        reset.payload.push_back(choice->GetStringSelection());
+                        pQueue->EnQueue(reset);
+                    }
+                }
             }
 
             UartMessage msg(UART_EVENT_DISCONNECT);

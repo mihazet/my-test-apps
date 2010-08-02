@@ -51,6 +51,8 @@ enum
         // payload.at(2): image offset
         // payload.at(3): image end
         // payload.at(4): image size
+    UART_EVENT_RESET_TARGET,
+        // payload.at(0): com port connect to
 
     /* uart -> main */
     UART_EVENT_PORT_DETECTION,
