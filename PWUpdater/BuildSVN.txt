@@ -21,8 +21,10 @@ Required Tool or Library
 Build Procedure
 ===============
 1. Build your wxWidgets libraries, we need at least the unicode debug and
-   unicode release build. If you use pre-build distribution, you can skip
-   this step. In any case, you need to know the exact path to you wxWidgets.
+   unicode release build. If you are using pre-build distribution, you can
+   skip this step. In any case, you need to know the exact path to you 
+   wxWidgets library when you configure your DialogBlocks.(See the wizard
+   int menu "Tasks > Set Up DialogBlocks")
 2. Use DialogBlocks to open the project file (*.pjd), and select menu
    [Build/Generate Makefile] to generate the build rule files for your
    platform. After files are genrated, you can close DialogBlocks.
