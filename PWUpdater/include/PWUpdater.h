@@ -113,7 +113,6 @@ public:
     {
         STATBAR_FLD_GENERAL,
         STATBAR_FLD_TFTP,
-        STATBAR_FLD_COMPORT,
 
         STATBAR_FLD_MAX
     };

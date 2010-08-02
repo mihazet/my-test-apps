@@ -466,7 +466,7 @@ void PWUpdaterFrame::CreateControls()
 
     /* status bar */
     wxStatusBar *statBar = new wxStatusBar(this, myID_FRAME_STATUSBAR, wxSTB_DEFAULT_STYLE);
-    int stBarWidths[STATBAR_FLD_MAX] = { -1, -2, 80 };
+    int stBarWidths[STATBAR_FLD_MAX] = { -1, -3 };
     statBar->SetFieldsCount(STATBAR_FLD_MAX);
     statBar->SetStatusWidths(STATBAR_FLD_MAX, stBarWidths);
     SetStatusBar(statBar);
