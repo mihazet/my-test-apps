@@ -27,7 +27,9 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
-#define RX_BUF_SIZE     (16 * 1024)
+#define UBOOT_TFTP_BLOCK_SIZE   (1468)
+#define FLASH_SECTOR_SIZE       (0x20000)
+#define RX_BUF_SIZE             (16 * 1024)
 #define UBOOT_BOOTUP_MESSAGE    "Hit any key to stop autoboot:"
 #define UBOOT_PROMPT_MESSAGE    "U-Boot> "
 
@@ -96,6 +98,7 @@ bool UartThread::ProcessMessage(const UartMessage &message)
     int searchResult;
     wxStopWatch stopWatch;
     long imageSize;
+    unsigned long sectorStart, sectorEnd, sectorSize;
 
     switch (evt)
     {
@@ -188,7 +191,7 @@ bool UartThread::ProcessMessage(const UartMessage &message)
             break;
         }
 
-        SendUartMessage("setenv serverip %s\r\n", (const char *)message.payload.at(1).ToAscii());
+        SendUartMessage("setenv serverip %s\r", (const char *)message.payload.at(1).ToAscii());
 
         searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, 5);
         if (searchResult != UART_ERR_MSG_FOUND)
@@ -197,16 +200,52 @@ bool UartThread::ProcessMessage(const UartMessage &message)
             break;
         }
 
-        SendUartMessage("tftpboot %s %s\r\n",
+        SendUartMessage("tftpboot %s %s\r",
             (const char *)message.payload.at(2).ToAscii(),
             (const char *)message.payload.at(3).ToAscii());
 
         message.payload.at(6).ToLong(&imageSize);
-        searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, imageSize / 10000);
+        searchResult = WaitUartMessageAndCountHashSign(message.payload.at(3),
+            UBOOT_PROMPT_MESSAGE, imageSize / (UBOOT_TFTP_BLOCK_SIZE * 10),
+            imageSize / 10000);
         if (searchResult != UART_ERR_MSG_FOUND)
         {
             NotifyDownloadResult(message.payload.at(3), searchResult);
             break;
+        }
+
+        SendUartMessage("erase %s %s\r",
+            (const char *)message.payload.at(4).ToAscii(),
+            (const char *)message.payload.at(5).ToAscii());
+
+        message.payload.at(4).ToULong(&sectorStart, 16);
+        message.payload.at(5).ToULong(&sectorEnd, 16);
+        sectorSize = sectorEnd - sectorStart + 1;
+        searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, sectorSize / FLASH_SECTOR_SIZE);
+        if (searchResult != UART_ERR_MSG_FOUND)
+        {
+            NotifyDownloadResult(message.payload.at(3), searchResult);
+            break;
+        }
+        else
+        {
+            NotifyDownloadProgress(message.payload.at(3), 75);
+        }
+
+        SendUartMessage("cp.b %s %s 0x%x\r",
+            (const char *)message.payload.at(2).ToAscii(),
+            (const char *)message.payload.at(4).ToAscii(),
+            imageSize);
+
+        searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, (imageSize / FLASH_SECTOR_SIZE) * 6);
+        if (searchResult != UART_ERR_MSG_FOUND)
+        {
+            NotifyDownloadResult(message.payload.at(3), searchResult);
+            break;
+        }
+        else
+        {
+            NotifyDownloadProgress(message.payload.at(3), 100);
         }
 
         NotifyDownloadResult(message.payload.at(3), searchResult);
@@ -226,7 +265,7 @@ bool UartThread::ProcessMessage(const UartMessage &message)
         if (message.payload.size() != 5)
             break;
 
-        SendUartMessage(" \r\n");
+        SendUartMessage(" \r");
 
         searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, 3);
         if (searchResult != UART_ERR_MSG_FOUND)
@@ -235,16 +274,52 @@ bool UartThread::ProcessMessage(const UartMessage &message)
             break;
         }
 
-        SendUartMessage("tftpboot %s %s\r\n",
+        SendUartMessage("tftpboot %s %s\r",
             (const char *)message.payload.at(0).ToAscii(),
             (const char *)message.payload.at(1).ToAscii());
 
         message.payload.at(4).ToLong(&imageSize);
-        searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, imageSize / 10000);
+        searchResult = WaitUartMessageAndCountHashSign(message.payload.at(1),
+            UBOOT_PROMPT_MESSAGE, imageSize / (UBOOT_TFTP_BLOCK_SIZE * 10),
+            imageSize / 10000);
         if (searchResult != UART_ERR_MSG_FOUND)
         {
             NotifyDownloadResult(message.payload.at(1), searchResult);
             break;
+        }
+
+        SendUartMessage("erase %s %s\r",
+            (const char *)message.payload.at(2).ToAscii(),
+            (const char *)message.payload.at(3).ToAscii());
+
+        message.payload.at(2).ToULong(&sectorStart, 16);
+        message.payload.at(3).ToULong(&sectorEnd, 16);
+        sectorSize = sectorEnd - sectorStart + 1;
+        searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, sectorSize / FLASH_SECTOR_SIZE);
+        if (searchResult != UART_ERR_MSG_FOUND)
+        {
+            NotifyDownloadResult(message.payload.at(1), searchResult);
+            break;
+        }
+        else
+        {
+            NotifyDownloadProgress(message.payload.at(1), 75);
+        }
+
+        SendUartMessage("cp.b %s %s 0x%x\r",
+            (const char *)message.payload.at(0).ToAscii(),
+            (const char *)message.payload.at(2).ToAscii(),
+            imageSize);
+
+        searchResult = WaitUartMessage(UBOOT_PROMPT_MESSAGE, (imageSize / FLASH_SECTOR_SIZE) * 6);
+        if (searchResult != UART_ERR_MSG_FOUND)
+        {
+            NotifyDownloadResult(message.payload.at(1), searchResult);
+            break;
+        }
+        else
+        {
+            NotifyDownloadProgress(message.payload.at(1), 100);
         }
 
         NotifyDownloadResult(message.payload.at(1), searchResult);
@@ -419,6 +494,105 @@ int UartThread::WaitUartMessage(const char *msg, int timeout_second)
         {
             dbg_read_data_cnt++;
             readTotal += readCnt;
+            while ((readTotal - compareIndex) >= (int)msgLength)
+            {
+                dbg_cmp_cnt++;
+                if (memcmp(&rxBuf[compareIndex], msg, msgLength))
+                    compareIndex++;
+                else
+                {
+                    result = UART_ERR_MSG_FOUND;
+                    msgFound = true;
+                    break;
+                }
+            }
+
+            if (msgFound)
+                break;
+
+            if (readTotal >= RX_BUF_SIZE)
+            {
+                result = UART_ERR_MSG_NOT_FOUND;
+                break;
+            }
+        }
+        else if (readCnt == -1)
+        {
+            result = UART_ERR_READ;
+            wxLogError(wxT("Fail to read data from serial port"));
+            break;
+        }
+        else
+        {
+            dbg_read_no_data_cnt++;
+        }
+
+        if (sw.Time() >= (timeout_second * 1000))
+        {
+            result = UART_ERR_TIMEOUT;
+            break;
+        }
+    }
+
+    wxLogMessage(wxT("Wait [%s], Read cnt = %lu/%lu, Compare cnt = %lu, Used time = %ld"),
+        msg, dbg_read_data_cnt, dbg_read_no_data_cnt, dbg_cmp_cnt, sw.Time());
+
+    delete [] rxBuf;
+
+    return result;
+}
+
+int UartThread::WaitUartMessageAndCountHashSign(const wxString &image,
+                                                const char *msg,
+                                                int hash_total,
+                                                int timeout_second)
+{
+    int result = UART_ERR_MSG_NOT_FOUND;
+    char *rxBuf = NULL;
+    size_t msgLength;
+    bool msgFound = false;
+    int readTotal, readCnt, compareIndex, hashSignCnt, intProgress, intTemp;
+    float fProgress;
+    unsigned long dbg_read_no_data_cnt, dbg_read_data_cnt, dbg_cmp_cnt;
+    wxStopWatch sw;
+
+    /* parameters check */
+    if (!msg)
+        return UART_ERR_PARAMS;
+    if (!_comPort.IsOpen())
+        return UART_ERR_CONNECTION;
+
+    /* allocate internal buffer */
+    rxBuf = new char [RX_BUF_SIZE];
+
+    /* start to read data and search message byte by byte */
+    msgLength = strlen(msg);
+    readTotal = compareIndex = hashSignCnt = intProgress = 0;
+    dbg_read_no_data_cnt = dbg_read_data_cnt = dbg_cmp_cnt = 0;
+    sw.Start();
+    while (true)
+    {
+        readCnt = _comPort.Readv(&rxBuf[readTotal], RX_BUF_SIZE - readTotal, 10);
+        if (readCnt > 0)
+        {
+            dbg_read_data_cnt++;
+            readTotal += readCnt;
+            
+            /* count for hash sign */
+            hashSignCnt = 0;
+            for (intTemp = 0; intTemp < readTotal; intTemp++)
+            {
+                if (rxBuf[intTemp] == '#')
+                    hashSignCnt++;
+            }
+            fProgress = (50.0 * hashSignCnt) / hash_total;
+            if ((fProgress - intProgress) > 10.0)
+            {
+                intProgress += 10;
+                NotifyDownloadProgress(image, intProgress);
+            }
+
+            /* check message availablity */
             while ((readTotal - compareIndex) >= (int)msgLength)
             {
                 dbg_cmp_cnt++;

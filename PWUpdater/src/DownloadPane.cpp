@@ -746,6 +746,10 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
     wxString lastUsedPort, nextDownloadFile;
     unsigned long offset, end, size, longTemp;
     long downloadResult = UART_ERR_NO_ERROR;
+    DownloadFileList *dfl = NULL;
+    wxDataViewListStore *store = NULL;
+    wxVariant data;
+    int row, nRow;
 
     switch (evt)
     {
@@ -810,6 +814,30 @@ void DownloadPane::OnThreadUart(wxThreadEvent &event)
         break;
 
     case UART_EVENT_DOWNLOAD_PROGRESS:
+
+        if (message.payload.size() != 2)
+        {
+            wxLogError(wxT("Incorrect number of parameters for UART_EVENT_DOWNLOAD_PROGRESS"));
+            break;
+        }
+
+        dfl = wxDynamicCast(FindWindow(myID_DOWNLOAD_FILE_LIST), DownloadFileList);
+        if (dfl && ((store = dfl->GetStore()) != NULL))
+        {
+            nRow = store->GetCount();
+            for (row = 0; row < nRow; row++)
+            {
+                store->GetValueByRow(data, row, DownloadFileList::DFL_COL_FILE);
+                if (data.GetString() == message.payload.at(0))
+                {
+                    message.payload.at(1).ToULong(&longTemp);
+                    data = (long)longTemp;
+                    store->SetValueByRow(data, row, DownloadFileList::DFL_COL_PROGRESS);
+                    store->RowChanged(row);
+                    break;
+                }
+            }
+        }
 
         break;
 

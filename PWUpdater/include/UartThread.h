@@ -174,6 +174,8 @@ private:
     bool ComPortConnect(const wxString &port, bool notify = false);
     bool ComPortDisconnect(bool notify = false);
     int WaitUartMessage(const char *msg, int timeout_second);
+    int WaitUartMessageAndCountHashSign(const wxString &image, 
+        const char *msg, int hash_total, int timeout_second);
     int SendUartMessage(const char *msg, ...);
     void NotifyDownloadResult(const wxString &image, int error_code);
     void NotifyDownloadProgress(const wxString &image, int progress);
