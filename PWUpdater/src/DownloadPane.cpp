@@ -649,7 +649,7 @@ void DownloadPane::DoSearchLocalImageFiles(int mode)
                             data.push_back(wxString::Format(wxT("%lu"), fileLength));
                             break;
                         case DownloadFileList::DFL_COL_PROGRESS:
-                            data.push_back(wxEmptyString);
+                            data.push_back((long)0);
                             break;
                         case DownloadFileList::DFL_COL_RESULT:
                             data.push_back(wxEmptyString);
