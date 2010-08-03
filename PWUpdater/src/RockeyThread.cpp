@@ -72,7 +72,7 @@ wxThread::ExitCode RockeyThread::Entry()
 #elif defined (__WXGTK__)
     unsigned int u32Ignore, u32HwId;
 #endif
-    unsigned long u32UserDataLen;
+    unsigned long u32UserDataLen = 0;
     unsigned char buf[1024];
     unsigned short u16Pos, u16Len;
     wxString userData, user, contact, sn;
