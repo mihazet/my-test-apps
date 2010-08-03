@@ -453,12 +453,16 @@ bool UartThread::ComPortConnect(const wxString &port, bool notify)
 
     if (_comPort.IsOpen())
         _comPort.Close();
+    /*
+      For Windows platform: Open() return 0 for ok, and negative for ng
+      For Linux platform: Open() return postive for ok, and negative for ng
+     */
     error = _comPort.Open(portString.ToAscii());
     if (_comPort.IsOpen())
         _comPort.SetBaudRate(wxBAUD_115200);
 
     /* generate feedback to main thread */
-    if (notify && (error == 0))
+    if (notify && (error >= 0))
     {
         wxThreadEvent evt(wxEVT_COMMAND_THREAD, _threadEventId);
         UartMessage response(UART_EVENT_CONNECTED);
@@ -467,7 +471,7 @@ bool UartThread::ComPortConnect(const wxString &port, bool notify)
         wxQueueEvent(_pHandler, evt.Clone());    
     }
 
-    return (error == 0);
+    return (error >= 0);
 }
 
 bool UartThread::ComPortDisconnect(bool notify)
