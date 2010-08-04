@@ -274,7 +274,8 @@ bool PWUpdaterApp::DetectNetAdapter()
     if (ioctl(socketFd, SIOCGIFCONF, &ifc) != 0)
     {
         wxLogError(_("Fail to retrieve interface configuration."));
-        free(ifc.ifc_buf);
+        free(pAdapterInfo);
+        close(socketFd);
         return false;
     }
 
@@ -301,6 +302,7 @@ bool PWUpdaterApp::DetectNetAdapter()
         if (ioctl(socketFd, SIOCGIFNETMASK, ifr) != 0)
         {
             free(pAdapterInfo);
+            close(socketFd);
             wxLogError(_("Fail to get netmask address!"));
             return false;
         }
@@ -320,6 +322,7 @@ bool PWUpdaterApp::DetectNetAdapter()
     }
 
     free(pAdapterInfo);
+    close(socketFd);
     return true;
 #else
     return false;
