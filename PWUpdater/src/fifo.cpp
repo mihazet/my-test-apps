@@ -19,7 +19,7 @@ fifo::fifo(size_t size) :
 
 fifo::~fifo()
 {
-    delete m_begin;
+    delete [] m_begin;
 };
 
 void fifo::clear()
