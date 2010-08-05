@@ -71,8 +71,6 @@ public:
         int flags = 0;
         if (m_toggle)
             flags |= wxCONTROL_CHECKED;
-        if (GetMode() != wxDATAVIEW_CELL_ACTIVATABLE)
-            flags |= wxCONTROL_DISABLED;
 
         // check boxes we draw must always have the same, standard size (if it's
         // bigger than the cell size the checkbox will be truncated because the
