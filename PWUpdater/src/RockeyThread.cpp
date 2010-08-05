@@ -159,6 +159,8 @@ wxThread::ExitCode RockeyThread::Entry()
             {
                 PostInsertedEvent(user, contact);
                 keyInserted = true;
+
+                u16Result = ROCKEY(RY_CLOSE, &u16Handle, &u32Ignore, &u32Ignore, &u16Ignore, &u16Ignore, &u16Ignore, &u16Ignore, &buf[0]);
             }
 
             /* monitor key existence */
