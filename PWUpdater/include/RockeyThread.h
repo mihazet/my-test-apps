@@ -70,7 +70,6 @@ private:
 
     wxEvtHandler *_pHandler;
     int _threadEventId;
-    int _state;
 };
 
 #endif /* _ROCKEY_THREAD_H_ */

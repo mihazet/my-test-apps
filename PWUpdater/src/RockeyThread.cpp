@@ -33,14 +33,14 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
-enum
+typedef enum
 {
     ROCKEY_STATE_NOT_FOUND,
     ROCKEY_STATE_FOUND,
     ROCKEY_STATE_OPENED,
     ROCKEY_STATE_READ_USER_DATA,
     ROCKEY_STATE_KEY_INSERTED,
-};
+} eRockeyState;
 
 // ------------------------------------------------------------------------
 // Implementation
@@ -50,7 +50,6 @@ RockeyThread::RockeyThread(wxEvtHandler *handler, const int id)
     _pHandler(handler),
     _threadEventId(id)
 {
-    _state = ROCKEY_STATE_NOT_FOUND;
 }
 
 RockeyThread::~RockeyThread()
@@ -65,6 +64,7 @@ RockeyThread::~RockeyThread()
 
 wxThread::ExitCode RockeyThread::Entry()
 {
+    eRockeyState state = ROCKEY_STATE_NOT_FOUND;
     unsigned short u16Handle, u16Result, u16Ignore;
     unsigned short u16BasicPW1, u16BasicPW2, u16AdvPW1, u16AdvPW2;
 #if defined (__WXMSW__)
@@ -85,7 +85,7 @@ wxThread::ExitCode RockeyThread::Entry()
 
     while (!TestDestroy())
     {
-        switch (_state)
+        switch (state)
         {
         default:
         case ROCKEY_STATE_NOT_FOUND:
@@ -98,16 +98,16 @@ wxThread::ExitCode RockeyThread::Entry()
 
             u16Result = ROCKEY(RY_FIND, &u16Handle, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
             if (u16Result == ERR_SUCCESS)
-                _state = ROCKEY_STATE_FOUND;
+                state = ROCKEY_STATE_FOUND;
             break;
 
         case ROCKEY_STATE_FOUND:
 
             u16Result = ROCKEY(RY_OPEN, &u16Handle, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
             if (u16Result == ERR_SUCCESS)
-                _state = ROCKEY_STATE_OPENED;
+                state = ROCKEY_STATE_OPENED;
             else
-                _state = ROCKEY_STATE_NOT_FOUND;
+                state = ROCKEY_STATE_NOT_FOUND;
             break;
 
         case ROCKEY_STATE_OPENED:
@@ -123,12 +123,12 @@ wxThread::ExitCode RockeyThread::Entry()
                 u32UserDataLen = 0;
                 lenStr.ToULong(&u32UserDataLen);
                 if (u32UserDataLen)
-                    _state = ROCKEY_STATE_READ_USER_DATA;
+                    state = ROCKEY_STATE_READ_USER_DATA;
                 else
-                    _state = ROCKEY_STATE_NOT_FOUND;
+                    state = ROCKEY_STATE_NOT_FOUND;
             }
             else
-                _state = ROCKEY_STATE_NOT_FOUND;
+                state = ROCKEY_STATE_NOT_FOUND;
             break;
 
         case ROCKEY_STATE_READ_USER_DATA:
@@ -145,12 +145,12 @@ wxThread::ExitCode RockeyThread::Entry()
                 user = userData.Mid(0, delimitPos1);
                 contact = userData.Mid(delimitPos1 + 1, delimitPos2 - delimitPos1 - 1);
                 if (!user.empty() && !contact.empty())
-                    _state = ROCKEY_STATE_KEY_INSERTED;
+                    state = ROCKEY_STATE_KEY_INSERTED;
                 else
-                    _state = ROCKEY_STATE_NOT_FOUND;
+                    state = ROCKEY_STATE_NOT_FOUND;
             }
             else
-                _state = ROCKEY_STATE_NOT_FOUND;
+                state = ROCKEY_STATE_NOT_FOUND;
             break;
 
         case ROCKEY_STATE_KEY_INSERTED:
@@ -166,7 +166,7 @@ wxThread::ExitCode RockeyThread::Entry()
             /* monitor key existence */
             u16Result = ROCKEY(RY_FIND, &u16Handle, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
             if (u16Result != ERR_SUCCESS)
-                _state = ROCKEY_STATE_FOUND;
+                state = ROCKEY_STATE_FOUND;
         }
 
         wxMilliSleep(1000);
