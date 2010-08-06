@@ -96,7 +96,7 @@ wxThread::ExitCode RockeyThread::Entry()
                 keyInserted = false;
             }
 
-            u16Result = ROCKEY(RY_FIND, &u16Handle, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
+            u16Result = ROCKEY(RY_FIND, &u16Ignore, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
             if (u16Result == ERR_SUCCESS)
                 state = ROCKEY_STATE_FOUND;
             break;
@@ -164,9 +164,14 @@ wxThread::ExitCode RockeyThread::Entry()
             }
 
             /* monitor key existence */
-            u16Result = ROCKEY(RY_FIND, &u16Handle, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
+            u16Result = ROCKEY(RY_FIND, &u16Ignore, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
             if (u16Result != ERR_SUCCESS)
-                state = ROCKEY_STATE_FOUND;
+                state = ROCKEY_STATE_NOT_FOUND;
+            else
+            {
+                ROCKEY(RY_OPEN, &u16Handle, &u32HwId, &u32Ignore, &u16BasicPW1, &u16BasicPW2, &u16AdvPW1, &u16AdvPW2, &buf[0]);
+                ROCKEY(RY_CLOSE, &u16Handle, &u32Ignore, &u32Ignore, &u16Ignore,&u16Ignore, &u16Ignore, &u16Ignore, &buf[0]);
+            }
         }
 
         wxMilliSleep(1000);
