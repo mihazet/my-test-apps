@@ -577,7 +577,12 @@ void DownloadPane::DoSearchLocalImageFiles(int mode)
     /* start to search files */
     rootPath = pOpt->GetOption(wxT("TftpdRoot"));
     if (rootPath.empty()) rootPath = wxGetCwd();
-    if (store) store->DeleteAllItems();
+    if (store)
+    {
+        nRow = store->GetCount();
+        for (row = 0; row < nRow; row++)
+            store->RowDeleted(row);
+    }
     for (it = fileOrder.begin(); it != fileOrder.end(); ++it)
     {
         needAuth = false;

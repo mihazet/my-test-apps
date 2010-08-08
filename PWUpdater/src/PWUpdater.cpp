@@ -751,5 +751,8 @@ void PWUpdaterFrame::OnRockey(wxThreadEvent &event)
     }
 
     /* key state changed, need to rescan download files */
-    if (pDownloadPane) pDownloadPane->RescanImageFiles();
+    if (pDownloadPane)
+    {
+        pDownloadPane->RescanImageFiles();
+    }
 }
