@@ -579,9 +579,13 @@ void DownloadPane::DoSearchLocalImageFiles(int mode)
     if (rootPath.empty()) rootPath = wxGetCwd();
     if (store)
     {
+#if defined (__WXMSW__)
+        store->DeleteAllItems();
+#elif defined (__WXGTK__)
         nRow = store->GetCount();
         for (row = 0; row < nRow; row++)
             store->RowDeleted(row);
+#endif
     }
     for (it = fileOrder.begin(); it != fileOrder.end(); ++it)
     {
