@@ -583,8 +583,8 @@ void DownloadPane::DoSearchLocalImageFiles(int mode)
         store->DeleteAllItems();
 #elif defined (__WXGTK__)
         nRow = store->GetCount();
-        for (row = 0; row < nRow; row++)
-            store->RowDeleted(row);
+        for (row = nRow - 1; (nRow > 0) && (row < nRow); row--)
+            store->DeleteItem(row);
 #endif
     }
     for (it = fileOrder.begin(); it != fileOrder.end(); ++it)
