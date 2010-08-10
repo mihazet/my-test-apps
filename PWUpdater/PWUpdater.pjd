@@ -641,6 +641,30 @@
             <string name="language">""</string>
           </document>
           <document>
+            <string name="title">"NetAddrTextCtrl.cpp"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"src/NetAddrTextCtrl.cpp"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"10/8/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
+            <string name="title">"NetAddrTextCtrl.h"</string>
+            <string name="type">"source-editor-document"</string>
+            <string name="filename">"include/NetAddrTextCtrl.h"</string>
+            <string name="icon-name">"source-editor"</string>
+            <long name="is-transient">0</long>
+            <long name="owns-file">0</long>
+            <long name="title-mode">1</long>
+            <long name="locked">0</long>
+            <string name="created">"10/8/2010"</string>
+            <string name="language">""</string>
+          </document>
+          <document>
             <string name="title">"PWUpdater.cpp"</string>
             <string name="type">"source-editor-document"</string>
             <string name="filename">"src/PWUpdater.cpp"</string>
