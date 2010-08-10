@@ -126,9 +126,9 @@ void PrefDlg::AddUiPage()
 
     wxStaticBoxSizer *soundSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Notification Sound"));
     soundSizer->Add(new wxStaticText(uiPage, wxID_STATIC, _("Successful")), 0, wxLEFT | wxRIGHT, 5);
-    soundSizer->Add(new wxFilePickerCtrl(uiPage, myID_PREF_UI_NOTIFY_SUCCESSFUL_SOUND_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("WAVE file (*.wav)|*.wav"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE & ~wxFLP_FILE_MUST_EXIST), 0, wxALL | wxEXPAND, 5);
+    soundSizer->Add(new wxFilePickerCtrl(uiPage, myID_PREF_UI_NOTIFY_SUCCESSFUL_SOUND_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("WAVE file (*.wav)|*.wav"), wxDefaultPosition, wxDefaultSize, (wxFLP_DEFAULT_STYLE | wxFLP_USE_TEXTCTRL) & ~wxFLP_FILE_MUST_EXIST), 0, wxALL | wxEXPAND, 5);
     soundSizer->Add(new wxStaticText(uiPage, wxID_STATIC, _("Failed")), 0, wxLEFT | wxRIGHT, 5);
-    soundSizer->Add(new wxFilePickerCtrl(uiPage, myID_PREF_UI_NOTIFY_FAILED_SOUND_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("WAVE file (*.wav)|*.wav"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE & ~wxFLP_FILE_MUST_EXIST), 0, wxALL | wxEXPAND, 5);
+    soundSizer->Add(new wxFilePickerCtrl(uiPage, myID_PREF_UI_NOTIFY_FAILED_SOUND_FILE, wxEmptyString, wxFileSelectorPromptStr, wxT("WAVE file (*.wav)|*.wav"), wxDefaultPosition, wxDefaultSize, (wxFLP_DEFAULT_STYLE | wxFLP_USE_TEXTCTRL) & ~wxFLP_FILE_MUST_EXIST), 0, wxALL | wxEXPAND, 5);
 
     wxBoxSizer *uiSizer = new wxBoxSizer(wxVERTICAL);
     uiSizer->Add(langSizer, 0, wxALL | wxEXPAND, 5);
