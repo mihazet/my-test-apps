@@ -53,6 +53,7 @@ NetAddrTextCtrl::NetAddrTextCtrl(wxWindow *parent, wxWindowID id,
     _type(type),
     _digitBoxW(10),
     _digitBoxH(16),
+    _family(wxFONTFAMILY_MODERN),
     _outsideBorderTop(1),
     _outsideBorderBottom(1),
     _outsideBorderLeft(1),
@@ -60,8 +61,7 @@ NetAddrTextCtrl::NetAddrTextCtrl(wxWindow *parent, wxWindowID id,
     _insideBorderTop(2),
     _insideBorderBottom(2),
     _insideBorderLeft(1),
-    _insideBorderRight(1),
-    _family(wxFONTFAMILY_MODERN)
+    _insideBorderRight(1)
 {
     Init();
     SetValue(value);
