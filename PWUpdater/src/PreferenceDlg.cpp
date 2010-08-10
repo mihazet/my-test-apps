@@ -171,7 +171,7 @@ void PrefDlg::AddTftpPage()
     pos.SetRow(pos.GetRow() + 1);
     optGridSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("Tftp server root path:")), pos, span, wxALIGN_CENTER_VERTICAL);
     pos.SetRow(pos.GetRow() + 1);
-    wxDirPickerCtrl *dirPicker = new wxDirPickerCtrl(tftpPage, myID_PREF_TFTP_ROOTPATH, wxEmptyString, wxDirSelectorPromptStr, wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE & ~wxDIRP_DIR_MUST_EXIST);
+    wxDirPickerCtrl *dirPicker = new wxDirPickerCtrl(tftpPage, myID_PREF_TFTP_ROOTPATH, wxEmptyString, wxDirSelectorPromptStr, wxDefaultPosition, wxDefaultSize, (wxDIRP_DEFAULT_STYLE | wxDIRP_USE_TEXTCTRL) & ~wxDIRP_DIR_MUST_EXIST);
     toolTip.clear();
     toolTip
         << _("If you assign a directory here, it will be treat as the root path for the internal tftp server. ")
