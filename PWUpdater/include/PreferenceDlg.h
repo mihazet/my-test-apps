@@ -38,6 +38,8 @@ private:
     int TftpRootSave();
     int SoundFileLoad(bool success);
     int SoundFileSave(bool success);
+    int NetAddrLoad(const wxWindowID id, const wxString &opt);
+    int NetAddrSave(const wxWindowID id, const wxString &opt);
 
     DECLARE_EVENT_TABLE()
 };

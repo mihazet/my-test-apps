@@ -21,6 +21,7 @@
 #include "PreferenceDlg.h"
 #include "PWUpdater.h"
 #include "WidgetsId.h"
+#include "NetAddrTextCtrl.h"
 
 #define wxLOG_COMPONENT "PWUpdater/pref"
 
@@ -152,7 +153,7 @@ void PrefDlg::AddTftpPage()
     wxBoxSizer *extSizer = new wxBoxSizer(wxHORIZONTAL);
     extSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("External TFTP server address:")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
     extSizer->AddStretchSpacer();
-    extSizer->Add(new wxTextCtrl(tftpPage, myID_PREF_TFTP_EXTERNAL_ADDRESS), 0, wxALL | wxEXPAND, 5);
+    extSizer->Add(new NetAddrTextCtrl(tftpPage, myID_PREF_TFTP_EXTERNAL_ADDRESS, NetAddrTextCtrl::NETADDR_TYPE_IP), 0, wxALL | wxEXPAND, 5);
     bgServiceSizer->Add(extSizer, 0, wxALL | wxEXPAND, 0);
 
     wxStaticBoxSizer *tftpOptSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("Internal TFTP server option"));
@@ -306,7 +307,7 @@ bool PrefDlg::TransferDataFromWindow()
     DBGCALL2(InterfaceSave());
     DBGCALL2(TftpRootSave());
     DBGCALL2(CheckBoxSave(myID_PREF_TFTP_USE_INTERNAL, wxT("UseInternalTftp")));
-    DBGCALL2(TextCtrlSave(myID_PREF_TFTP_EXTERNAL_ADDRESS, wxT("ExternalTftpAddress")));
+    DBGCALL2(NetAddrSave(myID_PREF_TFTP_EXTERNAL_ADDRESS, wxT("ExternalTftpAddress")));
     DBGCALL2(CheckBoxSave(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
     DBGCALL2(TextCtrlSave(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
     DBGCALL2(TextCtrlSave(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
@@ -344,7 +345,7 @@ bool PrefDlg::TransferDataToWindow()
     DBGCALL(InterfaceLoad());
     DBGCALL(TftpRootLoad());
     DBGCALL(CheckBoxLoad(myID_PREF_TFTP_USE_INTERNAL, wxT("UseInternalTftp")));
-    DBGCALL(TextCtrlLoad(myID_PREF_TFTP_EXTERNAL_ADDRESS, wxT("ExternalTftpAddress")));
+    DBGCALL(NetAddrLoad(myID_PREF_TFTP_EXTERNAL_ADDRESS, wxT("ExternalTftpAddress")));
     DBGCALL(CheckBoxLoad(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
     DBGCALL(TextCtrlLoad(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
     DBGCALL(TextCtrlLoad(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
@@ -716,6 +717,64 @@ int PrefDlg::SoundFileSave(bool success)
             if (dbValue != uiValue)
             {
                 pOpt->SetOption(dbEntry, uiValue);
+            }
+            else
+            {
+                return ERROR_SKIP_UPDATE;
+            }
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::NetAddrLoad(const wxWindowID id, const wxString &opt)
+{
+    wxString value;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    NetAddrTextCtrl *textCtrl = wxDynamicCast(FindWindow(id), NetAddrTextCtrl);
+
+    if (textCtrl)
+    {
+        if (pOpt->GetOption(opt, value))
+        {
+            textCtrl->SetValue(value);
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::NetAddrSave(const wxWindowID id, const wxString &opt)
+{
+    wxString dbValue, uiValue;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    NetAddrTextCtrl *textCtrl = wxDynamicCast(FindWindow(id), NetAddrTextCtrl);
+
+    if (textCtrl)
+    {
+        if (pOpt->GetOption(opt, dbValue))
+        {
+            uiValue = textCtrl->GetValue();
+            if (dbValue != uiValue)
+            {
+                pOpt->SetOption(opt, uiValue);
             }
             else
             {
