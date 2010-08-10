@@ -388,6 +388,23 @@ void NetAddrTextCtrl::SetSpecificDigitValue(const int fieldIdx, const int digitI
     int newFieldValue = oldFieldValue
         + (newDigitValue - oldDigitValue) * pow((double)gFieldBase[_type], (int)(gDigitInField[_type] - 1 - digitIdx));
 
+    /* for ip address case, overwirte newFieldValue in some situation */
+    if (_type == NETADDR_TYPE_IP)
+    {
+        if ((digitIdx == 0) && (newDigitValue > 2))
+            newFieldValue = 255;
+        else if ((digitIdx == 0) && (newDigitValue == 2) && (GetSpecificDigitValue(fieldIdx, 1) > 5))
+            newFieldValue = 255;
+        else if ((digitIdx == 0) && (newDigitValue == 2) && (GetSpecificDigitValue(fieldIdx, 1) == 5) && (GetSpecificDigitValue(fieldIdx, 2) > 5))
+            newFieldValue = 255;
+        else if ((digitIdx == 1) && (newDigitValue > 5) && (GetSpecificDigitValue(fieldIdx, 0) == 2))
+            newFieldValue = 255;
+        else if ((digitIdx == 1) && (newDigitValue == 5) && (GetSpecificDigitValue(fieldIdx, 0) == 2) && (GetSpecificDigitValue(fieldIdx, 2) > 5))
+            newFieldValue = 255;
+        else if ((digitIdx == 2) && (newDigitValue > 5) && (oldFieldValue >= 250))
+            newFieldValue = 255;
+    }
+
     /* update _internalValue */
     int shift = 8 * (gFieldMax[_type] - 1 - fieldIdx);
     wxLongLong oldVal = oldFieldValue;
