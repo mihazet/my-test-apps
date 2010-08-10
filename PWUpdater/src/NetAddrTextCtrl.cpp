@@ -413,7 +413,7 @@ void NetAddrTextCtrl::OnKeyDown(wxKeyEvent &event)
     int digitValue = 0;
     bool isA2F = false, isNumPad = true;
 
-    wxLogDebug(wxT("Key %d down"), keyCode);
+    //wxLogDebug(wxT("Key %d down"), keyCode);
 
     switch (keyCode)
     {
@@ -598,14 +598,14 @@ void NetAddrTextCtrl::OnErase(wxEraseEvent &WXUNUSED(event))
 
 void NetAddrTextCtrl::OnPaint(wxPaintEvent &event)
 {
-    wxLogDebug(wxT("OnPaint: %d"), event.GetId());
+    //wxLogDebug(wxT("OnPaint: %d"), event.GetId());
     wxPaintDC dc(this);
     dc.DrawBitmap(*_displayBitmap, 0, 0);
 }
 
 void NetAddrTextCtrl::OnFocus(wxFocusEvent &event)
 {
-    wxLogDebug(wxT("%s Focus: %d"), (event.GetEventType() == wxEVT_KILL_FOCUS) ? wxT("Kill") : wxT("Get"), event.GetId());
+    //wxLogDebug(wxT("%s Focus: %d"), (event.GetEventType() == wxEVT_KILL_FOCUS) ? wxT("Kill") : wxT("Get"), event.GetId());
     _hasFocused = (event.GetEventType() == wxEVT_SET_FOCUS);
     Layout();
     Refresh(false);
