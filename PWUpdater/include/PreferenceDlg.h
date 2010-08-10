@@ -40,6 +40,8 @@ private:
     int SoundFileSave(bool success);
     int NetAddrLoad(const wxWindowID id, const wxString &opt);
     int NetAddrSave(const wxWindowID id, const wxString &opt);
+    int SpinCtrlLoad(const wxWindowID id, const wxString &opt);
+    int SpinCtrlSave(const wxWindowID id, const wxString &opt);
 
     DECLARE_EVENT_TABLE()
 };

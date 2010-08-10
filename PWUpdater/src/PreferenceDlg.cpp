@@ -17,6 +17,7 @@
 #include <wx/filepicker.h>
 #include <wx/sizer.h>
 #include <wx/gbsizer.h>
+#include <wx/spinctrl.h>
 #include "AppOptions.h"
 #include "PreferenceDlg.h"
 #include "PWUpdater.h"
@@ -182,12 +183,16 @@ void PrefDlg::AddTftpPage()
     span.SetColspan(1);
     optGridSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("Transmit timeout (unit: second)")), pos, span, wxALIGN_CENTER_VERTICAL);
     pos.SetCol(1);
-    optGridSizer->Add(new wxTextCtrl(tftpPage, myID_PREF_TFTP_TIMEOUT), pos, span, wxALIGN_RIGHT);
+    wxSpinCtrl *spin1 = new wxSpinCtrl(tftpPage, myID_PREF_TFTP_TIMEOUT);
+    spin1->SetRange(1, 10);
+    optGridSizer->Add(spin1, pos, span, wxALIGN_RIGHT);
     pos.SetRow(pos.GetRow() + 1);
     pos.SetCol(0);
     optGridSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("Retransmit maximum count")), pos, span, wxALIGN_CENTER_VERTICAL);
     pos.SetCol(1);
-    optGridSizer->Add(new wxTextCtrl(tftpPage, myID_PREF_TFTP_RETRANSMIT), pos, span, wxALIGN_RIGHT);
+    wxSpinCtrl *spin2 = new wxSpinCtrl(tftpPage, myID_PREF_TFTP_RETRANSMIT);
+    spin2->SetRange(1, 10);
+    optGridSizer->Add(spin2, pos, span, wxALIGN_RIGHT);
     pos.SetRow(pos.GetRow() + 1);
     pos.SetCol(0);
     span.SetColspan(2);
@@ -309,8 +314,8 @@ bool PrefDlg::TransferDataFromWindow()
     DBGCALL2(CheckBoxSave(myID_PREF_TFTP_USE_INTERNAL, wxT("UseInternalTftp")));
     DBGCALL2(NetAddrSave(myID_PREF_TFTP_EXTERNAL_ADDRESS, wxT("ExternalTftpAddress")));
     DBGCALL2(CheckBoxSave(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
-    DBGCALL2(TextCtrlSave(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
-    DBGCALL2(TextCtrlSave(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
+    DBGCALL2(SpinCtrlSave(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
+    DBGCALL2(SpinCtrlSave(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
 
     /* flash page */
     DBGCALL2(TextCtrlSave(myID_PREF_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
@@ -347,8 +352,8 @@ bool PrefDlg::TransferDataToWindow()
     DBGCALL(CheckBoxLoad(myID_PREF_TFTP_USE_INTERNAL, wxT("UseInternalTftp")));
     DBGCALL(NetAddrLoad(myID_PREF_TFTP_EXTERNAL_ADDRESS, wxT("ExternalTftpAddress")));
     DBGCALL(CheckBoxLoad(myID_PREF_TFTP_NEGOTIATION, wxT("AllowOptionNegotiation")));
-    DBGCALL(TextCtrlLoad(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
-    DBGCALL(TextCtrlLoad(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
+    DBGCALL(SpinCtrlLoad(myID_PREF_TFTP_TIMEOUT, wxT("Timeout")));
+    DBGCALL(SpinCtrlLoad(myID_PREF_TFTP_RETRANSMIT, wxT("Retransmit")));
 
     /* flash page */
     DBGCALL(TextCtrlLoad(myID_PREF_FLASH_DL_OFFSET, wxT("RubyDownloadMemory")));
@@ -793,4 +798,64 @@ int PrefDlg::NetAddrSave(const wxWindowID id, const wxString &opt)
 
     return ERROR_NO_ERROR;
 }
+
+int PrefDlg::SpinCtrlLoad(const wxWindowID id, const wxString &opt)
+{
+    long value;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxSpinCtrl *spinCtrl = wxDynamicCast(FindWindow(id), wxSpinCtrl);
+
+    if (spinCtrl)
+    {
+        if (pOpt->GetOption(opt, &value))
+        {
+            spinCtrl->SetValue((int)value);
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+int PrefDlg::SpinCtrlSave(const wxWindowID id, const wxString &opt)
+{
+    long dbValue;
+    int uiValue;
+    AppOptions *&pOpt = wxGetApp().m_pOpt;
+    wxSpinCtrl *spinCtrl = wxDynamicCast(FindWindow(id), wxSpinCtrl);
+
+    if (spinCtrl)
+    {
+        if (pOpt->GetOption(opt, &dbValue))
+        {
+            uiValue = spinCtrl->GetValue();
+            if (dbValue != (long)uiValue)
+            {
+                pOpt->SetOption(opt, (long)uiValue);
+            }
+            else
+            {
+                return ERROR_SKIP_UPDATE;
+            }
+        }
+        else
+        {
+            return ERROR_DB_ENTRY;
+        }
+    }
+    else
+    {
+        return ERROR_WIDGET_ID;
+    }
+
+    return ERROR_NO_ERROR;
+}
+
 
