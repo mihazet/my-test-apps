@@ -596,7 +596,7 @@ void NetAddrTextCtrl::OnErase(wxEraseEvent &WXUNUSED(event))
     // intent to do nothing
 }
 
-void NetAddrTextCtrl::OnPaint(wxPaintEvent &event)
+void NetAddrTextCtrl::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     //wxLogDebug(wxT("OnPaint: %d"), event.GetId());
     wxPaintDC dc(this);
