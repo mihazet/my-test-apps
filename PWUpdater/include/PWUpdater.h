@@ -33,6 +33,7 @@
 class TftpdServerThread;
 class TftpdTransmissionThread;
 class RockeyThread;
+class AppLanguageInfo;
 
 // ========================================================================
 // Application class
@@ -44,6 +45,7 @@ public:
     ~PWUpdaterApp() { Term(); }
     wxString GetLanguageDescriptionFromISO639Code(const wxString &iso639);
     wxString GetLanguageISO639CodeFromDescription(const wxString &desc);
+    wxVector<wxString> GetInstalledLanguages();
 
     /* tftpd server thread managment */
     TftpdServerThread *m_pTftpdServerThread;
@@ -75,16 +77,19 @@ public:
     /* network adapters */
     wxVector<NetAdapter> m_adapterList;
 
-    /* language translations */
-    wxVector<wxString> m_installedLanguage;
-
 private:
     void Init();
     void Term();
     virtual bool OnInit();
     bool DetectNetAdapter();
+    void AddSupportedLanguages();
+    void AddLanguageDescriptions();
+    void AddSupportedLanguage(wxLanguage langId, const wxString &iso639);
+    void AddLanguageDescription(wxLanguage langId, const wxString &desc);
     wxLanguage DetectInstalledLanguages();
 
+    /* language stuff */
+    wxVector<AppLanguageInfo *> _appLanguages;
     wxLocale _locale;
 };
 

@@ -483,7 +483,7 @@ int PrefDlg::TextCtrlSave(const wxWindowID id, const wxString &opt)
 int PrefDlg::LanguageLoad()
 {
     wxChoice *choice = wxDynamicCast(FindWindow(myID_PREF_UI_LANG), wxChoice);
-    wxVector<wxString> &installedLang = wxGetApp().m_installedLanguage;
+    wxVector<wxString> installedLang = wxGetApp().GetInstalledLanguages();
     wxVector<wxString>::iterator it;
     wxString selectedLang, langDescription;
 
