@@ -86,6 +86,9 @@ PrefDlg::PrefDlg(wxWindow *parent, wxWindowID id, bool auth)
     /* dialog organization */
     wxBoxSizer *dlgSizer = new wxBoxSizer(wxVERTICAL);
     dlgSizer->Add(prefNB, 1, wxALL | wxEXPAND, 5);
+    dlgSizer->Add(new wxStaticText(this, wxID_STATIC, wxT("* : ") + 
+        _("Need to restart application for the changes to take effect.")),
+        0, wxLEFT | wxBOTTOM | wxRIGHT | wxEXPAND, 10);
     dlgSizer->Add(
         CreateStdDialogButtonSizer(wxOK|wxCANCEL|wxAPPLY),
         0, wxALL | wxEXPAND, 5);
@@ -118,7 +121,7 @@ void PrefDlg::AddUiPage()
 
     wxPanel *uiPage = new wxPanel(prefNB, myID_PREF_UI_PAGE);
 
-    wxStaticBoxSizer *langSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Language selection"));
+    wxStaticBoxSizer *langSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Language selection") + wxT(" *"));
     langSizer->Add(new wxChoice(uiPage, myID_PREF_UI_LANG), 0, wxALL | wxEXPAND, 5);
 
     wxStaticBoxSizer *memSizer = new wxStaticBoxSizer(wxVERTICAL, uiPage, _("Memory"));
@@ -149,7 +152,7 @@ void PrefDlg::AddTftpPage()
 
     wxPanel *tftpPage = new wxPanel(prefNB, myID_PREF_TFTP_PAGE);
 
-    wxStaticBoxSizer *bgServiceSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("TFTP Server"));
+    wxStaticBoxSizer *bgServiceSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("TFTP Server") + wxT(" *"));
     bgServiceSizer->Add(new wxCheckBox(tftpPage, myID_PREF_TFTP_USE_INTERNAL, _("Enable internal TFTP server.")), 0, wxALL | wxEXPAND, 5);
     wxBoxSizer *extSizer = new wxBoxSizer(wxHORIZONTAL);
     extSizer->Add(new wxStaticText(tftpPage, wxID_STATIC, _("External TFTP server address:")), 0, wxALL | wxALIGN_CENTER_VERTICAL, 5);
@@ -157,7 +160,7 @@ void PrefDlg::AddTftpPage()
     extSizer->Add(new NetAddrTextCtrl(tftpPage, myID_PREF_TFTP_EXTERNAL_ADDRESS, NetAddrTextCtrl::NETADDR_TYPE_IP), 0, wxALL | wxEXPAND, 5);
     bgServiceSizer->Add(extSizer, 0, wxALL | wxEXPAND, 0);
 
-    wxStaticBoxSizer *tftpOptSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("Internal TFTP server option"));
+    wxStaticBoxSizer *tftpOptSizer = new wxStaticBoxSizer(wxVERTICAL, tftpPage, _("Internal TFTP server option") + wxT(" *"));
     wxGridBagSizer *optGridSizer = new wxGridBagSizer(5, 5);
     optGridSizer->AddGrowableCol(0);
     wxGBPosition pos;
