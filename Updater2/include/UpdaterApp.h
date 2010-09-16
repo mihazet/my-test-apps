@@ -50,11 +50,6 @@ private:
     // internal data members
     wxLanguage _lang;
     wxLocale _locale;
-#ifdef __WXMSW__
-    IP_ADAPTER_INFO *_adapterInfo;
-#elif defined (__WXGTK__)
-    struct ifreq *_adapterInfo;
-#endif
     bool _skipVmwareNetworkAdapter;
 
     DECLARE_EVENT_TABLE()
