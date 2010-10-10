@@ -90,7 +90,7 @@
     <string name="app_class_name">"Application"</string>
     <bool name="generate_app_class">0</bool>
     <string name="external_symbol_filenames">""</string>
-    <string name="configuration">"VC++ Project Debug"</string>
+    <string name="configuration">"VC9++ Project Debug"</string>
     <string name="source_encoding">"iso-8859-1"</string>
     <string name="xrc_encoding">"utf-8"</string>
     <string name="project_encoding">"utf-8"</string>
@@ -152,6 +152,7 @@
         <string name="Use wxPropertyGrid">"Yes"</string>
         <string name="Use wxAUI">"Yes"</string>
         <string name="Use wxSTC">"Yes"</string>
+        <string name="Use wxRegEx">"sys"</string>
         <string name="Use wxRibbonControl">"Yes"</string>
         <string name="Executable name">"%EXECUTABLE%"</string>
         <string name="Program arguments">""</string>
@@ -190,7 +191,7 @@
         <bool name="Suppress source rules">0</bool>
         <bool name="Enable makefile generation">1</bool>
         <document>
-          <string name="title">"VC++ Project Debug"</string>
+          <string name="title">"VC9++ Project Debug"</string>
           <string name="type">"vc-project-config-data-document"</string>
           <string name="filename">""</string>
           <string name="icon-name">""</string>
@@ -220,6 +221,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Compiler version">"9"</string>
           <string name="Executable name">"%EXECUTABLE%"</string>
@@ -268,9 +270,10 @@
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
           <bool name="Enable .sln generation">1</bool>
+          <bool name="Generate manifest">1</bool>
         </document>
         <document>
-          <string name="title">"VC++ Project Release"</string>
+          <string name="title">"VC9++ Project Release"</string>
           <string name="type">"vc-project-config-data-document"</string>
           <string name="filename">""</string>
           <string name="icon-name">""</string>
@@ -300,6 +303,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Compiler version">"9"</string>
           <string name="Executable name">"%EXECUTABLE%"</string>
@@ -348,6 +352,7 @@
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
           <bool name="Enable .sln generation">1</bool>
+          <bool name="Generate manifest">1</bool>
         </document>
         <document>
           <string name="title">"GCC Debug"</string>
@@ -380,6 +385,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Use wx-config">"Yes"</string>
           <string name="Use installed wxWidgets">"No"</string>
@@ -457,6 +463,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Use wx-config">"Yes"</string>
           <string name="Use installed wxWidgets">"No"</string>
@@ -504,7 +511,7 @@
           <string name="Icns location">"%AUTO%"</string>
         </document>
         <document>
-          <string name="title">"VC++ Project Debug DLL"</string>
+          <string name="title">"VC9++ Project Debug DLL"</string>
           <string name="type">"vc-project-config-data-document"</string>
           <string name="filename">""</string>
           <string name="icon-name">""</string>
@@ -534,6 +541,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Compiler version">"9"</string>
           <string name="Executable name">"%EXECUTABLE%"</string>
@@ -582,9 +590,10 @@
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
           <bool name="Enable .sln generation">1</bool>
+          <bool name="Generate manifest">1</bool>
         </document>
         <document>
-          <string name="title">"VC++ Project Release DLL"</string>
+          <string name="title">"VC9++ Project Release DLL"</string>
           <string name="type">"vc-project-config-data-document"</string>
           <string name="filename">""</string>
           <string name="icon-name">""</string>
@@ -614,6 +623,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Compiler version">"9"</string>
           <string name="Executable name">"%EXECUTABLE%"</string>
@@ -662,6 +672,7 @@
           <string name="Pre-link command">"%AUTO%"</string>
           <string name="Ignore libraries">"%AUTO%"</string>
           <bool name="Enable .sln generation">1</bool>
+          <bool name="Generate manifest">1</bool>
         </document>
       </document>
     </document>
