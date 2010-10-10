@@ -241,6 +241,7 @@ bool UpdaterApp::DetectNetAdapter(bool *changed)
     }
 
     /* TODO: judge if result change. */
+    free(pAdapterInfo);
     if (changed)
         *changed = false;
     return true;
