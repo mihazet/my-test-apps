@@ -20,6 +20,8 @@
 #include "NetAdapter.h"
 #include "AppOptions.h"
 
+class ReportDataModel;
+
 ////////////////////////////////////////////////////////////////////////////
 class UpdaterApp : public wxApp
 {
@@ -37,6 +39,7 @@ public:
     wxAuiManager m_AuiManager;
     int m_UpdateThreadCount;
     bool m_SearchThreadRunning;
+    ReportDataModel *m_reportModel;
 
 private:
     // event handlers

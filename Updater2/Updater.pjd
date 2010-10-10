@@ -756,6 +756,30 @@
           <string name="language">""</string>
         </document>
         <document>
+          <string name="title">"DataModel.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/DataModel.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"11/10/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"DataModel.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/DataModel.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"11/10/2010"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"DownloadPane.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/DownloadPane.cpp"</string>

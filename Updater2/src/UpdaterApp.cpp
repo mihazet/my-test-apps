@@ -10,6 +10,7 @@
 #include "UpdaterApp.h"
 #include "UpdaterFrame.h"
 #include "WidgetId.h"
+#include "DataModel.h"
 
 // ------------------------------------------------------------------------
 // Resources
@@ -50,6 +51,8 @@ UpdaterApp::~UpdaterApp()
 {
     if (m_pAppOptions)
         delete m_pAppOptions;
+
+    wxDELETE(m_reportModel);
 }
 
 void UpdaterApp::Init()
@@ -87,6 +90,9 @@ void UpdaterApp::Init()
     /* thread management */
     m_UpdateThreadCount = 0;
     m_SearchThreadRunning = false;
+
+    /* report data model */
+    m_reportModel = new ReportDataModel();
 }
 
 bool UpdaterApp::OnInit()
