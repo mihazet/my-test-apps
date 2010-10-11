@@ -36,12 +36,13 @@ public:
 private:
     void Init();
     void CreateControls();
-    void RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h);
+    void RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h, bool *maximize);
 
     // event handlers
     void OnMove(wxMoveEvent &event);
     void OnMoveStart(wxMoveEvent &event);
     void OnMoveEnd(wxMoveEvent &event);
+    void OnMaximize(wxMaximizeEvent &event);
     void OnViewPane(wxCommandEvent &event);
     void OnUpdatePane(wxUpdateUIEvent &event);
     void OnResetLayout(wxCommandEvent &event);
@@ -53,6 +54,7 @@ private:
 
 private:
     wxAuiManager *_auiManager;
+    long _hackSizeEvent;
 
     DECLARE_EVENT_TABLE()
 };

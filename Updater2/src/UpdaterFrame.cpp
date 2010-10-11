@@ -35,11 +35,12 @@ BEGIN_EVENT_TABLE(UpdaterFrame, wxFrame)
     EVT_MOVE(UpdaterFrame::OnMove)
     EVT_MOVE_START(UpdaterFrame::OnMoveStart)
     EVT_MOVE_END(UpdaterFrame::OnMoveEnd)
+    EVT_MAXIMIZE(UpdaterFrame::OnMaximize)
+    EVT_SIZE(UpdaterFrame::OnSize)
     EVT_MENU_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, UpdaterFrame::OnViewPane)
     EVT_UPDATE_UI_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, UpdaterFrame::OnUpdatePane)
     EVT_MENU(myID_VIEW_RESET_LAYOUT, UpdaterFrame::OnResetLayout)
     EVT_ERASE_BACKGROUND(UpdaterFrame::OnEraseBackground)
-    EVT_SIZE(UpdaterFrame::OnSize)
     EVT_CLOSE(UpdaterFrame::OnClose)
     EVT_MENU(wxID_ABOUT, UpdaterFrame::OnAbout)
     EVT_MENU(wxID_EXIT, UpdaterFrame::OnQuit)
@@ -63,13 +64,16 @@ bool UpdaterFrame::Create(wxWindow *parent, wxWindowID id,
     const wxSize &size, long style)
 {
     int x, y, w, h;
+    bool max;
 
     wxFrame::Create(parent, id, caption, pos, size, style);
     CreateControls();
 
     /* update frame size and position */
-    RetrieveFrameSizeAndPosition(&x, &y, &w, &h);
+    RetrieveFrameSizeAndPosition(&x, &y, &w, &h, &max);
     SetSize(x, y, w, h);
+    if (max)
+        Maximize();
 
     return true;
 }
@@ -88,6 +92,7 @@ UpdaterFrame::~UpdaterFrame()
 void UpdaterFrame::Init()
 {
     _auiManager = &wxGetApp().m_AuiManager;
+    _hackSizeEvent = 0;
 }
 
 void UpdaterFrame::CreateControls()
@@ -186,16 +191,17 @@ void UpdaterFrame::CreateControls()
         _auiManager->Update();
 }
 
-void UpdaterFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
+void UpdaterFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h, bool *maximize)
 {
     int _x = -1, _y = -1, _w = -1, _h = -1;
-    long useLastSizePosition = 1;
+    long useLastSizePosition = 1, _maximize = 0;
     AppOptions *pOpt = wxGetApp().m_pAppOptions;
     wxSize screen = wxGetDisplaySize();
 
     if (pOpt)
     {
         pOpt->GetOption(wxT("RecordSizePosition"), &useLastSizePosition);
+        pOpt->GetOption(wxT("Maximize"), &_maximize);
         pOpt->GetOption(wxT("FrameX"), (long *)&_x);
         pOpt->GetOption(wxT("FrameY"), (long *)&_y);
         pOpt->GetOption(wxT("FrameW"), (long *)&_w);
@@ -228,6 +234,7 @@ void UpdaterFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
     *y = _y;
     *w = _w;
     *h = _h;
+    *maximize = _maximize ? true : false;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -261,6 +268,35 @@ void UpdaterFrame::OnMoveEnd(wxMoveEvent &WXUNUSED(event))
             pOpt->SetOption(wxT("FrameW"), w);
             pOpt->SetOption(wxT("FrameH"), h);
         }
+    }
+}
+
+void UpdaterFrame::OnMaximize(wxMaximizeEvent &WXUNUSED(event))
+{
+    _hackSizeEvent = 2;
+}
+
+void UpdaterFrame::OnSize(wxSizeEvent &WXUNUSED(event))
+{
+    AppOptions *pOpt = NULL;
+    long save;
+
+    switch (_hackSizeEvent)
+    {
+    case 2:
+    case 1:
+        pOpt = wxGetApp().m_pAppOptions;
+        if (pOpt)
+        {
+            pOpt->GetOption(wxT("RecordSizePosition"), &save);
+            if (save != 0)
+                pOpt->SetOption(wxT("Maximize"), _hackSizeEvent - 1);
+        }
+        _hackSizeEvent--;
+        break;
+    default:
+        /* do nothing */
+        break;
     }
 }
 
@@ -349,11 +385,6 @@ void UpdaterFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
 void UpdaterFrame::OnEraseBackground(wxEraseEvent &event)
 {
     event.Skip();
-}
-
-void UpdaterFrame::OnSize(wxSizeEvent &WXUNUSED(event))
-{
-    //event.Skip();
 }
 
 void UpdaterFrame::OnClose(wxCloseEvent &event)
