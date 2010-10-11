@@ -416,8 +416,8 @@ void DownloadPane::CreateControls()
     wxRadioButton *rb2 = new wxRadioButton(this, myID_DOWNLOAD_GLOBAL_RB, _("Use Global Image File"));
     wxBoxSizer *radioSizer = new wxBoxSizer(wxVERTICAL);
     radioSizer->AddStretchSpacer(1);
-    radioSizer->Add(rb1, 0, wxALL, 5);
-    radioSizer->Add(rb2, 0, wxALL, 5);
+    radioSizer->Add(rb1, 1, wxALL, 5);
+    radioSizer->Add(rb2, 1, wxALL, 5);
 
     wxFilePickerCtrl *filePicker = new wxFilePickerCtrl(this, myID_DOWNLOAD_GLOBAL_FILE, wxEmptyString, wxFileSelectorPromptStr, IMAGE_FILE_WILDCARD);
     wxBoxSizer *fileSizer = new wxBoxSizer(wxVERTICAL);
