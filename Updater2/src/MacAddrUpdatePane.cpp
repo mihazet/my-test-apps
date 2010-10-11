@@ -151,7 +151,7 @@ void MacAddrUpdatePane::UpdateReportFile(const wxString& macAddr)
             << _name << wxT("', '")
             << _mac << wxT("', '")
             << macAddr << wxT("', '")
-            << wxT("yh.yang@delta.com.tw")
+            << wxT("Anonymous")
             << wxT("')");
 
         db->ExecuteUpdate(sql);
