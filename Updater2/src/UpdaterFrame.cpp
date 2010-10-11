@@ -32,6 +32,9 @@
 // Implementation
 // ------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(UpdaterFrame, wxFrame)
+    EVT_MOVE(UpdaterFrame::OnMove)
+    EVT_MOVE_START(UpdaterFrame::OnMoveStart)
+    EVT_MOVE_END(UpdaterFrame::OnMoveEnd)
     EVT_MENU_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, UpdaterFrame::OnViewPane)
     EVT_UPDATE_UI_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, UpdaterFrame::OnUpdatePane)
     EVT_MENU(myID_VIEW_RESET_LAYOUT, UpdaterFrame::OnResetLayout)
@@ -186,10 +189,28 @@ void UpdaterFrame::CreateControls()
 void UpdaterFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
 {
     int _x = -1, _y = -1, _w = -1, _h = -1;
+    long useLastSizePosition = 1;
+    AppOptions *pOpt = wxGetApp().m_pAppOptions;
+    wxSize screen = wxGetDisplaySize();
 
-    if ((_x == -1) || (_y == -1) || (_w == -1) || (_h == -1))
+    if (pOpt)
     {
-        wxSize screen = wxGetDisplaySize();
+        pOpt->GetOption(wxT("RecordSizePosition"), &useLastSizePosition);
+        pOpt->GetOption(wxT("FrameX"), (long *)&_x);
+        pOpt->GetOption(wxT("FrameY"), (long *)&_y);
+        pOpt->GetOption(wxT("FrameW"), (long *)&_w);
+        pOpt->GetOption(wxT("FrameH"), (long *)&_h);
+    }
+
+    if (((_x == -1) && (_y == -1)) 
+        || (_w == -1) 
+        || (_h == -1)
+        || (_x >= screen.x)
+        || (_y >= screen.y)
+        || (_x + _w < 0)
+        || (_y + _h < 0)
+        || (useLastSizePosition == 0))
+    {
         float hRatio = 0.85f, vRatio = 0.85f;
 
         if (screen.x <= 1024)
@@ -212,6 +233,37 @@ void UpdaterFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
 //////////////////////////////////////////////////////////////////////////////
 // Event handlers
 //////////////////////////////////////////////////////////////////////////////
+void UpdaterFrame::OnMove(wxMoveEvent &WXUNUSED(event))
+{
+    // Cross-platform event
+}
+
+void UpdaterFrame::OnMoveStart(wxMoveEvent &WXUNUSED(event))
+{
+    // Windows only event
+}
+
+void UpdaterFrame::OnMoveEnd(wxMoveEvent &WXUNUSED(event))
+{
+    // Windows only event
+    long x, y, w, h, save;
+    AppOptions *pOpt = wxGetApp().m_pAppOptions;
+
+    if (pOpt)
+    {
+        pOpt->GetOption(wxT("RecordSizePosition"), &save);
+        if (save != 0)
+        {
+            GetPosition((int *)&x, (int *)&y);
+            GetSize((int *)&w, (int *)&h);
+            pOpt->SetOption(wxT("FrameX"), x);
+            pOpt->SetOption(wxT("FrameY"), y);
+            pOpt->SetOption(wxT("FrameW"), w);
+            pOpt->SetOption(wxT("FrameH"), h);
+        }
+    }
+}
+
 void UpdaterFrame::OnViewPane(wxCommandEvent &event)
 {
     int evtId = event.GetId(), paneId;
