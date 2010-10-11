@@ -203,8 +203,31 @@ void AppPreferencePane::CreateControls()
     macSizer->Add(reportFileSizer, 0, wxALL | wxEXPAND, 5);
     macPage->SetSizer(macSizer);
 
+    //
+    // misc page
+    //
+    wxPanel *miscPage = new wxPanel(prefNB, wxID_ANY);
+    wxStaticBoxSizer *langSizer = new wxStaticBoxSizer(wxVERTICAL, miscPage, _("Language"));
+
+    wxStaticBoxSizer *layoutSizer = new wxStaticBoxSizer(wxVERTICAL, miscPage, _("Layout"));
+    wxCheckBox *saveSizePos = new wxCheckBox(miscPage, myID_SAVE_SIZEPOS_CHKBOX, _("Save frame size and position?"));
+    long lSave = 0;
+    wxGetApp().m_pAppOptions->GetOption(wxT("RecordSizePosition"), &lSave);
+    saveSizePos->SetValue(lSave != 0);
+    saveSizePos->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &AppPreferencePane::OnUpdateSaveSizePos, this);
+    layoutSizer->Add(saveSizePos, 0, wxALL, 5);
+
+    wxBoxSizer *miscSizer = new wxBoxSizer(wxVERTICAL);
+    miscSizer->Add(langSizer, 0, wxALL | wxEXPAND, 5);
+    miscSizer->Add(layoutSizer, 0, wxALL | wxEXPAND, 5);
+    miscPage->SetSizer(miscSizer);
+
+    //
+    // pages organization
+    //
     prefNB->AddPage(networkPage, _("Network"), true);
     prefNB->AddPage(macPage, _("MAC Address"), false);
+    prefNB->AddPage(miscPage, _("Misc"), false);
 
     wxBoxSizer *paneSizer = new wxBoxSizer(wxVERTICAL);
     paneSizer->Add(prefNB, 1, wxALL | wxEXPAND, 5);
@@ -363,4 +386,9 @@ void AppPreferencePane::OnInvalidMacAddressUpdated(wxCommandEvent& WXUNUSED(even
 
     if ((btn = wxDynamicCast(FindWindow(myID_UPDATE_INVALID_MAC_BTN), wxButton)) != NULL)
         btn->Enable();
+}
+
+void AppPreferencePane::OnUpdateSaveSizePos(wxCommandEvent& event)
+{
+    wxGetApp().m_pAppOptions->SetOption(wxT("RecordSizePosition"), event.IsChecked() ? 1L : 0L);
 }
