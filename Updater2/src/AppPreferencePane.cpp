@@ -208,6 +208,24 @@ void AppPreferencePane::CreateControls()
     //
     wxPanel *miscPage = new wxPanel(prefNB, wxID_ANY);
     wxStaticBoxSizer *langSizer = new wxStaticBoxSizer(wxVERTICAL, miscPage, _("Language"));
+    wxChoice *langChoice = new wxChoice(miscPage, wxID_ANY);
+    wxVector<wxString> installedLang = wxGetApp().GetInstalledLanguages();
+    wxVector<wxString>::iterator itLang;
+    wxString selectedLang, langDescription;
+    if (wxGetApp().m_pAppOptions->GetOption(wxT("Language"), selectedLang))
+    {
+        for (itLang = installedLang.begin(); itLang != installedLang.end(); ++itLang)
+        {
+            langDescription = wxGetApp().GetLanguageDescriptionFromISO639Code(*itLang);
+            langChoice->Append(langDescription);
+            if (!selectedLang.empty() && (selectedLang == *itLang))
+                langChoice->SetStringSelection(langDescription);
+            else if (selectedLang.empty() && (*itLang == wxT("en")))
+                langChoice->SetStringSelection(langDescription);
+        }
+    }
+    langChoice->Bind(wxEVT_COMMAND_CHOICE_SELECTED, &AppPreferencePane::OnLanguageChanged, this);
+    langSizer->Add(langChoice, 1, wxALL | wxEXPAND, 5);
 
     wxStaticBoxSizer *layoutSizer = new wxStaticBoxSizer(wxVERTICAL, miscPage, _("Layout"));
     wxCheckBox *saveSizePos = new wxCheckBox(miscPage, myID_SAVE_SIZEPOS_CHKBOX, _("Save frame size and position?"));
@@ -391,4 +409,16 @@ void AppPreferencePane::OnInvalidMacAddressUpdated(wxCommandEvent& WXUNUSED(even
 void AppPreferencePane::OnUpdateSaveSizePos(wxCommandEvent& event)
 {
     wxGetApp().m_pAppOptions->SetOption(wxT("RecordSizePosition"), event.IsChecked() ? 1L : 0L);
+}
+
+void AppPreferencePane::OnLanguageChanged(wxCommandEvent &event)
+{
+    wxString selectedLangISO639, dbLangISO639;
+
+    selectedLangISO639 = wxGetApp().GetLanguageISO639CodeFromDescription(event.GetString());
+    if (wxGetApp().m_pAppOptions->GetOption(wxT("Language"), dbLangISO639)
+        && (dbLangISO639 != selectedLangISO639))
+    {
+        wxGetApp().m_pAppOptions->SetOption(wxT("Language"), selectedLangISO639);
+    }
 }

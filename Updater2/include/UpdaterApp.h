@@ -21,6 +21,7 @@
 #include "AppOptions.h"
 
 class ReportDataModel;
+class AppLanguageInfo;
 
 ////////////////////////////////////////////////////////////////////////////
 class UpdaterApp : public wxApp
@@ -33,6 +34,9 @@ public:
     virtual int OnExit();
     long HalfMAC2Long(const wxString& halfMAC);
     long long FullMAC2LongLong(const wxString& fullMAC);
+    wxString GetLanguageDescriptionFromISO639Code(const wxString &iso639);
+    wxString GetLanguageISO639CodeFromDescription(const wxString &desc);
+    wxVector<wxString> GetInstalledLanguages();
 
     wxVector<NetAdapter> m_Adapters;
     AppOptions *m_pAppOptions;
@@ -48,10 +52,15 @@ private:
     // internal member functions
     bool DetectNetAdapter(bool *changed = NULL);
     wxString CalculateSubnetBroadcastAddress(wxString, wxString);
+    void AddSupportedLanguages();
+    void AddLanguageDescriptions();
+    void AddSupportedLanguage(wxLanguage langId, const wxString &iso639);
+    void AddLanguageDescription(wxLanguage langId, const wxString &desc);
+    wxLanguage DetectInstalledLanguages();
 
 private:
     // internal data members
-    wxLanguage _lang;
+    wxVector<AppLanguageInfo *> _appLanguages;
     wxLocale _locale;
     bool _skipVmwareNetworkAdapter;
 

@@ -19,18 +19,20 @@
 // ------------------------------------------------------------------------
 // Declaration
 // ------------------------------------------------------------------------
-typedef struct
+class AppLanguageInfo
 {
-    wxLanguage langId;
-    wxString langStr;
-} MyLanguageMap;
-
-static const MyLanguageMap langSupported[] =
-{
-    { wxLANGUAGE_CHINESE_TRADITIONAL,       wxT("zh_TW")    },
-    { wxLANGUAGE_CHINESE_SIMPLIFIED,        wxT("zh_CN")    },
-
-    { wxLANGUAGE_DEFAULT,                   wxT("")         }
+public:
+    AppLanguageInfo(wxLanguage langId, const wxString &iso639)
+    {
+        m_langId = langId;
+        m_iso639 = iso639;
+        m_description = wxEmptyString;
+        m_installed = false;
+    }
+    wxLanguage m_langId;
+    wxString m_iso639;
+    wxString m_description;
+    bool m_installed;
 };
 
 // ------------------------------------------------------------------------
@@ -53,10 +55,21 @@ UpdaterApp::~UpdaterApp()
         delete m_pAppOptions;
 
     wxDELETE(m_reportModel);
+
+    wxVector<AppLanguageInfo *>::iterator it;
+    for (it = _appLanguages.begin(); it != _appLanguages.end(); ++it)
+        wxDELETE(*it);
 }
 
 void UpdaterApp::Init()
 {
+    /* application information */
+    SetVendorName(wxT("delta"));
+    SetVendorDisplayName(wxT("Delta Electronics, Inc."));
+    SetAppName(wxT("Updater"));
+    SetAppDisplayName(wxT("Geo semi REALTA Platform Updater"));
+
+    /* backend database */
     m_pAppOptions = new AppOptions();
     m_Adapters.clear();
     if (!m_pAppOptions->GetOption(wxT("SkipVMInterface")).Cmp(wxT("Yes")))
@@ -64,18 +77,8 @@ void UpdaterApp::Init()
     else
         _skipVmwareNetworkAdapter = false;
 
-    /* language setting */
-    wxString langString = m_pAppOptions->GetOption(wxT("Language"));
-    long loop;
-    _lang = wxLANGUAGE_DEFAULT;
-    for (loop = 0; loop < WXSIZEOF(langSupported); loop++)
-    {
-        if (!langString.CmpNoCase(langSupported[loop].langStr))
-        {
-            _lang = langSupported[loop].langId;
-            break;
-        }
-    }
+    /* create supported language map */
+    AddSupportedLanguages();
 
     /* init report folder when it is empty */
     if (m_pAppOptions->GetOption(wxT("ReportFolder")).IsEmpty())
@@ -99,8 +102,8 @@ bool UpdaterApp::OnInit()
 {
     /* init locale */
     wxStandardPaths &stdPaths = wxStandardPaths::Get();
-    wxString localePath = wxFileName(stdPaths.GetExecutablePath()).GetPathWithSep() + wxT("locale");
-    if (!_locale.Init(_lang))
+    wxString localePath = wxFileName(stdPaths.GetExecutablePath()).GetPath(true) + wxT("locale");
+    if (!_locale.Init(DetectInstalledLanguages()))
     {
         wxLogWarning(wxT("This language is not supported by system."));
         // continue nevertheless
@@ -108,6 +111,9 @@ bool UpdaterApp::OnInit()
     _locale.AddCatalogLookupPathPrefix(localePath);
     _locale.AddCatalog(GetAppName());
     _locale.AddCatalog(wxT("wxstd"));
+
+    /* add description after locale initialization, so that description can be translated. */
+    AddLanguageDescriptions();
 
     /* get network adapter info */
     if (DetectNetAdapter())
@@ -421,3 +427,152 @@ long long UpdaterApp::FullMAC2LongLong(const wxString &fullMAC)
     return longlongValue;
 }
 
+void UpdaterApp::AddSupportedLanguages()
+{
+    /* add all supported language here, the iso639 name will also be treated
+       as directory name under the locale directory */
+
+    AddSupportedLanguage(wxLANGUAGE_ENGLISH, wxT("en"));
+    AddSupportedLanguage(wxLANGUAGE_CHINESE_TRADITIONAL, wxT("zh_TW"));
+    AddSupportedLanguage(wxLANGUAGE_CHINESE_SIMPLIFIED, wxT("zh_CN"));
+    AddSupportedLanguage(wxLANGUAGE_FRENCH, wxT("fr_FR"));
+    AddSupportedLanguage(wxLANGUAGE_GERMAN, wxT("de_DE"));
+    AddSupportedLanguage(wxLANGUAGE_JAPANESE, wxT("ja_JP"));
+    AddSupportedLanguage(wxLANGUAGE_KOREAN, wxT("ko_KR"));
+    AddSupportedLanguage(wxLANGUAGE_RUSSIAN, wxT("ru_RU"));
+    AddSupportedLanguage(wxLANGUAGE_SPANISH, wxT("es_ES"));
+}
+
+void UpdaterApp::AddLanguageDescriptions()
+{
+    AddLanguageDescription(wxLANGUAGE_ENGLISH, _("English"));
+    AddLanguageDescription(wxLANGUAGE_CHINESE_TRADITIONAL, _("Traditional Chinese"));
+    AddLanguageDescription(wxLANGUAGE_CHINESE_SIMPLIFIED, _("Simplified Chinese"));
+    AddLanguageDescription(wxLANGUAGE_FRENCH, _("French"));
+    AddLanguageDescription(wxLANGUAGE_GERMAN, _("German"));
+    AddLanguageDescription(wxLANGUAGE_JAPANESE, _("Japanese"));
+    AddLanguageDescription(wxLANGUAGE_KOREAN, _("Korean"));
+    AddLanguageDescription(wxLANGUAGE_RUSSIAN, _("Russian"));
+    AddLanguageDescription(wxLANGUAGE_SPANISH, _("Spanish"));
+}
+
+void UpdaterApp::AddSupportedLanguage(wxLanguage langId, const wxString &iso639)
+{
+    bool already_exist = false;
+    wxVector<AppLanguageInfo *>::iterator it;
+
+    for (it = _appLanguages.begin(); it != _appLanguages.end(); ++it)
+    {
+        if ((*it)->m_langId == langId)
+        {
+            already_exist = true;
+            break;
+        }
+    }
+
+    if (already_exist) // replace the old one
+    {
+        wxLogWarning(_("ISO639 code of language '%d' is changing from '%s' to '%s'."),
+            (*it)->m_langId, (*it)->m_iso639, iso639);
+        (*it)->m_iso639 = iso639;
+    }
+    else // create a new one
+    {
+        AppLanguageInfo *langInfo = new AppLanguageInfo(langId, iso639);
+        _appLanguages.push_back(langInfo);
+    }
+}
+
+void UpdaterApp::AddLanguageDescription(wxLanguage langId, const wxString &desc)
+{
+    wxVector<AppLanguageInfo *>::iterator it;
+
+    for (it = _appLanguages.begin(); it != _appLanguages.end(); ++it)
+    {
+        if ((*it)->m_langId == langId)
+            break;
+    }
+
+    if (it != _appLanguages.end())
+    {
+        (*it)->m_description = desc;
+    }
+    else
+    {
+        wxLogError(_("Add description '%s' for unsupported language '%d'"), desc, langId);
+    }
+}
+
+wxLanguage UpdaterApp::DetectInstalledLanguages()
+{
+    wxStandardPaths &stdPaths = wxStandardPaths::Get();
+    wxString localePath = wxFileName(stdPaths.GetExecutablePath()).GetPath(true) + wxT("locale");
+    wxString selectedLang = m_pAppOptions->GetOption(wxT("Language"));
+    wxLanguage result = wxLANGUAGE_ENGLISH;
+    bool selectedIsInstalled = false;
+    wxVector<AppLanguageInfo *>::iterator it;
+
+    /* scan dir to check if each supported language is installed or not */
+    for (it = _appLanguages.begin(); it != _appLanguages.end(); ++it)
+    {
+        if ((wxFileName::DirExists(localePath + wxFileName::GetPathSeparator() + (*it)->m_iso639))
+            || ((*it)->m_iso639 == wxT("en")))
+        {
+            (*it)->m_installed = true;
+            if (selectedLang == (*it)->m_iso639)
+            {
+                selectedIsInstalled = true;
+                result = (*it)->m_langId;
+            }
+        }
+    }
+
+    /* fallback to english if selected language is not installed */
+    if (!selectedIsInstalled)
+        result = wxLANGUAGE_ENGLISH;
+
+    return result;
+}
+
+wxString UpdaterApp::GetLanguageDescriptionFromISO639Code(const wxString &iso639)
+{
+    wxVector<AppLanguageInfo *>::iterator it;
+
+    for (it = _appLanguages.begin(); it != _appLanguages.end(); ++it)
+    {
+        if ((*it)->m_iso639 == iso639)
+            return (*it)->m_description;
+    }
+
+    return wxEmptyString;
+}
+
+wxString UpdaterApp::GetLanguageISO639CodeFromDescription(const wxString &desc)
+{
+    wxVector<AppLanguageInfo *>::iterator it;
+
+    for (it = _appLanguages.begin(); it != _appLanguages.end(); ++it)
+    {
+        if ((*it)->m_description == desc)
+            return (*it)->m_iso639;
+    }
+
+    return wxEmptyString;
+}
+
+wxVector<wxString> UpdaterApp::GetInstalledLanguages()
+{
+    wxVector<wxString> result;
+    wxVector<AppLanguageInfo *>::iterator it;
+
+    for (it = _appLanguages.begin(); it != _appLanguages.end(); ++it)
+    {
+        if ((*it)->m_installed)
+            result.push_back((*it)->m_iso639);
+    }
+
+    if (result.empty())
+        result.push_back(wxT("en"));
+
+    return result;
+}

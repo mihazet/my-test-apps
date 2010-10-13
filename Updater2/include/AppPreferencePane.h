@@ -45,6 +45,7 @@ private:
     void OnVendorOrProductMacAddressUpdated(wxCommandEvent& event);
     void OnInvalidMacAddressUpdated(wxCommandEvent& event);
     void OnUpdateSaveSizePos(wxCommandEvent& event);
+    void OnLanguageChanged(wxCommandEvent& event);
     
     // private data members
 };
