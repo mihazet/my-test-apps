@@ -334,7 +334,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% iphlpapi.lib wxcode_msw29ud_wxsqlite3.lib"</string>
+          <string name="Libraries">"%AUTO% iphlpapi.lib wxcode_msw29u_wxsqlite3.lib"</string>
           <string name="Library path">"%AUTO%,lib/wxSQLite3/lib/vc_lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource,lib/wxSQLite3/include"</string>
@@ -654,7 +654,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% iphlpapi.lib wxcode_msw29ud_wxsqlite3.lib"</string>
+          <string name="Libraries">"%AUTO% iphlpapi.lib wxcode_msw29u_wxsqlite3.lib"</string>
           <string name="Library path">"%AUTO%,lib/wxSQLite3/lib/vc_dll"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource,lib/wxSQLite3/include"</string>
