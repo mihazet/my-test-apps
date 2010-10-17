@@ -45,13 +45,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_UNICODE;__WXMSW__;_CONSOLE"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples"
 				PreprocessorDefinitions="WIN32;_UNICODE;__WXMSW__;_CONSOLE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -69,7 +69,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_UNICODE;__WXMSW__;_CONSOLE"
 				Culture="1033"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -77,11 +77,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="..\lib\vc_lib\wxcode_msw28u_wxsqlite3.lib sqlite3.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
+				AdditionalDependencies="..\lib\vc_lib\wxcode_msw29u_wxsqlite3.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				OutputFile="..\samples\minimal.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_lib;..\lib\vc_lib;..\sqlite3\lib"
+				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_lib;..\lib\vc_lib"
 				GenerateManifest="true"
 				ProgramDatabaseFile="..\samples\minimal.pdb"
 				SubSystem="1"
@@ -135,13 +135,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_UNICODE;__WXMSW__;_CONSOLE"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples"
 				PreprocessorDefinitions="WIN32;_UNICODE;__WXMSW__;_CONSOLE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -159,7 +159,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_UNICODE;__WXMSW__;_CONSOLE"
 				Culture="1033"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -167,11 +167,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="..\lib\vc_dll\wxcode_msw28u_wxsqlite3.lib sqlite3.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
+				AdditionalDependencies="..\lib\vc_dll\wxcode_msw29u_wxsqlite3.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				OutputFile="..\samples\minimal.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_lib;..\lib\vc_lib;..\sqlite3\lib"
+				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_lib;..\lib\vc_lib"
 				GenerateManifest="true"
 				ProgramDatabaseFile="..\samples\minimal.pdb"
 				SubSystem="1"
@@ -225,13 +225,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples"
 				PreprocessorDefinitions="WIN32;_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -251,7 +251,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -259,11 +259,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="..\lib\vc_lib\wxcode_msw28ud_wxsqlite3.lib sqlite3.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
+				AdditionalDependencies="..\lib\vc_lib\wxcode_msw29ud_wxsqlite3.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				OutputFile="..\samples\minimal.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_lib;..\lib\vc_lib;..\sqlite3\lib"
+				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_lib;..\lib\vc_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="..\samples\minimal.pdb"
@@ -318,13 +318,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples"
 				PreprocessorDefinitions="WIN32;_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -344,7 +344,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswud;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -352,11 +352,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="..\lib\vc_dll\wxcode_msw28ud_wxsqlite3.lib sqlite3.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
+				AdditionalDependencies="..\lib\vc_dll\wxcode_msw29ud_wxsqlite3.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				OutputFile="..\samples\minimal.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_lib;..\lib\vc_lib;..\sqlite3\lib"
+				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_lib;..\lib\vc_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="..\samples\minimal.pdb"
@@ -411,13 +411,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;WXUSINGDLL;_UNICODE;__WXMSW__;_CONSOLE"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples"
 				PreprocessorDefinitions="WIN32;WXUSINGDLL;_UNICODE;__WXMSW__;_CONSOLE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -435,7 +435,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="WXUSINGDLL;_UNICODE;__WXMSW__;_CONSOLE"
 				Culture="1033"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -443,11 +443,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="..\lib\vc_lib\wxcode_msw28u_wxsqlite3.lib sqlite3.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
+				AdditionalDependencies="..\lib\vc_lib\wxcode_msw29u_wxsqlite3.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				OutputFile="..\samples\minimal.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_dll;..\lib\vc_dll;..\sqlite3\lib"
+				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_dll;..\lib\vc_dll"
 				GenerateManifest="true"
 				ProgramDatabaseFile="..\samples\minimal.pdb"
 				SubSystem="1"
@@ -501,13 +501,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;WXUSINGDLL;_UNICODE;__WXMSW__;_CONSOLE"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples"
 				PreprocessorDefinitions="WIN32;WXUSINGDLL;_UNICODE;__WXMSW__;_CONSOLE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -525,7 +525,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="WXUSINGDLL;_UNICODE;__WXMSW__;_CONSOLE"
 				Culture="1033"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswu;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -533,11 +533,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="..\lib\vc_dll\wxcode_msw28u_wxsqlite3.lib sqlite3.lib wxbase28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
+				AdditionalDependencies="..\lib\vc_dll\wxcode_msw29u_wxsqlite3.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				OutputFile="..\samples\minimal.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_dll;..\lib\vc_dll;..\sqlite3\lib"
+				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_dll;..\lib\vc_dll"
 				GenerateManifest="true"
 				ProgramDatabaseFile="..\samples\minimal.pdb"
 				SubSystem="1"
@@ -591,13 +591,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples"
 				PreprocessorDefinitions="WIN32;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -617,7 +617,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -625,11 +625,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="..\lib\vc_lib\wxcode_msw28ud_wxsqlite3.lib sqlite3.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
+				AdditionalDependencies="..\lib\vc_lib\wxcode_msw29ud_wxsqlite3.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				OutputFile="..\samples\minimal.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_dll;..\lib\vc_dll;..\sqlite3\lib"
+				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_dll;..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="..\samples\minimal.pdb"
@@ -684,13 +684,13 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples"
 				PreprocessorDefinitions="WIN32;WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -710,7 +710,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="WXUSINGDLL;_UNICODE;__WXDEBUG__;__WXMSW__;_CONSOLE;_DEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples;..\sqlite3\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;..\include;..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -718,11 +718,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="..\lib\vc_dll\wxcode_msw28ud_wxsqlite3.lib sqlite3.lib wxbase28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
+				AdditionalDependencies="..\lib\vc_dll\wxcode_msw29ud_wxsqlite3.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				OutputFile="..\samples\minimal.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_dll;..\lib\vc_dll;..\sqlite3\lib"
+				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_dll;..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="..\samples\minimal.pdb"
