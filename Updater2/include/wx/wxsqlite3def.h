@@ -48,7 +48,10 @@
 //                            Fixed a potential memory leak in wxSQLite3Statement class
 //              2009-11-07  - Upgrade to SQLite3 version 3.6.20
 //              2010-02-05  - Upgrade to SQLite3 version 3.6.22
-//                            
+//              2010-03-11  - Upgrade to SQLite3 version 3.6.23
+//              2010-07-25  - Upgrade to SQLite3 version 3.7.0
+//              2010-10-10  - Upgrade to SQLite3 version 3.7.3
+//
 // Copyright:   (c) Ulrich Telle
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,10 +68,10 @@
   Several solutions already exist to access SQLite databases. To name just a few:
 
   - <a href="http://sourceforge.net/projects/wxsqlite">wxSQLite</a> :
-    This is a wxWidgets wrapper for version 2.8.x of SQLite. 
+    This is a wxWidgets wrapper for version 2.8.x of SQLite.
     SQLite version 3.x has a lot more features - which are not supported by this wrapper.
 
-  - <a href="http://www.codeproject.com/database/CppSQLite.asp">CppSQLite</a> : 
+  - <a href="http://www.codeproject.com/database/CppSQLite.asp">CppSQLite</a> :
     Not wxWidgets specific, but with (partial) support for the newer version 3.x of SQLite.
 
   - <a href="http://wxcode.sf.net">DatabaseLayer</a> :
@@ -82,15 +85,40 @@
   scalar or aggregate functions.
 
   Since SQLite stores strings in UTF-8 encoding, the wxSQLite3 methods provide automatic conversion
-  between wxStrings and UTF-8 strings. This works best for the \b Unicode builds of \b wxWidgets.
-  In \b ANSI builds the current locale conversion object \b wxConvCurrent is used for conversion
-  to/from UTF-8. Special care has to be taken if external administration tools are used to modify
-  the database contents, since not all of these tools operate in Unicode or UTF-8 mode.
+  between wxStrings and UTF-8 strings. The methods ToUTF8 and FromUTF8 of the wxString class (available
+  since wxWidgets 2.8.4) are used for the conversion. Special care has to be taken if external administration
+  tools are used to modify the database contents, since not all of these tools operate in Unicode or UTF-8 mode.
 
 \section version Version history
 
 <dl>
 
+<dt><b>2.0.1</b> - <i>October 2010</i></dt>
+<dd>
+Upgrade to SQLite version 3.7.3<br>
+Added parameter transferStatementOwnership to method wxSQLite3Statement::ExecuteQuery
+to allow using the returned result set beyond the life time of the wxSQLite3Statement instance<br>
+Eliminated the use of sqlite3_mprintf which caused linker problems when loading SQLite dynamically<br>
+
+</dd>
+<dt><b>2.0.0</b> - <i>July 2010</i></dt>
+<dd>
+Upgrade to SQLite version 3.7.0<br>
+Fixed a bug in class wxSQLite3ResultSet<br>
+Added support for SQLite's write-ahead log journal mode<br>
+Added support for named collections (see class wxSQLite3NamedCollection)<br>
+Changed UTF-8 string handling to use methods To/FromUTF8 of the wxString class (requires wxWidgets 2.8.4 or higher)<br>
+Compatible with wxWidgets 2.9.1<br>
+
+</dd>
+<dt><b>1.9.9</b> - <i>March 2010</i></dt>
+<dd>
+Upgrade to SQLite version 3.6.23<br>
+Fixed a bug when compiling for dynamic loading of SQLite<br>
+Added static methods for accessing the run-time library compilation options diagnostics<br>
+Added mathod FormatV to class wxSQLite3StatementBuffer<br>
+
+</dd>
 <dt><b>1.9.8</b> - <i>February 2010</i></dt>
 <dd>
 Upgrade to SQLite version 3.6.22<br>
@@ -347,6 +375,18 @@ The following people have contributed to wxSQLite3:
   #define WXDLLIMPEXP_SQLITE3 WXIMPORT
 #else // not making nor using DLL
   #define WXDLLIMPEXP_SQLITE3
+#endif
+
+/*
+  GCC warns about using __declspec on forward declarations
+  while MSVC complains about forward declarations without
+  __declspec for the classes later declared with it. To hide this
+  difference a separate macro for forward declarations is defined:
+ */
+#if defined(__WINDOWS__) && defined(__GNUC__)
+  #define WXDLLIMPEXP_FWD_SQLITE3
+#else
+  #define WXDLLIMPEXP_FWD_SQLITE3 WXDLLIMPEXP_SQLITE3
 #endif
 
 #endif // _WX_SQLITE3_DEF_H_
