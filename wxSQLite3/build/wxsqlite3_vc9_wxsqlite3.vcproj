@@ -76,7 +76,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\vc_lib\wxcode_wxsqlite3.lib"
+				OutputFile="..\lib\vc_lib\wxcode_msw29u_wxsqlite3.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -157,13 +157,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
-				OutputFile="..\lib\vc_lib\wxcode_wxsqlite3.dll"
+				OutputFile="..\lib\vc_lib\wxcode_msw29u_wxsqlite3.dll"
 				LinkIncremental="1"
-				ImportLibrary="..\lib\vc_lib\wxcode_wxsqlite3.lib"
+				ImportLibrary="..\lib\vc_lib\wxcode_msw29u_wxsqlite3.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_lib;..\lib\vc_lib;..\sqlite3\lib"
 				GenerateManifest="true"
-				ProgramDatabaseFile="..\lib\vc_lib\wxcode_wxsqlite3.pdb"
+				ProgramDatabaseFile="..\lib\vc_lib\wxcode_msw29u_wxsqlite3.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -244,7 +244,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\vc_lib\wxcode_wxsqlite3.lib"
+				OutputFile="..\lib\vc_lib\wxcode_msw29ud_wxsqlite3.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -327,14 +327,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
-				OutputFile="..\lib\vc_lib\wxcode_wxsqlite3.dll"
+				OutputFile="..\lib\vc_lib\wxcode_msw29ud_wxsqlite3.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\lib\vc_lib\wxcode_wxsqlite3.lib"
+				ImportLibrary="..\lib\vc_lib\wxcode_msw29ud_wxsqlite3.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_lib;..\lib\vc_lib;..\sqlite3\lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\lib\vc_lib\wxcode_wxsqlite3.pdb"
+				ProgramDatabaseFile="..\lib\vc_lib\wxcode_msw29ud_wxsqlite3.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -413,7 +413,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\vc_lib\wxcode_wxsqlite3.lib"
+				OutputFile="..\lib\vc_lib\wxcode_msw29u_wxsqlite3.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -494,13 +494,13 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
-				OutputFile="..\lib\vc_dll\wxcode_wxsqlite3.dll"
+				OutputFile="..\lib\vc_dll\wxcode_msw29u_wxsqlite3.dll"
 				LinkIncremental="1"
-				ImportLibrary="..\lib\vc_dll\wxcode_wxsqlite3.lib"
+				ImportLibrary="..\lib\vc_dll\wxcode_msw29u_wxsqlite3.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_dll;..\lib\vc_dll;..\sqlite3\lib"
 				GenerateManifest="true"
-				ProgramDatabaseFile="..\lib\vc_dll\wxcode_wxsqlite3.pdb"
+				ProgramDatabaseFile="..\lib\vc_dll\wxcode_msw29u_wxsqlite3.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -581,7 +581,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\vc_lib\wxcode_wxsqlite3.lib"
+				OutputFile="..\lib\vc_lib\wxcode_msw29ud_wxsqlite3.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -664,14 +664,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
-				OutputFile="..\lib\vc_dll\wxcode_wxsqlite3.dll"
+				OutputFile="..\lib\vc_dll\wxcode_msw29ud_wxsqlite3.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\lib\vc_dll\wxcode_wxsqlite3.lib"
+				ImportLibrary="..\lib\vc_dll\wxcode_msw29ud_wxsqlite3.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(WXWIN)\lib\vc_dll;..\lib\vc_dll;..\sqlite3\lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\lib\vc_dll\wxcode_wxsqlite3.pdb"
+				ProgramDatabaseFile="..\lib\vc_dll\wxcode_msw29ud_wxsqlite3.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
