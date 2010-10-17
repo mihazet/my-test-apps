@@ -54,7 +54,7 @@
 				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;..\include;..\sqlite3"
 				PreprocessorDefinitions="WIN32;_LIB;_UNICODE;__WXMSW__;wxUSE_DYNAMIC_SQLITE3_LOAD=0;WXSQLITE3_HAVE_METADATA=0;WXSQLITE3_HAVE_CODEC=1;WXSQLITE3_HAVE_LOAD_EXTENSION=0"
 				ExceptionHandling="1"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				RuntimeTypeInfo="true"
 				ObjectFile="vcmswu\wxsqlite3\"
 				ProgramDataBaseFileName="..\lib\vc_lib\wxcode_msw29u_wxsqlite3.pdb"
