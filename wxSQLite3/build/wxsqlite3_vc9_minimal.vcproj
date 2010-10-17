@@ -22,7 +22,7 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Static Unicode Release Multilib Static|Win32"
+			Name="Release|Win32"
 			OutputDirectory="..\samples"
 			IntermediateDirectory="vcmswu\minimal"
 			ConfigurationType="1"
@@ -112,7 +112,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Static Unicode Debug Multilib Static|Win32"
+			Name="Debug|Win32"
 			OutputDirectory="..\samples"
 			IntermediateDirectory="vcmswud\minimal"
 			ConfigurationType="1"
@@ -205,7 +205,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="DLL Unicode Release Multilib DLL|Win32"
+			Name="Release DLL|Win32"
 			OutputDirectory="..\samples"
 			IntermediateDirectory="vcmswu_dll\minimal"
 			ConfigurationType="1"
@@ -295,7 +295,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="DLL Unicode Debug Multilib DLL|Win32"
+			Name="Debug DLL|Win32"
 			OutputDirectory="..\samples"
 			IntermediateDirectory="vcmswud_dll\minimal"
 			ConfigurationType="1"

@@ -22,7 +22,7 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Static Unicode Release Multilib Static|Win32"
+			Name="Release|Win32"
 			OutputDirectory="..\lib\vc_lib"
 			IntermediateDirectory="vcmswu\wxsqlite3"
 			ConfigurationType="4"
@@ -101,7 +101,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Static Unicode Debug Multilib Static|Win32"
+			Name="Debug|Win32"
 			OutputDirectory="..\lib\vc_lib"
 			IntermediateDirectory="vcmswud\wxsqlite3"
 			ConfigurationType="4"
@@ -182,7 +182,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="DLL Unicode Release Multilib DLL|Win32"
+			Name="Release DLL|Win32"
 			OutputDirectory="..\lib\vc_dll"
 			IntermediateDirectory="vcmswu_dll\wxsqlite3"
 			ConfigurationType="2"
@@ -269,7 +269,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="DLL Unicode Debug Multilib DLL|Win32"
+			Name="Debug DLL|Win32"
 			OutputDirectory="..\lib\vc_dll"
 			IntermediateDirectory="vcmswud_dll\wxsqlite3"
 			ConfigurationType="2"
