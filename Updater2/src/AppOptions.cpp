@@ -24,7 +24,7 @@ AppOptions::AppOptions(const wxString& name)
 
     if (NULL != (_db = new wxSQLite3Database))
     {
-        _db->Open(dbDir + name);
+        _db->Open(dbDir + name, wxT("keyOptions"));
         if (_db->IsOpen())
             Init();
     }
