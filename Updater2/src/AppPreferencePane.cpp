@@ -124,7 +124,6 @@ void AppPreferencePane::CreateControls()
     netSizer->Add(actIfSizer, 0, wxALL | wxEXPAND, 5);
     netSizer->Add(searchSizer, 0, wxALL | wxEXPAND, 5);
     netSizer->Add(serviceSizer, 0, wxALL | wxEXPAND, 5);
-    netSizer->Add(new wxStaticText(networkPage, wxID_STATIC, wxT("* : ") + _("Need to restart application for the changes to take effect.")), 0, wxALL, 5);
     networkPage->SetSizer(netSizer);
 
     //
@@ -208,6 +207,7 @@ void AppPreferencePane::CreateControls()
     //
     wxPanel *miscPage = new wxPanel(prefNB, wxID_ANY);
     wxStaticBoxSizer *langSizer = new wxStaticBoxSizer(wxVERTICAL, miscPage, _("Language"));
+    langSizer->Add(new wxStaticText(miscPage, wxID_STATIC, _("Please choose your preferred language.") + wxT(" *")), 0, wxALL, 5);
     wxChoice *langChoice = new wxChoice(miscPage, wxID_ANY);
     wxVector<wxString> installedLang = wxGetApp().GetInstalledLanguages();
     wxVector<wxString>::iterator itLang;
@@ -249,6 +249,7 @@ void AppPreferencePane::CreateControls()
 
     wxBoxSizer *paneSizer = new wxBoxSizer(wxVERTICAL);
     paneSizer->Add(prefNB, 1, wxALL | wxEXPAND, 5);
+    paneSizer->Add(new wxStaticText(this, wxID_STATIC, wxT("* : ") + _("Need to restart application for the changes to take effect.")), 0, wxALL, 10);
     SetSizer(paneSizer);
 }
 
