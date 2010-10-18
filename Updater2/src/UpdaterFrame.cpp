@@ -410,7 +410,7 @@ void UpdaterFrame::OnAbout(wxCommandEvent &WXUNUSED(event))
         << wxT("Copyright 2010 (c), Delta Electronics, Inc. All Rights Reserved.");
     description
         << wxT("This program is used to download the firmware and/or bootloader\n")
-        << wxT("into flash memory in parallel for the RELTA platform.\n")
+        << wxT("into flash memory in parallel for the REALTA platform.\n")
         << wxT("And it also helps user to manage the MAC address management.\n");
     version
         << VER_MAJOR_STRING << "." << VER_MINOR_STRING << "." << VER_RELEASE_STRING;
