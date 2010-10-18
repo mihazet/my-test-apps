@@ -105,7 +105,7 @@ void MacAddrUsagePane::OnReportImport(wxCommandEvent &WXUNUSED(event))
 
     if (wxID_OK == fileDlg.ShowModal())
     {
-        _reportModel->GetDB()->Restore(fileDlg.GetPath());
+        _reportModel->GetDB()->Restore(fileDlg.GetPath(), wxGetApp().m_encryptionKey[UpdaterApp::KEY_REPORT]);
         _reportModel->Reset(_reportModel->GetRowCount());
     }    
 }

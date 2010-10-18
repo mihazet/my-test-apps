@@ -44,6 +44,13 @@ public:
     int m_UpdateThreadCount;
     bool m_SearchThreadRunning;
     ReportDataModel *m_reportModel;
+    enum
+    {
+        KEY_OPTION,
+        KEY_REPORT,
+        KEY_MAX
+    };
+    wxString m_encryptionKey[KEY_MAX];
 
 private:
     // event handlers

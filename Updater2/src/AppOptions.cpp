@@ -4,6 +4,7 @@
 #include <wx/wx.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
+#include "UpdaterApp.h"
 #include "AppOptions.h"
 
 // ------------------------------------------------------------------------
@@ -24,7 +25,7 @@ AppOptions::AppOptions(const wxString& name)
 
     if (NULL != (_db = new wxSQLite3Database))
     {
-        _db->Open(dbDir + name, wxT("keyOptions"));
+        _db->Open(dbDir + name, wxGetApp().m_encryptionKey[UpdaterApp::KEY_OPTION]);
         if (_db->IsOpen())
             Init();
     }

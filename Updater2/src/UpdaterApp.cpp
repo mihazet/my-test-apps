@@ -69,6 +69,10 @@ void UpdaterApp::Init()
     SetAppName(wxT("Updater"));
     SetAppDisplayName(wxT("Geo semi REALTA Platform Updater"));
 
+    /* encryption keys */
+    m_encryptionKey[KEY_OPTION] = wxT("keyOptions");
+    m_encryptionKey[KEY_REPORT] = wxT("keyReport");
+    
     /* backend database */
     m_pAppOptions = new AppOptions();
     m_Adapters.clear();

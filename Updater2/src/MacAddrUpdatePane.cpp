@@ -211,7 +211,7 @@ wxSQLite3Database *MacAddrUpdatePane::OpenReportDatabase(int reportRotateType)
         {
             if (NULL != (db = new wxSQLite3Database()))
             {
-                db->Open(tempPath, wxT("keyReport"));
+                db->Open(tempPath, wxGetApp().m_encryptionKey[UpdaterApp::KEY_REPORT]);
                 if (db->IsOpen())
                 {
                     sqlQuery << wxT("SELECT COUNT(*) FROM ReportTable");
@@ -248,7 +248,7 @@ wxSQLite3Database *MacAddrUpdatePane::OpenReportDatabase(int reportRotateType)
     /* open and check db file */
     if (NULL != (db = new wxSQLite3Database()))
     {
-        db->Open(dbPath, wxT("keyReport"));
+        db->Open(dbPath, wxGetApp().m_encryptionKey[UpdaterApp::KEY_REPORT]);
         if (db->IsOpen())
         {
             sqlUpdate << wxT("CREATE TABLE IF NOT EXISTS ReportTable (")
