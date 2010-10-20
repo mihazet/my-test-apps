@@ -152,6 +152,7 @@
         <string name="Use wxPropertyGrid">"Yes"</string>
         <string name="Use wxAUI">"Yes"</string>
         <string name="Use wxSTC">"Yes"</string>
+        <string name="Use wxRegEx">"sys"</string>
         <string name="Use wxRibbonControl">"Yes"</string>
         <string name="Executable name">"%EXECUTABLE%"</string>
         <string name="Program arguments">""</string>
@@ -220,6 +221,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Executable name">"%EXECUTABLE%"</string>
           <string name="Program arguments">""</string>
@@ -289,6 +291,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Executable name">"%EXECUTABLE%"</string>
           <string name="Program arguments">""</string>
@@ -358,6 +361,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Compiler version">"9"</string>
           <string name="Executable name">"%EXECUTABLE%"</string>
@@ -439,6 +443,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Compiler version">"9"</string>
           <string name="Executable name">"%EXECUTABLE%"</string>
@@ -520,6 +525,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Use wx-config">"Yes"</string>
           <string name="Use installed wxWidgets">"No"</string>
@@ -597,6 +603,7 @@
           <string name="Use wxPropertyGrid">"Yes"</string>
           <string name="Use wxAUI">"Yes"</string>
           <string name="Use wxSTC">"Yes"</string>
+          <string name="Use wxRegEx">"sys"</string>
           <string name="Use wxRibbonControl">"Yes"</string>
           <string name="Use wx-config">"Yes"</string>
           <string name="Use installed wxWidgets">"No"</string>
