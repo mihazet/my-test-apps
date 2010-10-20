@@ -64,6 +64,7 @@ private:
     void AddSupportedLanguage(wxLanguage langId, const wxString &iso639);
     void AddLanguageDescription(wxLanguage langId, const wxString &desc);
     wxLanguage DetectInstalledLanguages();
+    void ProcessCmdLine();
 
 private:
     // internal data members

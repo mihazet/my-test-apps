@@ -104,6 +104,9 @@ void UpdaterApp::Init()
 
 bool UpdaterApp::OnInit()
 {
+    /* process command line */
+    ProcessCmdLine();
+
     /* init locale */
     wxStandardPaths &stdPaths = wxStandardPaths::Get();
     wxString localePath = wxFileName(stdPaths.GetExecutablePath()).GetPath(true) + wxT("locale");
@@ -580,3 +583,18 @@ wxVector<wxString> UpdaterApp::GetInstalledLanguages()
 
     return result;
 }
+
+void UpdaterApp::ProcessCmdLine()
+{
+    //
+    // When drag a file icon and drop in the execute, the file path will
+    // be used as the command line parameter.
+    //
+    if (wxApp::argc > 1)
+    {
+        wxString imageFile = wxApp::argv[1];
+        if (wxFile::Exists(imageFile))
+            m_pAppOptions->SetOption(wxT("GlobalFilePath"), imageFile);
+    }
+}
+
