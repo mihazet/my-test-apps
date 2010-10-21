@@ -394,6 +394,19 @@ void UpdaterFrame::OnClose(wxCloseEvent &event)
     {
         if (event.CanVeto())
         {
+            wxString explainMsg;
+            if (wxGetApp().m_UpdateThreadCount != 0)
+            {
+                explainMsg << _("There is still device under upgrade procedure.")
+                    << wxT("\n") << _("Please retry close application again later.");
+            }
+            else if (wxGetApp().m_SearchThreadRunning)
+            {
+                explainMsg << _("The device search procedure is still running.")
+                    << wxT("\n") << _("Please retry close application again later.");
+            }
+            wxMessageDialog dlg(this, explainMsg, _("Application can not exit now"));
+            dlg.ShowModal();
             event.Veto();
             return;
         }
