@@ -42,6 +42,8 @@ enum
     myID_DOWNLOAD_GLOBAL_FILE,
     myID_DOWNLOAD_SELECTED_BTN,
     myID_MODIFY_MAC_BTN,
+    myID_COUNTER_OK_TEXT,
+    myID_COUNTER_NG_TEXT,
 
     /* log */
 

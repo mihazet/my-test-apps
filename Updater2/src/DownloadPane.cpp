@@ -363,6 +363,7 @@ DownloadPane::~DownloadPane()
 
 void DownloadPane::Init()
 {
+    _cntOk = _cntNg = 0;
 }
 
 bool DownloadPane::Create(wxWindow *parent, wxWindowID id,
@@ -396,7 +397,19 @@ void DownloadPane::CreateControls()
     search->SetBitmapDisabled(wxBitmap(wxImage(search_32_xpm).ConvertToGreyscale()));
     wxBoxSizer *searchSizer = new wxBoxSizer(wxHORIZONTAL);
     searchSizer->Add(search, 0, wxALL | wxEXPAND, 5);
-    listBoxSizer->Add(searchSizer, 0, wxALL, 5);
+    searchSizer->AddStretchSpacer(1);
+    wxBoxSizer *counterSizer = new wxBoxSizer(wxVERTICAL);
+    counterSizer->AddStretchSpacer(1);
+    wxBoxSizer *okCntSizer = new wxBoxSizer(wxHORIZONTAL);
+    okCntSizer->Add(new wxStaticText(this, wxID_STATIC, _("OK")), 0, wxALL | wxALIGN_CENTER, 0);
+    okCntSizer->Add(new wxTextCtrl(this, myID_COUNTER_OK_TEXT, wxEmptyString, wxDefaultPosition, wxSize(40, -1), wxTE_READONLY), 0, wxLEFT, 5);
+    counterSizer->Add(okCntSizer, 0, wxALL, 0);
+    wxBoxSizer *ngCntSizer = new wxBoxSizer(wxHORIZONTAL);
+    ngCntSizer->Add(new wxStaticText(this, wxID_STATIC, _("NG")), 0, wxALL | wxALIGN_CENTER, 0);
+    ngCntSizer->Add(new wxTextCtrl(this, myID_COUNTER_NG_TEXT, wxEmptyString, wxDefaultPosition, wxSize(40, -1), wxTE_READONLY), 0, wxLEFT, 5);
+    counterSizer->Add(ngCntSizer, 0, wxALL, 0);
+    searchSizer->Add(counterSizer, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 0);
+    listBoxSizer->Add(searchSizer, 0, wxALL | wxEXPAND, 5);
 
     wxBoxSizer *selectSizer = new wxBoxSizer(wxHORIZONTAL);
     selectSizer->Add(new MyLinkAction(this, myID_TARGET_CHECK_ALL, _("Check All")), 0, wxLEFT, 5);
@@ -969,6 +982,24 @@ void DownloadPane::OnUpdateThread(wxThreadEvent &event)
                 msg_for_update_error << wxT("! ") << _("Reason") << wxT(" = ")
                     << ExplainUpdateThreadErrorCode(error) << wxT("!");
                 _promptForNotification->ShowMessage(msg_for_update_error, wxICON_ERROR);
+            }
+
+            /* increase the NG counter */
+            wxTextCtrl *ng = wxDynamicCast(FindWindow(myID_COUNTER_NG_TEXT), wxTextCtrl);
+            if (ng)
+            {
+                _cntNg++;
+                ng->ChangeValue(wxString::Format(wxT("%lu"), _cntNg));
+            }
+        }
+        else
+        {
+            /* increase the OK counter */
+            wxTextCtrl *ok = wxDynamicCast(FindWindow(myID_COUNTER_OK_TEXT), wxTextCtrl);
+            if (ok)
+            {
+                _cntOk++;
+                ok->ChangeValue(wxString::Format(wxT("%lu"), _cntOk));
             }
         }
 

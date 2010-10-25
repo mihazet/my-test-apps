@@ -51,6 +51,8 @@ private:
     wxString _preparedUpdateThreadCodedString; // used by button on the info button
     wxInfoBar *_promptForModifyMAC;
     wxInfoBar *_promptForNotification;
+    unsigned long _cntOk;
+    unsigned long _cntNg;
 
     DECLARE_EVENT_TABLE()
 };
