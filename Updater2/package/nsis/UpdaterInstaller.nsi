@@ -47,6 +47,7 @@
 	; Component page
 	!define MUI_COMPONENTSPAGE_CHECKBITMAP "${NSISDIR}\Contrib\Graphics\Checks\modern.bmp"
 	;!define MUI_COMPONENTSPAGE_NODESC
+	!define MUI_COMPONENTSPAGE_SMALLDESC
 	; Directory page
 	!define MUI_DIRECTORYPAGE_BGCOLOR "FFFFFF"
 	; Start menu folder page
@@ -79,13 +80,13 @@
   
 ;--------------------------------
 ;Pages
-	Var StartMenuFolder
+	;Var StartMenuFolder
 
 	!insertmacro MUI_PAGE_INIT
 	!insertmacro MUI_PAGE_WELCOME
 	!insertmacro MUI_PAGE_LICENSE "${NSISDIR}\Docs\Modern UI\License.txt"
 	!insertmacro MUI_PAGE_COMPONENTS
-	!insertmacro MUI_PAGE_STARTMENU page_id "$StartMenuFolder"
+	;!insertmacro MUI_PAGE_STARTMENU page_id "$StartMenuFolder"
 	!insertmacro MUI_PAGE_DIRECTORY
 	!insertmacro MUI_PAGE_INSTFILES
 	!insertmacro MUI_PAGE_FINISH
@@ -138,28 +139,35 @@ Section "Updater" MainApp
 	
 SectionEnd
 
-SubSection "SubSection" subsss
+SubSection "Language files" Locale
 
-Section "xxx" xxx
-SectionEnd
-
-Section /o "Language files" Locale
+Section "English" locale_en
 
 	SectionIn 1
-	SetOutPath "$INSTDIR\locale"
-	
 	CreateDirectory "$INSTDIR\locale\en"
-	CreateDirectory "$INSTDIR\locale\zh_TW"
-	CreateDirectory "$INSTDIR\locale\zh_CN"
-	
 	SetOutPath "$INSTDIR\locale\en"
-	File "..\..\bin\VC9ProjectDebug\locale\en\Updater.mo"
-	
+	File /nonfatal "..\..\bin\VC9ProjectDebug\locale\en\Updater.mo"
+	File /nonfatal "..\..\bin\VC9ProjectDebug\locale\en\wxstd.mo"	
+
+SectionEnd
+
+Section "Chinese (Traditional)" locale_zh_TW
+
+	SectionIn 1
+	CreateDirectory "$INSTDIR\locale\zh_TW"
 	SetOutPath "$INSTDIR\locale\zh_TW"
-	File "..\..\bin\VC9ProjectDebug\locale\zh_TW\Updater.mo"
-	
+	File /nonfatal "..\..\bin\VC9ProjectDebug\locale\zh_TW\Updater.mo"
+	File /nonfatal "..\..\bin\VC9ProjectDebug\locale\zh_TW\wxstd.mo"	
+
+SectionEnd
+
+Section "Chinese (Simplified)" locale_zh_CN
+
+	SectionIn 1
+	CreateDirectory "$INSTDIR\locale\zh_CN"
 	SetOutPath "$INSTDIR\locale\zh_CN"
-	File "..\..\bin\VC9ProjectDebug\locale\zh_CN\Updater.mo"
+	File /nonfatal "..\..\bin\VC9ProjectDebug\locale\zh_CN\Updater.mo"
+	File /nonfatal "..\..\bin\VC9ProjectDebug\locale\zh_CN\wxstd.mo"	
 
 SectionEnd
 
@@ -198,16 +206,16 @@ Section "Uninstall"
 	Delete "$INSTDIR\Updater.exe"
 	Delete "$INSTDIR\appoptions.db"
 	Delete "$INSTDIR\Uninstall.exe"  
-	Delete "$INSTDIR\locale\en\Updater.mo"
-	Delete "$INSTDIR\locale\zh_TW\Updater.mo"
-	Delete "$INSTDIR\locale\zh_CN\Updater.mo"
-	RMDir "$INSTDIR\locale\en"
-	RMDir "$INSTDIR\locale\zh_TW"
-	RMDir "$INSTDIR\locale\zh_CN"
-	RMDir "$INSTDIR\locale"
-	RMDir "$INSTDIR\report"
+	RMDir /r "$INSTDIR\locale"
+	RMDir /r "$INSTDIR\report"
 	RMDir "$INSTDIR"
-
+	
+	Delete "$SMPROGRAMS\${COMPANY}\${APPNAME}\Updater.lnk"
+	Delete "$SMPROGRAMS\${COMPANY}\${APPNAME}\Uninstall.lnk"
+	Delete "$QUICKLAUNCH\Updater.lnk"
+	RMDir "$SMPROGRAMS\${COMPANY}\${APPNAME}"
+	RMDir "$SMPROGRAMS\${COMPANY}"
+	
 	DeleteRegKey /ifempty HKCU "Software\${COMPANY}\${APPNAME}"
 
 SectionEnd
