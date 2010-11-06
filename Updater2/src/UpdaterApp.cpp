@@ -116,9 +116,9 @@ bool UpdaterApp::OnInit()
         // continue nevertheless
     }
     _locale.AddCatalogLookupPathPrefix(localePath);
-    _locale.AddCatalog(GetAppName());
     _locale.AddCatalog(wxT("wxstd"));
-
+    _locale.AddCatalog(GetAppName());
+    
     /* add description after locale initialization, so that description can be translated. */
     AddLanguageDescriptions();
 

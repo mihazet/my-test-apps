@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Realta Updater\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-22 00:41+0800\n"
-"PO-Revision-Date: 2010-10-22 00:43+0800\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2010-11-06 14:42+0800\n"
+"PO-Revision-Date: 2010-11-06 14:43+0800\n"
+"Last-Translator: YH <yh.yang@delta.com.tw>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -227,179 +227,187 @@ msgstr "单板专用更新档案路径"
 msgid "Result"
 msgstr "执行结果"
 
-#: ../src/DownloadPane.cpp:382
+#: ../src/DownloadPane.cpp:383
 msgid "Start to modify..."
 msgstr "开始修改..."
 
-#: ../src/DownloadPane.cpp:386
+#: ../src/DownloadPane.cpp:387
 msgid "Ignore"
 msgstr "忽略"
 
-#: ../src/DownloadPane.cpp:391
+#: ../src/DownloadPane.cpp:392
 msgid "Device list"
 msgstr "板子列表"
 
-#: ../src/DownloadPane.cpp:394
+#: ../src/DownloadPane.cpp:395
 msgid "Search"
 msgstr "搜寻"
 
-#: ../src/DownloadPane.cpp:402
+#: ../src/DownloadPane.cpp:404
+msgid "OK"
+msgstr "成功"
+
+#: ../src/DownloadPane.cpp:408
+msgid "NG"
+msgstr "失败"
+
+#: ../src/DownloadPane.cpp:415
 msgid "Check All"
 msgstr "全部勾选"
 
-#: ../src/DownloadPane.cpp:403
+#: ../src/DownloadPane.cpp:416
 msgid "Uncheck All"
 msgstr "全部不勾选"
 
-#: ../src/DownloadPane.cpp:404
+#: ../src/DownloadPane.cpp:417
 msgid "Select None"
 msgstr "全部不选"
 
-#: ../src/DownloadPane.cpp:411
+#: ../src/DownloadPane.cpp:424
 msgid "Update selected"
 msgstr "更新所有勾选"
 
-#: ../src/DownloadPane.cpp:415
+#: ../src/DownloadPane.cpp:428
 msgid "Use Device-specific Image File"
 msgstr "使用单板专用更新档案"
 
-#: ../src/DownloadPane.cpp:416
+#: ../src/DownloadPane.cpp:429
 msgid "Use Global Image File"
 msgstr "使用全域单一更新档案"
 
-#: ../src/DownloadPane.cpp:425
+#: ../src/DownloadPane.cpp:438
 msgid "Global Image File Path:"
 msgstr "全域单一更新档案路径："
 
-#: ../src/DownloadPane.cpp:428
+#: ../src/DownloadPane.cpp:441
 msgid "Device operation"
 msgstr "对板子的操作"
 
-#: ../src/DownloadPane.cpp:508
+#: ../src/DownloadPane.cpp:521
 msgid "Wrong image file syntax"
 msgstr "错误的更新档案格式"
 
-#: ../src/DownloadPane.cpp:509
+#: ../src/DownloadPane.cpp:522
 msgid "Calculated checksum mismatched"
 msgstr "与计算出的检查码不符"
 
-#: ../src/DownloadPane.cpp:510
+#: ../src/DownloadPane.cpp:523
 msgid "Wrong image file checksum"
 msgstr "错误的档案检查码"
 
-#: ../src/DownloadPane.cpp:511
+#: ../src/DownloadPane.cpp:524
 msgid "Unrecognize operation mode"
 msgstr "无法辨识的操作模式"
 
-#: ../src/DownloadPane.cpp:512
+#: ../src/DownloadPane.cpp:525
 msgid "Wrong version"
 msgstr "软体版本不符合"
 
-#: ../src/DownloadPane.cpp:513
+#: ../src/DownloadPane.cpp:526
 msgid "Memory allocation failed"
 msgstr "记忆体配置错误"
 
-#: ../src/DownloadPane.cpp:514
+#: ../src/DownloadPane.cpp:527
 msgid "Can't erase flash memory"
 msgstr "无法抹除快闪记忆体"
 
-#: ../src/DownloadPane.cpp:515
+#: ../src/DownloadPane.cpp:528
 msgid "Can't read flash memory"
 msgstr "无法读取快闪记忆体"
 
-#: ../src/DownloadPane.cpp:516
+#: ../src/DownloadPane.cpp:529
 msgid "Can't write flash memory"
 msgstr "无法写入快闪记忆体"
 
-#: ../src/DownloadPane.cpp:517
+#: ../src/DownloadPane.cpp:530
 msgid "Wrong firmware image size"
 msgstr "韧体更新档案大小错误"
 
-#: ../src/DownloadPane.cpp:518
+#: ../src/DownloadPane.cpp:531
 msgid "Wrong bootloader image size"
 msgstr "开机载入程式更新档案大小错误"
 
-#: ../src/DownloadPane.cpp:519
+#: ../src/DownloadPane.cpp:532
 msgid "Can't init socket"
 msgstr "无法为 Socket 初始化"
 
-#: ../src/DownloadPane.cpp:520
+#: ../src/DownloadPane.cpp:533
 msgid "Can't connect to remote"
 msgstr "无法与远端建立连线"
 
-#: ../src/DownloadPane.cpp:521
+#: ../src/DownloadPane.cpp:534
 msgid "Remote doesn't understand my protocol"
 msgstr "远端并不了解我的协定"
 
-#: ../src/DownloadPane.cpp:522
+#: ../src/DownloadPane.cpp:535
 msgid "Fail to read iamge file"
 msgstr "无法读取更新档案"
 
-#: ../src/DownloadPane.cpp:523
+#: ../src/DownloadPane.cpp:536
 msgid "Socket write error"
 msgstr "对 Socket 写入时发生错误"
 
-#: ../src/DownloadPane.cpp:524
+#: ../src/DownloadPane.cpp:537
 msgid "Socket read error"
 msgstr "对 Socket 读取时发生错误"
 
-#: ../src/DownloadPane.cpp:525
+#: ../src/DownloadPane.cpp:538
 msgid "Unknown error"
 msgstr "未知的错误"
 
-#: ../src/DownloadPane.cpp:659
+#: ../src/DownloadPane.cpp:672
 msgid "Update procedure is skipped because of lack of global image file path."
 msgstr "由于缺少全域单一更新档案路径，更新程序已略过。"
 
-#: ../src/DownloadPane.cpp:696
+#: ../src/DownloadPane.cpp:709
 msgid "There is another update procedure running! Please wait it completed and try later..."
 msgstr "有其它的更新程序正在执行中！请稍后再试..."
 
-#: ../src/DownloadPane.cpp:707
+#: ../src/DownloadPane.cpp:720
 msgid "MAC address auto-generation is disabled before you configure them done in the preference window!"
 msgstr "在您于偏好页面中完成 MAC 位址设定前，MAC 位址自动生成功能已被暂停！"
 
-#: ../src/DownloadPane.cpp:717
+#: ../src/DownloadPane.cpp:730
 msgid "You have run out of the MAC address pool! Please re-configure it."
 msgstr "您已经完毕先前设定的 MAC 位址资源！请重新设定资源范围。"
 
-#: ../src/DownloadPane.cpp:728
+#: ../src/DownloadPane.cpp:741
 msgid "Update MAC Address"
 msgstr "更新 MAC 位址"
 
-#: ../src/DownloadPane.cpp:891
+#: ../src/DownloadPane.cpp:904
 msgid "Device"
 msgstr "单板"
 
-#: ../src/DownloadPane.cpp:891
+#: ../src/DownloadPane.cpp:904
 msgid "with invalid MAC address"
 msgstr "具有无效的 MAC 位址"
 
-#: ../src/DownloadPane.cpp:892
+#: ../src/DownloadPane.cpp:905
 msgid "Would you like to modify it?"
 msgstr "请问是否要修改？"
 
-#: ../src/DownloadPane.cpp:962
+#: ../src/DownloadPane.cpp:975
 msgid "Can not download"
 msgstr "无法下载"
 
-#: ../src/DownloadPane.cpp:964
+#: ../src/DownloadPane.cpp:977
 msgid "firmware"
 msgstr "韧体"
 
-#: ../src/DownloadPane.cpp:966
+#: ../src/DownloadPane.cpp:979
 msgid "Bootloader"
 msgstr "开机启动程式"
 
-#: ../src/DownloadPane.cpp:968
+#: ../src/DownloadPane.cpp:981
 msgid "Image"
 msgstr "更新影像档"
 
-#: ../src/DownloadPane.cpp:969
+#: ../src/DownloadPane.cpp:982
 msgid "Reason"
 msgstr "理由"
 
-#: ../src/DownloadPane.cpp:1128
+#: ../src/DownloadPane.cpp:1159
 msgid "Select image file for device"
 msgstr "替单板选择更新档"
 
