@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PowerOn", "PowerOn\PowerOn.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StatusOn", "StatusOn\StatusOn.vcproj", "{ADA10F21-2789-478E-A6F3-75EF031C6997}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StatusOff", "StatusOff\StatusOff.vcproj", "{16FF8406-F04B-40D4-9272-FDC2AD620836}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -37,6 +39,10 @@ Global
 		{ADA10F21-2789-478E-A6F3-75EF031C6997}.Debug|Win32.Build.0 = Debug|Win32
 		{ADA10F21-2789-478E-A6F3-75EF031C6997}.Release|Win32.ActiveCfg = Release|Win32
 		{ADA10F21-2789-478E-A6F3-75EF031C6997}.Release|Win32.Build.0 = Release|Win32
+		{16FF8406-F04B-40D4-9272-FDC2AD620836}.Debug|Win32.ActiveCfg = Debug|Win32
+		{16FF8406-F04B-40D4-9272-FDC2AD620836}.Debug|Win32.Build.0 = Debug|Win32
+		{16FF8406-F04B-40D4-9272-FDC2AD620836}.Release|Win32.ActiveCfg = Release|Win32
+		{16FF8406-F04B-40D4-9272-FDC2AD620836}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
