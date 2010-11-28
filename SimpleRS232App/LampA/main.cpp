@@ -6,12 +6,6 @@ int main(int argc, char *argv[])
     HANDLE fd;
     DCB dcb;
     char cmdBuf[8] = { 0x02, 0x04, '*', '*', 0x2B, 0x00, 0x00, 0x03 };
-    // Lamp A: 0x2B, 0x00, 0x00
-    // Lamp B: 0x2B, 0x01, 0x00
-    // Lamp AB: 0x2B, 0x02, 0x00
-    // PowerOn: 'P', 'O', 'N'
-    // StatusOn: 'D', 'S', 'P'
-    // StatusOff: 'A', 'J', 'S'
     DWORD actualWriteLen;
 
     fd = CreateFileA("\\\\.\\COM1",
