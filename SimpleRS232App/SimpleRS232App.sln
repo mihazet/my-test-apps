@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LampB", "LampB\LampB.vcproj
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LampAB", "LampAB\LampAB.vcproj", "{874F30AE-BA33-454D-A0F0-3B793FE744EF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PowerOn", "PowerOn\PowerOn.vcproj", "{0EB637FE-7B2F-4403-B6DB-BEF2A1B7FF40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -25,6 +27,10 @@ Global
 		{874F30AE-BA33-454D-A0F0-3B793FE744EF}.Debug|Win32.Build.0 = Debug|Win32
 		{874F30AE-BA33-454D-A0F0-3B793FE744EF}.Release|Win32.ActiveCfg = Release|Win32
 		{874F30AE-BA33-454D-A0F0-3B793FE744EF}.Release|Win32.Build.0 = Release|Win32
+		{0EB637FE-7B2F-4403-B6DB-BEF2A1B7FF40}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0EB637FE-7B2F-4403-B6DB-BEF2A1B7FF40}.Debug|Win32.Build.0 = Debug|Win32
+		{0EB637FE-7B2F-4403-B6DB-BEF2A1B7FF40}.Release|Win32.ActiveCfg = Release|Win32
+		{0EB637FE-7B2F-4403-B6DB-BEF2A1B7FF40}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
