@@ -7,7 +7,7 @@
 
 #define VER_MAJOR               1
 #define VER_MINOR               0
-#define VER_RELEASE             0
+#define VER_RELEASE             1
 #define VER_BUILD               $WCREV$$WCMODS?*:$
 #define STRINGIFY_HELPER(x)     #x
 #define STRINGIFY(x)            STRINGIFY_HELPER(x)

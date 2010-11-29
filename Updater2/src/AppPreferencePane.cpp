@@ -158,6 +158,9 @@ void AppPreferencePane::CreateControls()
     invalidMAC->Bind(myEVT_NETADDR_TEXTCTRL_UPDATED, &AppPreferencePane::OnInvalidMacAddressUpdated, this);
     invalidMacSizerH->Add(invalidMAC, 0, wxALL, 0);
     invalidMacSizerH->AddStretchSpacer();
+    wxButton *resetInvalidMacBtn = new wxButton(macPage, myID_RESET_INVALID_MAC_BTN, _("Reset"));
+    resetInvalidMacBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AppPreferencePane::OnResetInvalidMAC, this);
+    invalidMacSizerH->Add(resetInvalidMacBtn, 0, wxALL, 0);
     wxButton *updateInvalidMacBtn = new wxButton(macPage, myID_UPDATE_INVALID_MAC_BTN, _("Update"));
     updateInvalidMacBtn->Enable(false);
     updateInvalidMacBtn->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AppPreferencePane::OnUpdateInvalidMAC, this);
@@ -378,6 +381,20 @@ void AppPreferencePane::OnVerifyAndUpdateMAC(wxCommandEvent& event)
 
         btn->Enable(false);
     }
+}
+
+void AppPreferencePane::OnResetInvalidMAC(wxCommandEvent& WXUNUSED(event))
+{
+    NetAddrTextCtrl *invalid = wxDynamicCast(FindWindow(myID_MAC_INVALID), NetAddrTextCtrl);
+    wxButton *btn = wxDynamicCast(FindWindow(myID_UPDATE_INVALID_MAC_BTN), wxButton);
+    wxString oldValue;
+
+    wxASSERT_MSG(invalid && btn, wxT("Can't find class object instance pointer"));
+
+    oldValue = invalid->GetValue();
+    invalid->SetValue(wxT("00:52:C2:3C:50:00"));
+    if (oldValue != wxT("00:52:C2:3C:50:00"))
+        btn->Enable(true);
 }
 
 void AppPreferencePane::OnUpdateInvalidMAC(wxCommandEvent& event)

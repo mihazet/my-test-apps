@@ -41,6 +41,7 @@ private:
     void OnUpdateReportRotate(wxCommandEvent& event);
     void OnUpdateReportFolder(wxFileDirPickerEvent& event);
     void OnVerifyAndUpdateMAC(wxCommandEvent& event);
+    void OnResetInvalidMAC(wxCommandEvent& event);
     void OnUpdateInvalidMAC(wxCommandEvent& event);
     void OnVendorOrProductMacAddressUpdated(wxCommandEvent& event);
     void OnInvalidMacAddressUpdated(wxCommandEvent& event);
