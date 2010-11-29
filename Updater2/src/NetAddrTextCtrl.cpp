@@ -390,6 +390,31 @@ void NetAddrTextCtrl::OnKeyDown(wxKeyEvent &event)
 
     wxLogDebug(wxT("Key %d down"), keyCode);
 
+    if (event.ShiftDown())
+    {
+        switch (keyCode)
+        {
+        case 'A':
+        case 'B':
+        case 'C':
+        case 'D':
+        case 'E':
+        case 'F':
+            if (gFieldBase[_type] == 10)
+            {
+                needRepaint = false;
+                break;
+            }
+            digitValue = keyCode - 'A' + 10;
+            SetSpecificDigitValue(_hlField, _hlDigit, digitValue);
+            HighLightShift(true);
+            break;
+        default:
+            break;
+        }
+        goto xxx;
+    }
+
     switch (keyCode)
     {
     case WXK_TAB:
@@ -504,6 +529,7 @@ void NetAddrTextCtrl::OnKeyDown(wxKeyEvent &event)
         break;
     }
 
+xxx:
     if (needRepaint)
     {
         Layout();
