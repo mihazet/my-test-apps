@@ -55,6 +55,46 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDI_ICON1               ICON                    "StatusOff.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040404b0"
+        BEGIN
+            VALUE "Comments", "Status Off, COM1, 115200bps"
+            VALUE "CompanyName", "Delta Electronics, Inc."
+            VALUE "FileDescription", "Hide Status Menu"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "StatusOf"
+            VALUE "LegalCopyright", "Copyright (C) 2010 Delta Electronics, Inc."
+            VALUE "OriginalFilename", "StatusOf.exe"
+            VALUE "ProductName", "StatusOf Application"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x404, 1200
+    END
+END
+
 #endif    // Chinese (Taiwan) resources
 /////////////////////////////////////////////////////////////////////////////
 
