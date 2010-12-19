@@ -923,9 +923,9 @@
           <string name="language">""</string>
         </document>
         <document>
-          <string name="title">"SimCube.rc"</string>
+          <string name="title">"SimVP.rc"</string>
           <string name="type">"source-editor-document"</string>
-          <string name="filename">"SimCube.rc"</string>
+          <string name="filename">"SimVP.rc"</string>
           <string name="icon-name">"source-editor"</string>
           <long name="is-transient">0</long>
           <long name="owns-file">0</long>
@@ -935,9 +935,9 @@
           <string name="language">""</string>
         </document>
         <document>
-          <string name="title">"SimCube.vcproj"</string>
+          <string name="title">"SimVP.vcproj"</string>
           <string name="type">"source-editor-document"</string>
-          <string name="filename">"SimCube.vcproj"</string>
+          <string name="filename">"SimVP.vcproj"</string>
           <string name="icon-name">"source-editor"</string>
           <long name="is-transient">0</long>
           <long name="owns-file">0</long>
@@ -947,9 +947,9 @@
           <string name="language">""</string>
         </document>
         <document>
-          <string name="title">"SimCubeApp.cpp"</string>
+          <string name="title">"SimVPApp.cpp"</string>
           <string name="type">"source-editor-document"</string>
-          <string name="filename">"src/SimCubeApp.cpp"</string>
+          <string name="filename">"src/SimVPApp.cpp"</string>
           <string name="icon-name">"source-editor"</string>
           <long name="is-transient">0</long>
           <long name="owns-file">0</long>
@@ -959,9 +959,9 @@
           <string name="language">""</string>
         </document>
         <document>
-          <string name="title">"SimCubeApp.h"</string>
+          <string name="title">"SimVPApp.h"</string>
           <string name="type">"source-editor-document"</string>
-          <string name="filename">"include/SimCubeApp.h"</string>
+          <string name="filename">"include/SimVPApp.h"</string>
           <string name="icon-name">"source-editor"</string>
           <long name="is-transient">0</long>
           <long name="owns-file">0</long>
@@ -971,9 +971,9 @@
           <string name="language">""</string>
         </document>
         <document>
-          <string name="title">"SimCubeFrame.cpp"</string>
+          <string name="title">"SimVPFrame.cpp"</string>
           <string name="type">"source-editor-document"</string>
-          <string name="filename">"src/SimCubeFrame.cpp"</string>
+          <string name="filename">"src/SimVPFrame.cpp"</string>
           <string name="icon-name">"source-editor"</string>
           <long name="is-transient">0</long>
           <long name="owns-file">0</long>
@@ -983,9 +983,9 @@
           <string name="language">""</string>
         </document>
         <document>
-          <string name="title">"SimCubeFrame.h"</string>
+          <string name="title">"SimVPFrame.h"</string>
           <string name="type">"source-editor-document"</string>
-          <string name="filename">"include/SimCubeFrame.h"</string>
+          <string name="filename">"include/SimVPFrame.h"</string>
           <string name="icon-name">"source-editor"</string>
           <long name="is-transient">0</long>
           <long name="owns-file">0</long>
