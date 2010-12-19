@@ -1,0 +1,813 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SimCube\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-02-25 18:50+0800\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team:  <yhuiyang@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ../../src\n"
+"X-Poedit-SearchPath-1: ../../include\n"
+
+#: ../../src/ConfigPane.cpp:65
+msgid "Important! All changed parameters will take effect at next boot!"
+msgstr "重要！只会在重新启动本程式后，所有改变的参数方才会生效！"
+
+#: ../../src/ConfigPane.cpp:69
+msgid "Language "
+msgstr "使用者介面语言"
+
+#: ../../src/ConfigPane.cpp:72
+msgid "Use system default language"
+msgstr "使用系统预设语言"
+
+#: ../../src/ConfigPane.cpp:76
+msgid "English"
+msgstr "English"
+
+#: ../../src/ConfigPane.cpp:77
+msgid "Chinese (Traditional)"
+msgstr "正体中文"
+
+#: ../../src/ConfigPane.cpp:78
+msgid "Chinese (Simplified)"
+msgstr "简体中文"
+
+#: ../../src/ConfigPane.cpp:91
+msgid "Options "
+msgstr "选用项目"
+
+#: ../../src/ConfigPane.cpp:94
+msgid "When application terminates, auto save the transaction history."
+msgstr "当应用程式结束时，自动储存历史纪录。"
+
+#: ../../src/ConfigPane.cpp:98
+msgid "Use ROCKEY4 (evaluate version only) to protect application."
+msgstr "使用 Rockey4 USB 保护锁 (必须使用评估版本的保护锁) 来保护本应用程式。"
+
+#: ../../src/ConfigPane.cpp:104
+msgid "Maximum connection with remote (0: no limit) "
+msgstr "与远端同时间最大连结数上限〈0代表无上限〉"
+
+#: ../../src/ConfigPane.cpp:112
+msgid "Simulate lamp hour increase (0: don't increase. Unit: minutes) "
+msgstr "模拟灯泡时数增加〈0代表不增加。单位：分钟〉"
+
+#: ../../src/ConfigPane.cpp:119
+msgid "Skip network adapters created by VMWare."
+msgstr "忽略 VMware 所建立的虚拟网路介面卡。"
+
+#: ../../src/ConfigPane.cpp:203
+msgid "Fail to update language setting!"
+msgstr "无法更新使用者介面语言设定！"
+
+#: ../../src/ConfigPane.cpp:220
+msgid "Fail to update auto save history setting!"
+msgstr "无法更新自动储存历史纪录设定！"
+
+#: ../../src/ConfigPane.cpp:233
+msgid "Fail to update using rockey4nd setting!"
+msgstr "无法更新使用Rockey4ND之设定！"
+
+#: ../../src/ConfigPane.cpp:242
+msgid "Fail to update maximun connection setting!"
+msgstr "无法更新连结数上限之设定！"
+
+#: ../../src/ConfigPane.cpp:251
+msgid "Fail to update lamp hours increase interval setting!"
+msgstr "无法更新灯泡时数增加间隔设定！"
+
+#: ../../src/ConfigPane.cpp:264
+msgid "Fail to update skip vmware netadapter setting!"
+msgstr "无法更新忽略VMware虚拟网路介面卡之设定！"
+
+#: ../../src/DebugPane.cpp:60
+msgid "Save log text to file"
+msgstr "储存文字纪录至档案"
+
+#: ../../src/DebugPane.cpp:62
+msgid "Erase all log text"
+msgstr "清除所有的文字纪录"
+
+#: ../../src/DebugPane.cpp:68
+#: ../../src/DebugPane.cpp:137
+msgid "Disable verbose message"
+msgstr "关闭冗长讯息"
+
+#: ../../src/DebugPane.cpp:74
+#: ../../src/DebugPane.cpp:131
+msgid "Enable verbose message"
+msgstr "启用冗长讯息"
+
+#: ../../src/DebugPane.cpp:79
+msgid "Config"
+msgstr "设定"
+
+#: ../../src/HistoryPane.cpp:87
+msgid "Timestamp"
+msgstr "时间戳记"
+
+#: ../../src/HistoryPane.cpp:88
+msgid "Direction"
+msgstr "讯息方向"
+
+#: ../../src/HistoryPane.cpp:89
+msgid "Remote"
+msgstr "远端"
+
+#: ../../src/HistoryPane.cpp:90
+#: ../../src/PeerPane.cpp:43
+msgid "Port"
+msgstr "埠口"
+
+#: ../../src/HistoryPane.cpp:91
+msgid "Length"
+msgstr "长度"
+
+#: ../../src/HistoryPane.cpp:92
+msgid "Message"
+msgstr "讯息内容"
+
+#: ../../src/HistoryPane.cpp:101
+msgid "Save history"
+msgstr "备份历史纪录"
+
+#: ../../src/HistoryPane.cpp:103
+msgid "Delete history"
+msgstr "删除所有的历史纪录"
+
+#: ../../src/HistoryPane.cpp:108
+#: ../../src/HistoryPane.cpp:179
+msgid "Address is resolved"
+msgstr "位址已被解析"
+
+#: ../../src/HistoryPane.cpp:109
+#: ../../src/HistoryPane.cpp:179
+msgid "Address is not resolved"
+msgstr "位址未被解析"
+
+#: ../../src/HistoryPane.cpp:112
+#: ../../src/HistoryPane.cpp:190
+msgid "Autoscroll is enabled"
+msgstr "自动卷动已启用"
+
+#: ../../src/HistoryPane.cpp:112
+#: ../../src/HistoryPane.cpp:190
+msgid "Autoscroll is disabled"
+msgstr "自动卷动已停用"
+
+#: ../../src/HistoryPane.cpp:134
+msgid "Save history to"
+msgstr "将历史纪录资料库备份至"
+
+#: ../../src/HistoryPane.cpp:150
+msgid "Sorry! History database is closed!"
+msgstr "抱歉！历史纪录资料库目前已关闭！"
+
+#: ../../src/HistoryPane.cpp:154
+msgid "Sorry! History database doesn't support backup feature!"
+msgstr "抱歉！历史纪录资料库不支援备份功能！"
+
+#: ../../src/HistoryPane.cpp:297
+msgid "Fail to insert new value into history table."
+msgstr "无法将新的资料插入历史纪录表格中！"
+
+#: ../../src/PeerPane.cpp:42
+msgid "IP Address"
+msgstr "IP 位址"
+
+#: ../../src/PeerPane.cpp:44
+msgid "Established Time"
+msgstr "连结建立时间"
+
+#: ../../src/PeerPane.cpp:45
+msgid "Monitored"
+msgstr "启用监控"
+
+#: ../../src/PropertyPane.cpp:98
+msgid "Reset properties"
+msgstr "重设全部属性值"
+
+#: ../../src/PropertyPane.cpp:103
+#, c-format
+msgid "Total %d properties"
+msgstr "共计 %d 个属性值"
+
+#: ../../src/PropertyPane.cpp:187
+#, c-format
+msgid "Input number out of range! Max = %s, Min = %s"
+msgstr "输入数值的值域不正确！最大值 = %s, 最小值 = %s。"
+
+#: ../../src/PropertyPane.cpp:211
+#, c-format
+msgid "Failed to update property %s"
+msgstr "无法更新属性 %s"
+
+#: ../../src/PropertyPane.cpp:226
+msgid "Would you like to reset all properties to their default value?"
+msgstr "您真的想要将全部的属性值回复到初始预设值吗？"
+
+#: ../../src/PropertyPane.cpp:227
+msgid "Need user confirm"
+msgstr "需要使用者的确认"
+
+#: ../../src/SimCubeApp.cpp:50
+msgid "Welcome to Cube Simulator."
+msgstr "欢迎来到 Cube Simulator。"
+
+#: ../../src/SimCubeApp.cpp:51
+msgid "Idle"
+msgstr "闲置中"
+
+#: ../../src/SimCubeApp.cpp:55
+#, c-format
+msgid "Adapters: %d"
+msgstr "网路配接卡数：%d"
+
+#: ../../src/SimCubeApp.cpp:87
+msgid "Local Adapters Info:"
+msgstr "本地端网路介面卡资讯："
+
+#: ../../src/SimCubeApp.cpp:94
+msgid "Adapter"
+msgstr "网路介面卡"
+
+#: ../../src/SimCubeApp.cpp:101
+msgid "ip"
+msgstr "IP"
+
+#: ../../src/SimCubeApp.cpp:102
+msgid "netmask"
+msgstr "子网路遮罩"
+
+#: ../../src/SimCubeApp.cpp:103
+msgid "broadcast"
+msgstr "广播位置"
+
+#: ../../src/SimCubeApp.cpp:109
+msgid "Rx (Bytes/Counts)"
+msgstr "接收 (位元组/次数)"
+
+#: ../../src/SimCubeApp.cpp:112
+msgid "Tx (Bytes/Counts)"
+msgstr "传送 (位元组/次数)"
+
+#: ../../src/SimCubeApp.cpp:138
+msgid "UDP Socket Enabled"
+msgstr "UDP Socket 已启用"
+
+#: ../../src/SimCubeApp.cpp:139
+msgid "Enable or disable the UDP socket transmision and receive."
+msgstr "启用或关闭 UDP Socket 的资料传输与接收"
+
+#: ../../src/SimCubeApp.cpp:148
+msgid "TCP Socket Enabled"
+msgstr "TCP Socket 已启用"
+
+#: ../../src/SimCubeApp.cpp:149
+msgid "Enable or disable the TCP socket transmission and receive."
+msgstr "启用或关闭 TCP Socket 的资料传输与接收"
+
+#: ../../src/SimCubeApp.cpp:321
+msgid "SimCube is already running, this instance will be terminated!"
+msgstr "已经有另外一个 SimCube 正在执行中，目前的这个 SimCube 将会中止执行！"
+
+#: ../../src/SimCubeApp.cpp:328
+msgid "Please insert USB dongle and restart application!"
+msgstr "请插入 USB 锁并重新启动本程式！"
+
+#: ../../src/SimCubeApp.cpp:337
+msgid "No network adapter is availabled, this application will be terminated!"
+msgstr "无可用的网路配接卡，本程式即将关闭！"
+
+#: ../../src/SimCubeApp.cpp:343
+msgid "Failed to detect network adapters information, this application will be terminated!"
+msgstr "侦测网路配接卡资讯时发生错误，本程式即将关闭！"
+
+#: ../../src/SimCubeApp.cpp:380
+msgid "USB dongle is removed, application will be terminated now!"
+msgstr "USB 锁已移除，本程式即将关闭！"
+
+#: ../../src/SimCubeApp.cpp:380
+msgid "Error"
+msgstr "错误"
+
+#: ../../src/SimCubeApp.cpp:444
+#: ../../src/SimCubeApp.cpp:455
+msgid "Fail to allocate memory space for GetAdaptersInfo."
+msgstr "无法为 API GetAdaptersInfo() 配置所需记忆体。"
+
+#: ../../src/SimCubeApp.cpp:461
+#, c-format
+msgid "GetAdaptersInfo failed with error code = %d"
+msgstr "API GetAdaptersInfo() 失败，错误码 = %d"
+
+#: ../../src/SimCubeApp.cpp:514
+#, c-format
+msgid "Fail to create UDP socket. errno = %d"
+msgstr "无法建立 UDP Socket。错误码 = %d"
+
+#: ../../src/SimCubeApp.cpp:524
+msgid "Fail to retrieve interface configuration."
+msgstr "无法使用取得 ioctl(SIOCGIFCONF) 列举网路介面。"
+
+#: ../../src/SimCubeApp.cpp:548
+msgid "Fail to get netmask address!"
+msgstr "无法取得子网路遮罩位址！"
+
+#: ../../src/SimCubeApp.cpp:560
+msgid "Fail to get broadcast address!"
+msgstr "无法取得广播位址！"
+
+#: ../../src/SimCubeFrame.cpp:36
+msgid "About SimCube"
+msgstr "关于 SimCube"
+
+#: ../../src/SimCubeFrame.cpp:61
+msgid "SimCube - A Cube Simulator"
+msgstr "SimCube - 一个模拟 Cube 的软体"
+
+#: ../../src/SimCubeFrame.cpp:64
+msgid "Version "
+msgstr "版本"
+
+#: ../../src/SimCubeFrame.cpp:66
+msgid " (build "
+msgstr "〈建立号"
+
+#: ../../src/SimCubeFrame.cpp:67
+msgid "), compiled at "
+msgstr "〉，编译于"
+
+#: ../../src/SimCubeFrame.cpp:76
+msgid "If I were a cube, I will try to response all requests from you."
+msgstr "如果我是一个 Cube，我会试着回应您所有的要求。"
+
+#: ../../src/SimCubeFrame.cpp:79
+msgid "If I were a cube, I will notify you of my change of state."
+msgstr "如果我是一个 Cube，我会通知您我的状态有了变更。"
+
+#: ../../src/SimCubeFrame.cpp:82
+msgid "If I were a cube..., but I am not a real cube, just a simulated cube."
+msgstr "如果我是一个 Cube...，但我不是，我只是个模拟的 Cube。"
+
+#: ../../src/SimCubeFrame.cpp:86
+msgid "Libraries Info "
+msgstr "函式库版本资讯"
+
+#: ../../src/SimCubeFrame.cpp:155
+msgid "Fail to save perspective!"
+msgstr "无法储存使用者介面布局！"
+
+#: ../../src/SimCubeFrame.cpp:180
+msgid "Quit"
+msgstr "离开"
+
+#: ../../src/SimCubeFrame.cpp:180
+msgid "Quit this program"
+msgstr "离开本程式"
+
+#: ../../src/SimCubeFrame.cpp:182
+msgid "Property Pane\tCTRL+F1"
+msgstr "属性值面版\tCTRL+F1"
+
+#: ../../src/SimCubeFrame.cpp:183
+msgid "Show or hide the property pane."
+msgstr "显示或隐藏属性质面版。"
+
+#: ../../src/SimCubeFrame.cpp:184
+msgid "Trap Pane\tCTRL+F2"
+msgstr "主动回应面版\tCTRL+F2"
+
+#: ../../src/SimCubeFrame.cpp:185
+msgid "Show or hid the trap pane."
+msgstr "显示或隐藏主动回应面版。"
+
+#: ../../src/SimCubeFrame.cpp:186
+msgid "Remote Pane\tCTRL+F3"
+msgstr "远端面版\tCTRL+F3"
+
+#: ../../src/SimCubeFrame.cpp:187
+msgid "Show or hide the remote peer pane."
+msgstr "显示或隐藏远端面版。"
+
+#: ../../src/SimCubeFrame.cpp:188
+msgid "Configuration Pane\tCTRL+F4"
+msgstr "软体设定面版\tCTRL+F4"
+
+#: ../../src/SimCubeFrame.cpp:189
+msgid "Show or hide the configuration pane."
+msgstr "显示或隐藏软体设定面版。"
+
+#: ../../src/SimCubeFrame.cpp:190
+msgid "Log Widnow\tCTRL+F5"
+msgstr "纪录视窗\tCTRL+F5"
+
+#: ../../src/SimCubeFrame.cpp:191
+msgid "Show or hide the logging window."
+msgstr "显示或隐藏纪录视窗。"
+
+#: ../../src/SimCubeFrame.cpp:193
+msgid "Reset all panes"
+msgstr "重置所有面版"
+
+#: ../../src/SimCubeFrame.cpp:194
+msgid "Reset all panes to its default position and size."
+msgstr "重置所有面版至预设位置与尺寸。"
+
+#: ../../src/SimCubeFrame.cpp:196
+msgid "Help file"
+msgstr "帮助档案"
+
+#: ../../src/SimCubeFrame.cpp:197
+msgid "Show help file."
+msgstr "显示帮助档案。"
+
+#: ../../src/SimCubeFrame.cpp:198
+msgid "About..."
+msgstr "关于..."
+
+#: ../../src/SimCubeFrame.cpp:198
+msgid "Show about dialog"
+msgstr "显示关于对话盒"
+
+#: ../../src/SimCubeFrame.cpp:201
+msgid "File"
+msgstr "档案"
+
+#: ../../src/SimCubeFrame.cpp:202
+msgid "View"
+msgstr "检视"
+
+#: ../../src/SimCubeFrame.cpp:203
+msgid "Help"
+msgstr "说明"
+
+#: ../../src/SimCubeFrame.cpp:214
+msgid "Log Output"
+msgstr "纪录视窗"
+
+#: ../../src/SimCubeFrame.cpp:219
+msgid "Supported Property"
+msgstr "支援的属性值"
+
+#: ../../src/SimCubeFrame.cpp:224
+msgid "Transaction History"
+msgstr "交易历史纪录"
+
+#: ../../src/SimCubeFrame.cpp:229
+msgid "SimCube Configuration"
+msgstr "SimCube 软体设定"
+
+#: ../../src/SimCubeFrame.cpp:233
+msgid "Send Trap Message"
+msgstr "传送主动回应讯息"
+
+#: ../../src/SimCubeFrame.cpp:237
+msgid "Remote Status"
+msgstr "远端连线状态"
+
+#: ../../src/SimCubeFrame.cpp:254
+msgid "Fail to save software default perspective!"
+msgstr "无法储存软体预设介面布局！"
+
+#: ../../src/SimCubeFrame.cpp:381
+msgid "Fail to reset current perspective value"
+msgstr "无法回复目前的介面布局"
+
+#: ../../src/TCPProtocol.cpp:108
+#, c-format
+msgid "Fail to bind %s:%d to tcp socket"
+msgstr "无法系结 %s:%d 至 TCP Socket"
+
+#: ../../src/TCPProtocol.cpp:155
+#, c-format
+msgid "Unexpect event (%d) received in server listening socket!"
+msgstr "TCP 监听专用 Socket 接收到非预期的事件 (%d)！"
+
+#: ../../src/TCPProtocol.cpp:163
+#, c-format
+msgid "Accept new client connection from %s:%d on tcp socket 0x%p, new created socket = 0x%p"
+msgstr "接受来自 %s:%d 的新连结。本地端 TCP Socket 0x%p，新建立 TCP Socket 0x%p"
+
+#: ../../src/TCPProtocol.cpp:167
+#, c-format
+msgid "Accept new connection from unknown client on tcp socket 0x%p, new created socket = 0x%p"
+msgstr "接受来自未知处的新连结。本地端 TCP Socket 0x%p，新建立 TCP Socket 0x%p"
+
+#: ../../src/TCPProtocol.cpp:172
+#, c-format
+msgid "Fail to accept new connection on tcp socket 0x%p!"
+msgstr "无法接受新连结！本地端 TCP Socket 0x%p！"
+
+#: ../../src/TCPProtocol.cpp:196
+#, c-format
+msgid "Fail to read load header via tcp socket 0x%p, error = %d."
+msgstr "无法藉由 TCP Socket 0x%p 读取封包标头，错误码 = %d。"
+
+#: ../../src/TCPProtocol.cpp:202
+#, c-format
+msgid "Success to read load header, optional payload size = %lu."
+msgstr "成功读取封包标头，额外待读封包大小 = %lu。"
+
+#: ../../src/TCPProtocol.cpp:209
+#, c-format
+msgid "Fail to read optional payload via tcp socket 0x%p, error = %d."
+msgstr "无法藉由 TCP Socket 0x%p 读取额外待读封包，错误码 = %d。"
+
+#: ../../src/TCPProtocol.cpp:214
+#, c-format
+msgid "Success to read optional payload (%lu bytes) vai tcp socket 0x%p."
+msgstr "成功藉由 TCP Socket 读取额外待读封包共 %lu 位元组。(0x%p)"
+
+#: ../../src/TCPProtocol.cpp:228
+#, c-format
+msgid "Fail to write data via tcp socket 0x%p, error = %d."
+msgstr "无法藉由 TCP Socket 0x%p 传输出资料，错误码 = %d。"
+
+#: ../../src/TCPProtocol.cpp:230
+#, c-format
+msgid "Success write data (%d bytes) via tcp socket 0x%p."
+msgstr "成功藉由 TCP Socket 传输出 %d 位元组资料。(0x%p)"
+
+#: ../../src/TCPProtocol.cpp:235
+#, c-format
+msgid "Receive socket lost event on tcp socket 0x%p."
+msgstr "接收到 TCP Socket 0x%p 断线事件。"
+
+#: ../../src/TCPProtocol.cpp:241
+#, c-format
+msgid "Unexpect event (%d) received in server accepted socket!"
+msgstr "TCP 传输专用 Socket 接收到非预期的事件(%d)！"
+
+#: ../../src/TCPProtocol.cpp:307
+msgid "Reset reserved flash"
+msgstr "重置 Flash 保留区"
+
+#: ../../src/TCPProtocol.cpp:312
+msgid "Run FW from flash"
+msgstr "由 Flash 执行 firmware"
+
+#: ../../src/TCPProtocol.cpp:317
+msgid "Run FW from ram"
+msgstr "由记忆体执行 firmware"
+
+#: ../../src/TCPProtocol.cpp:355
+msgid "Verify checksum in memory load buffer failed!"
+msgstr "Verify checksum in memory load buffer failed!"
+
+#: ../../src/TCPProtocol.cpp:384
+#, c-format
+msgid "Write %d bytes to file: %s"
+msgstr "写入 %d 位元组至档案：%s"
+
+#: ../../src/TrapPane.cpp:37
+msgid "Led is in off state."
+msgstr "Led 为灭状态"
+
+#: ../../src/TrapPane.cpp:38
+msgid "Red light constant on."
+msgstr "红色 Led 持续亮"
+
+#: ../../src/TrapPane.cpp:39
+msgid "Green light constant on."
+msgstr "绿色 Led 持续亮"
+
+#: ../../src/TrapPane.cpp:40
+msgid "Orange light constant on."
+msgstr "橘色 Led 持续亮"
+
+#: ../../src/TrapPane.cpp:41
+msgid "Led light flashing between green and off."
+msgstr "Led 灯号绿灭闪烁"
+
+#: ../../src/TrapPane.cpp:42
+msgid "Led light flashing between off and green."
+msgstr "Led 灯号灭绿闪烁"
+
+#: ../../src/TrapPane.cpp:43
+msgid "Led light flashing between red and green."
+msgstr "Led 灯号红绿闪烁"
+
+#: ../../src/TrapPane.cpp:44
+msgid "Led light flashing between green and orange."
+msgstr "Led 灯号绿橘闪烁"
+
+#: ../../src/TrapPane.cpp:338
+msgid "Led Status"
+msgstr "Led 灯号状态"
+
+#: ../../src/TrapPane.cpp:341
+msgid "Preview"
+msgstr "预览"
+
+#: ../../src/TrapPane.cpp:356
+msgid "Power"
+msgstr "电源"
+
+#: ../../src/TrapPane.cpp:360
+msgid "Fan"
+msgstr "风扇"
+
+#: ../../src/TrapPane.cpp:364
+msgid "LampA"
+msgstr "灯泡 A"
+
+#: ../../src/TrapPane.cpp:368
+msgid "LampB"
+msgstr "灯泡 B"
+
+#: ../../src/TrapPane.cpp:379
+msgid "Quick LED Preset"
+msgstr "Led 预建状态"
+
+#: ../../src/TrapPane.cpp:386
+#: ../../src/TrapPane.cpp:403
+#: ../../src/TrapPane.cpp:413
+#: ../../src/TrapPane.cpp:423
+#: ../../src/TrapPane.cpp:433
+#: ../../src/TrapPane.cpp:446
+#: ../../src/TrapPane.cpp:456
+#: ../../src/TrapPane.cpp:466
+#: ../../src/TrapPane.cpp:476
+msgid "Send"
+msgstr "传送"
+
+#: ../../src/TrapPane.cpp:395
+msgid "Lamp A Status"
+msgstr "灯泡 A 状态"
+
+#: ../../src/TrapPane.cpp:399
+#: ../../src/TrapPane.cpp:442
+msgid "Status"
+msgstr "状态"
+
+#: ../../src/TrapPane.cpp:409
+#: ../../src/TrapPane.cpp:452
+msgid "Hours"
+msgstr "点灯时数"
+
+#: ../../src/TrapPane.cpp:419
+#: ../../src/TrapPane.cpp:462
+msgid "Lit Count"
+msgstr "点灯次数"
+
+#: ../../src/TrapPane.cpp:429
+#: ../../src/TrapPane.cpp:472
+msgid "Temp Cond"
+msgstr "温度状态"
+
+#: ../../src/TrapPane.cpp:438
+msgid "Lamp B Status"
+msgstr "灯泡 B 状态"
+
+#: ../../src/TrapPane.cpp:574
+#: ../../src/TrapPane.cpp:623
+msgid "Fail to update LEDSTATUS."
+msgstr "无法更新资料库中的 LEDSTATUS 资料。"
+
+#: ../../src/UDPProtocol.cpp:91
+#, c-format
+msgid "NetAdapter[%d]: Fail to receive something from UDP socket. Error = %d"
+msgstr "网路配接卡[%d]：由 UDP socket 接收时发生错误。错误码 = %d"
+
+#: ../../src/UDPProtocol.cpp:97
+#, c-format
+msgid "NetAdapter[%d]: Received %d byte(s) from %s:%d."
+msgstr "网路配接卡[%d]: %d 位元组资料来自 %s:%d。"
+
+#: ../../src/UDPProtocol.cpp:115
+msgid "RecvFrom"
+msgstr "接收自"
+
+#: ../../src/UDPProtocol.cpp:222
+#, c-format
+msgid "No keyword in token (%s)"
+msgstr "讯息(%s)中缺少网路协定关键字元"
+
+#: ../../src/UDPProtocol.cpp:229
+#, c-format
+msgid "Multiple keywords in token (%s)"
+msgstr "讯息(%s)中存在过多的网路协定关键字元"
+
+#: ../../src/UDPProtocol.cpp:241
+#, c-format
+msgid "Token (%s) didn't handle by handler"
+msgstr "讯息(%s)未被处理函式处理"
+
+#: ../../src/UDPProtocol.cpp:384
+#, c-format
+msgid "Fail to send enable monitor trap message to peer. (error = %d)"
+msgstr "无法传回启用监控回应至远端。(错误码 = %d)"
+
+#: ../../src/UDPProtocol.cpp:417
+#, c-format
+msgid "This may not be an error. Set Request (%s) is not handled by database update."
+msgstr "这未必是个错误。设定要求(%s)并未更新资料库。"
+
+#: ../../src/UDPProtocol.cpp:474
+#, c-format
+msgid "Fail to send check board config response back to peer. (error = %d)"
+msgstr "无法传回确认单板设定回应至远端。(错误码 = %d)"
+
+#: ../../src/UDPProtocol.cpp:494
+#, c-format
+msgid "Fail to send check connection response back to peer. (error = %d)"
+msgstr "无法传回确认连结状态回应至远端。(错误码 = %d)"
+
+#: ../../src/UDPProtocol.cpp:544
+#, c-format
+msgid "Fail to send connect response back to peer. (error = %d)"
+msgstr "无法传回连结状态回应至远端。(错误码 = %d)"
+
+#: ../../src/UDPProtocol.cpp:551
+msgid "Empty BoardName in CONNECT get request message"
+msgstr "在建立连结的要求回应中，版名是空字元。"
+
+#: ../../src/UDPProtocol.cpp:569
+#, c-format
+msgid "Fail to send discover response back to peer. (error = %d)"
+msgstr "无法传回侦测回应至远端。(错误码 = %d)"
+
+#: ../../src/UDPProtocol.cpp:592
+#, c-format
+msgid "Fail to send monitor response back to peer. (error = %d)"
+msgstr "无法传回启用监控回应至远端。(错误码 = %d)"
+
+#: ../../src/UDPProtocol.cpp:623
+#, c-format
+msgid "Fail to send response (%s) back to peer. (error = %d)"
+msgstr "无法回应讯息(%s)至远端。(错误码 = %d)"
+
+#: ../../src/UDPProtocol.cpp:642
+#, c-format
+msgid "Failt to send response (%s) back to peer. (error = %d)"
+msgstr "无法回应讯息(%s)至远端。(错误码 = %d)"
+
+#: ../../src/UDPSocket.cpp:30
+msgid "SendTo"
+msgstr "传送至"
+
+#: ../../src/wxsqlite3.cpp:3443
+msgid "Regular expression invalid: '"
+msgstr "Regular expression invalid: '"
+
+#: ../../src/wxsqlite3.cpp:3448
+#, c-format
+msgid "REGEXP called with wrong number of arguments: %d instead of 2."
+msgstr "REGEXP called with wrong number of arguments: %d instead of 2."
+
+#~ msgid "Verbose"
+#~ msgstr "多话的"
+#~ msgid "OK"
+#~ msgstr "确定"
+#~ msgid "Off"
+#~ msgstr "Off"
+#~ msgid "Red"
+#~ msgstr "Red"
+#~ msgid "Green"
+#~ msgstr "Green"
+#~ msgid "Orange"
+#~ msgstr "Orange"
+#~ msgid "Green<->Off"
+#~ msgstr "Green<->Off"
+#~ msgid "Off<->Green"
+#~ msgstr "Off<->Green"
+#~ msgid "Red<->Green"
+#~ msgstr "Red<->Green"
+#~ msgid "Green<->Orange"
+#~ msgstr "Green<->Orange"
+#~ msgid "In use"
+#~ msgstr "In use"
+#~ msgid "Lit failed"
+#~ msgstr "Lit failed"
+#~ msgid "Shutdown"
+#~ msgstr "Shutdown"
+#~ msgid "Out of spec"
+#~ msgstr "Out of spec"
+#~ msgid "Critical"
+#~ msgstr "Critical"
+#~ msgid "Ok"
+#~ msgstr "Ok"
+#~ msgid "Port "
+#~ msgstr "埠口"
+#~ msgid "Which port will be used by UDP protocol? "
+#~ msgstr "UDP 协定使用的通讯埠口号码？"
+#~ msgid "History Pane\tCTRL+F3"
+#~ msgstr "历史记录面版\tCTRL+F3"
+#~ msgid "Show or hide the history pane."
+#~ msgstr "显示或隐藏历史记录面版。"
+#~ msgid "Download Pane\tCTRL+F6"
+#~ msgstr "下载区面版\tCTRL+F6"
+#~ msgid "Show or hide the download pane."
+#~ msgstr "显示或隐藏下载区面版。"
+#~ msgid "Reset To Default"
+#~ msgstr "回复到预设值"
+

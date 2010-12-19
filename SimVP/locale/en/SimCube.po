@@ -1,0 +1,813 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SimCube\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-02-25 18:49+0800\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team:  <yhuiyang@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED STATES\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ../../src\n"
+"X-Poedit-SearchPath-1: ../../include\n"
+
+#: ../../src/ConfigPane.cpp:65
+msgid "Important! All changed parameters will take effect at next boot!"
+msgstr "Important! All changed parameters will take effect at next boot!"
+
+#: ../../src/ConfigPane.cpp:69
+msgid "Language "
+msgstr "Language "
+
+#: ../../src/ConfigPane.cpp:72
+msgid "Use system default language"
+msgstr "Use system default language"
+
+#: ../../src/ConfigPane.cpp:76
+msgid "English"
+msgstr "English"
+
+#: ../../src/ConfigPane.cpp:77
+msgid "Chinese (Traditional)"
+msgstr "正體中文"
+
+#: ../../src/ConfigPane.cpp:78
+msgid "Chinese (Simplified)"
+msgstr "简体中文"
+
+#: ../../src/ConfigPane.cpp:91
+msgid "Options "
+msgstr "Options "
+
+#: ../../src/ConfigPane.cpp:94
+msgid "When application terminates, auto save the transaction history."
+msgstr "When application terminates, auto save the transaction history."
+
+#: ../../src/ConfigPane.cpp:98
+msgid "Use ROCKEY4 (evaluate version only) to protect application."
+msgstr "Use ROCKEY4 (evaluate version only) to protect application."
+
+#: ../../src/ConfigPane.cpp:104
+msgid "Maximum connection with remote (0: no limit) "
+msgstr "Maximum connection with remote (0: no limit) "
+
+#: ../../src/ConfigPane.cpp:112
+msgid "Simulate lamp hour increase (0: don't increase. Unit: minutes) "
+msgstr "Simulate lamp hour increase (0: don't increase. Unit: minutes) "
+
+#: ../../src/ConfigPane.cpp:119
+msgid "Skip network adapters created by VMWare."
+msgstr "Skip network adapters created by VMWare."
+
+#: ../../src/ConfigPane.cpp:203
+msgid "Fail to update language setting!"
+msgstr "Fail to update language setting!"
+
+#: ../../src/ConfigPane.cpp:220
+msgid "Fail to update auto save history setting!"
+msgstr "Fail to update auto save history setting!"
+
+#: ../../src/ConfigPane.cpp:233
+msgid "Fail to update using rockey4nd setting!"
+msgstr "Fail to update using rockey4nd setting!"
+
+#: ../../src/ConfigPane.cpp:242
+msgid "Fail to update maximun connection setting!"
+msgstr "Fail to update maximun connection setting!"
+
+#: ../../src/ConfigPane.cpp:251
+msgid "Fail to update lamp hours increase interval setting!"
+msgstr "Fail to update lamp hours increase interval setting!"
+
+#: ../../src/ConfigPane.cpp:264
+msgid "Fail to update skip vmware netadapter setting!"
+msgstr "Fail to update skip vmware netadapter setting!"
+
+#: ../../src/DebugPane.cpp:60
+msgid "Save log text to file"
+msgstr "Save log text to file"
+
+#: ../../src/DebugPane.cpp:62
+msgid "Erase all log text"
+msgstr "Erase all log text"
+
+#: ../../src/DebugPane.cpp:68
+#: ../../src/DebugPane.cpp:137
+msgid "Disable verbose message"
+msgstr "Disable verbose message"
+
+#: ../../src/DebugPane.cpp:74
+#: ../../src/DebugPane.cpp:131
+msgid "Enable verbose message"
+msgstr "Enable verbose message"
+
+#: ../../src/DebugPane.cpp:79
+msgid "Config"
+msgstr "Config"
+
+#: ../../src/HistoryPane.cpp:87
+msgid "Timestamp"
+msgstr "Timestamp"
+
+#: ../../src/HistoryPane.cpp:88
+msgid "Direction"
+msgstr "Direction"
+
+#: ../../src/HistoryPane.cpp:89
+msgid "Remote"
+msgstr "Remote"
+
+#: ../../src/HistoryPane.cpp:90
+#: ../../src/PeerPane.cpp:43
+msgid "Port"
+msgstr "Port"
+
+#: ../../src/HistoryPane.cpp:91
+msgid "Length"
+msgstr "Length"
+
+#: ../../src/HistoryPane.cpp:92
+msgid "Message"
+msgstr "Message"
+
+#: ../../src/HistoryPane.cpp:101
+msgid "Save history"
+msgstr "Save history"
+
+#: ../../src/HistoryPane.cpp:103
+msgid "Delete history"
+msgstr "Delete history"
+
+#: ../../src/HistoryPane.cpp:108
+#: ../../src/HistoryPane.cpp:179
+msgid "Address is resolved"
+msgstr "Address is resolved"
+
+#: ../../src/HistoryPane.cpp:109
+#: ../../src/HistoryPane.cpp:179
+msgid "Address is not resolved"
+msgstr "Address is not resolved"
+
+#: ../../src/HistoryPane.cpp:112
+#: ../../src/HistoryPane.cpp:190
+msgid "Autoscroll is enabled"
+msgstr "Autoscroll is enabled"
+
+#: ../../src/HistoryPane.cpp:112
+#: ../../src/HistoryPane.cpp:190
+msgid "Autoscroll is disabled"
+msgstr "Autoscroll is disabled"
+
+#: ../../src/HistoryPane.cpp:134
+msgid "Save history to"
+msgstr "Save history to"
+
+#: ../../src/HistoryPane.cpp:150
+msgid "Sorry! History database is closed!"
+msgstr "Sorry! History database is closed!"
+
+#: ../../src/HistoryPane.cpp:154
+msgid "Sorry! History database doesn't support backup feature!"
+msgstr "Sorry! History database doesn't support backup feature!"
+
+#: ../../src/HistoryPane.cpp:297
+msgid "Fail to insert new value into history table."
+msgstr "Fail to insert new value into history table."
+
+#: ../../src/PeerPane.cpp:42
+msgid "IP Address"
+msgstr "IP Address"
+
+#: ../../src/PeerPane.cpp:44
+msgid "Established Time"
+msgstr "Established Time"
+
+#: ../../src/PeerPane.cpp:45
+msgid "Monitored"
+msgstr "Monitored"
+
+#: ../../src/PropertyPane.cpp:98
+msgid "Reset properties"
+msgstr "Reset properties"
+
+#: ../../src/PropertyPane.cpp:103
+#, c-format
+msgid "Total %d properties"
+msgstr "Total %d properties"
+
+#: ../../src/PropertyPane.cpp:187
+#, c-format
+msgid "Input number out of range! Max = %s, Min = %s"
+msgstr "Input number out of range! Max = %s, Min = %s"
+
+#: ../../src/PropertyPane.cpp:211
+#, c-format
+msgid "Failed to update property %s"
+msgstr "Failed to update property %s"
+
+#: ../../src/PropertyPane.cpp:226
+msgid "Would you like to reset all properties to their default value?"
+msgstr "Would you like to reset all properties to their default value?"
+
+#: ../../src/PropertyPane.cpp:227
+msgid "Need user confirm"
+msgstr "Need user confirm"
+
+#: ../../src/SimCubeApp.cpp:50
+msgid "Welcome to Cube Simulator."
+msgstr "Welcome to Cube Simulator."
+
+#: ../../src/SimCubeApp.cpp:51
+msgid "Idle"
+msgstr "Idle"
+
+#: ../../src/SimCubeApp.cpp:55
+#, c-format
+msgid "Adapters: %d"
+msgstr "Adapters: %d"
+
+#: ../../src/SimCubeApp.cpp:87
+msgid "Local Adapters Info:"
+msgstr "Local Adapters Info:"
+
+#: ../../src/SimCubeApp.cpp:94
+msgid "Adapter"
+msgstr "Adapter"
+
+#: ../../src/SimCubeApp.cpp:101
+msgid "ip"
+msgstr "ip"
+
+#: ../../src/SimCubeApp.cpp:102
+msgid "netmask"
+msgstr "netmask"
+
+#: ../../src/SimCubeApp.cpp:103
+msgid "broadcast"
+msgstr "broadcast"
+
+#: ../../src/SimCubeApp.cpp:109
+msgid "Rx (Bytes/Counts)"
+msgstr "Rx (Bytes/Counts)"
+
+#: ../../src/SimCubeApp.cpp:112
+msgid "Tx (Bytes/Counts)"
+msgstr "Tx (Bytes/Counts)"
+
+#: ../../src/SimCubeApp.cpp:138
+msgid "UDP Socket Enabled"
+msgstr "UDP Socket Enabled"
+
+#: ../../src/SimCubeApp.cpp:139
+msgid "Enable or disable the UDP socket transmision and receive."
+msgstr "Enable or disable the UDP socket transmision and receive."
+
+#: ../../src/SimCubeApp.cpp:148
+msgid "TCP Socket Enabled"
+msgstr "TCP Socket Enabled"
+
+#: ../../src/SimCubeApp.cpp:149
+msgid "Enable or disable the TCP socket transmission and receive."
+msgstr "Enable or disable the TCP socket transmission and receive."
+
+#: ../../src/SimCubeApp.cpp:321
+msgid "SimCube is already running, this instance will be terminated!"
+msgstr "SimCube is already running, this instance will be terminated!"
+
+#: ../../src/SimCubeApp.cpp:328
+msgid "Please insert USB dongle and restart application!"
+msgstr "Please insert USB dongle and restart application!"
+
+#: ../../src/SimCubeApp.cpp:337
+msgid "No network adapter is availabled, this application will be terminated!"
+msgstr "No network adapter is availabled, this application will be terminated!"
+
+#: ../../src/SimCubeApp.cpp:343
+msgid "Failed to detect network adapters information, this application will be terminated!"
+msgstr "Failed to detect network adapters information, this application will be terminated!"
+
+#: ../../src/SimCubeApp.cpp:380
+msgid "USB dongle is removed, application will be terminated now!"
+msgstr "USB dongle is removed, application will be terminated now!"
+
+#: ../../src/SimCubeApp.cpp:380
+msgid "Error"
+msgstr "Error"
+
+#: ../../src/SimCubeApp.cpp:444
+#: ../../src/SimCubeApp.cpp:455
+msgid "Fail to allocate memory space for GetAdaptersInfo."
+msgstr "Fail to allocate memory space for GetAdaptersInfo."
+
+#: ../../src/SimCubeApp.cpp:461
+#, c-format
+msgid "GetAdaptersInfo failed with error code = %d"
+msgstr "GetAdaptersInfo failed with error code = %d"
+
+#: ../../src/SimCubeApp.cpp:514
+#, c-format
+msgid "Fail to create UDP socket. errno = %d"
+msgstr "Fail to create UDP socket. errno = %d"
+
+#: ../../src/SimCubeApp.cpp:524
+msgid "Fail to retrieve interface configuration."
+msgstr "Fail to retrieve interface configuration."
+
+#: ../../src/SimCubeApp.cpp:548
+msgid "Fail to get netmask address!"
+msgstr "Fail to get netmask address!"
+
+#: ../../src/SimCubeApp.cpp:560
+msgid "Fail to get broadcast address!"
+msgstr "Fail to get broadcast address!"
+
+#: ../../src/SimCubeFrame.cpp:36
+msgid "About SimCube"
+msgstr "About SimCube"
+
+#: ../../src/SimCubeFrame.cpp:61
+msgid "SimCube - A Cube Simulator"
+msgstr "SimCube - A Cube Simulator"
+
+#: ../../src/SimCubeFrame.cpp:64
+msgid "Version "
+msgstr "Version "
+
+#: ../../src/SimCubeFrame.cpp:66
+msgid " (build "
+msgstr " (build "
+
+#: ../../src/SimCubeFrame.cpp:67
+msgid "), compiled at "
+msgstr "), compiled at "
+
+#: ../../src/SimCubeFrame.cpp:76
+msgid "If I were a cube, I will try to response all requests from you."
+msgstr "If I were a cube, I will try to response all requests from you."
+
+#: ../../src/SimCubeFrame.cpp:79
+msgid "If I were a cube, I will notify you of my change of state."
+msgstr "If I were a cube, I will notify you of my change of state."
+
+#: ../../src/SimCubeFrame.cpp:82
+msgid "If I were a cube..., but I am not a real cube, just a simulated cube."
+msgstr "If I were a cube..., but I am not a real cube, just a simulated cube."
+
+#: ../../src/SimCubeFrame.cpp:86
+msgid "Libraries Info "
+msgstr "Libraries Info "
+
+#: ../../src/SimCubeFrame.cpp:155
+msgid "Fail to save perspective!"
+msgstr "Fail to save perspective!"
+
+#: ../../src/SimCubeFrame.cpp:180
+msgid "Quit"
+msgstr "Quit"
+
+#: ../../src/SimCubeFrame.cpp:180
+msgid "Quit this program"
+msgstr "Quit this program"
+
+#: ../../src/SimCubeFrame.cpp:182
+msgid "Property Pane\tCTRL+F1"
+msgstr "Property Pane\tCTRL+F1"
+
+#: ../../src/SimCubeFrame.cpp:183
+msgid "Show or hide the property pane."
+msgstr "Show or hide the property pane."
+
+#: ../../src/SimCubeFrame.cpp:184
+msgid "Trap Pane\tCTRL+F2"
+msgstr "Trap Pane\tCTRL+F2"
+
+#: ../../src/SimCubeFrame.cpp:185
+msgid "Show or hid the trap pane."
+msgstr "Show or hid the trap pane."
+
+#: ../../src/SimCubeFrame.cpp:186
+msgid "Remote Pane\tCTRL+F3"
+msgstr "Remote Pane\tCTRL+F3"
+
+#: ../../src/SimCubeFrame.cpp:187
+msgid "Show or hide the remote peer pane."
+msgstr "Show or hide the remote peer pane."
+
+#: ../../src/SimCubeFrame.cpp:188
+msgid "Configuration Pane\tCTRL+F4"
+msgstr "Configuration Pane\tCTRL+F4"
+
+#: ../../src/SimCubeFrame.cpp:189
+msgid "Show or hide the configuration pane."
+msgstr "Show or hide the configuration pane."
+
+#: ../../src/SimCubeFrame.cpp:190
+msgid "Log Widnow\tCTRL+F5"
+msgstr "Log Widnow\tCTRL+F5"
+
+#: ../../src/SimCubeFrame.cpp:191
+msgid "Show or hide the logging window."
+msgstr "Show or hide the logging window."
+
+#: ../../src/SimCubeFrame.cpp:193
+msgid "Reset all panes"
+msgstr "Reset all panes"
+
+#: ../../src/SimCubeFrame.cpp:194
+msgid "Reset all panes to its default position and size."
+msgstr "Reset all panes to its default position and size."
+
+#: ../../src/SimCubeFrame.cpp:196
+msgid "Help file"
+msgstr "Help file"
+
+#: ../../src/SimCubeFrame.cpp:197
+msgid "Show help file."
+msgstr "Show help file."
+
+#: ../../src/SimCubeFrame.cpp:198
+msgid "About..."
+msgstr "About..."
+
+#: ../../src/SimCubeFrame.cpp:198
+msgid "Show about dialog"
+msgstr "Show about dialog"
+
+#: ../../src/SimCubeFrame.cpp:201
+msgid "File"
+msgstr "File"
+
+#: ../../src/SimCubeFrame.cpp:202
+msgid "View"
+msgstr "View"
+
+#: ../../src/SimCubeFrame.cpp:203
+msgid "Help"
+msgstr "Help"
+
+#: ../../src/SimCubeFrame.cpp:214
+msgid "Log Output"
+msgstr "Log Output"
+
+#: ../../src/SimCubeFrame.cpp:219
+msgid "Supported Property"
+msgstr "Supported Property"
+
+#: ../../src/SimCubeFrame.cpp:224
+msgid "Transaction History"
+msgstr "Transaction History"
+
+#: ../../src/SimCubeFrame.cpp:229
+msgid "SimCube Configuration"
+msgstr "SimCube Configuration"
+
+#: ../../src/SimCubeFrame.cpp:233
+msgid "Send Trap Message"
+msgstr "Send Trap Message"
+
+#: ../../src/SimCubeFrame.cpp:237
+msgid "Remote Status"
+msgstr "Remote Status"
+
+#: ../../src/SimCubeFrame.cpp:254
+msgid "Fail to save software default perspective!"
+msgstr "Fail to save software default perspective!"
+
+#: ../../src/SimCubeFrame.cpp:381
+msgid "Fail to reset current perspective value"
+msgstr "Fail to reset current perspective value"
+
+#: ../../src/TCPProtocol.cpp:108
+#, c-format
+msgid "Fail to bind %s:%d to tcp socket"
+msgstr "Fail to bind %s:%d to tcp socket"
+
+#: ../../src/TCPProtocol.cpp:155
+#, c-format
+msgid "Unexpect event (%d) received in server listening socket!"
+msgstr "Unexpect event (%d) received in server listening socket!"
+
+#: ../../src/TCPProtocol.cpp:163
+#, c-format
+msgid "Accept new client connection from %s:%d on tcp socket 0x%p, new created socket = 0x%p"
+msgstr "Accept new client connection from %s:%d on tcp socket 0x%p, new created socket = 0x%p"
+
+#: ../../src/TCPProtocol.cpp:167
+#, c-format
+msgid "Accept new connection from unknown client on tcp socket 0x%p, new created socket = 0x%p"
+msgstr "Accept new connection from unknown client on tcp socket 0x%p, new created socket = 0x%p"
+
+#: ../../src/TCPProtocol.cpp:172
+#, c-format
+msgid "Fail to accept new connection on tcp socket 0x%p!"
+msgstr "Fail to accept new connection on tcp socket 0x%p!"
+
+#: ../../src/TCPProtocol.cpp:196
+#, c-format
+msgid "Fail to read load header via tcp socket 0x%p, error = %d."
+msgstr "Fail to read load header via tcp socket 0x%p, error = %d."
+
+#: ../../src/TCPProtocol.cpp:202
+#, c-format
+msgid "Success to read load header, optional payload size = %lu."
+msgstr "Success to read load header, optional payload size = %lu."
+
+#: ../../src/TCPProtocol.cpp:209
+#, c-format
+msgid "Fail to read optional payload via tcp socket 0x%p, error = %d."
+msgstr "Fail to read optional payload via tcp socket 0x%p, error = %d."
+
+#: ../../src/TCPProtocol.cpp:214
+#, c-format
+msgid "Success to read optional payload (%lu bytes) vai tcp socket 0x%p."
+msgstr "Success to read optional payload (%lu bytes) vai tcp socket 0x%p."
+
+#: ../../src/TCPProtocol.cpp:228
+#, c-format
+msgid "Fail to write data via tcp socket 0x%p, error = %d."
+msgstr "Fail to write data via tcp socket 0x%p, error = %d."
+
+#: ../../src/TCPProtocol.cpp:230
+#, c-format
+msgid "Success write data (%d bytes) via tcp socket 0x%p."
+msgstr "Success write data (%d bytes) via tcp socket 0x%p."
+
+#: ../../src/TCPProtocol.cpp:235
+#, c-format
+msgid "Receive socket lost event on tcp socket 0x%p."
+msgstr "Receive socket lost event on tcp socket 0x%p."
+
+#: ../../src/TCPProtocol.cpp:241
+#, c-format
+msgid "Unexpect event (%d) received in server accepted socket!"
+msgstr "Unexpect event (%d) received in server accepted socket!"
+
+#: ../../src/TCPProtocol.cpp:307
+msgid "Reset reserved flash"
+msgstr "Reset reserved flash"
+
+#: ../../src/TCPProtocol.cpp:312
+msgid "Run FW from flash"
+msgstr "Run FW from flash"
+
+#: ../../src/TCPProtocol.cpp:317
+msgid "Run FW from ram"
+msgstr "Run FW from ram"
+
+#: ../../src/TCPProtocol.cpp:355
+msgid "Verify checksum in memory load buffer failed!"
+msgstr "Verify checksum in memory load buffer failed!"
+
+#: ../../src/TCPProtocol.cpp:384
+#, c-format
+msgid "Write %d bytes to file: %s"
+msgstr "Write %d bytes to file: %s"
+
+#: ../../src/TrapPane.cpp:37
+msgid "Led is in off state."
+msgstr "Led is in off state."
+
+#: ../../src/TrapPane.cpp:38
+msgid "Red light constant on."
+msgstr "Red light constant on."
+
+#: ../../src/TrapPane.cpp:39
+msgid "Green light constant on."
+msgstr "Green light constant on."
+
+#: ../../src/TrapPane.cpp:40
+msgid "Orange light constant on."
+msgstr "Orange light constant on."
+
+#: ../../src/TrapPane.cpp:41
+msgid "Led light flashing between green and off."
+msgstr "Led light flashing between green and off."
+
+#: ../../src/TrapPane.cpp:42
+msgid "Led light flashing between off and green."
+msgstr "Led light flashing between off and green."
+
+#: ../../src/TrapPane.cpp:43
+msgid "Led light flashing between red and green."
+msgstr "Led light flashing between red and green."
+
+#: ../../src/TrapPane.cpp:44
+msgid "Led light flashing between green and orange."
+msgstr "Led light flashing between green and orange."
+
+#: ../../src/TrapPane.cpp:338
+msgid "Led Status"
+msgstr "Led Status"
+
+#: ../../src/TrapPane.cpp:341
+msgid "Preview"
+msgstr "Preview"
+
+#: ../../src/TrapPane.cpp:356
+msgid "Power"
+msgstr "Power"
+
+#: ../../src/TrapPane.cpp:360
+msgid "Fan"
+msgstr "Fan"
+
+#: ../../src/TrapPane.cpp:364
+msgid "LampA"
+msgstr "LampA"
+
+#: ../../src/TrapPane.cpp:368
+msgid "LampB"
+msgstr "LampB"
+
+#: ../../src/TrapPane.cpp:379
+msgid "Quick LED Preset"
+msgstr "Quick LED Preset"
+
+#: ../../src/TrapPane.cpp:386
+#: ../../src/TrapPane.cpp:403
+#: ../../src/TrapPane.cpp:413
+#: ../../src/TrapPane.cpp:423
+#: ../../src/TrapPane.cpp:433
+#: ../../src/TrapPane.cpp:446
+#: ../../src/TrapPane.cpp:456
+#: ../../src/TrapPane.cpp:466
+#: ../../src/TrapPane.cpp:476
+msgid "Send"
+msgstr "Send"
+
+#: ../../src/TrapPane.cpp:395
+msgid "Lamp A Status"
+msgstr "Lamp A Status"
+
+#: ../../src/TrapPane.cpp:399
+#: ../../src/TrapPane.cpp:442
+msgid "Status"
+msgstr "Status"
+
+#: ../../src/TrapPane.cpp:409
+#: ../../src/TrapPane.cpp:452
+msgid "Hours"
+msgstr "Hours"
+
+#: ../../src/TrapPane.cpp:419
+#: ../../src/TrapPane.cpp:462
+msgid "Lit Count"
+msgstr "Lit Count"
+
+#: ../../src/TrapPane.cpp:429
+#: ../../src/TrapPane.cpp:472
+msgid "Temp Cond"
+msgstr "Temp Cond"
+
+#: ../../src/TrapPane.cpp:438
+msgid "Lamp B Status"
+msgstr "Lamp B Status"
+
+#: ../../src/TrapPane.cpp:574
+#: ../../src/TrapPane.cpp:623
+msgid "Fail to update LEDSTATUS."
+msgstr "Fail to update LEDSTATUS."
+
+#: ../../src/UDPProtocol.cpp:91
+#, c-format
+msgid "NetAdapter[%d]: Fail to receive something from UDP socket. Error = %d"
+msgstr "NetAdapter[%d]: Fail to receive something from UDP socket. Error = %d"
+
+#: ../../src/UDPProtocol.cpp:97
+#, c-format
+msgid "NetAdapter[%d]: Received %d byte(s) from %s:%d."
+msgstr "NetAdapter[%d]: Received %d byte(s) from %s:%d."
+
+#: ../../src/UDPProtocol.cpp:115
+msgid "RecvFrom"
+msgstr "RecvFrom"
+
+#: ../../src/UDPProtocol.cpp:222
+#, c-format
+msgid "No keyword in token (%s)"
+msgstr "No keyword in token (%s)"
+
+#: ../../src/UDPProtocol.cpp:229
+#, c-format
+msgid "Multiple keywords in token (%s)"
+msgstr "Multiple keywords in token (%s)"
+
+#: ../../src/UDPProtocol.cpp:241
+#, c-format
+msgid "Token (%s) didn't handle by handler"
+msgstr "Token (%s) didn't handle by handler"
+
+#: ../../src/UDPProtocol.cpp:384
+#, c-format
+msgid "Fail to send enable monitor trap message to peer. (error = %d)"
+msgstr "Fail to send enable monitor trap message to peer. (error = %d)"
+
+#: ../../src/UDPProtocol.cpp:417
+#, c-format
+msgid "This may not be an error. Set Request (%s) is not handled by database update."
+msgstr "This may not be an error. Set Request (%s) is not handled by database update."
+
+#: ../../src/UDPProtocol.cpp:474
+#, c-format
+msgid "Fail to send check board config response back to peer. (error = %d)"
+msgstr "Fail to send check board config response back to peer. (error = %d)"
+
+#: ../../src/UDPProtocol.cpp:494
+#, c-format
+msgid "Fail to send check connection response back to peer. (error = %d)"
+msgstr "Fail to send check connection response back to peer. (error = %d)"
+
+#: ../../src/UDPProtocol.cpp:544
+#, c-format
+msgid "Fail to send connect response back to peer. (error = %d)"
+msgstr "Fail to send connect response back to peer. (error = %d)"
+
+#: ../../src/UDPProtocol.cpp:551
+msgid "Empty BoardName in CONNECT get request message"
+msgstr "Empty BoardName in CONNECT get request message"
+
+#: ../../src/UDPProtocol.cpp:569
+#, c-format
+msgid "Fail to send discover response back to peer. (error = %d)"
+msgstr "Fail to send discover response back to peer. (error = %d)"
+
+#: ../../src/UDPProtocol.cpp:592
+#, c-format
+msgid "Fail to send monitor response back to peer. (error = %d)"
+msgstr "Fail to send monitor response back to peer. (error = %d)"
+
+#: ../../src/UDPProtocol.cpp:623
+#, c-format
+msgid "Fail to send response (%s) back to peer. (error = %d)"
+msgstr "Fail to send response (%s) back to peer. (error = %d)"
+
+#: ../../src/UDPProtocol.cpp:642
+#, c-format
+msgid "Failt to send response (%s) back to peer. (error = %d)"
+msgstr "Failt to send response (%s) back to peer. (error = %d)"
+
+#: ../../src/UDPSocket.cpp:30
+msgid "SendTo"
+msgstr "SendTo"
+
+#: ../../src/wxsqlite3.cpp:3443
+msgid "Regular expression invalid: '"
+msgstr "Regular expression invalid: '"
+
+#: ../../src/wxsqlite3.cpp:3448
+#, c-format
+msgid "REGEXP called with wrong number of arguments: %d instead of 2."
+msgstr "REGEXP called with wrong number of arguments: %d instead of 2."
+
+#~ msgid "Verbose"
+#~ msgstr "Verbose"
+#~ msgid "OK"
+#~ msgstr "OK"
+#~ msgid "Off"
+#~ msgstr "Off"
+#~ msgid "Red"
+#~ msgstr "Red"
+#~ msgid "Green"
+#~ msgstr "Green"
+#~ msgid "Orange"
+#~ msgstr "Orange"
+#~ msgid "Green<->Off"
+#~ msgstr "Green<->Off"
+#~ msgid "Off<->Green"
+#~ msgstr "Off<->Green"
+#~ msgid "Red<->Green"
+#~ msgstr "Red<->Green"
+#~ msgid "Green<->Orange"
+#~ msgstr "Green<->Orange"
+#~ msgid "In use"
+#~ msgstr "In use"
+#~ msgid "Lit failed"
+#~ msgstr "Lit failed"
+#~ msgid "Shutdown"
+#~ msgstr "Shutdown"
+#~ msgid "Out of spec"
+#~ msgstr "Out of spec"
+#~ msgid "Critical"
+#~ msgstr "Critical"
+#~ msgid "Ok"
+#~ msgstr "Ok"
+#~ msgid "Port "
+#~ msgstr "Port "
+#~ msgid "Which port will be used by UDP protocol? "
+#~ msgstr "Which port will be used by UDP protocol? "
+#~ msgid "History Pane\tCTRL+F3"
+#~ msgstr "History Pane\tCTRL+F3"
+#~ msgid "Show or hide the history pane."
+#~ msgstr "Show or hide the history pane."
+#~ msgid "Download Pane\tCTRL+F6"
+#~ msgstr "Download Pane\tCTRL+F6"
+#~ msgid "Show or hide the download pane."
+#~ msgstr "Show or hide the download pane."
+#~ msgid "Reset To Default"
+#~ msgstr "Reset To Default"
+
