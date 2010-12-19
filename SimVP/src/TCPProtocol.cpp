@@ -1,6 +1,6 @@
 #include <wx/wx.h>
 #include <wx/wfstream.h>
-#include "SimCubeApp.h"
+#include "SimVPApp.h"
 #include "NetAdapter.h"
 #include "TCPProtocol.h"
 
@@ -377,7 +377,7 @@ bool TCPProtocol::ProcessDownloadModeProtocol(void *pIn, void *pOut)
                     /* check sum is matched */
                     else
                     {
-                        /* real cube will erase, write, read back flash */
+                        /* real video processor will erase, write, read back flash */
                         u32TotalLoad = pst_buffer_load->u32_total_load;
                         while (u32TotalLoad--)
                         {

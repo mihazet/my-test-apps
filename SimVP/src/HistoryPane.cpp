@@ -2,7 +2,7 @@
 #include <wx/srchctrl.h>
 #include <wx/wxsqlite3.h>
 #include <wx/filename.h>
-#include "SimCubeApp.h"
+#include "SimVPApp.h"
 #include "HistoryPane.h"
 
 #include "img/save_16.xpm"

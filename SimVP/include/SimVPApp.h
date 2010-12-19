@@ -1,5 +1,5 @@
-#ifndef _SIM_CUBE_APP_H_
-#define _SIM_CUBE_APP_H_
+#ifndef _SIM_VP_APP_H_
+#define _SIM_VP_APP_H_
 
 #include <wx/wx.h>
 #include <wx/wxsqlite3.h>
@@ -24,12 +24,12 @@
 #include "TCPProtocol.h"
 
 ////////////////////////////////////////////////////////////////////////////
-class SimCubeStatusBar : public wxStatusBar
+class SimVPStatusBar : public wxStatusBar
 {
 public:
-    SimCubeStatusBar() { Init(); }
-    SimCubeStatusBar(wxWindow *parent, long style = wxSTB_DEFAULT_STYLE);
-    virtual ~SimCubeStatusBar();
+    SimVPStatusBar() { Init(); }
+    SimVPStatusBar(wxWindow *parent, long style = wxSTB_DEFAULT_STYLE);
+    virtual ~SimVPStatusBar();
     bool Create(wxWindow *parent, long style = wxSTB_DEFAULT_STYLE);
 
 private:
@@ -47,11 +47,11 @@ private:
     DECLARE_EVENT_TABLE()
 };
 ////////////////////////////////////////////////////////////////////////////
-class SimCubeApp : public wxApp
+class SimVPApp : public wxApp
 {
 public:
-    SimCubeApp();
-    ~SimCubeApp();
+    SimVPApp();
+    ~SimVPApp();
     void Init();
     virtual bool OnInit();
     virtual int OnExit();
@@ -63,7 +63,7 @@ public:
     wxVector<NetAdapter> m_Adapters;
     PeerDataModel *m_PeerData;
     HistoryDataModel *m_HistoryData;
-    SimCubeStatusBar *m_StatusBar;
+    SimVPStatusBar *m_StatusBar;
 
 private:
     // event handlers
@@ -104,7 +104,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-DECLARE_APP(SimCubeApp)
+DECLARE_APP(SimVPApp)
 
-#endif /* _SIM_CUBE_APP_H_ */
+#endif /* _SIM_VP_APP_H_ */
 

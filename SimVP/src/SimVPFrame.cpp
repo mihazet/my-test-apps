@@ -8,22 +8,22 @@
 #include "HistoryPane.h"
 #include "PeerPane.h"
 #include "PropertyPane.h"
-#include "SimCubeFrame.h"
+#include "SimVPFrame.h"
 #include "TrapPane.h"
-#include "SimCubeApp.h"
+#include "SimVPApp.h"
 #include "WidgetId.h"
 #include "Version.h"
 // resource headers
-#include "img/SimCube-16.xpm"
-#include "img/SimCube-32.xpm"
-#include "img/SimCube-48.xpm"
+#include "img/SimVP-16.xpm"
+#include "img/SimVP-32.xpm"
+#include "img/SimVP-48.xpm"
 
 ////////////////////////////////////////////////////////////////////////////////////
-class SimCubeAboutDialog : public wxDialog
+class SimVPAboutDialog : public wxDialog
 {
 public:
-    SimCubeAboutDialog(wxWindow *parent);
-    ~SimCubeAboutDialog();
+    SimVPAboutDialog(wxWindow *parent);
+    ~SimVPAboutDialog();
 
 private:
     void CreateControls();
@@ -32,33 +32,33 @@ private:
     void OnMouseLButtonUp(wxMouseEvent &event);
 };
 
-SimCubeAboutDialog::SimCubeAboutDialog(wxWindow *parent)
-    : wxDialog(parent, wxID_ANY, _("About SimCube"))
+SimVPAboutDialog::SimVPAboutDialog(wxWindow *parent)
+    : wxDialog(parent, wxID_ANY, _("About SimVP"))
 {
     CreateControls();
     CenterOnParent();
 
     /* add event handler */
-    Bind(wxEVT_LEFT_UP, &SimCubeAboutDialog::OnMouseLButtonUp, this, wxID_ANY);
+    Bind(wxEVT_LEFT_UP, &SimVPAboutDialog::OnMouseLButtonUp, this, wxID_ANY);
 }
 
-SimCubeAboutDialog::~SimCubeAboutDialog()
+SimVPAboutDialog::~SimVPAboutDialog()
 {
 }
 
-void SimCubeAboutDialog::CreateControls()
+void SimVPAboutDialog::CreateControls()
 {
     wxSizer *allSizer = new wxBoxSizer(wxVERTICAL);
 
     /* description */
     wxSizer *descSizer = new wxBoxSizer(wxHORIZONTAL);
     allSizer->Add(descSizer, 1, wxALL | wxEXPAND, 5);
-    wxStaticBitmap *ico = new wxStaticBitmap(this, wxID_ANY, wxBitmap(SimCube_48_xpm));
+    wxStaticBitmap *ico = new wxStaticBitmap(this, wxID_ANY, wxBitmap(SimVP_48_xpm));
     descSizer->Add(ico, 0, wxALL | wxEXPAND, 5);
     wxSizer *descTextSizer = new wxBoxSizer(wxVERTICAL);
     descSizer->Add(descTextSizer, 1, wxALL | wxEXPAND, 5);
     wxString msg;
-    msg << _("SimCube - A Cube Simulator");
+    msg << _("SimVP - A Video Processor Simulator");
     descTextSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxALL, 5);
     msg.clear();
     msg << _("Version ")
@@ -73,13 +73,13 @@ void SimCubeAboutDialog::CreateControls()
     msg << wxT(SC_SRC_REPOSITORY);
     descTextSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxLEFT|wxRIGHT|wxBOTTOM, 5);
     msg.clear();
-    msg << _("If I were a cube, I will try to response all requests from you.");
+    msg << _("If I were a video processor, I will try to response all requests from you.");
     allSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxTOP|wxLEFT|wxRIGHT, 15);
     msg.clear();
-    msg << _("If I were a cube, I will notify you of my change of state.");
+    msg << _("If I were a video processor, I will notify you of my change of state.");
     allSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxRIGHT|wxLEFT, 15);
     msg.clear();
-    msg << _("If I were a cube..., but I am not a real cube, just a simulated cube.");
+    msg << _("If I were a video processor..., but I am not a real video processor, just a simulated one.");
     allSizer->Add(new wxStaticText(this, wxID_STATIC, msg), 0, wxBOTTOM|wxLEFT|wxRIGHT, 15);
 
     /* library info */
@@ -96,30 +96,30 @@ void SimCubeAboutDialog::CreateControls()
     SetSizerAndFit(allSizer);
 }
 
-void SimCubeAboutDialog::OnMouseLButtonUp(wxMouseEvent &WXUNUSED(event))
+void SimVPAboutDialog::OnMouseLButtonUp(wxMouseEvent &WXUNUSED(event))
 {
     EndModal(wxID_OK);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE(SimCubeFrame, wxFrame)
-    EVT_MENU_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, SimCubeFrame::OnViewPane)
-    EVT_UPDATE_UI_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, SimCubeFrame::OnUpdatePane)
-    EVT_MENU(myID_VIEW_RESET_LAYOUT, SimCubeFrame::OnResetLayout)
-    EVT_ERASE_BACKGROUND(SimCubeFrame::OnEraseBackground)
-    EVT_SIZE(SimCubeFrame::OnSize)
-    EVT_CLOSE(SimCubeFrame::OnClose)
-    EVT_MENU(wxID_ABOUT, SimCubeFrame::OnAbout)
-    EVT_MENU(wxID_EXIT, SimCubeFrame::OnQuit)
+BEGIN_EVENT_TABLE(SimVPFrame, wxFrame)
+    EVT_MENU_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, SimVPFrame::OnViewPane)
+    EVT_UPDATE_UI_RANGE(myID_VIEW_PANE_START, myID_VIEW_PANE_END, SimVPFrame::OnUpdatePane)
+    EVT_MENU(myID_VIEW_RESET_LAYOUT, SimVPFrame::OnResetLayout)
+    EVT_ERASE_BACKGROUND(SimVPFrame::OnEraseBackground)
+    EVT_SIZE(SimVPFrame::OnSize)
+    EVT_CLOSE(SimVPFrame::OnClose)
+    EVT_MENU(wxID_ABOUT, SimVPFrame::OnAbout)
+    EVT_MENU(wxID_EXIT, SimVPFrame::OnQuit)
 END_EVENT_TABLE()
 
-SimCubeFrame::SimCubeFrame()
+SimVPFrame::SimVPFrame()
 {
     Init();
 }
 
-SimCubeFrame::SimCubeFrame(wxWindow *parent, wxWindowID id,
+SimVPFrame::SimVPFrame(wxWindow *parent, wxWindowID id,
     const wxString &caption, const wxPoint &pos,
     const wxSize &size, long style)
 {
@@ -127,7 +127,7 @@ SimCubeFrame::SimCubeFrame(wxWindow *parent, wxWindowID id,
     Create(parent, id, caption, pos, size, style);
 }
 
-bool SimCubeFrame::Create(wxWindow *parent, wxWindowID id,
+bool SimVPFrame::Create(wxWindow *parent, wxWindowID id,
     const wxString &caption, const wxPoint &pos,
     const wxSize &size, long style)
 {
@@ -141,7 +141,7 @@ bool SimCubeFrame::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-SimCubeFrame::~SimCubeFrame()
+SimVPFrame::~SimVPFrame()
 {
     wxString sql, perspective;
     wxSQLite3ResultSet set;
@@ -158,21 +158,21 @@ SimCubeFrame::~SimCubeFrame()
     _auiManager.UnInit();
 }
 
-void SimCubeFrame::Init()
+void SimVPFrame::Init()
 {
     _cfgDB = wxGetApp().GetConfigDatabase();
 }
 
-void SimCubeFrame::CreateControls()
+void SimVPFrame::CreateControls()
 {
     /* tell wxAuiManager to manage this frame */
     _auiManager.SetManagedWindow(this);
 
     /* setup icon for window title bar, taskbar and task switching bar */
     wxIconBundle icons;
-    icons.AddIcon(wxIcon(SimCube_16_xpm));
-    icons.AddIcon(wxIcon(SimCube_32_xpm));
-    icons.AddIcon(wxIcon(SimCube_48_xpm));
+    icons.AddIcon(wxIcon(SimVP_16_xpm));
+    icons.AddIcon(wxIcon(SimVP_32_xpm));
+    icons.AddIcon(wxIcon(SimVP_48_xpm));
     SetIcons(icons);
 
     /* menu bar */
@@ -226,7 +226,7 @@ void SimCubeFrame::CreateControls()
         MinSize(500, 300));
 
     _auiManager.AddPane(new ConfigPane(this), wxAuiPaneInfo().
-        Name(wxT("ConfigPane")).Caption(_("SimCube Configuration")).
+        Name(wxT("ConfigPane")).Caption(_("SimVP Configuration")).
         Dockable(false).Float().Hide());
 
     _auiManager.AddPane(new TrapPane(this), wxAuiPaneInfo().
@@ -238,7 +238,7 @@ void SimCubeFrame::CreateControls()
         CloseButton(true).DestroyOnClose(false).MinSize(200, 150));
 
     /* status bar */
-    SimCubeStatusBar *sb = wxGetApp().m_StatusBar;
+    SimVPStatusBar *sb = wxGetApp().m_StatusBar;
     sb->Create(this);
     SetStatusBar(sb);
 
@@ -268,7 +268,7 @@ void SimCubeFrame::CreateControls()
         _auiManager.Update();
 }
 
-void SimCubeFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
+void SimVPFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
 {
     int _x = -1, _y = -1, _w = -1, _h = -1;
     wxSQLite3Database *db = wxGetApp().GetConfigDatabase();
@@ -325,7 +325,7 @@ void SimCubeFrame::RetrieveFrameSizeAndPosition(int *x, int *y, int *w, int *h)
 //////////////////////////////////////////////////////////////////////////////
 // Event handlers
 //////////////////////////////////////////////////////////////////////////////
-void SimCubeFrame::OnViewPane(wxCommandEvent &event)
+void SimVPFrame::OnViewPane(wxCommandEvent &event)
 {
     switch (event.GetId())
     {
@@ -348,7 +348,7 @@ void SimCubeFrame::OnViewPane(wxCommandEvent &event)
     _auiManager.Update();
 }
 
-void SimCubeFrame::OnUpdatePane(wxUpdateUIEvent &event)
+void SimVPFrame::OnUpdatePane(wxUpdateUIEvent &event)
 {
     switch (event.GetId())
     {
@@ -370,7 +370,7 @@ void SimCubeFrame::OnUpdatePane(wxUpdateUIEvent &event)
     }
 }
 
-void SimCubeFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
+void SimVPFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
 {
     wxString sql, defaultLayout;
     wxSQLite3ResultSet set;
@@ -392,28 +392,28 @@ void SimCubeFrame::OnResetLayout(wxCommandEvent &WXUNUSED(event))
         _auiManager.LoadPerspective(defaultLayout);
 }
 
-void SimCubeFrame::OnEraseBackground(wxEraseEvent &event)
+void SimVPFrame::OnEraseBackground(wxEraseEvent &event)
 {
     event.Skip();
 }
 
-void SimCubeFrame::OnSize(wxSizeEvent &event)
+void SimVPFrame::OnSize(wxSizeEvent &event)
 {
     event.Skip();
 }
 
-void SimCubeFrame::OnClose(wxCloseEvent &WXUNUSED(event))
+void SimVPFrame::OnClose(wxCloseEvent &WXUNUSED(event))
 {
     Destroy();
 }
 
-void SimCubeFrame::OnAbout(wxCommandEvent &WXUNUSED(event))
+void SimVPFrame::OnAbout(wxCommandEvent &WXUNUSED(event))
 {
-    SimCubeAboutDialog dlg(this);
+    SimVPAboutDialog dlg(this);
     dlg.ShowModal();
 }
 
-void SimCubeFrame::OnQuit(wxCommandEvent &WXUNUSED(event))
+void SimVPFrame::OnQuit(wxCommandEvent &WXUNUSED(event))
 {
     Close();
 }

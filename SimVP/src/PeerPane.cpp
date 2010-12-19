@@ -1,6 +1,6 @@
 #include <wx/wx.h>
 #include "PeerPane.h"
-#include "SimCubeApp.h"
+#include "SimVPApp.h"
 
 PeerPane::PeerPane()
 {

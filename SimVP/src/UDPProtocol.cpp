@@ -3,7 +3,7 @@
 #include <wx/socket.h>
 #include <wx/wxsqlite3.h>
 #include <wx/datetime.h>
-#include "SimCubeApp.h"
+#include "SimVPApp.h"
 #include "NetAdapter.h"
 #include "PeerPane.h"
 #include "HistoryPane.h"
@@ -368,7 +368,7 @@ bool UDPProtocol::set_request_handler(const char *buf, size_t len,
             {
                 data->SetMonitor(peer, true);
 
-                /* real cube will active notify source and lamp selection here. */
+                /* real video processor will active notify source and lamp selection here. */
                 sqlQuery << wxT("SELECT CurrentValue FROM PropTbl WHERE ProtocolName = 'MAIN_INPUT'");
                 set = db->ExecuteQuery(sqlQuery);
                 if (set.NextRow())

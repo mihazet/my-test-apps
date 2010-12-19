@@ -1,6 +1,6 @@
 #include <wx/wx.h>
 #include <wx/wxsqlite3.h>
-#include "SimCubeApp.h"
+#include "SimVPApp.h"
 #include "DebugPane.h"
 #include "WidgetId.h"
 

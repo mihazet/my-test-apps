@@ -1,5 +1,5 @@
 #include <wx/wx.h>
-#include "SimCubeApp.h"
+#include "SimVPApp.h"
 #include "UDPSocket.h"
 
 UDPSocket::UDPSocket(const wxSockAddress &addr, wxSocketFlags flags)

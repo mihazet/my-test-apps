@@ -4,8 +4,8 @@
 #include <wx/tipwin.h>
 #include <wx/wxsqlite3.h>
 #include <wx/tokenzr.h>
-#include "SimCubeApp.h"
-#include "SimCubeFrame.h"
+#include "SimVPApp.h"
+#include "SimVPFrame.h"
 #include "WidgetId.h"
 #if defined (__WXMSW__)
 #include "Rockey4_ND_32.h"
@@ -16,58 +16,58 @@
 ////////////////////////////////////////////////////////////////////////////
 enum
 {
-    SIMCUBE_STB_INFO,
-    SIMCUBE_STB_DOWNLOAD,
-    SIMCUBE_STB_ADAPTER,
+    SIMVP_STB_INFO,
+    SIMVP_STB_DOWNLOAD,
+    SIMVP_STB_ADAPTER,
 
-    SIMCUBE_STB_MAX
+    SIMVP_STB_MAX
 };
 
-BEGIN_EVENT_TABLE(SimCubeStatusBar, wxStatusBar)
-    EVT_SIZE(SimCubeStatusBar::OnSize)
+BEGIN_EVENT_TABLE(SimVPStatusBar, wxStatusBar)
+    EVT_SIZE(SimVPStatusBar::OnSize)
 END_EVENT_TABLE()
 
-SimCubeStatusBar::SimCubeStatusBar(wxWindow *parent, long style)
+SimVPStatusBar::SimVPStatusBar(wxWindow *parent, long style)
     : wxStatusBar(parent, wxID_ANY, style)
 {
     Init();
     Create(parent, style);
 }
 
-SimCubeStatusBar::~SimCubeStatusBar()
+SimVPStatusBar::~SimVPStatusBar()
 {
 }
 
-bool SimCubeStatusBar::Create(wxWindow *parent, long style)
+bool SimVPStatusBar::Create(wxWindow *parent, long style)
 {
     bool result;
-    int widths[SIMCUBE_STB_MAX] = { -1, 250, 180 };
+    int widths[SIMVP_STB_MAX] = { -1, 250, 180 };
     wxVector<NetAdapter> &adapters = wxGetApp().m_Adapters;
 
     result = wxStatusBar::Create(parent, wxID_ANY, style);
     SetFieldsCount(WXSIZEOF(widths));
     SetStatusWidths(WXSIZEOF(widths), widths);
-    SetStatusText(_("Welcome to Cube Simulator."), SIMCUBE_STB_INFO);
-    SetStatusText(_("Idle"), SIMCUBE_STB_DOWNLOAD);
+    SetStatusText(_("Welcome to Video Processor Simulator."), SIMVP_STB_INFO);
+    SetStatusText(_("Idle"), SIMVP_STB_DOWNLOAD);
 
     /* adapters information - show on a wxStaticText object */
     _adaptersInfo = new wxStaticText(this, wxID_ANY,
         wxString::Format(_("Adapters: %d"), adapters.size()));
-    _adaptersInfo->Bind(wxEVT_LEFT_UP, &SimCubeStatusBar::OnAdaptersLUp, this);
-    _adaptersInfo->Bind(wxEVT_CONTEXT_MENU, &SimCubeStatusBar::OnAdaptersContextMenu, this);
+    _adaptersInfo->Bind(wxEVT_LEFT_UP, &SimVPStatusBar::OnAdaptersLUp, this);
+    _adaptersInfo->Bind(wxEVT_CONTEXT_MENU, &SimVPStatusBar::OnAdaptersContextMenu, this);
 
     return result;
 }
 
-void SimCubeStatusBar::Init()
+void SimVPStatusBar::Init()
 {
 }
 
-void SimCubeStatusBar::OnSize(wxSizeEvent &event)
+void SimVPStatusBar::OnSize(wxSizeEvent &event)
 {
     wxRect rect;
 
-    if (_adaptersInfo && GetFieldRect(SIMCUBE_STB_ADAPTER, rect))
+    if (_adaptersInfo && GetFieldRect(SIMVP_STB_ADAPTER, rect))
     {
         wxRect rectCheck = rect;
         rectCheck.Deflate(2);
@@ -77,7 +77,7 @@ void SimCubeStatusBar::OnSize(wxSizeEvent &event)
     event.Skip();
 }
 
-void SimCubeStatusBar::OnAdaptersLUp(wxMouseEvent &WXUNUSED(event))
+void SimVPStatusBar::OnAdaptersLUp(wxMouseEvent &WXUNUSED(event))
 {
     wxVector<NetAdapter> &adapters = wxGetApp().m_Adapters;
     wxString info, line;
@@ -121,7 +121,7 @@ void SimCubeStatusBar::OnAdaptersLUp(wxMouseEvent &WXUNUSED(event))
     tip->Show();
 }
 
-void SimCubeStatusBar::OnAdaptersContextMenu(wxContextMenuEvent &WXUNUSED(event))
+void SimVPStatusBar::OnAdaptersContextMenu(wxContextMenuEvent &WXUNUSED(event))
 {
     wxVector<NetAdapter> &adapters = wxGetApp().m_Adapters;
     // Only 1st level pop up menu on stack, and others on heap
@@ -143,7 +143,7 @@ void SimCubeStatusBar::OnAdaptersContextMenu(wxContextMenuEvent &WXUNUSED(event)
             adapter->Check(id, it->udp->m_enabled);
         }
         adapterListMenu.Bind(wxEVT_COMMAND_MENU_SELECTED,
-            &SimCubeStatusBar::OnToggleUDPSocket, this, id);
+            &SimVPStatusBar::OnToggleUDPSocket, this, id);
         /* item: tcp */
         item = adapter->AppendCheckItem(id + 1, _("TCP Socket Enabled"),
             _("Enable or disable the TCP socket transmission and receive."));
@@ -155,7 +155,7 @@ void SimCubeStatusBar::OnAdaptersContextMenu(wxContextMenuEvent &WXUNUSED(event)
     PopupMenu(&adapterListMenu);
 }
 
-void SimCubeStatusBar::OnToggleUDPSocket(wxCommandEvent &event)
+void SimVPStatusBar::OnToggleUDPSocket(wxCommandEvent &event)
 {
     wxVector<NetAdapter> &adapters = wxGetApp().m_Adapters;
 
@@ -181,18 +181,18 @@ void SimCubeStatusBar::OnToggleUDPSocket(wxCommandEvent &event)
 }
 
 ////////////////////////////////////////////////////////////////////////////
-IMPLEMENT_APP(SimCubeApp)
+IMPLEMENT_APP(SimVPApp)
 
-BEGIN_EVENT_TABLE(SimCubeApp, wxApp)
-    EVT_IDLE(SimCubeApp::OnAppIdle)
+BEGIN_EVENT_TABLE(SimVPApp, wxApp)
+    EVT_IDLE(SimVPApp::OnAppIdle)
 END_EVENT_TABLE()
 
-SimCubeApp::SimCubeApp()
+SimVPApp::SimVPApp()
 {
     Init();
 }
 
-SimCubeApp::~SimCubeApp()
+SimVPApp::~SimVPApp()
 {
     wxDELETE(m_PeerData);
     wxDELETE(m_HistoryData);
@@ -207,7 +207,7 @@ SimCubeApp::~SimCubeApp()
         _historyDB->Close();
 }
 
-void SimCubeApp::Init()
+void SimVPApp::Init()
 {
     wxStandardPaths &stdPaths = wxStandardPaths::Get();
     wxString dbPath, dbName, setting;
@@ -294,7 +294,7 @@ void SimCubeApp::Init()
     m_HistoryData = new HistoryDataModel(_historyDB);
 }
 
-bool SimCubeApp::OnInit()
+bool SimVPApp::OnInit()
 {
     /* init locale */
     wxStandardPaths &stdPaths = wxStandardPaths::Get();
@@ -318,7 +318,7 @@ bool SimCubeApp::OnInit()
     _onlyMe = new wxSingleInstanceChecker();
     if (_onlyMe->IsAnotherRunning())
     {
-        wxLogWarning(_("SimCube is already running, this instance will be terminated!"));
+        wxLogWarning(_("SimVP is already running, this instance will be terminated!"));
         return false;
     }
 
@@ -350,17 +350,17 @@ bool SimCubeApp::OnInit()
     _tcpProtocol = new TCPProtocol();
 
     /* init the status bar
-     * GTK doesn't allow this to be done in SimCubeApp::Init() */
-    m_StatusBar = new SimCubeStatusBar();
+     * GTK doesn't allow this to be done in SimVPApp::Init() */
+    m_StatusBar = new SimVPStatusBar();
 
     /* init the main frame */
-    SimCubeFrame *frame = new SimCubeFrame(NULL);
+    SimVPFrame *frame = new SimVPFrame(NULL);
     SetTopWindow(frame);
     frame->Show();
     return true;
 }
 
-int SimCubeApp::OnExit()
+int SimVPApp::OnExit()
 {
     if (_adapterInfo)
     {
@@ -373,7 +373,7 @@ int SimCubeApp::OnExit()
     return wxApp::OnExit();
 }
 
-void SimCubeApp::OnAppIdle(wxIdleEvent &WXUNUSED(event))
+void SimVPApp::OnAppIdle(wxIdleEvent &WXUNUSED(event))
 {
     if (!CheckRockey())
     {
@@ -382,7 +382,7 @@ void SimCubeApp::OnAppIdle(wxIdleEvent &WXUNUSED(event))
     }
 }
 
-bool SimCubeApp::CheckRockey()
+bool SimVPApp::CheckRockey()
 {
 #if defined (__WXGTK__)
 #define WORD unsigned short
@@ -432,7 +432,7 @@ bool SimCubeApp::CheckRockey()
 //      true - successful detect network adapter info.
 //      false - failed to detect network adapter info.
 //
-bool SimCubeApp::DetectNetAdapter(bool *changed)
+bool SimVPApp::DetectNetAdapter(bool *changed)
 {
 #ifdef __WXMSW__
     DWORD dwRetVal = 0;
@@ -583,7 +583,7 @@ bool SimCubeApp::DetectNetAdapter(bool *changed)
 #endif
 }
 
-wxString SimCubeApp::CalculateSubnetBroadcastAddress(wxString ipAddr, wxString netmaskAddr)
+wxString SimVPApp::CalculateSubnetBroadcastAddress(wxString ipAddr, wxString netmaskAddr)
 {
     if (ipAddr.IsEmpty() || netmaskAddr.IsEmpty()
         || !ipAddr.Cmp(wxT("0.0.0.0")) || !netmaskAddr.Cmp(wxT("0.0.0.0")))
@@ -618,7 +618,7 @@ wxString SimCubeApp::CalculateSubnetBroadcastAddress(wxString ipAddr, wxString n
 //
 // This function init all database tables need in the whole application
 //
-void SimCubeApp::InitDatabase(eDB db)
+void SimVPApp::InitDatabase(eDB db)
 {
     wxString sql;
 
@@ -629,7 +629,7 @@ void SimCubeApp::InitDatabase(eDB db)
             << wxT("CREATE TABLE IF NOT EXISTS PropTbl (DisplayedName TEXT UNIQUE, ")
                 << wxT("ProtocolName TEXT UNIQUE, PropertyType TEXT, ")
                 << wxT("PropertyFormat TEXT, InitValue TEXT, CurrentValue TEXT);")
-            << wxT("INSERT OR IGNORE INTO PropTbl VALUES (\"BoardName\", \"BOARD_NAME\", \"String\", \"19\", \"SimCube\", \"SimCube\");")
+            << wxT("INSERT OR IGNORE INTO PropTbl VALUES (\"BoardName\", \"BOARD_NAME\", \"String\", \"19\", \"SimVP\", \"SimVP\");")
             << wxT("INSERT OR IGNORE INTO PropTbl VALUES (\"Board H/W Revison\", \"BOARD_HW_REV\", \"String\", \"11\", \"2973043701\", \"2973043701\");")
             << wxT("INSERT OR IGNORE INTO PropTbl VALUES (\"DHCP Client\", \"DHCP_CLIENT\", \"List\", \"DISABLE;ENABLE\", \"ENABLE\", \"ENABLE\");")
             << wxT("INSERT OR IGNORE INTO PropTbl VALUES (\"Host Domain\", \"HOST_DOMAIN\", \"String\", \"31\", \"deltaww.com\", \"deltaww.com\");")

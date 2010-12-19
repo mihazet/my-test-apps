@@ -2,7 +2,7 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/props.h>
 #include <wx/wxsqlite3.h>
-#include "SimCubeApp.h"
+#include "SimVPApp.h"
 #include "PeerPane.h"
 #include "PropertyPane.h"
 #include "WidgetId.h"

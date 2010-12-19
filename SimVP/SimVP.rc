@@ -7,16 +7,16 @@
 
 #else
 #include <windows.h>
-#include "include/version.h" // version defintion for simcube
+#include "include/version.h" // version defintion for simvp
 
 // note that the icon used by the Explorer (i.e. the programs icon) is the
 // first icon is the executable adn the icon are sorted both by their order
 // (Win9x) and by alphabetically (!) (NT). so put this icon first and give it
 // a name starting with "a"
-aaaaaaaa ICON "SimCube.ico"
+aaaaaaaa ICON "SimVP.ico"
 
 // this icon is used with wxFrame::SetIcon()
-SimCube ICON "SimCube.ico"
+SimVP ICON "SimVP.ico"
 
 VS_VERSION_INFO VERSIONINFO
 FILEVERSION     SCVER_MAJOR,SCVER_MINOR,SCVER_RELEASE,SCVER_BUILD
@@ -36,13 +36,13 @@ BEGIN
         BLOCK "040904B0"
         BEGIN
             VALUE "CompanyName",      "Delta Electronics, Inc.\0"
-            VALUE "FileDescription",  "Simulate VideoWall Cube Network Behavior\0"
+            VALUE "FileDescription",  "Simulate Video Processor Network Behavior\0"
             VALUE "FileVersion",      SCVER_MAJOR_STRING "." SCVER_MINOR_STRING "." SCVER_RELEASE_STRING "." SCVER_BUILD_STRING "\0"
-            VALUE "InternalName",     "SimCube\0"
-            VALUE "LegalCopyright",   "Copyright 2009 Yu-Hui, Yang\0"
+            VALUE "InternalName",     "SimVP\0"
+            VALUE "LegalCopyright",   "Copyright 2010 Yu-Hui, Yang\0"
             //VALUE "LegalTrademarks",  "\0"
-            VALUE "OriginalFilename", "SimCube.exe\0"
-            VALUE "ProductName",      "Cube Simulator\0"
+            VALUE "OriginalFilename", "SimVP.exe\0"
+            VALUE "ProductName",      "Video Processor Simulator\0"
             VALUE "ProductVersion",   SCVER_MAJOR_STRING "." SCVER_MINOR_STRING "." SCVER_RELEASE_STRING ".0\0"
         END
     END

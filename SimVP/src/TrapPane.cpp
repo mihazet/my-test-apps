@@ -1,6 +1,6 @@
 #include <wx/wx.h>
 #include <wx/spinctrl.h>
-#include "SimCubeApp.h"
+#include "SimVPApp.h"
 #include "TrapPane.h"
 #include "led.h"
 #include "WidgetId.h"
