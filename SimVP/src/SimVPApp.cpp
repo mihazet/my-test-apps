@@ -384,6 +384,7 @@ void SimVPApp::OnAppIdle(wxIdleEvent &WXUNUSED(event))
 
 bool SimVPApp::CheckRockey()
 {
+#if 0
 #if defined (__WXGTK__)
 #define WORD unsigned short
 #define DWORD unsigned int
@@ -416,6 +417,9 @@ bool SimVPApp::CheckRockey()
 #endif
 
 #undef ROCKEY_API_CALL
+#else
+    return true;
+#endif
 }
 
 //^^

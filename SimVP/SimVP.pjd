@@ -340,7 +340,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"VC++ Project"</string>
-          <bool name="dirty">0</bool>
+          <bool name="dirty">1</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"VC++ Project"</string>
           <string name="Build mode">"Debug"</string>
@@ -392,7 +392,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% wxmsw29ud_propgrid.lib wxcode_msw29ud_wxsqlite3.lib Rockey4ND.lib iphlpapi.lib"</string>
+          <string name="Libraries">"%AUTO% wxmsw29ud_propgrid.lib wxcode_msw29ud_wxsqlite3.lib iphlpapi.lib"</string>
           <string name="Library path">"%AUTO%,lib,lib/wxSQLite3/lib/vc_lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource,lib/wxSQLite3/include"</string>
@@ -422,7 +422,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"VC++ Project"</string>
-          <bool name="dirty">0</bool>
+          <bool name="dirty">1</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"VC++ Project"</string>
           <string name="Build mode">"Release"</string>
@@ -474,7 +474,7 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% wxmsw29u_propgrid.lib wxcode_msw29u_wxsqlite3.lib Rockey4ND.lib iphlpapi.lib"</string>
+          <string name="Libraries">"%AUTO% wxmsw29u_propgrid.lib wxcode_msw29u_wxsqlite3.lib iphlpapi.lib"</string>
           <string name="Library path">"%AUTO%,lib,lib/wxSQLite3/lib/vc_lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
           <string name="Include path">"%AUTO%,include,resource,lib/wxSQLite3/include"</string>
