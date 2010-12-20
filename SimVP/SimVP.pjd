@@ -392,10 +392,10 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% wxmsw29ud_propgrid.lib sqlite3.lib Rockey4ND.lib iphlpapi.lib"</string>
-          <string name="Library path">"%AUTO%,lib"</string>
+          <string name="Libraries">"%AUTO% wxmsw29ud_propgrid.lib wxcode_msw29ud_wxsqlite3.lib Rockey4ND.lib iphlpapi.lib"</string>
+          <string name="Library path">"%AUTO%,lib,lib/wxSQLite3/lib/vc_lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,include,resource"</string>
+          <string name="Include path">"%AUTO%,include,resource,lib/wxSQLite3/include"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <bool name="Suppress source rules">0</bool>
@@ -474,10 +474,10 @@
           <string name="Warnings">"%AUTO%"</string>
           <string name="Debug flags">"%AUTO%"</string>
           <string name="Extra compile flags">"%AUTO%"</string>
-          <string name="Libraries">"%AUTO% wxmsw29u_propgrid.lib sqlite3.lib Rockey4ND.lib iphlpapi.lib"</string>
-          <string name="Library path">"%AUTO%,lib"</string>
+          <string name="Libraries">"%AUTO% wxmsw29u_propgrid.lib wxcode_msw29u_wxsqlite3.lib Rockey4ND.lib iphlpapi.lib"</string>
+          <string name="Library path">"%AUTO%,lib,lib/wxSQLite3/lib/vc_lib"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%,include,resource"</string>
+          <string name="Include path">"%AUTO%,include,resource,lib/wxSQLite3/include"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <bool name="Suppress source rules">0</bool>
@@ -683,77 +683,6 @@
         <long name="owns-file">1</long>
         <long name="title-mode">0</long>
         <long name="locked">1</long>
-        <document>
-          <string name="title">"wxSQLite3"</string>
-          <string name="type">"html-folder-document"</string>
-          <string name="filename">""</string>
-          <string name="icon-name">"folder"</string>
-          <long name="is-transient">1</long>
-          <long name="owns-file">1</long>
-          <long name="title-mode">0</long>
-          <long name="locked">0</long>
-          <string name="created">"9/8/2009"</string>
-          <document>
-            <string name="title">"sqlite3.h"</string>
-            <string name="type">"source-editor-document"</string>
-            <string name="filename">"include/sqlite3.h"</string>
-            <string name="icon-name">"source-editor"</string>
-            <long name="is-transient">0</long>
-            <long name="owns-file">0</long>
-            <long name="title-mode">1</long>
-            <long name="locked">0</long>
-            <string name="created">"9/8/2009"</string>
-            <string name="language">""</string>
-          </document>
-          <document>
-            <string name="title">"wxsqlite3.cpp"</string>
-            <string name="type">"source-editor-document"</string>
-            <string name="filename">"src/wxsqlite3.cpp"</string>
-            <string name="icon-name">"source-editor"</string>
-            <long name="is-transient">0</long>
-            <long name="owns-file">0</long>
-            <long name="title-mode">1</long>
-            <long name="locked">0</long>
-            <string name="created">"9/8/2009"</string>
-            <string name="language">""</string>
-          </document>
-          <document>
-            <string name="title">"wxsqlite3.h"</string>
-            <string name="type">"source-editor-document"</string>
-            <string name="filename">"include/wx/wxsqlite3.h"</string>
-            <string name="icon-name">"source-editor"</string>
-            <long name="is-transient">0</long>
-            <long name="owns-file">0</long>
-            <long name="title-mode">1</long>
-            <long name="locked">0</long>
-            <string name="created">"9/8/2009"</string>
-            <string name="language">""</string>
-          </document>
-          <document>
-            <string name="title">"wxsqlite3def.h"</string>
-            <string name="type">"source-editor-document"</string>
-            <string name="filename">"include/wx/wxsqlite3def.h"</string>
-            <string name="icon-name">"source-editor"</string>
-            <long name="is-transient">0</long>
-            <long name="owns-file">0</long>
-            <long name="title-mode">1</long>
-            <long name="locked">0</long>
-            <string name="created">"9/8/2009"</string>
-            <string name="language">""</string>
-          </document>
-          <document>
-            <string name="title">"wxsqlite3opt.h"</string>
-            <string name="type">"source-editor-document"</string>
-            <string name="filename">"include/wx/wxsqlite3opt.h"</string>
-            <string name="icon-name">"source-editor"</string>
-            <long name="is-transient">0</long>
-            <long name="owns-file">0</long>
-            <long name="title-mode">1</long>
-            <long name="locked">0</long>
-            <string name="created">"9/8/2009"</string>
-            <string name="language">""</string>
-          </document>
-        </document>
         <document>
           <string name="title">"ConfigPane.cpp"</string>
           <string name="type">"source-editor-document"</string>
