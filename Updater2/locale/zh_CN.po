@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Realta Updater\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-06 14:42+0800\n"
-"PO-Revision-Date: 2010-11-06 14:43+0800\n"
+"POT-Creation-Date: 2011-01-02 21:17+0800\n"
+"PO-Revision-Date: 2011-01-02 21:20+0800\n"
 "Last-Translator: YH <yh.yang@delta.com.tw>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -86,116 +86,120 @@ msgid "Request user doing update when target board with this MAC address:"
 msgstr "侦测到板子具有此 MAC 位址时，使用者将被要求为该板子执行更新："
 
 #: ../src/AppPreferencePane.cpp:161
+msgid "Reset"
+msgstr "重置"
+
+#: ../src/AppPreferencePane.cpp:164
 #: ../src/MacAddrUpdatePane.cpp:131
 msgid "Update"
 msgstr "更新"
 
-#: ../src/AppPreferencePane.cpp:167
+#: ../src/AppPreferencePane.cpp:170
 msgid "Report File"
 msgstr "报告档案"
 
-#: ../src/AppPreferencePane.cpp:169
+#: ../src/AppPreferencePane.cpp:172
 msgid "Report folder:"
 msgstr "报告档案存放路径："
 
-#: ../src/AppPreferencePane.cpp:175
+#: ../src/AppPreferencePane.cpp:178
 msgid "Automatically rotate report file?"
 msgstr "自动轮替报告档案？"
 
-#: ../src/AppPreferencePane.cpp:177
+#: ../src/AppPreferencePane.cpp:180
 msgid "Never"
 msgstr "永不"
 
-#: ../src/AppPreferencePane.cpp:178
+#: ../src/AppPreferencePane.cpp:181
 msgid "Every year"
 msgstr "每年"
 
-#: ../src/AppPreferencePane.cpp:179
+#: ../src/AppPreferencePane.cpp:182
 msgid "Every month"
 msgstr "每月"
 
-#: ../src/AppPreferencePane.cpp:180
+#: ../src/AppPreferencePane.cpp:183
 msgid "Every week"
 msgstr "每周"
 
-#: ../src/AppPreferencePane.cpp:181
+#: ../src/AppPreferencePane.cpp:184
 msgid "Limit entries"
 msgstr "项目次数限制"
 
-#: ../src/AppPreferencePane.cpp:190
+#: ../src/AppPreferencePane.cpp:193
 msgid "Maximun entries in a single report file:"
 msgstr "单一报告档案中的项目次数上限："
 
-#: ../src/AppPreferencePane.cpp:209
+#: ../src/AppPreferencePane.cpp:212
 msgid "Language"
 msgstr "语言"
 
-#: ../src/AppPreferencePane.cpp:210
+#: ../src/AppPreferencePane.cpp:213
 msgid "Please choose your preferred language."
 msgstr "请选择使用者介面偏好语言。"
 
-#: ../src/AppPreferencePane.cpp:230
+#: ../src/AppPreferencePane.cpp:233
 msgid "Layout"
 msgstr "布局"
 
-#: ../src/AppPreferencePane.cpp:231
+#: ../src/AppPreferencePane.cpp:234
 msgid "Save frame size and position?"
 msgstr "储存应用程式页框大小与位置？"
 
-#: ../src/AppPreferencePane.cpp:246
+#: ../src/AppPreferencePane.cpp:249
 msgid "Network"
 msgstr "网路"
 
-#: ../src/AppPreferencePane.cpp:247
+#: ../src/AppPreferencePane.cpp:250
 #: ../src/DownloadPane.cpp:296
 msgid "MAC Address"
 msgstr "MAC 位址"
 
-#: ../src/AppPreferencePane.cpp:248
+#: ../src/AppPreferencePane.cpp:251
 msgid "Misc"
 msgstr "其他"
 
-#: ../src/AppPreferencePane.cpp:252
+#: ../src/AppPreferencePane.cpp:255
 msgid "Need to restart application for the changes to take effect."
 msgstr "需要重新启动应用程式以使改变生效。"
 
-#: ../src/AppPreferencePane.cpp:342
+#: ../src/AppPreferencePane.cpp:345
 msgid "The beginning product code is equal to the end of product code."
 msgstr "起始 MAC 位址产品码与结束 MAC 位址产品码相同。"
 
-#: ../src/AppPreferencePane.cpp:343
+#: ../src/AppPreferencePane.cpp:346
 msgid "You are entering the same first and last product code."
 msgstr "您所输入的产品码其起始值与结束值相同。"
 
-#: ../src/AppPreferencePane.cpp:344
+#: ../src/AppPreferencePane.cpp:347
 msgid "This means you only have _ONE_ valid product code in the automated MAC address generation procedure."
 msgstr "这代表在 MAC 位址自动生成的过程中，您只有一组有效值。"
 
-#: ../src/AppPreferencePane.cpp:345
+#: ../src/AppPreferencePane.cpp:348
 msgid "If this isn't your intention, please press [Cancel] and try to reassign the correct setting again."
 msgstr "若您是不小心设定错误，请按 [取消] 键关闭此对话盒并重新修正设定。"
 
-#: ../src/AppPreferencePane.cpp:346
+#: ../src/AppPreferencePane.cpp:349
 msgid "If this is indeed your intention, please press [OK] again to confirm it."
 msgstr "若您正是希望使用如此的设定值，请按 [确定] 键。"
 
-#: ../src/AppPreferencePane.cpp:354
+#: ../src/AppPreferencePane.cpp:357
 msgid "Product code range incorrect, do swap?"
 msgstr "产品码范围不正确，是否要交换方式来修正？"
 
-#: ../src/AppPreferencePane.cpp:355
+#: ../src/AppPreferencePane.cpp:358
 msgid "You are entering the first product code larger than the last product code."
 msgstr "您所输入的产品码其起始值比结束值还要大。"
 
-#: ../src/AppPreferencePane.cpp:356
+#: ../src/AppPreferencePane.cpp:359
 msgid "However, the first product code _MUST_ be smaller than the last product code."
 msgstr "但是在正确设定下，起始值必须小于结束值。"
 
-#: ../src/AppPreferencePane.cpp:357
+#: ../src/AppPreferencePane.cpp:360
 msgid "If you want to swap the first/last product code, please press [OK] again to confirm it."
 msgstr "若您希望使用交换起始值与结束值的方式来修正错误，请按 [确定] 键。"
 
-#: ../src/AppPreferencePane.cpp:358
+#: ../src/AppPreferencePane.cpp:361
 msgid "If you want to change these product codes manually, please press [CANCEL] and try to reassign again."
 msgstr "若您希望再次重新手动输入正确设定，请按 [取消] 键。"
 
@@ -243,171 +247,171 @@ msgstr "板子列表"
 msgid "Search"
 msgstr "搜寻"
 
-#: ../src/DownloadPane.cpp:404
-msgid "OK"
+#: ../src/DownloadPane.cpp:402
+msgid "Pass"
 msgstr "成功"
 
-#: ../src/DownloadPane.cpp:408
-msgid "NG"
+#: ../src/DownloadPane.cpp:404
+msgid "Fail"
 msgstr "失败"
 
-#: ../src/DownloadPane.cpp:415
+#: ../src/DownloadPane.cpp:410
 msgid "Check All"
 msgstr "全部勾选"
 
-#: ../src/DownloadPane.cpp:416
+#: ../src/DownloadPane.cpp:411
 msgid "Uncheck All"
 msgstr "全部不勾选"
 
-#: ../src/DownloadPane.cpp:417
+#: ../src/DownloadPane.cpp:412
 msgid "Select None"
 msgstr "全部不选"
 
-#: ../src/DownloadPane.cpp:424
+#: ../src/DownloadPane.cpp:419
 msgid "Update selected"
 msgstr "更新所有勾选"
 
-#: ../src/DownloadPane.cpp:428
+#: ../src/DownloadPane.cpp:423
 msgid "Use Device-specific Image File"
 msgstr "使用单板专用更新档案"
 
-#: ../src/DownloadPane.cpp:429
+#: ../src/DownloadPane.cpp:424
 msgid "Use Global Image File"
 msgstr "使用全域单一更新档案"
 
-#: ../src/DownloadPane.cpp:438
+#: ../src/DownloadPane.cpp:433
 msgid "Global Image File Path:"
 msgstr "全域单一更新档案路径："
 
-#: ../src/DownloadPane.cpp:441
+#: ../src/DownloadPane.cpp:436
 msgid "Device operation"
 msgstr "对板子的操作"
 
-#: ../src/DownloadPane.cpp:521
+#: ../src/DownloadPane.cpp:516
 msgid "Wrong image file syntax"
 msgstr "错误的更新档案格式"
 
-#: ../src/DownloadPane.cpp:522
+#: ../src/DownloadPane.cpp:517
 msgid "Calculated checksum mismatched"
 msgstr "与计算出的检查码不符"
 
-#: ../src/DownloadPane.cpp:523
+#: ../src/DownloadPane.cpp:518
 msgid "Wrong image file checksum"
 msgstr "错误的档案检查码"
 
-#: ../src/DownloadPane.cpp:524
+#: ../src/DownloadPane.cpp:519
 msgid "Unrecognize operation mode"
 msgstr "无法辨识的操作模式"
 
-#: ../src/DownloadPane.cpp:525
+#: ../src/DownloadPane.cpp:520
 msgid "Wrong version"
 msgstr "软体版本不符合"
 
-#: ../src/DownloadPane.cpp:526
+#: ../src/DownloadPane.cpp:521
 msgid "Memory allocation failed"
 msgstr "记忆体配置错误"
 
-#: ../src/DownloadPane.cpp:527
+#: ../src/DownloadPane.cpp:522
 msgid "Can't erase flash memory"
 msgstr "无法抹除快闪记忆体"
 
-#: ../src/DownloadPane.cpp:528
+#: ../src/DownloadPane.cpp:523
 msgid "Can't read flash memory"
 msgstr "无法读取快闪记忆体"
 
-#: ../src/DownloadPane.cpp:529
+#: ../src/DownloadPane.cpp:524
 msgid "Can't write flash memory"
 msgstr "无法写入快闪记忆体"
 
-#: ../src/DownloadPane.cpp:530
+#: ../src/DownloadPane.cpp:525
 msgid "Wrong firmware image size"
 msgstr "韧体更新档案大小错误"
 
-#: ../src/DownloadPane.cpp:531
+#: ../src/DownloadPane.cpp:526
 msgid "Wrong bootloader image size"
 msgstr "开机载入程式更新档案大小错误"
 
-#: ../src/DownloadPane.cpp:532
+#: ../src/DownloadPane.cpp:527
 msgid "Can't init socket"
 msgstr "无法为 Socket 初始化"
 
-#: ../src/DownloadPane.cpp:533
+#: ../src/DownloadPane.cpp:528
 msgid "Can't connect to remote"
 msgstr "无法与远端建立连线"
 
-#: ../src/DownloadPane.cpp:534
+#: ../src/DownloadPane.cpp:529
 msgid "Remote doesn't understand my protocol"
 msgstr "远端并不了解我的协定"
 
-#: ../src/DownloadPane.cpp:535
+#: ../src/DownloadPane.cpp:530
 msgid "Fail to read iamge file"
 msgstr "无法读取更新档案"
 
-#: ../src/DownloadPane.cpp:536
+#: ../src/DownloadPane.cpp:531
 msgid "Socket write error"
 msgstr "对 Socket 写入时发生错误"
 
-#: ../src/DownloadPane.cpp:537
+#: ../src/DownloadPane.cpp:532
 msgid "Socket read error"
 msgstr "对 Socket 读取时发生错误"
 
-#: ../src/DownloadPane.cpp:538
+#: ../src/DownloadPane.cpp:533
 msgid "Unknown error"
 msgstr "未知的错误"
 
-#: ../src/DownloadPane.cpp:672
+#: ../src/DownloadPane.cpp:667
 msgid "Update procedure is skipped because of lack of global image file path."
 msgstr "由于缺少全域单一更新档案路径，更新程序已略过。"
 
-#: ../src/DownloadPane.cpp:709
+#: ../src/DownloadPane.cpp:704
 msgid "There is another update procedure running! Please wait it completed and try later..."
 msgstr "有其它的更新程序正在执行中！请稍后再试..."
 
-#: ../src/DownloadPane.cpp:720
+#: ../src/DownloadPane.cpp:715
 msgid "MAC address auto-generation is disabled before you configure them done in the preference window!"
 msgstr "在您于偏好页面中完成 MAC 位址设定前，MAC 位址自动生成功能已被暂停！"
 
-#: ../src/DownloadPane.cpp:730
+#: ../src/DownloadPane.cpp:725
 msgid "You have run out of the MAC address pool! Please re-configure it."
 msgstr "您已经完毕先前设定的 MAC 位址资源！请重新设定资源范围。"
 
-#: ../src/DownloadPane.cpp:741
+#: ../src/DownloadPane.cpp:736
 msgid "Update MAC Address"
 msgstr "更新 MAC 位址"
 
-#: ../src/DownloadPane.cpp:904
+#: ../src/DownloadPane.cpp:899
 msgid "Device"
 msgstr "单板"
 
-#: ../src/DownloadPane.cpp:904
+#: ../src/DownloadPane.cpp:899
 msgid "with invalid MAC address"
 msgstr "具有无效的 MAC 位址"
 
-#: ../src/DownloadPane.cpp:905
+#: ../src/DownloadPane.cpp:900
 msgid "Would you like to modify it?"
 msgstr "请问是否要修改？"
 
-#: ../src/DownloadPane.cpp:975
+#: ../src/DownloadPane.cpp:970
 msgid "Can not download"
 msgstr "无法下载"
 
-#: ../src/DownloadPane.cpp:977
+#: ../src/DownloadPane.cpp:972
 msgid "firmware"
 msgstr "韧体"
 
-#: ../src/DownloadPane.cpp:979
+#: ../src/DownloadPane.cpp:974
 msgid "Bootloader"
 msgstr "开机启动程式"
 
-#: ../src/DownloadPane.cpp:981
+#: ../src/DownloadPane.cpp:976
 msgid "Image"
 msgstr "更新影像档"
 
-#: ../src/DownloadPane.cpp:982
+#: ../src/DownloadPane.cpp:977
 msgid "Reason"
 msgstr "理由"
 
-#: ../src/DownloadPane.cpp:1159
+#: ../src/DownloadPane.cpp:1154
 msgid "Select image file for device"
 msgstr "替单板选择更新档"
 
@@ -677,3 +681,8 @@ msgstr "装置搜寻程序仍在运行中。"
 msgid "Application can not exit now"
 msgstr "目前无法关闭应用程式"
 
+#~ msgid "OK"
+#~ msgstr "成功"
+
+#~ msgid "NG"
+#~ msgstr "失败"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Realta Updater\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-06 14:43+0800\n"
-"PO-Revision-Date: 2010-11-06 14:43+0800\n"
+"POT-Creation-Date: 2011-01-02 21:12+0800\n"
+"PO-Revision-Date: 2011-01-02 21:14+0800\n"
 "Last-Translator: YH <yh.yang@delta.com.tw>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -86,116 +86,120 @@ msgid "Request user doing update when target board with this MAC address:"
 msgstr "Request user doing update when target board with this MAC address:"
 
 #: ../src/AppPreferencePane.cpp:161
+msgid "Reset"
+msgstr "Reset"
+
+#: ../src/AppPreferencePane.cpp:164
 #: ../src/MacAddrUpdatePane.cpp:131
 msgid "Update"
 msgstr "Update"
 
-#: ../src/AppPreferencePane.cpp:167
+#: ../src/AppPreferencePane.cpp:170
 msgid "Report File"
 msgstr "Report File"
 
-#: ../src/AppPreferencePane.cpp:169
+#: ../src/AppPreferencePane.cpp:172
 msgid "Report folder:"
 msgstr "Report folder:"
 
-#: ../src/AppPreferencePane.cpp:175
+#: ../src/AppPreferencePane.cpp:178
 msgid "Automatically rotate report file?"
 msgstr "Automatically rotate report file?"
 
-#: ../src/AppPreferencePane.cpp:177
+#: ../src/AppPreferencePane.cpp:180
 msgid "Never"
 msgstr "Never"
 
-#: ../src/AppPreferencePane.cpp:178
+#: ../src/AppPreferencePane.cpp:181
 msgid "Every year"
 msgstr "Every year"
 
-#: ../src/AppPreferencePane.cpp:179
+#: ../src/AppPreferencePane.cpp:182
 msgid "Every month"
 msgstr "Every month"
 
-#: ../src/AppPreferencePane.cpp:180
+#: ../src/AppPreferencePane.cpp:183
 msgid "Every week"
 msgstr "Every week"
 
-#: ../src/AppPreferencePane.cpp:181
+#: ../src/AppPreferencePane.cpp:184
 msgid "Limit entries"
 msgstr "Limit entries"
 
-#: ../src/AppPreferencePane.cpp:190
+#: ../src/AppPreferencePane.cpp:193
 msgid "Maximun entries in a single report file:"
 msgstr "Maximun entries in a single report file:"
 
-#: ../src/AppPreferencePane.cpp:209
+#: ../src/AppPreferencePane.cpp:212
 msgid "Language"
 msgstr "Language"
 
-#: ../src/AppPreferencePane.cpp:210
+#: ../src/AppPreferencePane.cpp:213
 msgid "Please choose your preferred language."
 msgstr "Please choose your preferred language."
 
-#: ../src/AppPreferencePane.cpp:230
+#: ../src/AppPreferencePane.cpp:233
 msgid "Layout"
 msgstr "Layout"
 
-#: ../src/AppPreferencePane.cpp:231
+#: ../src/AppPreferencePane.cpp:234
 msgid "Save frame size and position?"
 msgstr "Save frame size and position?"
 
-#: ../src/AppPreferencePane.cpp:246
+#: ../src/AppPreferencePane.cpp:249
 msgid "Network"
 msgstr "Network"
 
-#: ../src/AppPreferencePane.cpp:247
+#: ../src/AppPreferencePane.cpp:250
 #: ../src/DownloadPane.cpp:296
 msgid "MAC Address"
 msgstr "MAC Address"
 
-#: ../src/AppPreferencePane.cpp:248
+#: ../src/AppPreferencePane.cpp:251
 msgid "Misc"
 msgstr "Misc"
 
-#: ../src/AppPreferencePane.cpp:252
+#: ../src/AppPreferencePane.cpp:255
 msgid "Need to restart application for the changes to take effect."
 msgstr "Need to restart application for the changes to take effect."
 
-#: ../src/AppPreferencePane.cpp:342
+#: ../src/AppPreferencePane.cpp:345
 msgid "The beginning product code is equal to the end of product code."
 msgstr "The beginning product code is equal to the end of product code."
 
-#: ../src/AppPreferencePane.cpp:343
+#: ../src/AppPreferencePane.cpp:346
 msgid "You are entering the same first and last product code."
 msgstr "You are entering the same first and last product code."
 
-#: ../src/AppPreferencePane.cpp:344
+#: ../src/AppPreferencePane.cpp:347
 msgid "This means you only have _ONE_ valid product code in the automated MAC address generation procedure."
 msgstr "This means you only have _ONE_ valid product code in the automated MAC address generation procedure."
 
-#: ../src/AppPreferencePane.cpp:345
+#: ../src/AppPreferencePane.cpp:348
 msgid "If this isn't your intention, please press [Cancel] and try to reassign the correct setting again."
 msgstr "If this isn't your intention, please press [Cancel] and try to reassign the correct setting again."
 
-#: ../src/AppPreferencePane.cpp:346
+#: ../src/AppPreferencePane.cpp:349
 msgid "If this is indeed your intention, please press [OK] again to confirm it."
 msgstr "If this is indeed your intention, please press [OK] again to confirm it."
 
-#: ../src/AppPreferencePane.cpp:354
+#: ../src/AppPreferencePane.cpp:357
 msgid "Product code range incorrect, do swap?"
 msgstr "Product code range incorrect, do swap?"
 
-#: ../src/AppPreferencePane.cpp:355
+#: ../src/AppPreferencePane.cpp:358
 msgid "You are entering the first product code larger than the last product code."
 msgstr "You are entering the first product code larger than the last product code."
 
-#: ../src/AppPreferencePane.cpp:356
+#: ../src/AppPreferencePane.cpp:359
 msgid "However, the first product code _MUST_ be smaller than the last product code."
 msgstr "However, the first product code _MUST_ be smaller than the last product code."
 
-#: ../src/AppPreferencePane.cpp:357
+#: ../src/AppPreferencePane.cpp:360
 msgid "If you want to swap the first/last product code, please press [OK] again to confirm it."
 msgstr "If you want to swap the first/last product code, please press [OK] again to confirm it."
 
-#: ../src/AppPreferencePane.cpp:358
+#: ../src/AppPreferencePane.cpp:361
 msgid "If you want to change these product codes manually, please press [CANCEL] and try to reassign again."
 msgstr "If you want to change these product codes manually, please press [CANCEL] and try to reassign again."
 
@@ -243,171 +247,171 @@ msgstr "Device list"
 msgid "Search"
 msgstr "Search"
 
+#: ../src/DownloadPane.cpp:402
+msgid "Pass"
+msgstr "Pass"
+
 #: ../src/DownloadPane.cpp:404
-msgid "OK"
-msgstr "OK"
+msgid "Fail"
+msgstr "Fail"
 
-#: ../src/DownloadPane.cpp:408
-msgid "NG"
-msgstr "NG"
-
-#: ../src/DownloadPane.cpp:415
+#: ../src/DownloadPane.cpp:410
 msgid "Check All"
 msgstr "Check All"
 
-#: ../src/DownloadPane.cpp:416
+#: ../src/DownloadPane.cpp:411
 msgid "Uncheck All"
 msgstr "Uncheck All"
 
-#: ../src/DownloadPane.cpp:417
+#: ../src/DownloadPane.cpp:412
 msgid "Select None"
 msgstr "Select None"
 
-#: ../src/DownloadPane.cpp:424
+#: ../src/DownloadPane.cpp:419
 msgid "Update selected"
 msgstr "Update selected"
 
-#: ../src/DownloadPane.cpp:428
+#: ../src/DownloadPane.cpp:423
 msgid "Use Device-specific Image File"
 msgstr "Use Device-specific Image File"
 
-#: ../src/DownloadPane.cpp:429
+#: ../src/DownloadPane.cpp:424
 msgid "Use Global Image File"
 msgstr "Use Global Image File"
 
-#: ../src/DownloadPane.cpp:438
+#: ../src/DownloadPane.cpp:433
 msgid "Global Image File Path:"
 msgstr "Global Image File Path:"
 
-#: ../src/DownloadPane.cpp:441
+#: ../src/DownloadPane.cpp:436
 msgid "Device operation"
 msgstr "Device operation"
 
-#: ../src/DownloadPane.cpp:521
+#: ../src/DownloadPane.cpp:516
 msgid "Wrong image file syntax"
 msgstr "Wrong image file syntax"
 
-#: ../src/DownloadPane.cpp:522
+#: ../src/DownloadPane.cpp:517
 msgid "Calculated checksum mismatched"
 msgstr "Calculated checksum mismatched"
 
-#: ../src/DownloadPane.cpp:523
+#: ../src/DownloadPane.cpp:518
 msgid "Wrong image file checksum"
 msgstr "Wrong image file checksum"
 
-#: ../src/DownloadPane.cpp:524
+#: ../src/DownloadPane.cpp:519
 msgid "Unrecognize operation mode"
 msgstr "Unrecognize operation mode"
 
-#: ../src/DownloadPane.cpp:525
+#: ../src/DownloadPane.cpp:520
 msgid "Wrong version"
 msgstr "Wrong version"
 
-#: ../src/DownloadPane.cpp:526
+#: ../src/DownloadPane.cpp:521
 msgid "Memory allocation failed"
 msgstr "Memory allocation failed"
 
-#: ../src/DownloadPane.cpp:527
+#: ../src/DownloadPane.cpp:522
 msgid "Can't erase flash memory"
 msgstr "Can't erase flash memory"
 
-#: ../src/DownloadPane.cpp:528
+#: ../src/DownloadPane.cpp:523
 msgid "Can't read flash memory"
 msgstr "Can't read flash memory"
 
-#: ../src/DownloadPane.cpp:529
+#: ../src/DownloadPane.cpp:524
 msgid "Can't write flash memory"
 msgstr "Can't write flash memory"
 
-#: ../src/DownloadPane.cpp:530
+#: ../src/DownloadPane.cpp:525
 msgid "Wrong firmware image size"
 msgstr "Wrong firmware image size"
 
-#: ../src/DownloadPane.cpp:531
+#: ../src/DownloadPane.cpp:526
 msgid "Wrong bootloader image size"
 msgstr "Wrong bootloader image size"
 
-#: ../src/DownloadPane.cpp:532
+#: ../src/DownloadPane.cpp:527
 msgid "Can't init socket"
 msgstr "Can't init socket"
 
-#: ../src/DownloadPane.cpp:533
+#: ../src/DownloadPane.cpp:528
 msgid "Can't connect to remote"
 msgstr "Can't connect to remote"
 
-#: ../src/DownloadPane.cpp:534
+#: ../src/DownloadPane.cpp:529
 msgid "Remote doesn't understand my protocol"
 msgstr "Remote doesn't understand my protocol"
 
-#: ../src/DownloadPane.cpp:535
+#: ../src/DownloadPane.cpp:530
 msgid "Fail to read iamge file"
 msgstr "Fail to read iamge file"
 
-#: ../src/DownloadPane.cpp:536
+#: ../src/DownloadPane.cpp:531
 msgid "Socket write error"
 msgstr "Socket write error"
 
-#: ../src/DownloadPane.cpp:537
+#: ../src/DownloadPane.cpp:532
 msgid "Socket read error"
 msgstr "Socket read error"
 
-#: ../src/DownloadPane.cpp:538
+#: ../src/DownloadPane.cpp:533
 msgid "Unknown error"
 msgstr "Unknown error"
 
-#: ../src/DownloadPane.cpp:672
+#: ../src/DownloadPane.cpp:667
 msgid "Update procedure is skipped because of lack of global image file path."
 msgstr "Update procedure is skipped because of lack of global image file path."
 
-#: ../src/DownloadPane.cpp:709
+#: ../src/DownloadPane.cpp:704
 msgid "There is another update procedure running! Please wait it completed and try later..."
 msgstr "There is another update procedure running! Please wait it completed and try later..."
 
-#: ../src/DownloadPane.cpp:720
+#: ../src/DownloadPane.cpp:715
 msgid "MAC address auto-generation is disabled before you configure them done in the preference window!"
 msgstr "MAC address auto-generation is disabled before you configure them done in the preference window!"
 
-#: ../src/DownloadPane.cpp:730
+#: ../src/DownloadPane.cpp:725
 msgid "You have run out of the MAC address pool! Please re-configure it."
 msgstr "You have run out of the MAC address pool! Please re-configure it."
 
-#: ../src/DownloadPane.cpp:741
+#: ../src/DownloadPane.cpp:736
 msgid "Update MAC Address"
 msgstr "Update MAC Address"
 
-#: ../src/DownloadPane.cpp:904
+#: ../src/DownloadPane.cpp:899
 msgid "Device"
 msgstr "Device"
 
-#: ../src/DownloadPane.cpp:904
+#: ../src/DownloadPane.cpp:899
 msgid "with invalid MAC address"
 msgstr "with invalid MAC address"
 
-#: ../src/DownloadPane.cpp:905
+#: ../src/DownloadPane.cpp:900
 msgid "Would you like to modify it?"
 msgstr "Would you like to modify it?"
 
-#: ../src/DownloadPane.cpp:975
+#: ../src/DownloadPane.cpp:970
 msgid "Can not download"
 msgstr "Can not download"
 
-#: ../src/DownloadPane.cpp:977
+#: ../src/DownloadPane.cpp:972
 msgid "firmware"
 msgstr "firmware"
 
-#: ../src/DownloadPane.cpp:979
+#: ../src/DownloadPane.cpp:974
 msgid "Bootloader"
 msgstr "Bootloader"
 
-#: ../src/DownloadPane.cpp:981
+#: ../src/DownloadPane.cpp:976
 msgid "Image"
 msgstr "Image"
 
-#: ../src/DownloadPane.cpp:982
+#: ../src/DownloadPane.cpp:977
 msgid "Reason"
 msgstr "Reason"
 
-#: ../src/DownloadPane.cpp:1159
+#: ../src/DownloadPane.cpp:1154
 msgid "Select image file for device"
 msgstr "Select image file for device"
 
@@ -677,3 +681,8 @@ msgstr "The device search procedure is still running."
 msgid "Application can not exit now"
 msgstr "Application can not exit now"
 
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "NG"
+#~ msgstr "NG"

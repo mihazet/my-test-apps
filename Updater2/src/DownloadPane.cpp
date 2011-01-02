@@ -398,16 +398,11 @@ void DownloadPane::CreateControls()
     wxBoxSizer *searchSizer = new wxBoxSizer(wxHORIZONTAL);
     searchSizer->Add(search, 0, wxALL | wxEXPAND, 5);
     searchSizer->AddStretchSpacer(1);
-    wxBoxSizer *counterSizer = new wxBoxSizer(wxVERTICAL);
-    counterSizer->AddStretchSpacer(1);
-    wxBoxSizer *okCntSizer = new wxBoxSizer(wxHORIZONTAL);
-    okCntSizer->Add(new wxStaticText(this, wxID_STATIC, _("OK")), 0, wxALL | wxALIGN_CENTER, 0);
-    okCntSizer->Add(new wxTextCtrl(this, myID_COUNTER_OK_TEXT, wxEmptyString, wxDefaultPosition, wxSize(40, -1), wxTE_READONLY), 0, wxLEFT, 5);
-    counterSizer->Add(okCntSizer, 0, wxALL, 0);
-    wxBoxSizer *ngCntSizer = new wxBoxSizer(wxHORIZONTAL);
-    ngCntSizer->Add(new wxStaticText(this, wxID_STATIC, _("NG")), 0, wxALL | wxALIGN_CENTER, 0);
-    ngCntSizer->Add(new wxTextCtrl(this, myID_COUNTER_NG_TEXT, wxEmptyString, wxDefaultPosition, wxSize(40, -1), wxTE_READONLY), 0, wxLEFT, 5);
-    counterSizer->Add(ngCntSizer, 0, wxALL, 0);
+    wxFlexGridSizer *counterSizer = new wxFlexGridSizer(2);
+    counterSizer->Add(new wxStaticText(this, wxID_STATIC, _("Pass")), 0, wxALL | wxALIGN_CENTER, 0);
+    counterSizer->Add(new wxTextCtrl(this, myID_COUNTER_OK_TEXT, wxEmptyString, wxDefaultPosition, wxSize(40, -1), wxTE_READONLY), 0, wxLEFT, 5);
+    counterSizer->Add(new wxStaticText(this, wxID_STATIC, _("Fail")), 0, wxALL | wxALIGN_CENTER, 0);
+    counterSizer->Add(new wxTextCtrl(this, myID_COUNTER_NG_TEXT, wxEmptyString, wxDefaultPosition, wxSize(40, -1), wxTE_READONLY), 0, wxLEFT, 5);
     searchSizer->Add(counterSizer, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 0);
     listBoxSizer->Add(searchSizer, 0, wxALL | wxEXPAND, 5);
 
