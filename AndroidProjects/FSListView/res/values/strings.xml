@@ -3,5 +3,6 @@
 
     <string name="hello">Hello World, FSActivity!</string>
     <string name="app_name">FSListView</string>
+    <string name="main_no_items">No files to display</string>
 
 </resources>
