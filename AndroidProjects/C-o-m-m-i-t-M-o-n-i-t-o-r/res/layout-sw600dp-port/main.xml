@@ -9,13 +9,19 @@
         android:name="com.yhlab.commitmonitor.RepoListFragment"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1" >
+
+        <!-- Preview: layout=@layout/repolist_fragment -->
+    </fragment>
 
     <fragment
-        android:id="@+id/repo_detail_fragment"
-        android:name="com.yhlab.commitmonitor.RepoDetailFragment"
+        android:id="@+id/repo_config_fragment"
+        android:name="com.yhlab.commitmonitor.RepoConfigFragment"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
-        android:layout_weight="2" />
+        android:layout_weight="2" >
+
+        <!-- Preview: layout=@layout/repoconfig_fragment -->
+    </fragment>
 
 </LinearLayout>

@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, CMActivity!</string>
     <string name="app_name">Commit Monitor</string>
+    <string name="label_repo_name">Repository name:</string>
+    <string name="label_repo_url">Repository URL:</string>
+    <string name="label_repo_username">Username:</string>
+    <string name="label_repo_password">Password:</string>
+    <string name="label_repo_ignore_users">Ignore users:</string>
+    <string name="btn_repo_config_save">Save</string>
+    <string name="btn_repo_config_discard">Discard</string>
+    <string name="hint_repo_name">Give a nickname for your repository</string>
+    <string name="hint_repo_url">svn://svn.example.server/path/to/repo</string>
+    <string name="hint_repo_username">Your account</string>
+    <string name="chkbox_repo_anonymous">Anonymous?</string>
+    <string name="hint_repo_password">Your password</string>
+    <string name="label_repo_check_update_interval">Check update interval:</string>
+    <string name="hint_repo_check_update_interval">default: 30 min</string>
+    <string name="unit_minute">minutes</string>
+    <string name="hint_repo_ignore_users">list one user account per line.\nFor example:\nAlice\nBob</string>
+    <string name="btn_repo_config_delete">Delete</string>
+    <string name="btn_repo_config_cancel">Cancel</string>
 
 </resources>

@@ -8,6 +8,9 @@
         android:id="@+id/repo_list_fragment"
         android:name="com.yhlab.commitmonitor.RepoListFragment"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent" >
+
+        <!-- Preview: layout=@layout/repolist_fragment -->
+    </fragment>
 
 </LinearLayout>
