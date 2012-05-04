@@ -2,17 +2,24 @@ package com.yhlab.commitmonitor;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 public class CMActivity extends FragmentActivity {
 
     static final String TAG = "CMActivity";
+    RepoFragmentPagerAdapter mPagerAdapter;
+    ViewPager mViewPager;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        mPagerAdapter = new RepoFragmentPagerAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager)findViewById(R.id.viewpager_repo);
+        mViewPager.setAdapter(mPagerAdapter);
 
         Log.d(TAG, "onCreate");
     }

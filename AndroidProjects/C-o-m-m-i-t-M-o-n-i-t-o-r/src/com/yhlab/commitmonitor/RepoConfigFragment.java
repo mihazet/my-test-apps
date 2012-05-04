@@ -35,7 +35,7 @@ public class RepoConfigFragment extends Fragment {
 
         Log.d(TAG, "onCreateView");
 
-        return inflater.inflate(R.layout.repoconfig_fragment, container, true);
+        return inflater.inflate(R.layout.repoconfig_fragment, container, false);
 
         // return super.onCreateView(inflater, container, savedInstanceState);
     }
