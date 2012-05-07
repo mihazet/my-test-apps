@@ -8,8 +8,10 @@ import android.util.Log;
 public class CMActivity extends FragmentActivity {
 
     static final String TAG = "CMActivity";
-    RepoFragmentPagerAdapter mPagerAdapter;
-    ViewPager mViewPager;
+
+    /* for viewpager management used in tablet */
+    private RepoFragmentPagerAdapter mPagerAdapter;
+    private ViewPager mViewPager;
 
     /** Called when the activity is first created. */
     @Override
@@ -17,10 +19,12 @@ public class CMActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        mPagerAdapter = new RepoFragmentPagerAdapter(
-                getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.viewpager_repo);
-        mViewPager.setAdapter(mPagerAdapter);
+        if (mViewPager != null) { // viewpager is unavailable in phone.
+            mPagerAdapter = new RepoFragmentPagerAdapter(
+                    getSupportFragmentManager());
+            mViewPager.setAdapter(mPagerAdapter);
+        }
 
         Log.d(TAG, "onCreate");
     }
