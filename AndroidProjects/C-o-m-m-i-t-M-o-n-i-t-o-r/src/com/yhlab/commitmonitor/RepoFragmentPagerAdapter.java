@@ -8,15 +8,15 @@ import android.util.Log;
 public class RepoFragmentPagerAdapter extends FragmentPagerAdapter {
 
     final static String TAG = "RepoFragmentPagerAdapter";
-    
+
     public RepoFragmentPagerAdapter(FragmentManager fragMgr) {
         super(fragMgr);
     }
-    
+
     @Override
     public Fragment getItem(int arg0) {
         Log.d(TAG, "getItem" + arg0);
-        
+
         switch (arg0) {
         case 0:
             return new RepoConfigFragment();

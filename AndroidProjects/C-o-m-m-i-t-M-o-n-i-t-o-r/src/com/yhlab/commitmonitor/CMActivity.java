@@ -16,9 +16,10 @@ public class CMActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
-        mPagerAdapter = new RepoFragmentPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager)findViewById(R.id.viewpager_repo);
+
+        mPagerAdapter = new RepoFragmentPagerAdapter(
+                getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.viewpager_repo);
         mViewPager.setAdapter(mPagerAdapter);
 
         Log.d(TAG, "onCreate");
@@ -27,7 +28,7 @@ public class CMActivity extends FragmentActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        
+
         Log.d(TAG, "onRestart");
     }
 
@@ -69,14 +70,14 @@ public class CMActivity extends FragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        
+
         Log.d(TAG, "onSaveInstanceState");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        
+
         Log.d(TAG, "onRestoreInstanceState");
     }
 }

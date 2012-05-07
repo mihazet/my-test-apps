@@ -34,10 +34,10 @@ public class RepoListFragment extends Fragment {
         // TODO Auto-generated method stub
 
         Log.d(TAG, "onCreateView");
-        
+
         return inflater.inflate(R.layout.repolist_fragment, container, false);
 
-        //return super.onCreateView(inflater, container, savedInstanceState);
+        // return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
