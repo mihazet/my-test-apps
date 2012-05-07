@@ -14,11 +14,18 @@
         <!-- Preview: layout=@layout/repolist_fragment -->
     </fragment>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager_repo"
+    <LinearLayout
+        android:id="@+id/adLayoutIABBanner"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
-        android:layout_weight="2" >
-    </android.support.v4.view.ViewPager>
+        android:layout_weight="2"
+        android:orientation="vertical" >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager_repo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+        </android.support.v4.view.ViewPager>
+    </LinearLayout>
 
 </LinearLayout>
