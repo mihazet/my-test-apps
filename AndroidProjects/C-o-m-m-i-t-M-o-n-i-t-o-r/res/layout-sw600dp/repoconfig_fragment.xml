@@ -173,6 +173,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="12dp"
+        android:drawableLeft="@drawable/ic_discard"
         android:text="@string/btn_repo_config_delete" />
 
     <EditText
@@ -200,6 +201,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="12dp"
+        android:drawableLeft="@drawable/ic_save"
         android:text="@string/btn_repo_config_save" />
 
     <Button
@@ -213,6 +215,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="12dp"
         android:layout_toLeftOf="@+id/btn_repo_config_save"
+        android:drawableLeft="@drawable/ic_backspace"
         android:text="@string/btn_repo_config_cancel" />
 
     <CheckBox
