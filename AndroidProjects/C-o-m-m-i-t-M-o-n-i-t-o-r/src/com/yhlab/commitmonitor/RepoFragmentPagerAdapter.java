@@ -15,21 +15,34 @@ public class RepoFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int arg0) {
-        Log.d(TAG, "getItem" + arg0);
+
+        Fragment f;
+
+        Log.d(TAG, ">>> getItem " + arg0);
 
         switch (arg0) {
         case 0:
-            return new RepoConfigFragment();
+            f = new RepoConfigFragment();
+            break;
         case 1:
-            return new RepoDetailFragment();
+            f = new RepoDetailFragment();
+            break;
         default:
-            Log.e(TAG, "Don't have so many fragment.");
-            return null;
+            f = null;
         }
+
+        Log.d(TAG, "<<< getItem");
+
+        return f;
     }
 
     @Override
     public int getCount() {
+
+        Log.d(TAG, ">>> getCount");
+
+        Log.d(TAG, "<<< getCount");
+
         return 2;
     }
 

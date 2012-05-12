@@ -29,6 +29,9 @@ public class CMActivity extends FragmentActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        Log.d(TAG, ">>> onCreate");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -74,46 +77,63 @@ public class CMActivity extends FragmentActivity {
             adView.loadAd(adRequest);
         }
 
-        Log.d(TAG, "onCreate");
+        Log.d(TAG, "<<< onCreate");
     }
 
     @Override
     protected void onRestart() {
+
+        Log.d(TAG, ">>> onRestart");
+
         super.onRestart();
 
-        Log.d(TAG, "onRestart");
+        Log.d(TAG, "<<< onRestart");
     }
 
     @Override
     protected void onStart() {
+
+        Log.d(TAG, ">>> onSart");
+
         super.onStart();
 
-        Log.d(TAG, "onStart");
+        Log.d(TAG, "<<< onStart");
     }
 
     @Override
     protected void onResume() {
+
+        Log.d(TAG, ">>> onResume");
+
         super.onResume();
 
-        Log.d(TAG, "onResume");
+        Log.d(TAG, "<<< onResume");
     }
 
     @Override
     protected void onPause() {
+
+        Log.d(TAG, ">>> onPause");
+
         super.onPause();
 
-        Log.d(TAG, "onPause");
+        Log.d(TAG, "<<< onPause");
     }
 
     @Override
     protected void onStop() {
+
+        Log.d(TAG, ">>> onStop");
+
         super.onStop();
 
-        Log.d(TAG, "onStop");
+        Log.d(TAG, "<<< onStop");
     }
 
     @Override
     protected void onDestroy() {
+
+        Log.d(TAG, ">>> onDestroy");
 
         /* remove ad from layout first or crash */
         if (adAvailable) {
@@ -123,20 +143,26 @@ public class CMActivity extends FragmentActivity {
 
         super.onDestroy();
 
-        Log.d(TAG, "onDestroy");
+        Log.d(TAG, "<<< onDestroy");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+
+        Log.d(TAG, ">>> onSaveInstanceState");
+
         super.onSaveInstanceState(outState);
 
-        Log.d(TAG, "onSaveInstanceState");
+        Log.d(TAG, "<<< onSaveInstanceState");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        Log.d(TAG, ">>> onRestoreInstanceState");
+
         super.onRestoreInstanceState(savedInstanceState);
 
-        Log.d(TAG, "onRestoreInstanceState");
+        Log.d(TAG, "<<< onRestoreInstanceState");
     }
 }
