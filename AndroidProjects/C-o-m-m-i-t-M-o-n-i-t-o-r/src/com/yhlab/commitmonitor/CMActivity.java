@@ -74,6 +74,7 @@ public class CMActivity extends FragmentActivity {
             // adRequest addTestDevice();
             adRequest.addTestDevice("310E735B8E260B98F50AD7FBAEB83D74");
             adRequest.addTestDevice("7370AF93550EB18283A7EA7D78D020B7");
+            adRequest.addTestDevice("45EF6179ECEA9435C3D8731E94E8A16F");
             adView.loadAd(adRequest);
         }
 
