@@ -18,7 +18,7 @@ public class RepoFragmentPagerAdapter extends FragmentPagerAdapter {
 
         Fragment f;
 
-        Log.d(TAG, ">>> getItem " + arg0);
+        Log.v(TAG, ">>> getItem " + arg0);
 
         switch (arg0) {
         case 0:
@@ -31,7 +31,7 @@ public class RepoFragmentPagerAdapter extends FragmentPagerAdapter {
             f = null;
         }
 
-        Log.d(TAG, "<<< getItem");
+        Log.v(TAG, "<<< getItem");
 
         return f;
     }
@@ -39,9 +39,9 @@ public class RepoFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
 
-        Log.d(TAG, ">>> getCount");
+        Log.v(TAG, ">>> getCount");
 
-        Log.d(TAG, "<<< getCount");
+        Log.v(TAG, "<<< getCount");
 
         return 2;
     }

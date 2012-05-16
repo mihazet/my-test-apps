@@ -10,20 +10,20 @@ public class CMApp extends Application {
     @Override
     public void onCreate() {
 
-        Log.d(TAG, ">>> onCreate");
+        Log.v(TAG, ">>> onCreate");
 
         super.onCreate();
 
-        Log.d(TAG, "<<< onCreate");
+        Log.v(TAG, "<<< onCreate");
     }
 
     @Override
     public void onTerminate() {
 
-        Log.d(TAG, ">>> onTerminate");
+        Log.v(TAG, ">>> onTerminate");
 
         super.onTerminate();
 
-        Log.d(TAG, "<<< onTerminate");
+        Log.v(TAG, "<<< onTerminate");
     }
 }

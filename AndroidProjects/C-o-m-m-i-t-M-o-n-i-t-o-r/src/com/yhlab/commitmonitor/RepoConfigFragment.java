@@ -15,34 +15,34 @@ public class RepoConfigFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
 
-        Log.d(TAG, ">>> onAttach");
+        Log.v(TAG, ">>> onAttach");
 
         super.onAttach(activity);
 
-        Log.d(TAG, "<<< onAttach");
+        Log.v(TAG, "<<< onAttach");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        Log.d(TAG, ">>> onCreate");
+        Log.v(TAG, ">>> onCreate");
 
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "<<< onCreate");
+        Log.v(TAG, "<<< onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        Log.d(TAG, ">>> onCreateView");
+        Log.v(TAG, ">>> onCreateView");
 
         View v = inflater.inflate(R.layout.repoconfig_fragment, container,
                 false);
         // View v = super.onCreateView(inflater, container, savedInstanceState);
 
-        Log.d(TAG, "<<< onCreateView");
+        Log.v(TAG, "<<< onCreateView");
 
         return v;
     }
@@ -50,80 +50,80 @@ public class RepoConfigFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
-        Log.d(TAG, ">>> onActivityCreated");
+        Log.v(TAG, ">>> onActivityCreated");
 
         super.onActivityCreated(savedInstanceState);
 
-        Log.d(TAG, "<<< onActivityCreated");
+        Log.v(TAG, "<<< onActivityCreated");
     }
 
     @Override
     public void onStart() {
 
-        Log.d(TAG, ">>> onStart");
+        Log.v(TAG, ">>> onStart");
 
         super.onStart();
 
-        Log.d(TAG, "<<< onStart");
+        Log.v(TAG, "<<< onStart");
     }
 
     @Override
     public void onResume() {
 
-        Log.d(TAG, ">>> onResume");
+        Log.v(TAG, ">>> onResume");
 
         super.onResume();
 
-        Log.d(TAG, "<<< onResume");
+        Log.v(TAG, "<<< onResume");
     }
 
     @Override
     public void onPause() {
 
-        Log.d(TAG, ">>> onPause");
+        Log.v(TAG, ">>> onPause");
 
         super.onPause();
 
-        Log.d(TAG, "<<< onPause");
+        Log.v(TAG, "<<< onPause");
     }
 
     @Override
     public void onStop() {
 
-        Log.d(TAG, ">>> onStop");
+        Log.v(TAG, ">>> onStop");
 
         super.onStop();
 
-        Log.d(TAG, "<<< onStop");
+        Log.v(TAG, "<<< onStop");
     }
 
     @Override
     public void onDestroyView() {
 
-        Log.d(TAG, ">>> onDestroyView");
+        Log.v(TAG, ">>> onDestroyView");
 
         super.onDestroyView();
 
-        Log.d(TAG, "<<< onDestroyView");
+        Log.v(TAG, "<<< onDestroyView");
     }
 
     @Override
     public void onDestroy() {
 
-        Log.d(TAG, ">>> onDestroy");
+        Log.v(TAG, ">>> onDestroy");
 
         super.onDestroy();
 
-        Log.d(TAG, "<<< onDestroy");
+        Log.v(TAG, "<<< onDestroy");
     }
 
     @Override
     public void onDetach() {
 
-        Log.d(TAG, ">>> onDetach");
+        Log.v(TAG, ">>> onDetach");
 
         super.onDetach();
 
-        Log.d(TAG, "<<< onDetach");
+        Log.v(TAG, "<<< onDetach");
     }
 }

@@ -30,7 +30,7 @@ public class CMActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        Log.d(TAG, ">>> onCreate");
+        Log.v(TAG, ">>> onCreate");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
@@ -44,16 +44,10 @@ public class CMActivity extends FragmentActivity {
 
         /* Determinate ad size and then load ad */
         if (null != (adLayout = (LinearLayout) findViewById(R.id.adLayoutIABLeaderBoard))) {
-            Log.d(TAG,
-                    "land - " + adLayout.getWidth() + ", "
-                            + adLayout.getHeight());
             adSize = AdSize.IAB_LEADERBOARD;
             minHeight = 90;
             minWidth = 728;
         } else if (null != (adLayout = (LinearLayout) findViewById(R.id.adLayoutIABBanner))) {
-            Log.d(TAG,
-                    "port - " + adLayout.getWidth() + ", "
-                            + adLayout.getHeight());
             adSize = AdSize.IAB_BANNER;
             minHeight = 60;
             minWidth = 468;
@@ -78,63 +72,63 @@ public class CMActivity extends FragmentActivity {
             adView.loadAd(adRequest);
         }
 
-        Log.d(TAG, "<<< onCreate");
+        Log.v(TAG, "<<< onCreate");
     }
 
     @Override
     protected void onRestart() {
 
-        Log.d(TAG, ">>> onRestart");
+        Log.v(TAG, ">>> onRestart");
 
         super.onRestart();
 
-        Log.d(TAG, "<<< onRestart");
+        Log.v(TAG, "<<< onRestart");
     }
 
     @Override
     protected void onStart() {
 
-        Log.d(TAG, ">>> onSart");
+        Log.v(TAG, ">>> onSart");
 
         super.onStart();
 
-        Log.d(TAG, "<<< onStart");
+        Log.v(TAG, "<<< onStart");
     }
 
     @Override
     protected void onResume() {
 
-        Log.d(TAG, ">>> onResume");
+        Log.v(TAG, ">>> onResume");
 
         super.onResume();
 
-        Log.d(TAG, "<<< onResume");
+        Log.v(TAG, "<<< onResume");
     }
 
     @Override
     protected void onPause() {
 
-        Log.d(TAG, ">>> onPause");
+        Log.v(TAG, ">>> onPause");
 
         super.onPause();
 
-        Log.d(TAG, "<<< onPause");
+        Log.v(TAG, "<<< onPause");
     }
 
     @Override
     protected void onStop() {
 
-        Log.d(TAG, ">>> onStop");
+        Log.v(TAG, ">>> onStop");
 
         super.onStop();
 
-        Log.d(TAG, "<<< onStop");
+        Log.v(TAG, "<<< onStop");
     }
 
     @Override
     protected void onDestroy() {
 
-        Log.d(TAG, ">>> onDestroy");
+        Log.v(TAG, ">>> onDestroy");
 
         /* remove ad from layout first or crash */
         if (adAvailable) {
@@ -144,26 +138,26 @@ public class CMActivity extends FragmentActivity {
 
         super.onDestroy();
 
-        Log.d(TAG, "<<< onDestroy");
+        Log.v(TAG, "<<< onDestroy");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        Log.d(TAG, ">>> onSaveInstanceState");
+        Log.v(TAG, ">>> onSaveInstanceState");
 
         super.onSaveInstanceState(outState);
 
-        Log.d(TAG, "<<< onSaveInstanceState");
+        Log.v(TAG, "<<< onSaveInstanceState");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
 
-        Log.d(TAG, ">>> onRestoreInstanceState");
+        Log.v(TAG, ">>> onRestoreInstanceState");
 
         super.onRestoreInstanceState(savedInstanceState);
 
-        Log.d(TAG, "<<< onRestoreInstanceState");
+        Log.v(TAG, "<<< onRestoreInstanceState");
     }
 }
