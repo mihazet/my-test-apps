@@ -20,5 +20,11 @@
     <string name="hint_repo_ignore_users">list one user account per line.\nFor example:\nAlice\nBob</string>
     <string name="btn_repo_config_delete">Delete</string>
     <string name="btn_repo_config_cancel">Cancel</string>
+    <string name="label_1st_use_intro">Thanks for download and install Commit Monitor. This application helps you to monitor subversion repositories for new commits. You can setup how often to check new commits for each repository, and when new commit happens, Commit Monitor will notify you. Currently, it supports the following svn protocols: svn, http, and https. New protocol may be added in the future.</string>
+    <string name="label_1st_use_instruction">This is your first time to use Commit Monitor. In order to properly use Commit Monitor, you need to setup the repository settings. Please use the following functions to add the repositories that you want to monitor.</string>
+    <string name="btn_add_repo_sample">Add sample repository</string>
+    <string name="label_add_repo_sample">Add sample repository: automatically add a repository as a sample, this can show you how does Commit Monitor work.</string>
+    <string name="label_add_repo">Add repository: setup your custom repository setting.</string>
+    <string name="btn_add_repo">Add repository</string>
 
 </resources>

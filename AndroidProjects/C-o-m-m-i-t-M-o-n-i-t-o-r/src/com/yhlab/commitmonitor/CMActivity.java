@@ -1,7 +1,10 @@
 package com.yhlab.commitmonitor;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.LinearLayout;
@@ -13,6 +16,10 @@ import com.google.ads.AdView;
 public class CMActivity extends FragmentActivity {
 
     static final String TAG = "CMActivity";
+
+    /* activity-specific shared preferences */
+    private SharedPreferences mPrefs;
+    private Boolean m1stUse;
 
     /* for viewpager management used in tablet */
     private RepoFragmentPagerAdapter mPagerAdapter;
@@ -33,7 +40,18 @@ public class CMActivity extends FragmentActivity {
         Log.v(TAG, ">>> onCreate");
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+
+        /* check shared preference for using difference layout */
+        mPrefs = getPreferences(MODE_PRIVATE);
+        m1stUse = mPrefs.getBoolean("1stUse", true);
+
+        if (m1stUse) {
+            setContentView(R.layout.firstuse);
+            FragmentManager fragMgr = getSupportFragmentManager();
+            fragMgr.beginTransaction().add(R.id.Layout1stUse, new FirstUseFragment()).commit();
+        } else {
+            setContentView(R.layout.main);
+        }
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager_repo);
         if (mViewPager != null) { // viewpager is unavailable in phone.
