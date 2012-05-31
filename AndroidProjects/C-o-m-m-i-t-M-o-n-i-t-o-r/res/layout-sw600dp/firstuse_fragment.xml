@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp" >
+    android:layout_gravity="fill"
+    android:layout_margin="10dp" >
 
     <TextView
         android:id="@+id/label_1st_use_intro"
@@ -25,53 +26,14 @@
         android:text="@string/label_1st_use_instruction"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
-        android:id="@+id/label_add_repo_sample"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/label_1st_use_instruction"
-        android:layout_marginTop="10dp"
-        android:text="@string/label_add_repo_sample"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/label_add_repo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/label_add_repo_sample"
-        android:layout_marginTop="10dp"
-        android:text="@string/label_add_repo"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <LinearLayout
+    <Button
+        android:id="@+id/btn_next_add_repo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/label_add_repo"
-        android:layout_marginTop="10dp"
-        android:baselineAligned="true"
-        android:gravity="center"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/btn_add_repo_sample"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="@string/btn_add_repo_sample" />
-
-        <Button
-            android:id="@+id/btn_add_repo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="@string/btn_add_repo" />
-    </LinearLayout>
+        android:layout_margin="10dp"
+        android:text="@string/btn_next_add_repo" />
 
 </RelativeLayout>

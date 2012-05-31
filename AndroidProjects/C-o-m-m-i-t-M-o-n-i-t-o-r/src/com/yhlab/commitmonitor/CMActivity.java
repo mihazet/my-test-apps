@@ -2,6 +2,7 @@ package com.yhlab.commitmonitor;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,9 +14,14 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
 
-public class CMActivity extends FragmentActivity {
+public class CMActivity extends FragmentActivity implements
+        FirstUseFragment.INextButtonClickListener {
 
     static final String TAG = "CMActivity";
+    static final String TAG_1ST_USE_FRAGMENT = "firstuse";
+    static final String TAG_REPO_EDIT_FRAGMENT = "repoedit";
+    static final String KEY_1STUSE = "1stuse";
+    static final boolean KEY_1STUSE_DEF = true;
 
     /* activity-specific shared preferences */
     private SharedPreferences mPrefs;
@@ -37,19 +43,32 @@ public class CMActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        Log.v(TAG, ">>> onCreate");
+        if (savedInstanceState != null)
+            Log.v(TAG, ">>> onCreate, not null");
+        else
+            Log.v(TAG, ">>> onCreate");
 
         super.onCreate(savedInstanceState);
 
         /* check shared preference for using difference layout */
         mPrefs = getPreferences(MODE_PRIVATE);
-        m1stUse = mPrefs.getBoolean("1stUse", true);
+        m1stUse = mPrefs.getBoolean(KEY_1STUSE, KEY_1STUSE_DEF);
 
         if (m1stUse) {
+            Log.d(TAG, "Use 1st use layout");
             setContentView(R.layout.firstuse);
-            FragmentManager fragMgr = getSupportFragmentManager();
-            fragMgr.beginTransaction().add(R.id.Layout1stUse, new FirstUseFragment()).commit();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+
+            Fragment f = fm.findFragmentByTag(TAG_1ST_USE_FRAGMENT);
+            if (f == null && savedInstanceState == null) {
+                Log.d(TAG, "fragment not found");
+                f = new FirstUseFragment();
+                ft.add(R.id.Layout1stUse, f, TAG_1ST_USE_FRAGMENT);
+            }
+            ft.commit();
         } else {
+            Log.d(TAG, "Use regular layout");
             setContentView(R.layout.main);
         }
 
@@ -177,5 +196,18 @@ public class CMActivity extends FragmentActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         Log.v(TAG, "<<< onRestoreInstanceState");
+    }
+
+    public void onNextButtonClick() {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        Fragment f = fm.findFragmentByTag(TAG_REPO_EDIT_FRAGMENT);
+        if (f == null) {
+            f = new RepoConfigFragment();
+        }
+        ft.replace(R.id.Layout1stUse, f, TAG_REPO_EDIT_FRAGMENT);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 }
