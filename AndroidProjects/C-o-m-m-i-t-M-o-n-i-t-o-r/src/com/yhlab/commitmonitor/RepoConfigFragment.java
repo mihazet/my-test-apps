@@ -41,6 +41,31 @@ public class RepoConfigFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        Log.v(TAG, ">>> onViewCreated");
+        View v;
+
+        super.onViewCreated(view, savedInstanceState);
+
+        int container_id = ((ViewGroup) (getActivity()
+                .findViewById(android.R.id.content))).getChildAt(0).getId();
+        switch (container_id) {
+        case R.id.Layout1stUse:
+            /* No need delete button in 1st use layout, hide it. */
+            v = getView().findViewById(R.id.btn_repo_config_delete);
+            if (v != null) {
+                v.setVisibility(View.INVISIBLE);
+            }
+            break;
+        default:
+            break;
+        }
+
+        Log.v(TAG, "<<< onViewCreated");
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.repoconfig_optmenu, menu);
     }
