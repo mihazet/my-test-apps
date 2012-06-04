@@ -8,11 +8,39 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 public class RepoConfigFragment extends Fragment {
 
     static final String TAG = "RepoConfigFragment";
+
+    private final OnClickListener _clickHandler = new OnClickListener() {
+        public void onClick(View v) {
+            int id = v.getId();
+            switch (id) {
+            case R.id.btn_repo_config_save:
+                Log.d(TAG, "save button clicked");
+                break;
+            case R.id.btn_repo_config_cancel:
+                Log.d(TAG, "cancel button clicked");
+                break;
+            case R.id.btn_repo_config_delete:
+                Log.d(TAG, "delete button clicked");
+                break;
+            case R.id.chkbox_repo_anonymous:
+                getView().findViewById(R.id.edit_repo_username).setEnabled(
+                        !((CheckBox) v).isChecked());
+                getView().findViewById(R.id.edit_repo_password).setEnabled(
+                        !((CheckBox) v).isChecked());
+                break;
+            default:
+                Log.d(TAG, "some button clicked");
+                break;
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,16 +72,31 @@ public class RepoConfigFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         Log.v(TAG, ">>> onViewCreated");
-        View v;
+        View v, vRoot = getView();
 
         super.onViewCreated(view, savedInstanceState);
 
+        /* process view stuff */
+        v = vRoot.findViewById(R.id.btn_repo_config_save);
+        if (v != null)
+            v.setOnClickListener(_clickHandler);
+        v = vRoot.findViewById(R.id.btn_repo_config_cancel);
+        if (v != null)
+            v.setOnClickListener(_clickHandler);
+        v = vRoot.findViewById(R.id.btn_repo_config_delete);
+        if (v != null)
+            v.setOnClickListener(_clickHandler);
+        v = vRoot.findViewById(R.id.chkbox_repo_anonymous);
+        if (v != null)
+            v.setOnClickListener(_clickHandler);
+
+        /* process view stuff container-specific */
         int container_id = ((ViewGroup) (getActivity()
                 .findViewById(android.R.id.content))).getChildAt(0).getId();
         switch (container_id) {
         case R.id.Layout1stUse:
             /* No need delete button in 1st use layout, hide it. */
-            v = getView().findViewById(R.id.btn_repo_config_delete);
+            v = vRoot.findViewById(R.id.btn_repo_config_delete);
             if (v != null) {
                 v.setVisibility(View.INVISIBLE);
             }
