@@ -27,5 +27,7 @@
     <string name="label_add_repo">Add repository: setup your custom repository setting.</string>
     <string name="btn_add_repo">Add repository</string>
     <string name="btn_next_add_repo">Next: add repository</string>
+    <string name="progressdlg_title_save">Save</string>
+    <string name="progressdlg_msg_save">Saving, please wait#8230.</string>
 
 </resources>
