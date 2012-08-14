@@ -127,7 +127,8 @@ public class WheelView extends View {
 	 * @param context the context
 	 */
 	private void initData(Context context) {
-	    scroller = new WheelScroller(getContext(), scrollingListener);
+	    if (!isInEditMode())
+	        scroller = new WheelScroller(getContext(), scrollingListener);
 	}
 	
 	// Scrolling listener
