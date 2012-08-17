@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="GuessedNumber">
+        <attr name="digitCount" format="integer" />
+        <attr name="symbols" format="string" />
+    </declare-styleable>
+    <declare-styleable name="GuessedResult">
+        <attr name="digitUsed" format="integer" />
+    </declare-styleable>
+
+</resources>
