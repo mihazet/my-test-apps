@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/number_fragment"
-        android:name="com.yhlab.guessnumberhelperlite.NumberFragment"
+        android:name="com.yhlab.guessnumberhelper.lite.NumberFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/number_fragment" >
@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/history_fragment"
-        android:name="com.yhlab.guessnumberhelperlite.HistoryFragment"
+        android:name="com.yhlab.guessnumberhelper.lite.HistoryFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/history_fragment" >
