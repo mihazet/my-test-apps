@@ -13,7 +13,7 @@ public class GuessedResult extends LinearLayout {
 
     public static final int DIGIT_USED_MAX = 8;
     public static final int DEFAULT_DIGIT_USED = 4;
-    
+
     private WheelView[] wheel = new WheelView[2];
     private int digitUsed = DEFAULT_DIGIT_USED;
     private static final String RESULT = "012345678";
@@ -21,12 +21,6 @@ public class GuessedResult extends LinearLayout {
 
     public GuessedResult(Context context, AttributeSet attrs) {
         super(context, attrs);
-        getParamsFromXml(context, attrs);
-        initWidgets(context);
-    }
-
-    public GuessedResult(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
         getParamsFromXml(context, attrs);
         initWidgets(context);
     }
@@ -72,16 +66,16 @@ public class GuessedResult extends LinearLayout {
             wheel[i].setCyclic(true);
         }
     }
-    
+
     public int getResult() {
-        
+
         int result = 0, current;
-        
+
         current = wheel[1].getCurrentItem();
         result += current << 4;
         current = wheel[0].getCurrentItem();
         result += current;
-        
+
         return result;
     }
 }

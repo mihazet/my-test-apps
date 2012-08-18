@@ -7,8 +7,6 @@ import kankan.wheel.widget.adapters.SymbolWheelAdapter;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.LinearLayout;
 import com.yhlab.component.R;
 
@@ -25,19 +23,6 @@ public class GuessedNumber extends LinearLayout {
     private WheelView[] wheel = new WheelView[DIGIT_MAX];
     private int digitCount = DEFAULT_DIGIT_COUNT;
     private String symbols = DEFAULT_SYMBOLS;
-
-    /**
-     * This constructor is used for adding this widget by xml declaration.
-     * 
-     * @param context
-     * @param attrs
-     * @param defStyle
-     */
-    public GuessedNumber(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        getParamsFromXml(context, attrs);
-        initWidgets(context);
-    }
 
     /**
      * This constructor is used for adding this widget by xml declaration.
@@ -103,7 +88,7 @@ public class GuessedNumber extends LinearLayout {
             wheel[i].setCurrentItem((int) (Math.random() * symbols.length()));
             wheel[i].setCyclic(true);
             wheel[i].addScrollingListener(scrolledListener);
-            //wheel[i].setInterpolator(new AnticipateOvershootInterpolator());
+            // wheel[i].setInterpolator(new AnticipateOvershootInterpolator());
             addView(wheel[i]);
         }
     }
