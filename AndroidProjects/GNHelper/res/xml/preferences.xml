@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ListPreference
+        android:defaultValue="4"
+        android:entries="@array/prefs_digit_count_entries"
+        android:entryValues="@array/prefs_digit_count_values"
+        android:key="prefs_digitCount"
+        android:title="@string/prefs_digit_count" />
+    <ListPreference
+        android:defaultValue="random"
+        android:entries="@array/prefs_guess_method_entries"
+        android:entryValues="@array/prefs_guess_method_values"
+        android:key="prefs_guessMethod"
+        android:title="@string/prefs_guess_method" />
+
+</PreferenceScreen>

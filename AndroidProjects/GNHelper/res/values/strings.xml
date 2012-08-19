@@ -9,5 +9,8 @@
     <string name="btn_result_add">Add</string>
     <string name="menu_restart">Restart</string>
     <string name="menu_about">About</string>
+    <string name="prefs_digit_count">The number of digits</string>
+    <string name="prefs_guess_method">The guess method</string>
+    <string name="title_activity_settings">Settings</string>
 
 </resources>
