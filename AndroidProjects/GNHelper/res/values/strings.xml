@@ -7,5 +7,7 @@
     <string name="label_guess">Guess</string>
     <string name="label_result">Result</string>
     <string name="btn_result_add">Add</string>
+    <string name="menu_restart">Restart</string>
+    <string name="menu_about">About</string>
 
 </resources>
