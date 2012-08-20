@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
 public class SettingsActivity extends PreferenceActivity {
+    
+    public static final String KEY_DIGIT_COUNT = "prefs_digitCount";
+    public static final String KEY_GUESS_METHOD = "prefs_guessMethod";
 
     @SuppressWarnings("deprecation")
     @Override

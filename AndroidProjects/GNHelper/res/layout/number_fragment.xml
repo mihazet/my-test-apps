@@ -17,15 +17,6 @@
             android:layout_margin="5dp"
             android:text="@string/label_guess"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <com.yhlab.component.guessnumber.GuessedNumber
-            android:id="@+id/guessed_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            app:digitCount="4"
-            app:symbols="0123456789?" >
-        </com.yhlab.component.guessnumber.GuessedNumber>
     </TableRow>
 
     <TableRow
@@ -41,13 +32,6 @@
             android:layout_margin="5dp"
             android:text="@string/label_result"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <com.yhlab.component.guessnumber.GuessedResult
-            android:id="@+id/guessed_result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:digitUsed="4" >
-        </com.yhlab.component.guessnumber.GuessedResult>
 
         <Button
             android:id="@+id/btn_result_add"
