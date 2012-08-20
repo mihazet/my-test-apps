@@ -19,17 +19,36 @@ public class GuessedResult extends LinearLayout {
     private static final String RESULT = "012345678";
     private String symbols;
 
+    /**
+     * This constructor is used for adding this widget by xml declaration.
+     * 
+     * @param context
+     * @param attrs
+     */
     public GuessedResult(Context context, AttributeSet attrs) {
         super(context, attrs);
         getParamsFromXml(context, attrs);
         initWidgets(context);
     }
 
+    /**
+     * This constructor is used for adding this widget programmatically with
+     * default parameters.
+     * 
+     * @param context
+     */
     public GuessedResult(Context context) {
         super(context);
         initWidgets(context);
     }
 
+    /**
+     * This constructor is used for adding this widget programmatically.
+     * 
+     * @param context
+     * @param digitUsed
+     *            the max number displayed in this widget
+     */
     public GuessedResult(Context context, int digitUsed) {
         super(context);
 
@@ -67,6 +86,12 @@ public class GuessedResult extends LinearLayout {
         }
     }
 
+    /**
+     * Get the current guess number result. This result is 'X'A and 'Y'B, and X
+     * Y is represented as 0xXY. For example, 0x12 represents the 1A2B.
+     * 
+     * @return the result
+     */
     public int getResult() {
 
         int result = 0, current;
