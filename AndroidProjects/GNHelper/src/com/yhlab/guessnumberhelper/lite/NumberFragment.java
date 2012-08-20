@@ -19,7 +19,7 @@ public class NumberFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        
+
         try {
             mGuessedListener = (IGuessedListener) activity;
         } catch (ClassCastException e) {
@@ -27,7 +27,7 @@ public class NumberFragment extends Fragment {
                     + " must implement IGuessedListener interface.");
         }
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -40,20 +40,26 @@ public class NumberFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        int digitCount = Integer.parseInt(sp.getString(SettingsActivity.KEY_DIGIT_COUNT, "4"));
-       
+
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+        int digitCount = Integer.parseInt(sp.getString(
+                SettingsActivity.KEY_DIGIT_COUNT, "4"));
+
         /* add dynamic widgets GuessedNumber */
-        final GuessedNumber gn = new GuessedNumber(getActivity(), digitCount, "0123456789?");
-        TableRow tr = (TableRow)getView().findViewById(R.id.row_guess);
-        tr.addView(gn);
-        
+        final GuessedNumber gn = new GuessedNumber(getActivity(), digitCount,
+                "0123456789?");
+        TableRow tr = (TableRow) getView().findViewById(R.id.row_guess);
+        TableRow.LayoutParams trlp = new TableRow.LayoutParams();
+        trlp.column = 1;
+        trlp.span = 2;
+        tr.addView(gn, trlp);
+
         /* add dynamic widgets GuessedResult */
         final GuessedResult gr = new GuessedResult(getActivity(), digitCount);
-        tr = (TableRow)getView().findViewById(R.id.row_result);
+        tr = (TableRow) getView().findViewById(R.id.row_result);
         tr.addView(gr, 1);
-        
+
         Button add = (Button) (getView().findViewById(R.id.btn_result_add));
         add.setOnClickListener(new OnClickListener() {
 
