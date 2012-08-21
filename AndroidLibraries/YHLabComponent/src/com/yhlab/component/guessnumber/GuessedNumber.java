@@ -23,6 +23,7 @@ public class GuessedNumber extends LinearLayout {
     private WheelView[] wheel = new WheelView[DIGIT_MAX];
     private int digitCount = DEFAULT_DIGIT_COUNT;
     private String symbols = DEFAULT_SYMBOLS;
+    private Context context;
 
     /**
      * This constructor is used for adding this widget by xml declaration.
@@ -33,6 +34,7 @@ public class GuessedNumber extends LinearLayout {
     public GuessedNumber(Context context, AttributeSet attrs) {
         super(context, attrs);
         getParamsFromXml(context, attrs);
+        this.context = context;
         initWidgets(context);
     }
 
@@ -44,6 +46,7 @@ public class GuessedNumber extends LinearLayout {
      */
     public GuessedNumber(Context context) {
         super(context);
+        this.context = context;
         initWidgets(context);
     }
 
@@ -61,6 +64,7 @@ public class GuessedNumber extends LinearLayout {
 
         this.digitCount = digitCount;
         this.symbols = symbols;
+        this.context = context;
 
         initWidgets(context);
     }
@@ -138,6 +142,13 @@ public class GuessedNumber extends LinearLayout {
         }
 
         return result;
+    }
+
+    public void changeDigitCount(int newDigitCount) {
+
+        removeAllViews();
+        digitCount = newDigitCount;
+        initWidgets(context);
     }
 
     private OnWheelScrollListener scrolledListener = new OnWheelScrollListener() {

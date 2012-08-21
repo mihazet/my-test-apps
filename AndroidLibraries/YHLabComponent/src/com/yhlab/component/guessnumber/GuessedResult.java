@@ -18,6 +18,7 @@ public class GuessedResult extends LinearLayout {
     private int digitUsed = DEFAULT_DIGIT_USED;
     private static final String RESULT = "012345678";
     private String symbols;
+    private Context context;
 
     /**
      * This constructor is used for adding this widget by xml declaration.
@@ -28,6 +29,7 @@ public class GuessedResult extends LinearLayout {
     public GuessedResult(Context context, AttributeSet attrs) {
         super(context, attrs);
         getParamsFromXml(context, attrs);
+        this.context = context;
         initWidgets(context);
     }
 
@@ -39,6 +41,7 @@ public class GuessedResult extends LinearLayout {
      */
     public GuessedResult(Context context) {
         super(context);
+        this.context = context;
         initWidgets(context);
     }
 
@@ -53,6 +56,7 @@ public class GuessedResult extends LinearLayout {
         super(context);
 
         this.digitUsed = digitUsed;
+        this.context = context;
 
         initWidgets(context);
     }
@@ -102,5 +106,12 @@ public class GuessedResult extends LinearLayout {
         result += current;
 
         return result;
+    }
+    
+    public void changeDigitUsed(int newDigitUsed) {
+     
+        removeAllViews();
+        digitUsed = newDigitUsed;
+        initWidgets(context);
     }
 }
