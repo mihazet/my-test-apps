@@ -76,13 +76,17 @@ public class MainActivity extends FragmentActivity implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sp, String k) {
-
+        
         if (k.equals(SettingsActivity.KEY_DIGIT_COUNT)) {
-            String s1 = sp.getString(k, null);
-            Log.d("MainActivity", "change digit count to " + s1);
+
+            FragmentManager fm = getSupportFragmentManager();
+            NumberFragment nf = (NumberFragment) fm
+                    .findFragmentById(R.id.number_fragment);
+            nf.changeDigitCount(Integer.parseInt(sp.getString(k, null)));
+
         } else if (k.equals(SettingsActivity.KEY_GUESS_METHOD)) {
-            String s2 = sp.getString(k, null);
-            Log.d("MainActivity", "change guess method to " + s2);
+
+            
         }
     }
 }

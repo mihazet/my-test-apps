@@ -16,6 +16,9 @@ import com.yhlab.component.guessnumber.GuessedResult;
 
 public class NumberFragment extends Fragment {
 
+    private GuessedNumber gn;
+    private GuessedResult gr;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -47,8 +50,7 @@ public class NumberFragment extends Fragment {
                 SettingsActivity.KEY_DIGIT_COUNT, "4"));
 
         /* add dynamic widgets GuessedNumber */
-        final GuessedNumber gn = new GuessedNumber(getActivity(), digitCount,
-                "0123456789?");
+        gn = new GuessedNumber(getActivity(), digitCount, "0123456789?");
         TableRow tr = (TableRow) getView().findViewById(R.id.row_guess);
         TableRow.LayoutParams trlp = new TableRow.LayoutParams();
         trlp.column = 1;
@@ -56,7 +58,7 @@ public class NumberFragment extends Fragment {
         tr.addView(gn, trlp);
 
         /* add dynamic widgets GuessedResult */
-        final GuessedResult gr = new GuessedResult(getActivity(), digitCount);
+        gr = new GuessedResult(getActivity(), digitCount);
         tr = (TableRow) getView().findViewById(R.id.row_result);
         tr.addView(gr, 1);
 
@@ -76,4 +78,9 @@ public class NumberFragment extends Fragment {
     }
 
     private IGuessedListener mGuessedListener;
+
+    public void changeDigitCount(int newDigitCount) {
+        gn.changeDigitCount(newDigitCount);
+        gr.changeDigitUsed(newDigitCount);
+    }
 }
