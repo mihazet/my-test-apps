@@ -41,7 +41,7 @@ public class ChooserFactory {
     
     static private ChooserFactory singleton;
     
-    private HashMap builderMap = new HashMap();
+    private HashMap<String, ChooserBuilder> builderMap = new HashMap<String, ChooserBuilder>();
 
     private ChooserFactory() {      
     }

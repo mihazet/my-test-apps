@@ -128,7 +128,7 @@ public class GuessTreeNode implements Serializable {
         int s = start, e = end;
         for( int i=s; i < e; ++i )
             lab[i] = Utility.label( num[i], guess, digitCount );
-        ArrayList list = new ArrayList();       
+        ArrayList<GuessTreeNode> list = new ArrayList<GuessTreeNode>();       
         while( true ) {
             int t = organize( lab[s], s + 1, e );
             if ( num[s] != guess ) {
