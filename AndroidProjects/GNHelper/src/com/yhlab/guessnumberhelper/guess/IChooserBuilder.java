@@ -20,5 +20,5 @@ public interface IChooserBuilder {
      *            the arguments to build the chooser
      * @return a new <code>GuessChooser</code>
      */
-    public GuessChooser buildChooser(String argv[]);
+    public IGuessChooser buildChooser(String argv[]);
 }

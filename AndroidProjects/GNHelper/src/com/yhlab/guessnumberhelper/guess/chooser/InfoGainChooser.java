@@ -1,9 +1,9 @@
 package com.yhlab.guessnumberhelper.guess.chooser;
 
 import java.util.Random;
-import com.yhlab.guessnumberhelper.guess.IChooserBuilder;
 import com.yhlab.guessnumberhelper.guess.ChooserFactory;
-import com.yhlab.guessnumberhelper.guess.GuessChooser;
+import com.yhlab.guessnumberhelper.guess.IChooserBuilder;
+import com.yhlab.guessnumberhelper.guess.IGuessChooser;
 import com.yhlab.guessnumberhelper.guess.ScoredChooser;
 
 /**
@@ -92,13 +92,13 @@ public class InfoGainChooser extends ScoredChooser {
 
     private static class Builder implements IChooserBuilder {
 
-        public GuessChooser buildChooser(String[] argv) {
+        public IGuessChooser buildChooser(String[] argv) {
             double weight = argv.length > 0 ?
                     Double.parseDouble(argv[0]) : 1.8;
             long seed = argv.length > 1 ?
                     Long.parseLong(argv[1]) :
                     System.currentTimeMillis();
-            GuessChooser chooser = new InfoGainChooser(
+            IGuessChooser chooser = new InfoGainChooser(
                     new Random(seed), weight);
             System.out.println("build "
                     + chooser + " with random seed as " + seed);

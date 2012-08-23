@@ -4,13 +4,13 @@ import java.util.Random;
 
 /**
  * This class provides an abstract level for the interface
- * <code>GuessChooser</code>, so that the descendent of this class can simply
+ * <code>IGuessChooser</code>, so that the descendent of this class can simply
  * provide the function <code>score(int)</code> to score the possible guesses.
  * The guess with the highest score will be choosed.
  * 
  * @author Cheng-Ru Lin ( owenlin.twn@gmail.com )
  */
-public abstract class ScoredChooser implements GuessChooser {
+public abstract class ScoredChooser implements IGuessChooser {
 
     /**
      * The guess tree node which represents the current state of the game.

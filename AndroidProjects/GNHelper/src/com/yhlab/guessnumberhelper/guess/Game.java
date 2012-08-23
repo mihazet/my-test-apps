@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
  * </p>
  * 
  * <p>
- * Many implementations of the <code>GuessChooser</code> will choose the same
+ * Many implementations of the <code>IGuessChooser</code> will choose the same
  * number for the first guess. This chold be a weekness of this application.
  * Thus, in this application, the digits is shuffled at the begining of the
  * game. Which means we use a one-to-one and on-to function to map the original
@@ -68,7 +68,7 @@ public class Game {
      *            the guess chooser adopted
      */
     public Game(int digitCount, int symbolCount,
-            Random random, GuessChooser chooser) {
+            Random random, IGuessChooser chooser) {
         if (digitCount <= 0 || digitCount > 8)
             throw new IllegalArgumentException();
         if (random == null)
@@ -167,7 +167,7 @@ public class Game {
             System.arraycopy(argv, 1, args, 0, args.length);
         }
         ChooserFactory factory = ChooserFactory.getInstance();
-        GuessChooser chooser = factory.buildChooser(name, args);
+        IGuessChooser chooser = factory.buildChooser(name, args);
         if (chooser instanceof ScoredChooser) {
             ((ScoredChooser) chooser).setTimeout(5000);
         }

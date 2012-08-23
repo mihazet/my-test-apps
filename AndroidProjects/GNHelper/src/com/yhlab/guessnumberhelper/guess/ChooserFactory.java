@@ -88,7 +88,7 @@ public class ChooserFactory {
      * @param argv the arguments for building the chooser
      * @return a new instance of <code>GuessChooser</code>
      */
-    public GuessChooser buildChooser( String name, String argv[] ) {
+    public IGuessChooser buildChooser( String name, String argv[] ) {
         IChooserBuilder builder 
                 = (IChooserBuilder) builderMap.get( name );
         if ( builder == null )

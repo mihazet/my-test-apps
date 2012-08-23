@@ -8,7 +8,7 @@ package com.yhlab.guessnumberhelper.guess;
  *
  * @author Cheng-Ru Lin ( owenlin.twn@gmail.com )
  */
-public interface GuessChooser {
+public interface IGuessChooser {
     
     /** 
      * <p>Chooses the next guessing number. Sub classes of this 

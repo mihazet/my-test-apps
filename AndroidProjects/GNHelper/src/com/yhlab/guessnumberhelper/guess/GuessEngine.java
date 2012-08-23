@@ -45,7 +45,7 @@ public class GuessEngine {
     private int guessedMask;
 
     private GuessTreeNode node;
-    private GuessChooser chooser;
+    private IGuessChooser chooser;
 
     /**
      * Constructs a new instance of <code>GuessEngine</code>.
@@ -56,7 +56,7 @@ public class GuessEngine {
      *            the guess chooser used
      */
     public GuessEngine(int digitCount,
-            int symbolCount, GuessChooser chooser) {
+            int symbolCount, IGuessChooser chooser) {
         if (digitCount <= 0 || digitCount > 8)
             throw new IllegalArgumentException();
         if (symbolCount < digitCount || symbolCount >= 0x10)
@@ -106,12 +106,12 @@ public class GuessEngine {
     }
 
     /**
-     * Sets the <code>GuessChooser</code> used in this engine.
+     * Sets the <code>IGuessChooser</code> used in this engine.
      * 
      * @param chooser
      *            the chooser to be used
      */
-    public void setChooser(GuessChooser chooser) {
+    public void setChooser(IGuessChooser chooser) {
         if (chooser == null)
             throw new NullPointerException();
         this.chooser = chooser;

@@ -1,10 +1,10 @@
 package com.yhlab.guessnumberhelper.guess.chooser;
 
 import java.util.Random;
-import com.yhlab.guessnumberhelper.guess.IChooserBuilder;
 import com.yhlab.guessnumberhelper.guess.ChooserFactory;
-import com.yhlab.guessnumberhelper.guess.GuessChooser;
 import com.yhlab.guessnumberhelper.guess.GuessTreeNode;
+import com.yhlab.guessnumberhelper.guess.IChooserBuilder;
+import com.yhlab.guessnumberhelper.guess.IGuessChooser;
 
 /**
  * <p>
@@ -19,7 +19,7 @@ import com.yhlab.guessnumberhelper.guess.GuessTreeNode;
  * 
  * @author Cheng-Ru Lin ( owenlin.twn@gmail.com )
  */
-public class BasicChooser implements GuessChooser {
+public class BasicChooser implements IGuessChooser {
 
     static {
         ChooserFactory factory = ChooserFactory.getInstance();
@@ -47,12 +47,12 @@ public class BasicChooser implements GuessChooser {
 
     private static class Builder implements IChooserBuilder {
 
-        public GuessChooser buildChooser(String[] argv) {
+        public IGuessChooser buildChooser(String[] argv) {
             long seed = argv.length == 0 ?
                     System.currentTimeMillis() :
                     Long.parseLong(argv[0]);
             Random random = new Random(seed);
-            GuessChooser chooser = new BasicChooser(random);
+            IGuessChooser chooser = new BasicChooser(random);
             System.out.println("create "
                     + chooser + " with seed as " + seed);
             return chooser;
