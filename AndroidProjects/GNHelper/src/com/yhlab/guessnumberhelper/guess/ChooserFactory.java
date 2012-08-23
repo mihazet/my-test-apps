@@ -35,13 +35,13 @@ import java.util.NoSuchElementException;
  * </pre></blockquote></p>
  *
  * @author Cheng-Ru Lin ( owenlin.twn@gmail.com )
- * @see ChooserBuilder
+ * @see IChooserBuilder
  */
 public class ChooserFactory {
     
     static private ChooserFactory singleton;
     
-    private HashMap<String, ChooserBuilder> builderMap = new HashMap<String, ChooserBuilder>();
+    private HashMap<String, IChooserBuilder> builderMap = new HashMap<String, IChooserBuilder>();
 
     private ChooserFactory() {      
     }
@@ -72,7 +72,7 @@ public class ChooserFactory {
      * @param b the registered builder
      * @see #buildChooser( String, String[] )
      */
-    public void registerBuilder( String name, ChooserBuilder b ) {
+    public void registerBuilder( String name, IChooserBuilder b ) {
         if ( builderMap.containsKey( name ) )
             throw new IllegalStateException( 
                     "alread has a builder named \"" + name + '"' );
@@ -81,7 +81,7 @@ public class ChooserFactory {
     
     /**
      * Builds a new instance of <code>GuessChooser</code> by the 
-     * <code>ChooserBuilder</code> which is registered with the given
+     * <code>IChooserBuilder</code> which is registered with the given
      * name.
      * 
      * @param name the registered name of the builder
@@ -89,8 +89,8 @@ public class ChooserFactory {
      * @return a new instance of <code>GuessChooser</code>
      */
     public GuessChooser buildChooser( String name, String argv[] ) {
-        ChooserBuilder builder 
-                = (ChooserBuilder) builderMap.get( name );
+        IChooserBuilder builder 
+                = (IChooserBuilder) builderMap.get( name );
         if ( builder == null )
             throw new NoSuchElementException( name );
         if ( argv == null ) argv = new String[ 0 ];
@@ -98,7 +98,7 @@ public class ChooserFactory {
     }
     
     private void loadJarBuilders() throws IOException {
-        String factoryId = ChooserBuilder.class.getName();
+        String factoryId = IChooserBuilder.class.getName();
         String serviceId = "META-INF/services/" + factoryId;
         ClassLoader loader = ChooserFactory.class.getClassLoader();
         InputStream is = loader.getResourceAsStream( serviceId );
@@ -135,7 +135,7 @@ public class ChooserFactory {
     }
     
     private void loadSystemBuilders() throws IOException {
-        String filename = ChooserBuilder.class.getName() + ".list";
+        String filename = IChooserBuilder.class.getName() + ".list";
         String path = System.getProperty( "java.home" ) 
                 + File.separator + "lib" + File.separator + filename;
         File file = new File( path );
@@ -149,7 +149,7 @@ public class ChooserFactory {
     }
     
     private void loadUserBuilders() throws IOException {
-        String filename = ChooserBuilder.class.getName() + ".list";
+        String filename = IChooserBuilder.class.getName() + ".list";
         String path = System.getProperty( 
                 "user.home" ) + File.separator + filename;
         File file = new File( path );

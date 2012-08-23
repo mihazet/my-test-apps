@@ -1,7 +1,7 @@
 package com.yhlab.guessnumberhelper.guess.chooser;
 
 import java.util.Random;
-import com.yhlab.guessnumberhelper.guess.ChooserBuilder;
+import com.yhlab.guessnumberhelper.guess.IChooserBuilder;
 import com.yhlab.guessnumberhelper.guess.ChooserFactory;
 import com.yhlab.guessnumberhelper.guess.GuessChooser;
 import com.yhlab.guessnumberhelper.guess.ScoredChooser;
@@ -90,7 +90,7 @@ public class InfoGainChooser extends ScoredChooser {
         return builder.toString();
     }
 
-    private static class Builder implements ChooserBuilder {
+    private static class Builder implements IChooserBuilder {
 
         public GuessChooser buildChooser(String[] argv) {
             double weight = argv.length > 0 ?

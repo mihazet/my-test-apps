@@ -1,7 +1,7 @@
 package com.yhlab.guessnumberhelper.guess.chooser;
 
 import java.util.Random;
-import com.yhlab.guessnumberhelper.guess.ChooserBuilder;
+import com.yhlab.guessnumberhelper.guess.IChooserBuilder;
 import com.yhlab.guessnumberhelper.guess.ChooserFactory;
 import com.yhlab.guessnumberhelper.guess.GuessChooser;
 import com.yhlab.guessnumberhelper.guess.GuessTreeNode;
@@ -45,7 +45,7 @@ public class BasicChooser implements GuessChooser {
         return index < 0 ? name : name.substring(index + 1);
     }
 
-    private static class Builder implements ChooserBuilder {
+    private static class Builder implements IChooserBuilder {
 
         public GuessChooser buildChooser(String[] argv) {
             long seed = argv.length == 0 ?
