@@ -53,6 +53,7 @@ public class GuessTreeNode implements Serializable {
 
     private int numbers[];
     private int labels[];
+
     private int start;
     private int end;
 
