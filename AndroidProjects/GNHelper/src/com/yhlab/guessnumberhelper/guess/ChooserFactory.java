@@ -1,11 +1,5 @@
 package com.yhlab.guessnumberhelper.guess;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
@@ -65,7 +59,13 @@ public class ChooserFactory {
     public static ChooserFactory getInstance() {
         if (singleton == null) {
             singleton = new ChooserFactory();
-            singleton.loadChooserBuilders();
+            
+            try {
+                Class.forName("com.yhlab.guessnumberhelper.guess.chooser.BasicChooser");
+                Class.forName("com.yhlab.guessnumberhelper.guess.chooser.InfoGainChooser");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
         return singleton;
     }
@@ -106,90 +106,4 @@ public class ChooserFactory {
             argv = new String[0];
         return builder.buildChooser(argv);
     }
-
-    private void loadJarBuilders() throws IOException {
-        String factoryId = IChooserBuilder.class.getName();
-        String serviceId = "META-INF/services/" + factoryId;
-        ClassLoader loader = ChooserFactory.class.getClassLoader();
-        InputStream is = loader.getResourceAsStream(serviceId);
-        if (is == null)
-            return;
-        try {
-            loadChooserBuilders(is);
-        } finally {
-            is.close();
-        }
-    }
-
-    private void loadChooserBuilders() {
-        try {
-            loadSystemBuilders();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            loadUserBuilders();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            loadJarBuilders();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            Class.forName("org.fattybobo.guess.chooser.BasicChooser");
-            Class.forName("org.fattybobo.guess.chooser.InfoGainChooser");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadSystemBuilders() throws IOException {
-        String filename = IChooserBuilder.class.getName() + ".list";
-        String path = System.getProperty("java.home")
-                + File.separator + "lib" + File.separator + filename;
-        File file = new File(path);
-        if (!file.exists())
-            return;
-        FileInputStream fis = new FileInputStream(file);
-        try {
-            loadChooserBuilders(fis);
-        } finally {
-            fis.close();
-        }
-    }
-
-    private void loadUserBuilders() throws IOException {
-        String filename = IChooserBuilder.class.getName() + ".list";
-        String path = System.getProperty(
-                "user.home") + File.separator + filename;
-        File file = new File(path);
-        if (!file.exists())
-            return;
-        FileInputStream fis = new FileInputStream(file);
-        try {
-            loadChooserBuilders(fis);
-        } finally {
-            fis.close();
-        }
-    }
-
-    private void loadChooserBuilders(InputStream is)
-            throws IOException {
-        BufferedReader br =
-                new BufferedReader(new InputStreamReader(is));
-        String line = null;
-        while ((line = br.readLine()) != null) {
-            line = line.trim();
-            if (line.startsWith("#") || line.length() == 0)
-                continue;
-            try {
-                Class.forName(line);
-            } catch (ClassNotFoundException e) {
-                System.err.println("no such builder - " + line);
-            }
-        }
-    }
-
 }

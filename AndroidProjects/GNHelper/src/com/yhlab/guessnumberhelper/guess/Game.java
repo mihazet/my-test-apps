@@ -13,11 +13,11 @@ import java.util.regex.Pattern;
  * <p>
  * This java application play the guess game with users. It will guess the
  * passcode in the mind of the user. This game is also named as "MasterMind" in
- * other contries.
+ * other countries.
  * </p>
  * 
  * <p>
- * Here is the rule of the game. At the begining, user chooses one 4-digit
+ * Here is the rule of the game. At the beginning, user chooses one 4-digit
  * passcode in his mind. This program will then try to probe the passcode and
  * finally get the correct one. It will shoot several guesses. For each guess,
  * the user responses the relation ship between the guess and the correct
@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
  * passcode and those of the guess number. If a digit appears in both of the
  * passcode and the guess number and is in the same position of the two numbers,
  * then we say it's an "A". If the digit appears in both numbers but is in
- * different posistions, then we say it's a "B" The label is the infomation of
+ * different positions, then we say it's a "B" The label is the information of
  * how many "A"'s and "B"'s the guess number has. In this application, user can
  * simply type 01 to indicates 0A1B, alternatively, he can types "0A1B" or
  * "0a1b" for the same information.
@@ -39,8 +39,8 @@ import java.util.regex.Pattern;
  * 
  * <p>
  * Many implementations of the <code>IGuessChooser</code> will choose the same
- * number for the first guess. This chold be a weekness of this application.
- * Thus, in this application, the digits is shuffled at the begining of the
+ * number for the first guess. This could be a weakness of this application.
+ * Thus, in this application, the digits is shuffled at the beginning of the
  * game. Which means we use a one-to-one and on-to function to map the original
  * digits. By doing so, the users is hard to see the rule of the guessing
  * sequence.

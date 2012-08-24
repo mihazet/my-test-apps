@@ -2,11 +2,12 @@ package com.yhlab.guessnumberhelper.guess;
 
 /**
  * <p>
- * This class provides a high level interface to play the guess game. Users may
- * use this class as shown below. <blockquote>
+ * This class provides a high level interface to play the guess game.
+ * Users may use this class as shown below. 
  * 
+ * <blockquote>
  * <pre>
- * int digitCount = 4, target = (digitCount &lt;&lt; 4);// 4A0B
+ * int digitCount = 4, target = (digitCount << 4);// 4A0B
  * GuessEngine engine = new GuessEngine(digitCount, chooser);
  * while (true) {
  *     int guess = engine.nextGuess();
@@ -23,8 +24,8 @@ package com.yhlab.guessnumberhelper.guess;
  * </p>
  * 
  * <p>
- * The purpose of this class is just provide a friendly interface for clients to
- * use. The main AI part is provided by the instance of
+ * The purpose of this class is just provide a friendly interface for
+ * clients to use. The main AI part is provided by the instance of
  * <code>GuessChooser</code>.
  * </p>
  * 
@@ -80,8 +81,8 @@ public class GuessEngine {
 
     /**
      * Gets the next guess number. The number is formated in HEX based. For
-     * example, the value 0x1234 means to guess "1234". This function can only
-     * be called in the following three conditions:
+     * example, the value 0x1234 means to guess "1234". This function can
+     * only be called in the following three conditions:
      * <ol>
      * <li>after the instance has been constructed
      * <li>after the function <code>reset()</code>

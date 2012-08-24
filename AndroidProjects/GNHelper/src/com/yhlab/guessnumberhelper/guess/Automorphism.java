@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 /**
  * This class is used to solve the isomorphism problem. In some cases, one
- * guessing number is equivlent to
+ * guessing number is equivalent to
  * 
  * @author Cheng-Ru Lin ( owenlin.twn@gmail.com )
  */

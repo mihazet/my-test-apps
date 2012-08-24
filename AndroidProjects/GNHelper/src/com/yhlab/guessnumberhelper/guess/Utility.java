@@ -14,16 +14,16 @@ public class Utility {
 
     /**
      * <p>
-     * Get the label of the given candidate and guess. The label is the relation
-     * ship between the guess and the candidate. Those digits appear in both
-     * numbers and in the same position is named as "A" and those appear in both
-     * numbers but in different position is named "B". The label is the number
-     * of "A"s and "B"s between a guess and a candidate.
+     * Get the label of the given candidate and guess. The label is the
+     * relationship between the guess and the candidate. Those digits appear in
+     * both numbers and locate at the same position is named as "A", and those
+     * appear in both numbers but at different position is named "B". The label
+     * is the number of "A"s and "B"s between the guess and the candidate.
      * </p>
      * 
      * <p>
      * For example, the label of "0123" and "0135" is "2A1B" (2A: 0 and 1, 1B:
-     * 3). The value of label is in HEX formated. For example, if the label is
+     * 3). The value of label is represented in HEX formated. If the label is
      * "1A2B", the returned value will be 0x12.
      * 
      * @param candidate
@@ -34,8 +34,7 @@ public class Utility {
      *            the number of digits in the game
      * @return the label between the given candidate and the given guess
      */
-    public static int
-            label(int candidate, int guess, int digitCount) {
+    public static int label(int candidate, int guess, int digitCount) {
         int mask = 0x00, mark = 0;
         for (int i = 0; i < digitCount; ++i, candidate >>= 4, guess >>= 4) {
             int x = (candidate & 0x0F);
@@ -81,8 +80,7 @@ public class Utility {
      *            the number of digits in the game
      * @return an array of all the candidate numbers
      */
-    public static int[]
-            generateCandidates(int digitCount, int symbolCount) {
+    public static int[] generateCandidates(int digitCount, int symbolCount) {
         if (digitCount <= 0 || digitCount > 8)
             throw new IllegalArgumentException();
         if (symbolCount < digitCount || symbolCount >= 0x10)
