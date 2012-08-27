@@ -48,7 +48,7 @@ import java.util.regex.Pattern;
  * 
  * @author Cheng-Ru Lin ( owenlin.twn@gmail.com )
  */
-public class Game {
+public class ConsoleGame {
     private static final Pattern pattern = Pattern
             .compile("\\s*(\\d)[aA]?\\s*(\\d)[bB]?\\s*");
 
@@ -58,7 +58,7 @@ public class Game {
     private GuessEngine engine;
 
     /**
-     * Constructs a new instance of <code>Game</code>.
+     * Constructs a new instance of <code>ConsoleGame</code>.
      * 
      * @param digitCount
      *            the number of digits
@@ -67,7 +67,7 @@ public class Game {
      * @param chooser
      *            the guess chooser adopted
      */
-    public Game(int digitCount, int symbolCount,
+    public ConsoleGame(int digitCount, int symbolCount,
             Random random, IGuessChooser chooser) {
         if (digitCount <= 0 || digitCount > 8)
             throw new IllegalArgumentException();
@@ -177,7 +177,7 @@ public class Game {
         System.out.println(
                 "start game with random seed as " + seed);
         System.out.println("using chooser: " + chooser);
-        Game game = new Game(digitCount,
+        ConsoleGame game = new ConsoleGame(digitCount,
                 symbolCount, new Random(seed), chooser);
         game.play(System.in, System.out);
     }

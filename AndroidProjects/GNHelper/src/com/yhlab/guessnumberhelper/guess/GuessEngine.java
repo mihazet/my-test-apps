@@ -130,14 +130,14 @@ public class GuessEngine {
      * </p>
      * 
      * <p>
-     * Please reference <code>Game</code> for more details about the description
+     * Please reference <code>ConsoleGame</code> for more details about the description
      * about the label.
      * </p>
      * 
      * @param label
      *            the label of the guess
      * @return false if no candidate numbers match the label; otherwise, true.
-     * @see Game
+     * @see ConsoleGame
      */
     public boolean setLabel(int label) {
         if (state != STATE_INPUT)

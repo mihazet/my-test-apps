@@ -423,7 +423,7 @@ public class GuessTreeNode implements Serializable {
      * answer. For example, the label between candidate "0123" and the guess
      * "0132" is 2A2B. The label is encoding as an integer, the value 0x11 means
      * 1A1B; the value 0x22 means 2A2B and etc. Please refer to
-     * <code>Game</code> for more detail about the "label".
+     * <code>ConsoleGame</code> for more detail about the "label".
      * </p>
      * 
      * <p>
@@ -441,7 +441,7 @@ public class GuessTreeNode implements Serializable {
      *            the label of the returned child
      * @return the child node of the given label or null if no such child node
      *         exists.
-     * @see Game
+     * @see ConsoleGame
      */
     public GuessTreeNode findChild(int label) {
         if (child == null)
