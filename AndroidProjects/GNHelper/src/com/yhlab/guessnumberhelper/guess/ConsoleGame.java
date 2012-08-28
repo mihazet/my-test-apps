@@ -167,7 +167,7 @@ public class ConsoleGame {
             System.arraycopy(argv, 1, args, 0, args.length);
         }
         ChooserFactory factory = ChooserFactory.getInstance();
-        IGuessChooser chooser = factory.buildChooser(name, args);
+        IGuessChooser chooser = factory.createChooser(name, args);
         if (chooser instanceof ScoredChooser) {
             ((ScoredChooser) chooser).setTimeout(5000);
         }

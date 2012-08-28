@@ -10,15 +10,15 @@ package com.yhlab.guessnumberhelper.guess;
  * 
  * @author Cheng-Ru Lin ( owenlin.twn@gmail.com )
  */
-public interface IChooserBuilder {
+public interface IChooserCreater {
 
     /**
-     * Builds a new instance of <code>GuessChooser</code>. The instance is
+     * Create a new instance of <code>GuessChooser</code>. The instance is
      * created based on the builder and the the given arguments.
      * 
      * @param argv
      *            the arguments to build the chooser
      * @return a new <code>GuessChooser</code>
      */
-    public IGuessChooser buildChooser(String argv[]);
+    public IGuessChooser createChooser(String argv[]);
 }

@@ -4,7 +4,7 @@ import java.util.Random;
 import android.util.Log;
 import com.yhlab.guessnumberhelper.guess.ChooserFactory;
 import com.yhlab.guessnumberhelper.guess.GuessTreeNode;
-import com.yhlab.guessnumberhelper.guess.IChooserBuilder;
+import com.yhlab.guessnumberhelper.guess.IChooserCreater;
 import com.yhlab.guessnumberhelper.guess.IGuessChooser;
 
 /**
@@ -24,7 +24,7 @@ public class BasicChooser implements IGuessChooser {
 
     static {
         ChooserFactory factory = ChooserFactory.getInstance();
-        factory.registerBuilder("Basic", new Builder());
+        factory.registerChooser("Basic", new Builder());
     }
 
     private static final String TAG = "BasicChooser";
@@ -47,9 +47,9 @@ public class BasicChooser implements IGuessChooser {
         return index < 0 ? name : name.substring(index + 1);
     }
 
-    private static class Builder implements IChooserBuilder {
+    private static class Builder implements IChooserCreater {
 
-        public IGuessChooser buildChooser(String[] argv) {
+        public IGuessChooser createChooser(String[] argv) {
             long seed = argv.length == 0 ?
                     System.currentTimeMillis() :
                     Long.parseLong(argv[0]);

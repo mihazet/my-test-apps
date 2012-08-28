@@ -37,13 +37,13 @@ import java.util.NoSuchElementException;
  * </p>
  * 
  * @author Cheng-Ru Lin ( owenlin.twn@gmail.com )
- * @see IChooserBuilder
+ * @see IChooserCreater
  */
 public class ChooserFactory {
 
     static private ChooserFactory singleton;
 
-    private HashMap<String, IChooserBuilder> builderMap = new HashMap<String, IChooserBuilder>();
+    private HashMap<String, IChooserCreater> chooserMap = new HashMap<String, IChooserCreater>();
 
     private ChooserFactory() {
     }
@@ -71,8 +71,8 @@ public class ChooserFactory {
     }
 
     /**
-     * Registers a builder with this factory. Users can use the registered
-     * builder to create a new instance of <code>
+     * Registers a chooser with this factory. Users can use the registered
+     * chooser to create a new instance of <code>
      * GuessChooser</code> by calling the function <code>buildChooser</code>.
      * 
      * @param name
@@ -81,16 +81,16 @@ public class ChooserFactory {
      *            the registered builder
      * @see #buildChooser(String, String[] )
      */
-    public void registerBuilder(String name, IChooserBuilder b) {
-        if (builderMap.containsKey(name))
+    public void registerChooser(String name, IChooserCreater b) {
+        if (chooserMap.containsKey(name))
             throw new IllegalStateException(
-                    "alread has a builder named \"" + name + '"');
-        builderMap.put(name, b);
+                    "already has a chooser named \"" + name + '"');
+        chooserMap.put(name, b);
     }
 
     /**
      * Builds a new instance of <code>GuessChooser</code> by the
-     * <code>IChooserBuilder</code> which is registered with the given name.
+     * <code>IChooserCreater</code> which is registered with the given name.
      * 
      * @param name
      *            the registered name of the builder
@@ -98,12 +98,12 @@ public class ChooserFactory {
      *            the arguments for building the chooser
      * @return a new instance of <code>GuessChooser</code>
      */
-    public IGuessChooser buildChooser(String name, String argv[]) {
-        IChooserBuilder builder = (IChooserBuilder) builderMap.get(name);
-        if (builder == null)
+    public IGuessChooser createChooser(String name, String argv[]) {
+        IChooserCreater creater = (IChooserCreater) chooserMap.get(name);
+        if (creater == null)
             throw new NoSuchElementException(name);
         if (argv == null)
             argv = new String[0];
-        return builder.buildChooser(argv);
+        return creater.createChooser(argv);
     }
 }

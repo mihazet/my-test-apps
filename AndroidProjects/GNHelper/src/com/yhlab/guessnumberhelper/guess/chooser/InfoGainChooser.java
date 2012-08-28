@@ -3,7 +3,7 @@ package com.yhlab.guessnumberhelper.guess.chooser;
 import java.util.Random;
 import android.util.Log;
 import com.yhlab.guessnumberhelper.guess.ChooserFactory;
-import com.yhlab.guessnumberhelper.guess.IChooserBuilder;
+import com.yhlab.guessnumberhelper.guess.IChooserCreater;
 import com.yhlab.guessnumberhelper.guess.IGuessChooser;
 import com.yhlab.guessnumberhelper.guess.ScoredChooser;
 
@@ -52,7 +52,7 @@ import com.yhlab.guessnumberhelper.guess.ScoredChooser;
 public class InfoGainChooser extends ScoredChooser {
     static {
         ChooserFactory factory = ChooserFactory.getInstance();
-        factory.registerBuilder("InfoGain", new Builder());
+        factory.registerChooser("InfoGain", new Builder());
     }
 
     private static final String TAG = "InfoGainChooser";
@@ -92,9 +92,9 @@ public class InfoGainChooser extends ScoredChooser {
         return builder.toString();
     }
 
-    private static class Builder implements IChooserBuilder {
+    private static class Builder implements IChooserCreater {
 
-        public IGuessChooser buildChooser(String[] argv) {
+        public IGuessChooser createChooser(String[] argv) {
             double weight = argv.length > 0 ?
                     Double.parseDouble(argv[0]) : 1.8;
             long seed = argv.length > 1 ?
