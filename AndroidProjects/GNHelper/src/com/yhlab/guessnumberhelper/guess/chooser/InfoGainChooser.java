@@ -1,6 +1,7 @@
 package com.yhlab.guessnumberhelper.guess.chooser;
 
 import java.util.Random;
+import android.util.Log;
 import com.yhlab.guessnumberhelper.guess.ChooserFactory;
 import com.yhlab.guessnumberhelper.guess.IChooserBuilder;
 import com.yhlab.guessnumberhelper.guess.IGuessChooser;
@@ -54,6 +55,7 @@ public class InfoGainChooser extends ScoredChooser {
         factory.registerBuilder("InfoGain", new Builder());
     }
 
+    private static final String TAG = "InfoGainChooser";
     private int category[] = new int[0x100];
     private double weight;
 
@@ -100,8 +102,7 @@ public class InfoGainChooser extends ScoredChooser {
                     System.currentTimeMillis();
             IGuessChooser chooser = new InfoGainChooser(
                     new Random(seed), weight);
-            System.out.println("build "
-                    + chooser + " with random seed as " + seed);
+            Log.d(TAG, chooser + " created with seed " + seed); 
             return chooser;
         }
 

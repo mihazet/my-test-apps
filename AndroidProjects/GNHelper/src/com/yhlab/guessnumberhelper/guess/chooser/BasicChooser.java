@@ -1,6 +1,7 @@
 package com.yhlab.guessnumberhelper.guess.chooser;
 
 import java.util.Random;
+import android.util.Log;
 import com.yhlab.guessnumberhelper.guess.ChooserFactory;
 import com.yhlab.guessnumberhelper.guess.GuessTreeNode;
 import com.yhlab.guessnumberhelper.guess.IChooserBuilder;
@@ -26,6 +27,7 @@ public class BasicChooser implements IGuessChooser {
         factory.registerBuilder("Basic", new Builder());
     }
 
+    private static final String TAG = "BasicChooser";
     private Random random;
 
     public BasicChooser(Random random) {
@@ -53,8 +55,7 @@ public class BasicChooser implements IGuessChooser {
                     Long.parseLong(argv[0]);
             Random random = new Random(seed);
             IGuessChooser chooser = new BasicChooser(random);
-            System.out.println("create "
-                    + chooser + " with seed as " + seed);
+            Log.d(TAG, chooser + " created with seed " + seed); 
             return chooser;
         }
 
