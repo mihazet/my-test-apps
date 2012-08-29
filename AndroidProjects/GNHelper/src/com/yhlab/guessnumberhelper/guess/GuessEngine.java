@@ -2,12 +2,13 @@ package com.yhlab.guessnumberhelper.guess;
 
 /**
  * <p>
- * This class provides a high level interface to play the guess game.
- * Users may use this class as shown below. 
+ * This class provides a high level interface to play the guess game. Users may
+ * use this class as shown below.
  * 
  * <blockquote>
+ * 
  * <pre>
- * int digitCount = 4, target = (digitCount << 4);// 4A0B
+ * int digitCount = 4, target = (digitCount &lt;&lt; 4);// 4A0B
  * GuessEngine engine = new GuessEngine(digitCount, chooser);
  * while (true) {
  *     int guess = engine.nextGuess();
@@ -24,8 +25,8 @@ package com.yhlab.guessnumberhelper.guess;
  * </p>
  * 
  * <p>
- * The purpose of this class is just provide a friendly interface for
- * clients to use. The main AI part is provided by the instance of
+ * The purpose of this class is just provide a friendly interface for clients to
+ * use. The main AI part is provided by the instance of
  * <code>GuessChooser</code>.
  * </p>
  * 
@@ -56,8 +57,7 @@ public class GuessEngine {
      * @param chooser
      *            the guess chooser used
      */
-    public GuessEngine(int digitCount,
-            int symbolCount, IGuessChooser chooser) {
+    public GuessEngine(int digitCount, int symbolCount, IGuessChooser chooser) {
         if (digitCount <= 0 || digitCount > 8)
             throw new IllegalArgumentException();
         if (symbolCount < digitCount || symbolCount >= 0x10)
@@ -81,8 +81,8 @@ public class GuessEngine {
 
     /**
      * Gets the next guess number. The number is formated in HEX based. For
-     * example, the value 0x1234 means to guess "1234". This function can
-     * only be called in the following three conditions:
+     * example, the value 0x1234 means to guess "1234". This function can only
+     * be called in the following three conditions:
      * <ol>
      * <li>after the instance has been constructed
      * <li>after the function <code>reset()</code>
@@ -130,8 +130,8 @@ public class GuessEngine {
      * </p>
      * 
      * <p>
-     * Please reference <code>ConsoleGame</code> for more details about the description
-     * about the label.
+     * Please reference <code>ConsoleGame</code> for more details about the
+     * description about the label.
      * </p>
      * 
      * @param label

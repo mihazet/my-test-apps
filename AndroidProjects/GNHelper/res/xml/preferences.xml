@@ -8,7 +8,7 @@
         android:key="prefs_digitCount"
         android:title="@string/prefs_digit_count" />
     <ListPreference
-        android:defaultValue="random"
+        android:defaultValue="Basic"
         android:entries="@array/prefs_guess_method_entries"
         android:entryValues="@array/prefs_guess_method_values"
         android:key="prefs_guessMethod"

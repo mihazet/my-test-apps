@@ -6,14 +6,15 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-
 public class MainActivity extends SherlockFragmentActivity implements
         NumberFragment.IGuessedListener, OnSharedPreferenceChangeListener {
 
+    private static final String TAG = "MainActivity";
     private SharedPreferences mSharedPrefs;
 
     @Override
@@ -32,6 +33,8 @@ public class MainActivity extends SherlockFragmentActivity implements
          */
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPrefs.registerOnSharedPreferenceChangeListener(this);
+
+        // getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     @Override
@@ -57,6 +60,17 @@ public class MainActivity extends SherlockFragmentActivity implements
             this.startActivity(new Intent(this, SettingsActivity.class));
             return true;
         case R.id.menu_restart:
+
+            GNApp app = (GNApp) getApplication();
+            int firstGuess = app.game.restart();
+
+            FragmentManager fm = getSupportFragmentManager();
+            NumberFragment nf = (NumberFragment) fm
+                    .findFragmentById(R.id.number_fragment);
+            nf.setGuessNumber(firstGuess);
+
+            return true;
+
         case R.id.menu_about:
         default:
             return super.onOptionsItemSelected(item);
@@ -69,6 +83,18 @@ public class MainActivity extends SherlockFragmentActivity implements
         HistoryFragment hf = (HistoryFragment) fm
                 .findFragmentById(R.id.history_fragment);
         hf.addHistory(number, result);
+
+        GNApp app = (GNApp) getApplication();
+
+        if (app.game.setGuessLabel(0, result)) {
+            int nextGuess = app.game.nextGuess();
+            NumberFragment nf = (NumberFragment) fm
+                    .findFragmentById(R.id.number_fragment);
+            nf.setGuessNumber(nextGuess);
+        } else {
+            Log.d(TAG, "Invalid or got it!");
+        }
+        
     }
 
     @Override
