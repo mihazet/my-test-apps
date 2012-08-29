@@ -2,16 +2,19 @@
 
     <item
         android:id="@+id/menu_settings"
-        android:showAsAction="never"
+        android:icon="@drawable/ic_action_settings"
+        android:showAsAction="never|withText"
         android:title="@string/menu_settings"/>
     <item
         android:id="@+id/menu_restart"
-        android:showAsAction="withText"
+        android:icon="@drawable/ic_action_restart"
+        android:showAsAction="ifRoom|withText"
         android:title="@string/menu_restart">
     </item>
     <item
         android:id="@+id/menu_about"
-        android:showAsAction="never"
+        android:icon="@drawable/ic_action_about"
+        android:showAsAction="never|withText"
         android:title="@string/menu_about">
     </item>
 
