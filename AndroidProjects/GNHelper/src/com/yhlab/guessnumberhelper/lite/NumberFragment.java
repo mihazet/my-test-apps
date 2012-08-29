@@ -4,17 +4,18 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableRow;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.yhlab.component.guessnumber.GuessedNumber;
 import com.yhlab.component.guessnumber.GuessedResult;
 
-public class NumberFragment extends Fragment {
+
+public class NumberFragment extends SherlockFragment {
 
     private GuessedNumber gn;
     private GuessedResult gr;
@@ -82,5 +83,13 @@ public class NumberFragment extends Fragment {
     public void changeDigitCount(int newDigitCount) {
         gn.changeDigitCount(newDigitCount);
         gr.changeDigitUsed(newDigitCount);
+    }
+    
+    public void setGuessNumber(int guess) {
+        gn.setNumber(guess, true);
+    }
+    
+    public int getGuessNumber() {
+        return gn.getNumber();
     }
 }

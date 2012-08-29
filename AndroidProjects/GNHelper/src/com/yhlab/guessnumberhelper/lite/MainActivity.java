@@ -5,13 +5,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
-public class MainActivity extends FragmentActivity implements
+
+public class MainActivity extends SherlockFragmentActivity implements
         NumberFragment.IGuessedListener, OnSharedPreferenceChangeListener {
 
     private SharedPreferences mSharedPrefs;
@@ -19,9 +19,6 @@ public class MainActivity extends FragmentActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        /* init default values */
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         setContentView(R.layout.activity_main);
 
@@ -48,7 +45,7 @@ public class MainActivity extends FragmentActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+        getSupportMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
 
@@ -76,7 +73,7 @@ public class MainActivity extends FragmentActivity implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sp, String k) {
-        
+
         if (k.equals(SettingsActivity.KEY_DIGIT_COUNT)) {
 
             FragmentManager fm = getSupportFragmentManager();
@@ -86,7 +83,6 @@ public class MainActivity extends FragmentActivity implements
 
         } else if (k.equals(SettingsActivity.KEY_GUESS_METHOD)) {
 
-            
         }
     }
 }
