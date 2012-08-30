@@ -44,7 +44,6 @@ public class GuessEngine {
     private int digitCount;
     private int symbolCount;
     private int nextGuess;
-    private int guessedMask;
 
     private GuessTreeNode node;
     private IGuessChooser chooser;
@@ -76,7 +75,6 @@ public class GuessEngine {
     public void reset() {
         this.state = STATE_GUESS;
         this.node = new GuessTreeNode(digitCount, symbolCount);
-        this.guessedMask = 0x00;
     }
 
     /**
@@ -100,9 +98,6 @@ public class GuessEngine {
             throw new IllegalStateException();
         this.nextGuess = chooser.nextGuess(node);
         state = STATE_INPUT;
-        int tmp = nextGuess;
-        for (int i = 0; i < digitCount; ++i, tmp >>= 4)
-            guessedMask |= (0x01 << (tmp & 0x0F));
         return nextGuess;
     }
 
