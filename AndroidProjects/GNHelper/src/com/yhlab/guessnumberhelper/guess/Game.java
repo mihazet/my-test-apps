@@ -1,13 +1,8 @@
 package com.yhlab.guessnumberhelper.guess;
 
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Game {
 
-    private int digitCount;
-    private Random random;
     private GuessEngine engine;
 
     /**
@@ -15,20 +10,13 @@ public class Game {
      * 
      * @param digitCount
      *            the number of digits
-     * @param random
-     *            the random number variable used to shuffle the digits.
      * @param chooser
      *            the guess chooser adopted
      */
-    public Game(int digitCount, int symbolCount, Random random,
-            IGuessChooser chooser) {
+    public Game(int digitCount, int symbolCount, IGuessChooser chooser) {
         if (digitCount <= 0 || digitCount > 8)
             throw new IllegalArgumentException();
-        if (random == null)
-            throw new NullPointerException();
-        this.digitCount = digitCount;
-        this.random = random;
-        this.engine = new GuessEngine(digitCount, symbolCount, chooser);
+        engine = new GuessEngine(digitCount, symbolCount, chooser);
     }
 
     /**

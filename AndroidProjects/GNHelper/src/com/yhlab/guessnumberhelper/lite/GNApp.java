@@ -1,6 +1,5 @@
 package com.yhlab.guessnumberhelper.lite;
 
-import java.util.Random;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -41,8 +40,7 @@ public class GNApp extends Application {
         if (chooser instanceof ScoredChooser) {
             ((ScoredChooser) chooser).setTimeout(5000);
         }
-        long seed = System.currentTimeMillis();
-        game = new Game(digitCount, 10, new Random(seed), chooser);
+        game = new Game(digitCount, 10, chooser);
 
         Log.v(TAG, "Created!");
     }
