@@ -85,7 +85,7 @@ public class Utility {
             throw new IllegalArgumentException();
         if (symbolCount < digitCount || symbolCount >= 0x10)
             throw new IllegalArgumentException();
-        int digit[] = new int[symbolCount];
+        int[] digit = new int[symbolCount];
         for (int i = 0; i < symbolCount; ++i)
             digit[i] = i;
         int size = 1;
@@ -98,7 +98,7 @@ public class Utility {
     }
 
     private static void generate(int n,
-            IntArray array, int digit[], int depth, int number) {
+            IntArray array, int[] digit, int depth, int number) {
         if (depth < n) {
             number <<= 4;
             int x = digit[depth];
@@ -115,7 +115,7 @@ public class Utility {
     /**
      * Gets the bit mask of the given number. The bit mask will show which
      * digits are used in the given number. For example, the bit mask of number
-     * "1357" will be 1010101(in binary), i.e, 0x55 (in HEX).
+     * "1357" will be 10101010(in binary), i.e, 0xAA (in HEX).
      * 
      * @param number
      *            the value to be calculated

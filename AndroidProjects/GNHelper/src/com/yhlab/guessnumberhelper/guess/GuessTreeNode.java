@@ -43,16 +43,16 @@ public class GuessTreeNode implements Serializable {
     public static final int NON_SPLIT = -1;
     private static final long serialVersionUID = -1088587165312440165L;
 
-    private static final GuessTreeNode EMPTY_NODE[] = new GuessTreeNode[0];
+    private static final GuessTreeNode[] EMPTY_NODE = new GuessTreeNode[0];
 
     private GuessTreeNode parent;
-    private GuessTreeNode child[] = null;
+    private GuessTreeNode[] child = null;
     private int splitGuess = NON_SPLIT;
     private int digitCount;
     private int symbolCount;
 
-    private int numbers[];
-    private int labels[];
+    private int[] numbers;
+    private int[] labels;
 
     private int start;
     private int end;
@@ -61,8 +61,7 @@ public class GuessTreeNode implements Serializable {
      * Constructs a unsplit root node of the guessing game. The number of the
      * digit should be in the range of (0, 8]. This is because we use the HEX
      * format to represent the number. Otherwise, an exception of
-     * <code>IllegalArgumentException
-     * </code> will be thrown.
+     * <code>IllegalArgumentException</code> will be thrown.
      * 
      * @param digitCount
      *            the number of the digits of the game.
@@ -82,8 +81,7 @@ public class GuessTreeNode implements Serializable {
         this.end = numbers.length;
     }
 
-    private GuessTreeNode(
-            GuessTreeNode parent, int start, int end) {
+    private GuessTreeNode(GuessTreeNode parent, int start, int end) {
         this.parent = parent;
         this.numbers = parent.numbers;
         this.labels = parent.labels;
@@ -95,7 +93,7 @@ public class GuessTreeNode implements Serializable {
 
     /**
      * Gets the split guess of this node. If this node has not been split yet,
-     * -1 (<code>NON_SPLIT</code>) will be returne.
+     * -1 (<code>NON_SPLIT</code>) will be returned.
      * 
      * @return the split guess number of this node or <code>NON_SPLIT</code> if
      *         this node has not been split
@@ -118,7 +116,7 @@ public class GuessTreeNode implements Serializable {
     }
 
     /**
-     * Splits the node with the given gussing number <code>guess</code>. Please
+     * Splits the node with the given number <code>guess</code>. Please
      * note that, It is allowed to re-split a split node. The previous split
      * children will be discarded.
      * 
@@ -126,8 +124,9 @@ public class GuessTreeNode implements Serializable {
      *            the number used to split the node
      */
     public void split(int guess) {
-        this.splitGuess = guess;
-        int lab[] = this.labels, num[] = this.numbers;
+        splitGuess = guess;
+        int[] lab = labels;
+        int[] num = numbers;
         int s = start, e = end;
         for (int i = s; i < e; ++i)
             lab[i] = Utility.label(num[i], guess, digitCount);
@@ -140,7 +139,7 @@ public class GuessTreeNode implements Serializable {
             if ((s = t) == e)
                 break;
         }
-        this.child = (GuessTreeNode[]) list.toArray(EMPTY_NODE);
+        child = (GuessTreeNode[]) list.toArray(EMPTY_NODE);
     }
 
     /**
@@ -169,6 +168,8 @@ public class GuessTreeNode implements Serializable {
     public GuessTreeNode getChild(int index) {
         if (child == null)
             throw new IllegalStateException();
+        if (index >= getChildCount())
+            throw new ArrayIndexOutOfBoundsException();
         return child[index];
     }
 
@@ -184,8 +185,8 @@ public class GuessTreeNode implements Serializable {
     }
 
     private int organize(int target, int s, int e) {
-        int label[] = this.labels;
-        int cand[] = this.numbers;
+        int[] label = labels;
+        int[] cand = numbers;
         if (--e < s)
             return e + 1;
         while (true) {
@@ -203,7 +204,7 @@ public class GuessTreeNode implements Serializable {
 
     /**
      * Gets the size of this node. The size of a node is defined as the possible
-     * candidates at the state represted by the node.
+     * candidates at the state represented by the node.
      * 
      * @return the size of this node.
      */
@@ -312,11 +313,11 @@ public class GuessTreeNode implements Serializable {
 
     private GuessTreeNode[] getPathNodes(int size) {
         if (parent == null) {
-            GuessTreeNode nodes[] = new GuessTreeNode[size];
+            GuessTreeNode[] nodes = new GuessTreeNode[size];
             nodes[size - 1] = this;
             return nodes;
         } else {
-            GuessTreeNode nodes[] = parent.getPathNodes(size + 1);
+            GuessTreeNode[] nodes = parent.getPathNodes(size + 1);
             nodes[size - 1] = this;
             return nodes;
         }
@@ -347,9 +348,9 @@ public class GuessTreeNode implements Serializable {
      * @return the guessed numbers of this node.
      */
     public int[] getGuessedNumbers() {
-        GuessTreeNode nodes[] = getPathNodes(1);
+        GuessTreeNode[] nodes = getPathNodes(1);
         int length = nodes.length - 1;
-        int guessed[] = new int[length];
+        int[] guessed = new int[length];
         for (int i = 0; i < length; ++i)
             guessed[i] = nodes[length - i].splitGuess;
         return guessed;
@@ -365,7 +366,7 @@ public class GuessTreeNode implements Serializable {
      * @return the digit mask of all the guessed number
      */
     public int getGuessedDigitMask() {
-        GuessTreeNode nodes[] = getPathNodes(1);
+        GuessTreeNode[] nodes = getPathNodes(1);
         int length = nodes.length - 1;
         int mask = 0x00, fullMask = (0x01 << symbolCount) - 1;
         for (int i = 0; i < length; ++i) {
@@ -476,14 +477,14 @@ public class GuessTreeNode implements Serializable {
      * @param stat
      *            the results of the statistics
      */
-    public void doLabelStatistics(int guess, int stat[]) {
+    public void doLabelStatistics(int guess, int[] stat) {
         if (stat.length < 0x100)
             throw new IllegalArgumentException();
         for (int i = 0; i <= digitCount; ++i) {
             for (int j = 0, jn = digitCount - i; j <= jn; ++j)
                 stat[(i << 4) | j] = 0;
         }
-        int num[] = this.numbers;
+        int[] num = numbers;
         for (int i = start; i < end; ++i)
             ++stat[Utility.label(num[i], guess, digitCount)];
     }
@@ -502,7 +503,7 @@ public class GuessTreeNode implements Serializable {
      * @throws IllegalArgumentException
      *             if stat is not large enough to keep the statistics result
      */
-    public void doDigitStatistics(int statistics[][]) {
+    public void doDigitStatistics(int[][] statistics) {
         if (statistics.length != this.digitCount)
             throw new IllegalArgumentException();
         for (int i = 0; i < digitCount; ++i) {
