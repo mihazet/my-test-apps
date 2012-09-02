@@ -1,5 +1,7 @@
 package com.yhlab.guessnumberhelper.guess;
 
+import android.util.Log;
+
 /**
  * <p>
  * This class provides a high level interface to play the guess game. Users may
@@ -34,6 +36,8 @@ package com.yhlab.guessnumberhelper.guess;
  * @author Cheng-Ru Lin ( owenlin.twn@gmail.com )
  */
 public class GuessEngine {
+
+    private static final String TAG = "GuessEngine";
 
     private static final int STATE_INIT = 0;
     private static final int STATE_GUESS = 1;
@@ -131,19 +135,40 @@ public class GuessEngine {
      * 
      * @param label
      *            the label of the guess
-     * @return false if no candidate numbers match the label; otherwise, true.
-     * @see ConsoleGame
+     * @return 2 if there are more than one possible number. 1 if there is only
+     *         one possible number. 0 if there is not possible number any more.
      */
-    public boolean setLabel(int label) {
+    public int setLabel(int guess, int label) {
         if (state != STATE_INPUT)
             throw new IllegalStateException();
-        node.split(nextGuess);
-        GuessTreeNode next = node.findChild(label);
-        if (next == null)
-            return false;
-        state = STATE_GUESS;
-        this.node = next;
-        return true;
-    }
 
+        Log.d(TAG, "Total candidates: " + node.size());
+        
+        node.split(guess);
+        GuessTreeNode next = node.findChild(label);
+
+        Log.v(TAG, "Guess[" + node.getDepth() + "]"
+                + ", groups:" + node.getChildCount()
+                + ", candidates:" + (next != null ? next.size() : "invalid"));
+
+        if (label == digitCount << 4) {
+            if (node.size() > 1)
+                return 3;
+            else {
+                state = STATE_GUESS;
+                return 1;
+            }
+        }
+
+        if (next == null)
+            return 0;
+
+        state = STATE_GUESS;
+        node = next;
+
+        if (node.size() > 1)
+            return 2;
+        else
+            return 1;
+    }
 }

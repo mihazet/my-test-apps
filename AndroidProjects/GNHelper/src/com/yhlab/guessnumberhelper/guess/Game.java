@@ -2,6 +2,11 @@ package com.yhlab.guessnumberhelper.guess;
 
 
 public class Game {
+    
+    public static final int CANDIDATE_ZERO = 0;
+    public static final int CANDIDATE_ONE = 1;
+    public static final int CANDIDATE_MORE = 2;
+    public static final int CANDIDATE_MORE_LUCKY_ONE = 3;
 
     private GuessEngine engine;
 
@@ -49,7 +54,7 @@ public class Game {
         return guess;
     }
     
-    public boolean setGuessLabel(int guess, int label) {
-        return engine.setLabel(label);
+    public int setGuessLabel(int guess, int label) {
+        return engine.setLabel(guess, label);
     }
 }

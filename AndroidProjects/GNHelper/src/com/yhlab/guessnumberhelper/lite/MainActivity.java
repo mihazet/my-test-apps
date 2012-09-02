@@ -10,6 +10,8 @@ import android.util.Log;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.yhlab.guessnumberhelper.guess.Game;
+
 
 public class MainActivity extends SherlockFragmentActivity implements
         NumberFragment.IGuessedListener, OnSharedPreferenceChangeListener {
@@ -85,16 +87,26 @@ public class MainActivity extends SherlockFragmentActivity implements
         hf.addHistory(number, result);
 
         GNApp app = (GNApp) getApplication();
+        int candidate = app.game.setGuessLabel(number, result);
 
-        if (app.game.setGuessLabel(0, result)) {
-            int nextGuess = app.game.nextGuess();
-            NumberFragment nf = (NumberFragment) fm
-                    .findFragmentById(R.id.number_fragment);
-            nf.setGuessNumber(nextGuess);
-        } else {
-            Log.d(TAG, "Invalid or got it!");
+        switch (candidate) {
+        case Game.CANDIDATE_MORE_LUCKY_ONE:
+        case Game.CANDIDATE_ONE:
+            Log.d(TAG, "Bingo! Got it!");
+            /* intent falling down */
+        case Game.CANDIDATE_MORE:
+            if (candidate != Game.CANDIDATE_MORE_LUCKY_ONE) {
+                int nextGuess = app.game.nextGuess();
+                NumberFragment nf = (NumberFragment) fm
+                        .findFragmentById(R.id.number_fragment);
+                nf.setGuessNumber(nextGuess);
+            }
+            break;
+        case Game.CANDIDATE_ZERO:
+            Log.d(TAG, "No such number!");
+            break;
         }
-        
+
     }
 
     @Override
