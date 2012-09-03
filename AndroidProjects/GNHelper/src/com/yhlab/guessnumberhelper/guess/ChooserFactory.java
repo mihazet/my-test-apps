@@ -63,6 +63,7 @@ public class ChooserFactory {
             try {
                 Class.forName("com.yhlab.guessnumberhelper.guess.chooser.BasicChooser");
                 Class.forName("com.yhlab.guessnumberhelper.guess.chooser.InfoGainChooser");
+                Class.forName("com.yhlab.guessnumberhelper.guess.chooser.OneTwoThreeFourChooser");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }

@@ -3,25 +3,17 @@
 
     <string-array name="prefs_digit_count_entries">
         <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
     </string-array>
     <string-array name="prefs_digit_count_values">
         <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
     </string-array>
     <string-array name="prefs_guess_method_entries">
         <item>Random choose</item>
-        <item>The fast</item>
+        <item>1234 first</item>
     </string-array>
     <string-array name="prefs_guess_method_values">
         <item>Basic</item>
-        <item>InfoGain</item>
+        <item>OneTwoThreeFour</item>
     </string-array>
 
 </resources>
