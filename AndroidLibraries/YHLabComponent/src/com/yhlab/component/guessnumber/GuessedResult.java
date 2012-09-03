@@ -114,4 +114,13 @@ public class GuessedResult extends LinearLayout {
         digitUsed = newDigitUsed;
         initWidgets(context);
     }
+    
+    public void resetToUnknown() {
+     
+        for (int i = 0; i < 2; i++) {
+            int current = wheel[i].getCurrentItem();
+            wheel[i].scroll(symbols.length() - 1 - current, 2000);
+        }
+
+    }
 }

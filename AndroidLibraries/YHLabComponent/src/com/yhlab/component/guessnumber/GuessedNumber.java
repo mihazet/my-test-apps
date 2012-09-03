@@ -89,7 +89,7 @@ public class GuessedNumber extends LinearLayout {
             wheel[i] = new WheelView(context);
             wheel[i].setVisibleItems(3);
             wheel[i].setViewAdapter(new SymbolWheelAdapter(context, symbols));
-            wheel[i].setCurrentItem((int) (Math.random() * symbols.length()));
+            wheel[i].setCurrentItem(symbols.length() - 1);
             wheel[i].setCyclic(true);
             wheel[i].addScrollingListener(scrolledListener);
             // wheel[i].setInterpolator(new AnticipateOvershootInterpolator());
