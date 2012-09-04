@@ -12,7 +12,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.yhlab.guessnumberhelper.guess.Game;
 
-
 public class MainActivity extends SherlockFragmentActivity implements
         NumberFragment.IGuessedListener, OnSharedPreferenceChangeListener {
 
@@ -59,20 +58,31 @@ public class MainActivity extends SherlockFragmentActivity implements
 
         switch (item.getItemId()) {
         case R.id.menu_settings:
-            this.startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         case R.id.menu_restart:
 
             GNApp app = (GNApp) getApplication();
+            app.InitGame(-1, null);
             int firstGuess = app.game.restart();
 
             FragmentManager fm = getSupportFragmentManager();
             NumberFragment nf = (NumberFragment) fm
                     .findFragmentById(R.id.number_fragment);
             nf.setGuessNumber(firstGuess);
+            nf.resetResult();
+
+            HistoryFragment hf = (HistoryFragment) fm
+                    .findFragmentById(R.id.history_fragment);
+            hf.clearHistory();
 
             return true;
 
+        case R.id.menu_help:
+            
+            startActivity(new Intent(this, HelpActivity.class));
+            return true;
+            
         case R.id.menu_about:
         default:
             return super.onOptionsItemSelected(item);

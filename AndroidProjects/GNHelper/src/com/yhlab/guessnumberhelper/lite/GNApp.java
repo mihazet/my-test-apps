@@ -3,7 +3,6 @@ package com.yhlab.guessnumberhelper.lite;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import com.yhlab.guessnumberhelper.guess.ChooserFactory;
 import com.yhlab.guessnumberhelper.guess.Game;
 import com.yhlab.guessnumberhelper.guess.IGuessChooser;
@@ -11,6 +10,7 @@ import com.yhlab.guessnumberhelper.guess.ScoredChooser;
 
 public class GNApp extends Application {
 
+    @SuppressWarnings("unused")
     private static final String TAG = "App";
 
     public ChooserFactory factory;
@@ -20,21 +20,28 @@ public class GNApp extends Application {
     @Override
     public void onCreate() {
 
-        Log.v(TAG, "Creating...");
-
         super.onCreate();
 
         /* setup preference default values */
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        /* retrieve game parameters */
+    }
+
+    public void InitGame(int digitCount, String method) {
+
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(this);
-        String d = sp.getString(SettingsActivity.KEY_DIGIT_COUNT, null);
-        int digitCount = Integer.parseInt(d);
-        String method = sp.getString(SettingsActivity.KEY_GUESS_METHOD, null);
 
-        /* Game: chooser factory */
+        /* retrieve game parameters if not specific */
+        if (digitCount == -1) {
+            String d = sp.getString(SettingsActivity.KEY_DIGIT_COUNT, null);
+            digitCount = Integer.parseInt(d);
+        }
+
+        if (method == null) {
+            method = sp.getString(SettingsActivity.KEY_GUESS_METHOD, null);
+        }
+
         factory = ChooserFactory.getInstance();
         IGuessChooser chooser = factory.createChooser(method, null);
         if (chooser instanceof ScoredChooser) {
@@ -42,6 +49,5 @@ public class GNApp extends Application {
         }
         game = new Game(digitCount, 10, chooser);
 
-        Log.v(TAG, "Created!");
     }
 }

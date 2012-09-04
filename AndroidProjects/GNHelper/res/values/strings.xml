@@ -11,5 +11,6 @@
     <string name="prefs_digit_count">The number of digits</string>
     <string name="prefs_guess_method">The guess method</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="menu_help">Help</string>
 
 </resources>

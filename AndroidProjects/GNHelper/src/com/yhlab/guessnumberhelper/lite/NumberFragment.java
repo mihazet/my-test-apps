@@ -92,4 +92,8 @@ public class NumberFragment extends SherlockFragment {
     public int getGuessNumber() {
         return gn.getNumber();
     }
+    
+    public void resetResult() {
+        gr.resetToUnknown();
+    }
 }
