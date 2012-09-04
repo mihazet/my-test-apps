@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 
-
 public class HistoryFragment extends SherlockFragment {
+
+    private int guessCount = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -22,13 +23,14 @@ public class HistoryFragment extends SherlockFragment {
     public void addHistory(int number, int result) {
         TextView tv = (TextView) getView()
                 .findViewById(R.id.tv_guessed_history);
-        tv.append(String.format("%X %XA%XB\n", number, result >> 4,
-                result & 0xF));
+        tv.append(String.format("[%d] %04X %XA%XB\n", ++guessCount, number,
+                result >> 4, result & 0xF));
     }
 
     public void clearHistory() {
         TextView tv = (TextView) getView()
                 .findViewById(R.id.tv_guessed_history);
         tv.setText(null);
+        guessCount = 0;
     }
 }
