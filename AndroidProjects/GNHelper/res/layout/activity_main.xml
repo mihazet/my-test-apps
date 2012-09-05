@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -16,8 +18,17 @@
         android:id="@+id/history_fragment"
         android:name="com.yhlab.guessnumberhelper.lite.HistoryFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         tools:layout="@layout/history_fragment" >
     </fragment>
+
+    <com.google.ads.AdView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="a15045a9f94c706"
+        ads:loadAdOnCreate="true"
+        ads:testDevices="TEST_EMULATOR, 7370AF93550EB18283A7EA7D78D020B7" />
 
 </LinearLayout>
