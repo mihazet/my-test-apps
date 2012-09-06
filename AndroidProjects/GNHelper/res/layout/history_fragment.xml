@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/history_bg"
+        android:minWidth="160dp"
         android:singleLine="false"
         android:typeface="monospace" >
     </TextView>
