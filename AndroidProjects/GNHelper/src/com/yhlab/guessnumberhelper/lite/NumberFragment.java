@@ -95,4 +95,11 @@ public class NumberFragment extends SherlockFragment {
     public void resetResult() {
         gr.resetToUnknown();
     }
+    
+    public void enableAddResult(boolean enabled) {
+        Button btn = (Button) getView().findViewById(R.id.btn_result_add);
+        if (btn != null) {
+            btn.setEnabled(enabled);
+        }
+    }
 }

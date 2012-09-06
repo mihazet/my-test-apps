@@ -69,6 +69,7 @@ public class MainActivity extends SherlockFragmentActivity implements
             FragmentManager fm = getSupportFragmentManager();
             NumberFragment nf = (NumberFragment) fm
                     .findFragmentById(R.id.number_fragment);
+            nf.enableAddResult(true);
             nf.setGuessNumber(firstGuess);
             nf.resetResult();
 
