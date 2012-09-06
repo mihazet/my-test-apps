@@ -14,7 +14,6 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.yhlab.component.guessnumber.GuessedNumber;
 import com.yhlab.component.guessnumber.GuessedResult;
 
-
 public class NumberFragment extends SherlockFragment {
 
     private GuessedNumber gn;
@@ -36,7 +35,7 @@ public class NumberFragment extends SherlockFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.number_fragment, container, false);
+        View v = inflater.inflate(R.layout.fragment_number, container, false);
 
         return v;
     }
@@ -84,15 +83,15 @@ public class NumberFragment extends SherlockFragment {
         gn.changeDigitCount(newDigitCount);
         gr.changeDigitUsed(newDigitCount);
     }
-    
+
     public void setGuessNumber(int guess) {
         gn.setNumber(guess, true);
     }
-    
+
     public int getGuessNumber() {
         return gn.getNumber();
     }
-    
+
     public void resetResult() {
         gr.resetToUnknown();
     }
