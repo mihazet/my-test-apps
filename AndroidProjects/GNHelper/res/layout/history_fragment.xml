@@ -2,16 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:background="@drawable/history_bg"
+    android:orientation="horizontal" >
 
     <TextView
         android:id="@+id/tv_guessed_history"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:background="@drawable/history_bg"
-        android:minWidth="160dp"
-        android:singleLine="false"
+        android:layout_weight="0.5"
         android:typeface="monospace" >
     </TextView>
+
+    <TextView
+        android:id="@+id/tv_guessed_history_2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:typeface="monospace" />
 
 </LinearLayout>
