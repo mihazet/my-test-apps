@@ -14,5 +14,10 @@
     <string name="prefs_digit_count">The number of digits</string>
     <string name="prefs_guess_method">The guess method</string>
     <string name="content_about">This application helps people playing guess number game.\nGuess number is usually a game playing between 2 players. At beginning of the game, each player keeps one 4-digit secret number in mind. The number is formed with digits which range from 0 to 9, and each digit cannot be repeated.\nDuring the game, one player proposes a number for guess attempt, the other player replies the result compared between the guess and the secret number. The result is composed of how many digits has the player guessed on the same position (noted as <i>A</i>) and how many digits has the player guessed on different position (noted as <i>B</i>). For example, when the secret number is 1234 and the guess is 1357, the result will be 1A1B. (1 is at the same position, 3 is at different position.)</string>
+    <string name="notify_congra">Congratulations! The answer must be:</string>
+    <string name="notify_congra_lucky">Congratulation! We\'re so lucky :D</string>
+    <string name="notify_badformat_guess">Er, the guess number is incorrect!</string>
+    <string name="notify_badformat_result">Er, the result is incorrect!</string>
+    <string name="notify_nosuchnumber">Something terrible happened, I cannot help you any more :(</string>
 
 </resources>

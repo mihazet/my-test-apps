@@ -6,7 +6,11 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -15,6 +19,7 @@ import com.yhlab.guessnumberhelper.guess.Game;
 public class MainActivity extends SherlockFragmentActivity implements
         NumberFragment.IGuessedListener, OnSharedPreferenceChangeListener {
 
+    @SuppressWarnings("unused")
     private static final String TAG = "MainActivity";
     private SharedPreferences mSharedPrefs;
 
@@ -105,20 +110,38 @@ public class MainActivity extends SherlockFragmentActivity implements
         int candidate = app.game.setGuessLabel(number, result);
 
         switch (candidate) {
-        case Game.CANDIDATE_MORE_LUCKY_ONE:
         case Game.CANDIDATE_ONE:
-            Log.d(TAG, "Bingo! Got it!");
-            /* intent falling down */
         case Game.CANDIDATE_MORE:
-            if (candidate != Game.CANDIDATE_MORE_LUCKY_ONE) {
-                int nextGuess = app.game.nextGuess();
-                NumberFragment nf = (NumberFragment) fm
-                        .findFragmentById(R.id.number_fragment);
-                nf.setGuessNumber(nextGuess);
+            int nextGuess = app.game.nextGuess();
+            NumberFragment nf = (NumberFragment) fm
+                    .findFragmentById(R.id.number_fragment);
+            nf.setGuessNumber(nextGuess);
+
+            if (candidate == Game.CANDIDATE_ONE) {
+                CharSequence cs1 = getString(R.string.notify_congra);
+                int cs1len = cs1.length();
+                CharSequence cs2 = String.format(" %04X", nextGuess);
+                SpannableString msg =
+                        new SpannableString(TextUtils.concat(cs1, cs2));
+                msg.setSpan(new ForegroundColorSpan(0xFFFF0000),
+                        cs1len + 1, cs1len + 5,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                Toast.makeText(getApplicationContext(),
+                        msg, Toast.LENGTH_LONG).show();
             }
             break;
+
+        case Game.CANDIDATE_MORE_LUCKY_ONE:
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.notify_congra_lucky),
+                    Toast.LENGTH_SHORT).show();            
+            break;
+
         case Game.CANDIDATE_ZERO:
-            Log.d(TAG, "No such number!");
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.notify_nosuchnumber),
+                    Toast.LENGTH_LONG).show();
             break;
         }
 

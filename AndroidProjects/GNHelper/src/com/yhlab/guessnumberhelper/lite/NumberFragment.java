@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableRow;
+import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.yhlab.component.guessnumber.GuessedNumber;
 import com.yhlab.component.guessnumber.GuessedResult;
@@ -18,6 +19,7 @@ public class NumberFragment extends SherlockFragment {
 
     private GuessedNumber gn;
     private GuessedResult gr;
+    private int digitCount;
 
     @Override
     public void onAttach(Activity activity) {
@@ -46,7 +48,7 @@ public class NumberFragment extends SherlockFragment {
 
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
-        int digitCount = Integer.parseInt(sp.getString(
+        digitCount = Integer.parseInt(sp.getString(
                 SettingsActivity.KEY_DIGIT_COUNT, "4"));
 
         /* add dynamic widgets GuessedNumber */
@@ -67,7 +69,34 @@ public class NumberFragment extends SherlockFragment {
 
             @Override
             public void onClick(View v) {
-                mGuessedListener.onGuess(gn.getNumber(), gr.getResult());
+                int gnn = gn.getNumber();
+                int grr = gr.getResult();
+                int grrA = (grr >> 4) & 0xF;
+                int grrB = grr & 0xF;
+                boolean invalidNumber = false;
+                boolean invalidResult = false;
+
+                for (int digit = 0; digit < digitCount; digit++) {
+                    if (((gnn >> (digit * 4)) & 0xF) >= 10) {
+                        invalidNumber = true;
+                        break;
+                    }
+                }
+                if (grrA > digitCount || grrB > digitCount
+                        || (grrA + grrB) > digitCount) {
+                    invalidResult = true;
+                }
+                
+                if (invalidNumber)
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            getString(R.string.notify_badformat_guess),
+                            Toast.LENGTH_SHORT).show();
+                else if (invalidResult)
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            getString(R.string.notify_badformat_result),
+                            Toast.LENGTH_SHORT).show();
+                else
+                    mGuessedListener.onGuess(gnn, grr);
             }
 
         });
@@ -95,7 +124,7 @@ public class NumberFragment extends SherlockFragment {
     public void resetResult() {
         gr.resetToUnknown();
     }
-    
+
     public void enableAddResult(boolean enabled) {
         Button btn = (Button) getView().findViewById(R.id.btn_result_add);
         if (btn != null) {
