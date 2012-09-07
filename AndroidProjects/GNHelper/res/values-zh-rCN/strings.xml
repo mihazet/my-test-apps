@@ -1,0 +1,25 @@
+<resources>
+
+    <string name="app_name">猜数字小帮手（含广告）</string>
+    <string name="title_activity_main">猜数字小帮手</string>
+    <string name="title_activity_settings">设定</string>
+    <string name="title_activity_about">关于猜数字小帮手</string>
+    <string name="menu_restart">重新开始</string>
+    <string name="menu_settings">设定</string>
+    <string name="menu_help">帮助</string>
+    <string name="menu_about">关于</string>
+    <string name="label_guess">猜测</string>
+    <string name="label_result">结果</string>
+    <string name="label_prefs_guess_method_random">随机挑选</string>
+    <string name="label_prefs_guess_method_1234first">由1234先猜</string>
+    <string name="btn_result_add">输入\n结果</string>
+    <string name="prefs_digit_count">数字的位数</string>
+    <string name="prefs_guess_method">猜数字方法</string>
+    <string name="content_about">本应用程式是用来帮助人们玩猜数字游戏。\n猜数字通常是由两人游玩的游戏。游戏一开始，每位玩家在心中先想好一组四位数的秘密数字，數字中的每一位數的數字範圍為0～9，而且每個位數的數字彼此之間不可以重複。\n在游玩过程中，一名玩家提出一组猜测数字来猜，另一位玩家则回应此组猜测数字与秘密数字的比较结果。比较结果是由『数字相同且所在位置亦相同的个数』（标记为\'A\'）与『数字相同但所在位置不同的个数』（标记为\'B\'）所组成。例如，当秘密数字为1234，而猜测数字为1357时，比较结果应记作 1A1B.（1是位置相同, 3是位置不同。）</string>
+    <string name="notify_congra">恭喜！正确答案就是：</string>
+    <string name="notify_congra_lucky">恭喜！我们超幸运 :D</string>
+    <string name="notify_badformat_guess">呃，猜测数字的格式不正确！</string>
+    <string name="notify_badformat_result">呃，输入结果的格式不正确！</string>
+    <string name="notify_nosuchnumber">发生了某种可怕的错误，我再也没办法帮忙了！:(</string>
+
+</resources>

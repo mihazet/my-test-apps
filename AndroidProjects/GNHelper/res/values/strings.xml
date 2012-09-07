@@ -10,6 +10,8 @@
     <string name="menu_about">About</string>
     <string name="label_guess">Guess</string>
     <string name="label_result">Result</string>
+    <string name="label_prefs_guess_method_random">Random choose</string>
+    <string name="label_prefs_guess_method_1234first">1234 first</string>
     <string name="btn_result_add">Add\nresult</string>
     <string name="prefs_digit_count">The number of digits</string>
     <string name="prefs_guess_method">The guess method</string>

@@ -1,0 +1,25 @@
+<resources>
+
+    <string name="app_name">猜數字小幫手 (含廣告)</string>
+    <string name="title_activity_main">猜數字小幫手</string>
+    <string name="title_activity_settings">設定</string>
+    <string name="title_activity_about">關於猜數字小幫手</string>
+    <string name="menu_restart">重新開始</string>
+    <string name="menu_settings">設定</string>
+    <string name="menu_help">幫助</string>
+    <string name="menu_about">關於</string>
+    <string name="label_guess">猜測</string>
+    <string name="label_result">結果</string>
+    <string name="label_prefs_guess_method_random">隨機挑選</string>
+    <string name="label_prefs_guess_method_1234first">由1234先猜</string>
+    <string name="btn_result_add">輸入\n結果</string>
+    <string name="prefs_digit_count">數字的位數</string>
+    <string name="prefs_guess_method">猜數字方法</string>
+    <string name="content_about">本應用程式是用來幫助人們玩猜數字遊戲。\n猜數字通常是由兩人遊玩的遊戲。遊戲一開始, 每位玩家在心中先想好一組四位數的秘密數字，數字中的每一位數的數字範圍為0～9，而且每個位數的數字彼此之間不可以重複。\n在遊玩過程中，一名玩家提出一組猜測數字來猜，另一位玩家則回應此組猜測數字與秘密數字的比較結果。比較結果是由『數字相同且所在位置亦相同的個數』（標記為\'A\'）與『數字相同但所在位置不同的個數』（標記為\'B\'）所組成。例如，當秘密數字為1234，而猜測數字為1357時，比較結果應記作 1A1B.（1是位置相同, 3是位置不同。）</string>
+    <string name="notify_congra">恭喜！正確答案就是：</string>
+    <string name="notify_congra_lucky">恭喜! 我們超幸運 :D</string>
+    <string name="notify_badformat_guess">呃，猜測數字的格式不正確!</string>
+    <string name="notify_badformat_result">呃，輸入結果的格式不正確!</string>
+    <string name="notify_nosuchnumber">發生了某種可怕的錯誤，我再也沒辦法幫忙了。:(</string>
+
+</resources>

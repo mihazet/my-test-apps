@@ -8,8 +8,8 @@
         <item>4</item>
     </string-array>
     <string-array name="prefs_guess_method_entries">
-        <item>Random choose</item>
-        <item>1234 first</item>
+        <item>@string/label_prefs_guess_method_random</item>
+        <item>@string/label_prefs_guess_method_1234first</item>
     </string-array>
     <string-array name="prefs_guess_method_values">
         <item>Basic</item>
