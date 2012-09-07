@@ -80,11 +80,15 @@ public class MainActivity extends SherlockFragmentActivity implements
             return true;
 
         case R.id.menu_help:
-            
+
             startActivity(new Intent(this, HelpActivity.class));
             return true;
-            
+
         case R.id.menu_about:
+
+            startActivity(new Intent(this, AboutActivity.class));
+            return true;
+
         default:
             return super.onOptionsItemSelected(item);
         }
