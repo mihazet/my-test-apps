@@ -11,7 +11,7 @@
         android:name="com.yhlab.guessnumberhelper.lite.NumberFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout="@layout/number_fragment" >
+        tools:layout="@layout/fragment_number" >
     </fragment>
 
     <fragment
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:layout="@layout/history_fragment" >
+        tools:layout="@layout/fragment_history" >
     </fragment>
 
     <com.google.ads.AdView
