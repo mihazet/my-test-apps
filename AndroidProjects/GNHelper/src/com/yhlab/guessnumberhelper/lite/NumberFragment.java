@@ -15,7 +15,8 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.yhlab.component.guessnumber.GuessedNumber;
 import com.yhlab.component.guessnumber.GuessedResult;
 
-public class NumberFragment extends SherlockFragment {
+public class NumberFragment extends SherlockFragment
+        implements View.OnClickListener {
 
     private GuessedNumber gn;
     private GuessedResult gr;
@@ -39,13 +40,6 @@ public class NumberFragment extends SherlockFragment {
 
         View v = inflater.inflate(R.layout.fragment_number, container, false);
 
-        return v;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
         digitCount = Integer.parseInt(sp.getString(
@@ -53,7 +47,7 @@ public class NumberFragment extends SherlockFragment {
 
         /* add dynamic widgets GuessedNumber */
         gn = new GuessedNumber(getActivity(), digitCount, "0123456789?");
-        TableRow tr = (TableRow) getView().findViewById(R.id.row_guess);
+        TableRow tr = (TableRow) v.findViewById(R.id.row_guess);
         TableRow.LayoutParams trlp = new TableRow.LayoutParams();
         trlp.column = 1;
         trlp.span = 2;
@@ -61,45 +55,59 @@ public class NumberFragment extends SherlockFragment {
 
         /* add dynamic widgets GuessedResult */
         gr = new GuessedResult(getActivity(), digitCount);
-        tr = (TableRow) getView().findViewById(R.id.row_result);
+        tr = (TableRow) v.findViewById(R.id.row_result);
         tr.addView(gr, 1);
 
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         Button add = (Button) (getView().findViewById(R.id.btn_result_add));
-        add.setOnClickListener(new OnClickListener() {
+        add.setOnClickListener(this);
+    }
 
-            @Override
-            public void onClick(View v) {
-                int gnn = gn.getNumber();
-                int grr = gr.getResult();
-                int grrA = (grr >> 4) & 0xF;
-                int grrB = grr & 0xF;
-                boolean invalidNumber = false;
-                boolean invalidResult = false;
+    @Override
+    public void onClick(View v) {
 
-                for (int digit = 0; digit < digitCount; digit++) {
-                    if (((gnn >> (digit * 4)) & 0xF) >= 10) {
-                        invalidNumber = true;
-                        break;
-                    }
+        int id = v.getId();
+
+        switch (id) {
+        case R.id.btn_result_add:
+            int gnn = gn.getNumber();
+            int grr = gr.getResult();
+            int grrA = (grr >> 4) & 0xF;
+            int grrB = grr & 0xF;
+            boolean invalidNumber = false;
+            boolean invalidResult = false;
+
+            for (int digit = 0; digit < digitCount; digit++) {
+                if (((gnn >> (digit * 4)) & 0xF) >= 10) {
+                    invalidNumber = true;
+                    break;
                 }
-                if (grrA > digitCount || grrB > digitCount
-                        || (grrA + grrB) > digitCount) {
-                    invalidResult = true;
-                }
-                
-                if (invalidNumber)
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            getString(R.string.notify_badformat_guess),
-                            Toast.LENGTH_SHORT).show();
-                else if (invalidResult)
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            getString(R.string.notify_badformat_result),
-                            Toast.LENGTH_SHORT).show();
-                else
-                    mGuessedListener.onGuess(gnn, grr);
+            }
+            if (grrA > digitCount || grrB > digitCount
+                    || (grrA + grrB) > digitCount) {
+                invalidResult = true;
             }
 
-        });
+            if (invalidNumber)
+                Toast.makeText(getActivity().getApplicationContext(),
+                        getString(R.string.notify_badformat_guess),
+                        Toast.LENGTH_SHORT).show();
+            else if (invalidResult)
+                Toast.makeText(getActivity().getApplicationContext(),
+                        getString(R.string.notify_badformat_result),
+                        Toast.LENGTH_SHORT).show();
+            else
+                mGuessedListener.onGuess(gnn, grr);
+            break;
+        default:
+            break;
+        }
     }
 
     public interface IGuessedListener {
@@ -131,4 +139,5 @@ public class NumberFragment extends SherlockFragment {
             btn.setEnabled(enabled);
         }
     }
+
 }
