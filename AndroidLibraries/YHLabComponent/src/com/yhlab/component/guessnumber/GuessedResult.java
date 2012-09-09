@@ -108,6 +108,16 @@ public class GuessedResult extends LinearLayout {
         return result;
     }
     
+    public void setResult(int result) {
+        int a = (result >> 4) & 0xF;
+        int b = result & 0xF;
+        
+        if (a < symbols.length())
+            wheel[1].setCurrentItem(a);
+        if (b < symbols.length())
+            wheel[0].setCurrentItem(b);
+    }
+    
     public void changeDigitUsed(int newDigitUsed) {
      
         removeAllViews();

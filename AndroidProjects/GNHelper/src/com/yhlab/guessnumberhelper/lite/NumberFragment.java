@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableRow;
@@ -18,9 +17,16 @@ import com.yhlab.component.guessnumber.GuessedResult;
 public class NumberFragment extends SherlockFragment
         implements View.OnClickListener {
 
+    @SuppressWarnings("unused")
+    private static final String TAG = "NumberFragment";
     private GuessedNumber gn;
     private GuessedResult gr;
+    private Button btnAdd;
     private int digitCount;
+
+    private final String KEY_NUMBER = "Number";
+    private final String KEY_RESULT = "Result";
+    private final String KEY_BTN_ADD = "BtnAdd";
 
     @Override
     public void onAttach(Activity activity) {
@@ -65,8 +71,25 @@ public class NumberFragment extends SherlockFragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button add = (Button) (getView().findViewById(R.id.btn_result_add));
-        add.setOnClickListener(this);
+        btnAdd = (Button) (getView().findViewById(R.id.btn_result_add));
+        btnAdd.setOnClickListener(this);
+
+        /* check if we need to restore previous instance state */
+        if (savedInstanceState != null) {
+            gn.setNumber(savedInstanceState.getInt(KEY_NUMBER));
+            gr.setResult(savedInstanceState.getInt(KEY_RESULT));
+            btnAdd.setEnabled(savedInstanceState.getBoolean(KEY_BTN_ADD));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        /* save wheel state */
+        outState.putInt(KEY_NUMBER, gn.getNumber());
+        outState.putInt(KEY_RESULT, gr.getResult());
+        outState.putBoolean(KEY_BTN_ADD, btnAdd.isEnabled());
     }
 
     @Override
