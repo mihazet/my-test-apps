@@ -1,5 +1,6 @@
 package com.yhlab.guessnumberhelper.lite;
 
+import java.util.ArrayList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ public class HistoryFragment extends SherlockFragment {
     private int guessCount = 0;
     private TextView tv1;
     private TextView tv2;
+    private ArrayList<String> savedHistory = new ArrayList<String>();
+    private final String KEY_HISTORY = "History";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,6 +33,30 @@ public class HistoryFragment extends SherlockFragment {
 
         tv1 = (TextView) getView().findViewById(R.id.tv_guessed_history);
         tv2 = (TextView) getView().findViewById(R.id.tv_guessed_history_2);
+
+        /* check if we need to restore previous instance state */
+        if (savedInstanceState != null) {
+            savedHistory = savedInstanceState.getStringArrayList(KEY_HISTORY);
+            if (!savedHistory.isEmpty()) {
+                TextView tv;
+                int historyCount = savedHistory.size();
+                for (int history = 0; history < historyCount; history++) {
+                    if ((history % 2) == 1 && tv2 != null)
+                        tv = tv2;
+                    else
+                        tv = tv1;
+                    tv.append(savedHistory.get(history));
+                }
+                guessCount = historyCount;
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putStringArrayList(KEY_HISTORY, savedHistory);
     }
 
     public void addHistory(int number, int result) {
@@ -41,8 +68,10 @@ public class HistoryFragment extends SherlockFragment {
         else
             tv = tv1;
 
-        tv.append(String.format("[%d] %04X %XA%XB\n", guessCount, number,
-                result >> 4, result & 0xF));
+        String historyRecord = String.format("[%d] %04X %XA%XB\n",
+                guessCount, number, result >> 4, result & 0xF);
+        savedHistory.add(historyRecord);
+        tv.append(historyRecord);
     }
 
     public void clearHistory() {
