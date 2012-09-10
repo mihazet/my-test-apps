@@ -3,6 +3,7 @@ package com.yhlab.guessnumberhelper.lite;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 import com.yhlab.guessnumberhelper.guess.Game;
 
 public class MainActivity extends SherlockFragmentActivity implements
@@ -26,6 +28,9 @@ public class MainActivity extends SherlockFragmentActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // This has to be called before setContentView
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         setContentView(R.layout.activity_main);
 
@@ -41,6 +46,7 @@ public class MainActivity extends SherlockFragmentActivity implements
         mSharedPrefs.registerOnSharedPreferenceChangeListener(this);
 
         // getSupportActionBar().setDisplayShowTitleEnabled(false);
+        setSupportProgressBarIndeterminateVisibility(false);
     }
 
     @Override
@@ -65,23 +71,10 @@ public class MainActivity extends SherlockFragmentActivity implements
         case R.id.menu_settings:
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
+
         case R.id.menu_restart:
 
-            GNApp app = (GNApp) getApplication();
-            app.InitGame(-1, null);
-            int firstGuess = app.game.restart();
-
-            FragmentManager fm = getSupportFragmentManager();
-            NumberFragment nf = (NumberFragment) fm
-                    .findFragmentById(R.id.number_fragment);
-            nf.enableAddResult(true);
-            nf.setGuessNumber(firstGuess);
-            nf.resetResult();
-
-            HistoryFragment hf = (HistoryFragment) fm
-                    .findFragmentById(R.id.history_fragment);
-            hf.clearHistory();
-
+            new RestartGameTask().execute();
             return true;
 
         case R.id.menu_help:
@@ -101,50 +94,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
     @Override
     public void onGuess(int number, int result) {
-        FragmentManager fm = getSupportFragmentManager();
-        HistoryFragment hf = (HistoryFragment) fm
-                .findFragmentById(R.id.history_fragment);
-        hf.addHistory(number, result);
-
-        GNApp app = (GNApp) getApplication();
-        int candidate = app.game.setGuessLabel(number, result);
-
-        switch (candidate) {
-        case Game.CANDIDATE_ONE:
-        case Game.CANDIDATE_MORE:
-            int nextGuess = app.game.nextGuess();
-            NumberFragment nf = (NumberFragment) fm
-                    .findFragmentById(R.id.number_fragment);
-            nf.setGuessNumber(nextGuess);
-
-            if (candidate == Game.CANDIDATE_ONE) {
-                CharSequence cs1 = getString(R.string.notify_congra);
-                int cs1len = cs1.length();
-                CharSequence cs2 = String.format(" %04X", nextGuess);
-                SpannableString msg =
-                        new SpannableString(TextUtils.concat(cs1, cs2));
-                msg.setSpan(new ForegroundColorSpan(0xFFFF0000),
-                        cs1len + 1, cs1len + 5,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                Toast.makeText(getApplicationContext(),
-                        msg, Toast.LENGTH_LONG).show();
-            }
-            break;
-
-        case Game.CANDIDATE_MORE_LUCKY_ONE:
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.notify_congra_lucky),
-                    Toast.LENGTH_SHORT).show();            
-            break;
-
-        case Game.CANDIDATE_ZERO:
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.notify_nosuchnumber),
-                    Toast.LENGTH_LONG).show();
-            break;
-        }
-
+        new SetLabelAndGenNextGuessTask(number, result).execute();
     }
 
     @Override
@@ -159,6 +109,179 @@ public class MainActivity extends SherlockFragmentActivity implements
 
         } else if (k.equals(SettingsActivity.KEY_GUESS_METHOD)) {
 
+        }
+    }
+
+    private class SetLabelAndGenNextGuessTask extends
+            AsyncTask<Void, Integer, Void> {
+
+        /* progress index */
+        private final int REASON = 0;
+
+        /* reasons index */
+        private final int REASON_SHOW_NEXTGUESS = 0;
+        private final int REASON_SHOW_TOAST = 1;
+
+        private int num_;
+        private int res_;
+        private int digitCnt_;
+
+        public SetLabelAndGenNextGuessTask(int num, int res) {
+            super();
+            num_ = num;
+            res_ = res;
+            digitCnt_ = Integer.parseInt(mSharedPrefs.getString(
+                    SettingsActivity.KEY_DIGIT_COUNT, "4"));
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            /* show the indeterminate progress bar */
+            setSupportProgressBarIndeterminateVisibility(true);
+
+            /* add current number and result to history */
+            FragmentManager fm = getSupportFragmentManager();
+            HistoryFragment hf = (HistoryFragment) fm
+                    .findFragmentById(R.id.history_fragment);
+            hf.addHistory(num_, res_);
+
+            // TODO: disable number scrolling
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            GNApp app = (GNApp) getApplication();
+            int candidate = app.game.setGuessLabel(num_, res_);
+
+            switch (candidate) {
+            case Game.CANDIDATE_ONE:
+            case Game.CANDIDATE_MORE:
+
+                int nextGuess = app.game.nextGuess();
+                publishProgress(REASON_SHOW_NEXTGUESS, nextGuess);
+
+                if (candidate == Game.CANDIDATE_ONE) {
+                    publishProgress(REASON_SHOW_TOAST, Game.CANDIDATE_ONE,
+                            nextGuess);
+                }
+                break;
+
+            case Game.CANDIDATE_MORE_LUCKY_ONE:
+            case Game.CANDIDATE_ZERO:
+                publishProgress(REASON_SHOW_TOAST, candidate);
+                break;
+
+            default:
+                break;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+
+            if (values[REASON] == REASON_SHOW_NEXTGUESS) {
+
+                FragmentManager fm = getSupportFragmentManager();
+                NumberFragment nf = (NumberFragment) fm
+                        .findFragmentById(R.id.number_fragment);
+                nf.setGuessNumber(values[1]);
+
+            } else if (values[REASON] == REASON_SHOW_TOAST) {
+
+                switch (values[1]) {
+                case Game.CANDIDATE_ONE:
+                    CharSequence cs1 = getString(R.string.notify_congra);
+                    int cs1len = cs1.length();
+                    CharSequence cs2 = String.format(" %04X", values[2]);
+                    SpannableString msg =
+                            new SpannableString(TextUtils.concat(cs1, cs2));
+                    msg.setSpan(new ForegroundColorSpan(0xFFFF0000),
+                            cs1len + 1, cs1len + digitCnt_ + 1,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    Toast.makeText(getApplicationContext(),
+                            msg, Toast.LENGTH_LONG).show();
+                    break;
+
+                case Game.CANDIDATE_MORE_LUCKY_ONE:
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.notify_congra_lucky),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+
+                case Game.CANDIDATE_ZERO:
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.notify_nosuchnumber),
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case Game.CANDIDATE_MORE:
+                default:
+                    break;
+                }
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            /* hide the indeterminate progress bar */
+            setSupportProgressBarIndeterminateVisibility(false);
+
+            // TODO: enable number scrolling
+        }
+    }
+
+    private class RestartGameTask extends AsyncTask<Void, Void, Integer> {
+
+        private FragmentManager fm_;
+        private NumberFragment nf_;
+        private HistoryFragment hf_;
+
+        public RestartGameTask() {
+            super();
+            fm_ = getSupportFragmentManager();
+            nf_ = (NumberFragment) fm_.findFragmentById(R.id.number_fragment);
+            hf_ = (HistoryFragment) fm_.findFragmentById(R.id.history_fragment);
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            /* show the indeterminate progress bar */
+            setSupportProgressBarIndeterminateVisibility(true);
+
+            /* clear history */
+            hf_.clearHistory();
+
+            /* reset result */
+            nf_.resetResult();
+        }
+
+        @Override
+        protected Integer doInBackground(Void... arg0) {
+
+            GNApp app = (GNApp) getApplication();
+            app.InitGame(-1, null);
+            int firstGuess = app.game.restart();
+
+            return firstGuess;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+
+            /* enable add result button */
+            nf_.enableAddResult(true);
+
+            /* setup the suggest number */
+            nf_.setGuessNumber(result);
+
+            /* hide the indeterminate progress bar */
+            setSupportProgressBarIndeterminateVisibility(false);
         }
     }
 }
