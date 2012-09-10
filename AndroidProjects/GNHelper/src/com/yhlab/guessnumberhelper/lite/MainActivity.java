@@ -220,8 +220,7 @@ public class MainActivity extends SherlockFragmentActivity implements
                     break;
 
                 case Game.CANDIDATE_MORE:
-                    Log.v(TAG, "Suggest number: "
-                            + String.format("%X", values[2]));
+                    dbg_show_suggest_number(values[2]);
                     break;
 
                 default:
@@ -280,6 +279,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 
         @Override
         protected void onPostExecute(Integer result) {
+            
+            dbg_show_suggest_number(result);
 
             /* enable add result button */
             nf_.enableAddResult(true);
@@ -290,5 +291,9 @@ public class MainActivity extends SherlockFragmentActivity implements
             /* hide the indeterminate progress bar */
             setSupportProgressBarIndeterminateVisibility(false);
         }
+    }
+    
+    private void dbg_show_suggest_number(int num) {
+        Log.v(TAG, "suggest number: " + String.format("%X", num));
     }
 }
