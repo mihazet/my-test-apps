@@ -195,7 +195,8 @@ public class MainActivity extends SherlockFragmentActivity implements
                 case Game.CANDIDATE_ONE:
                     CharSequence cs1 = getString(R.string.notify_congra);
                     int cs1len = cs1.length();
-                    CharSequence cs2 = String.format(" %04X", values[2]);
+                    String fmt = " %0" + digitCnt_ + "X";
+                    CharSequence cs2 = String.format(fmt, values[2]);
                     SpannableString msg =
                             new SpannableString(TextUtils.concat(cs1, cs2));
                     msg.setSpan(new ForegroundColorSpan(0xFFFF0000),

@@ -113,7 +113,8 @@ public class NumberFragment extends SherlockFragment
                 }
             }
             if (grrA > digitCount || grrB > digitCount
-                    || (grrA + grrB) > digitCount) {
+                    || (grrA + grrB) > digitCount
+                    || (grrA == digitCount - 1 && grrB == 1)) {
                 invalidResult = true;
             }
 
@@ -142,6 +143,10 @@ public class NumberFragment extends SherlockFragment
     public void changeDigitCount(int newDigitCount) {
         gn.changeDigitCount(newDigitCount);
         gr.changeDigitUsed(newDigitCount);
+        
+        // remember to update the cached digitCount, this function is called
+        // due to the game setting changes.
+        digitCount = newDigitCount;
     }
 
     public void setGuessNumber(int guess) {

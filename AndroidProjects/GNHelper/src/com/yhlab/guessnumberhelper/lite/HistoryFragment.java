@@ -2,6 +2,7 @@ package com.yhlab.guessnumberhelper.lite;
 
 import java.util.ArrayList;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,6 @@ public class HistoryFragment extends SherlockFragment {
 
     @SuppressWarnings("unused")
     private static final String TAG = "HistoryFragment";
-    private int guessCount = 0;
     private TextView tv1;
     private TextView tv2;
     private ArrayList<String> savedHistory = new ArrayList<String>();
@@ -47,7 +47,6 @@ public class HistoryFragment extends SherlockFragment {
                         tv = tv1;
                     tv.append(savedHistory.get(history));
                 }
-                guessCount = historyCount;
             }
         }
     }
@@ -63,13 +62,17 @@ public class HistoryFragment extends SherlockFragment {
 
         TextView tv;
 
-        if ((guessCount++ % 2) == 1 && tv2 != null)
+        if ((savedHistory.size() % 2) == 1 && tv2 != null)
             tv = tv2;
         else
             tv = tv1;
 
-        String historyRecord = String.format("[%d] %04X %XA%XB\n",
-                guessCount, number, result >> 4, result & 0xF);
+        int digitCount = Integer.parseInt(PreferenceManager
+                .getDefaultSharedPreferences(getActivity()).getString(
+                        SettingsActivity.KEY_DIGIT_COUNT, "4"));
+        String fmt = "[%d] %0" + digitCount + "X %XA%XB\n";
+        String historyRecord = String.format(fmt, savedHistory.size() + 1,
+                number, result >> 4, result & 0xF);
         savedHistory.add(historyRecord);
         tv.append(historyRecord);
     }
@@ -80,6 +83,6 @@ public class HistoryFragment extends SherlockFragment {
         if (tv2 != null)
             tv2.setText(null);
 
-        guessCount = 0;
+        savedHistory.clear();
     }
 }
