@@ -11,6 +11,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -126,12 +127,18 @@ public class MainActivity extends SherlockFragmentActivity implements
         private int res_;
         private int digitCnt_;
 
+        private NumberFragment nf_;
+        private HistoryFragment hf_;
+
         public SetLabelAndGenNextGuessTask(int num, int res) {
             super();
             num_ = num;
             res_ = res;
             digitCnt_ = Integer.parseInt(mSharedPrefs.getString(
                     SettingsActivity.KEY_DIGIT_COUNT, "4"));
+            FragmentManager fm = getSupportFragmentManager();
+            nf_ = (NumberFragment) fm.findFragmentById(R.id.number_fragment);
+            hf_ = (HistoryFragment) fm.findFragmentById(R.id.history_fragment);
         }
 
         @Override
@@ -141,10 +148,10 @@ public class MainActivity extends SherlockFragmentActivity implements
             setSupportProgressBarIndeterminateVisibility(true);
 
             /* add current number and result to history */
-            FragmentManager fm = getSupportFragmentManager();
-            HistoryFragment hf = (HistoryFragment) fm
-                    .findFragmentById(R.id.history_fragment);
-            hf.addHistory(num_, res_);
+            hf_.addHistory(num_, res_);
+
+            /* disable button to avoid it is clicked again */
+            nf_.enableAddResult(false);
 
             // TODO: disable number scrolling
         }
@@ -161,11 +168,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
                 int nextGuess = app.game.nextGuess();
                 publishProgress(REASON_SHOW_NEXTGUESS, nextGuess);
-
-                if (candidate == Game.CANDIDATE_ONE) {
-                    publishProgress(REASON_SHOW_TOAST, Game.CANDIDATE_ONE,
-                            nextGuess);
-                }
+                publishProgress(REASON_SHOW_TOAST, candidate, nextGuess);
                 break;
 
             case Game.CANDIDATE_MORE_LUCKY_ONE:
@@ -184,10 +187,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
             if (values[REASON] == REASON_SHOW_NEXTGUESS) {
 
-                FragmentManager fm = getSupportFragmentManager();
-                NumberFragment nf = (NumberFragment) fm
-                        .findFragmentById(R.id.number_fragment);
-                nf.setGuessNumber(values[1]);
+                nf_.setGuessNumber(values[1]);
 
             } else if (values[REASON] == REASON_SHOW_TOAST) {
 
@@ -220,6 +220,10 @@ public class MainActivity extends SherlockFragmentActivity implements
                     break;
 
                 case Game.CANDIDATE_MORE:
+                    Log.v(TAG, "Suggest number: "
+                            + String.format("%X", values[2]));
+                    break;
+
                 default:
                     break;
                 }
@@ -232,21 +236,23 @@ public class MainActivity extends SherlockFragmentActivity implements
             /* hide the indeterminate progress bar */
             setSupportProgressBarIndeterminateVisibility(false);
 
+            /* re-enable button for click */
+            nf_.enableAddResult(true);
+
             // TODO: enable number scrolling
         }
     }
 
     private class RestartGameTask extends AsyncTask<Void, Void, Integer> {
 
-        private FragmentManager fm_;
         private NumberFragment nf_;
         private HistoryFragment hf_;
 
         public RestartGameTask() {
             super();
-            fm_ = getSupportFragmentManager();
-            nf_ = (NumberFragment) fm_.findFragmentById(R.id.number_fragment);
-            hf_ = (HistoryFragment) fm_.findFragmentById(R.id.history_fragment);
+            FragmentManager fm = getSupportFragmentManager();
+            nf_ = (NumberFragment) fm.findFragmentById(R.id.number_fragment);
+            hf_ = (HistoryFragment) fm.findFragmentById(R.id.history_fragment);
         }
 
         @Override
