@@ -6,7 +6,7 @@
     <string name="title_activity_about">About Guess Number Helper</string>
     <string name="menu_restart">Restart</string>
     <string name="menu_settings">Settings</string>
-    <string name="menu_help">Help</string>
+    <string name="menu_intro">Introduction</string>
     <string name="menu_about">About</string>
     <string name="label_guess">Guess</string>
     <string name="label_result">Result</string>
@@ -21,5 +21,15 @@
     <string name="notify_badformat_guess">Er, the guess number is incorrect!</string>
     <string name="notify_badformat_result">Er, the result is incorrect!</string>
     <string name="notify_nosuchnumber">Something terrible happened, I cannot help you any more :(</string>
+    <string name="desc_interrupt_intro">Press \'BACK\' key to end introduction.</string>
+    <string name="desc_restart">First, press \'Restart\' on the Action Bar to start helper.</string>
+    <string name="desc_number_1">After calculating, helper will show you suggested number.</string>
+    <string name="desc_number_2">Don\'t like this number? You are free to scroll wheels to the number you like.</string>
+    <string name="desc_number_3">Use this number to ask your opponent.</string>
+    <string name="desc_result_1">Get result from your opponent, and let helper know.</string>
+    <string name="desc_result_2">Press \'Add result\' button, the current result will be recorded.</string>
+    <string name="desc_result_3">Then, helper will calculate the next suggested number.</string>
+    <string name="desc_step_repeat">Repeat previous steps until the opponent\'s secret number is found.</string>
+    <string name="desc_notice_1">Notice: the calculate time is increased with the number of digits, please be patient.</string>
 
 </resources>

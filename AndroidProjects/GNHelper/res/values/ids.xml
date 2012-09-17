@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="guessed_number" type="id"/>
+    <item name="guessed_result" type="id"/>
+
+</resources>

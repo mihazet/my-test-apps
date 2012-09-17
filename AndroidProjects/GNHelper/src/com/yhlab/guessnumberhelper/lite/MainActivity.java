@@ -3,6 +3,7 @@ package com.yhlab.guessnumberhelper.lite;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -11,7 +12,10 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.View;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -22,7 +26,6 @@ import com.yhlab.guessnumberhelper.guess.Game;
 public class MainActivity extends SherlockFragmentActivity implements
         NumberFragment.IGuessedListener, OnSharedPreferenceChangeListener {
 
-    @SuppressWarnings("unused")
     private static final String TAG = "MainActivity";
     private SharedPreferences mSharedPrefs;
 
@@ -78,9 +81,32 @@ public class MainActivity extends SherlockFragmentActivity implements
             new RestartGameTask().execute();
             return true;
 
-        case R.id.menu_help:
+        case R.id.menu_intro:
 
-            startActivity(new Intent(this, HelpActivity.class));
+            /*
+             * before start help activity, record some view position for the
+             * help activity.
+             */
+            int offset = getStatusbarHeight();
+            GNApp app = (GNApp) getApplication();
+            app.rectAppArea = getAppArea();
+
+            View v = findViewById(R.id.btn_result_add);
+            app.rectAddResult = getRectOnScreen(v, offset);
+
+            v = findViewById(R.id.menu_restart);
+            app.rectRestartGame = getRectOnScreen(v, offset);
+
+            v = findViewById(R.id.guessed_number);
+            app.rectGuessNumber = getRectOnScreen(v, offset);
+            fixRectForGuessNumber(app.rectGuessNumber);
+
+            v = findViewById(R.id.guessed_result);
+            app.rectGuessResult = getRectOnScreen(v, offset);
+            fixRectForGuessResult(app.rectGuessResult);
+
+            startActivity(new Intent(this, IntroActivity.class));
+
             return true;
 
         case R.id.menu_about:
@@ -279,7 +305,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
         @Override
         protected void onPostExecute(Integer result) {
-            
+
             dbg_show_suggest_number(result);
 
             /* enable add result button */
@@ -292,8 +318,88 @@ public class MainActivity extends SherlockFragmentActivity implements
             setSupportProgressBarIndeterminateVisibility(false);
         }
     }
-    
+
     private void dbg_show_suggest_number(int num) {
         Log.v(TAG, "suggest number: " + String.format("%X", num));
+    }
+
+    /*
+     * return the statusbar height, but can not be called in onCreate, it should
+     * be called after layout completed.
+     */
+    private int getStatusbarHeight() {
+        Rect rect = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+        return rect.top;
+    }
+
+    private Rect getAppArea() {
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        // Log.v(TAG, "W:" + metrics.widthPixels + " H:" +
+        // metrics.heightPixels);
+        return new Rect(0, 0, metrics.widthPixels, metrics.heightPixels);
+    }
+
+    private Rect getRectOnScreen(View view, int statusbarHeight) {
+        if (view == null)
+            return null;
+
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+
+        return new Rect(location[0],
+                location[1] - statusbarHeight,
+                location[0] + view.getWidth(),
+                location[1] + view.getHeight() - statusbarHeight);
+    }
+
+    private void fixRectForGuessNumber(Rect inOutRect) {
+        if (inOutRect != null) {
+            int digitCount = Integer.parseInt(mSharedPrefs.getString(
+                    SettingsActivity.KEY_DIGIT_COUNT, "4"));
+            float t = inOutRect.top;
+            float b = inOutRect.bottom;
+            inOutRect.top = Math.round(t + (b - t) * 0.3f);
+            inOutRect.bottom = Math.round(t + (b - t) * 0.7f);
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            // Log.v(TAG, "density:" + metrics.density);
+            int wheelWidth;
+            if (metrics.density - 0.75f < 0.001) {
+                wheelWidth = 24; // need to verify...
+            } else if (metrics.density - 1.0f < 0.001) {
+                wheelWidth = 33;
+            } else if (metrics.density - 1.5f < 0.001) {
+                wheelWidth = 41;
+            } else {
+                wheelWidth = 48;
+            }
+            inOutRect.right = inOutRect.left + wheelWidth * digitCount;
+        }
+    }
+
+    private void fixRectForGuessResult(Rect inOutRect) {
+        if (inOutRect != null) {
+            float t = inOutRect.top;
+            float b = inOutRect.bottom;
+            inOutRect.top = Math.round(t + (b - t) * 0.3f);
+            inOutRect.bottom = Math.round(t + (b - t) * 0.7f);
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            // Log.v(TAG, "density:" + metrics.density);
+            int wheelWidth;
+            if (metrics.density - 0.75f < 0.001) {
+                wheelWidth = 24; // need to verify...
+            } else if (metrics.density - 1.0f < 0.001) {
+                wheelWidth = 33;
+            } else if (metrics.density - 1.5f < 0.001) {
+                wheelWidth = 41;
+            } else {
+                wheelWidth = 48;
+            }
+            inOutRect.right = inOutRect.left + wheelWidth * 4;
+        }
     }
 }

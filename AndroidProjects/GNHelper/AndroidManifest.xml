@@ -30,7 +30,7 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name="HelpActivity"
+            android:name="IntroActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity

@@ -53,6 +53,7 @@ public class NumberFragment extends SherlockFragment
 
         /* add dynamic widgets GuessedNumber */
         gn = new GuessedNumber(getActivity(), digitCount, "0123456789?");
+        gn.setId(R.id.guessed_number);
         TableRow tr = (TableRow) v.findViewById(R.id.row_guess);
         TableRow.LayoutParams trlp = new TableRow.LayoutParams();
         trlp.column = 1;
@@ -61,6 +62,7 @@ public class NumberFragment extends SherlockFragment
 
         /* add dynamic widgets GuessedResult */
         gr = new GuessedResult(getActivity(), digitCount);
+        gr.setId(R.id.guessed_result);
         tr = (TableRow) v.findViewById(R.id.row_result);
         tr.addView(gr, 1);
 

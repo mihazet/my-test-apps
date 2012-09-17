@@ -12,11 +12,10 @@
         android:title="@string/menu_restart">
     </item>
     <item
-        android:id="@+id/menu_help"
+        android:id="@+id/menu_intro"
         android:icon="@drawable/ic_action_help"
         android:showAsAction="never|withText"
-        android:title="@string/menu_help"
-        android:visible="false">
+        android:title="@string/menu_intro">
     </item>
     <item
         android:id="@+id/menu_about"

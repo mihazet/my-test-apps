@@ -2,6 +2,7 @@ package com.yhlab.guessnumberhelper.lite;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.preference.PreferenceManager;
 import com.yhlab.guessnumberhelper.guess.ChooserFactory;
 import com.yhlab.guessnumberhelper.guess.Game;
@@ -16,6 +17,13 @@ public class GNApp extends Application {
     public ChooserFactory factory;
     public Game game;
     public int nexGuess;
+    
+    /* position of view used by the help activity */
+    public Rect rectRestartGame = null;
+    public Rect rectAddResult = null;
+    public Rect rectAppArea = null;
+    public Rect rectGuessNumber = null;
+    public Rect rectGuessResult = null;
 
     @Override
     public void onCreate() {

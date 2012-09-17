@@ -6,7 +6,7 @@
     <string name="title_activity_about">關於猜數字小幫手</string>
     <string name="menu_restart">重新開始</string>
     <string name="menu_settings">設定</string>
-    <string name="menu_help">幫助</string>
+    <string name="menu_intro">介紹</string>
     <string name="menu_about">關於</string>
     <string name="label_guess">猜測</string>
     <string name="label_result">結果</string>
@@ -21,5 +21,15 @@
     <string name="notify_badformat_guess">呃，猜測數字的格式不正確!</string>
     <string name="notify_badformat_result">呃，輸入結果的格式不正確!</string>
     <string name="notify_nosuchnumber">發生了某種可怕的錯誤，我再也沒辦法幫忙了。:(</string>
+    <string name="desc_interrupt_intro">按\'返回\'鍵結束介紹</string>
+    <string name="desc_restart">首先，按\'重新開始\'啟動小幫手。</string>
+    <string name="desc_number_1">經過計算後，小幫手會顯示出建議數字。</string>
+    <string name="desc_number_2">不喜歡這個建議數字嗎？您可以自由轉動轉盤挑選您喜歡的數字。</string>
+    <string name="desc_number_3">向對手詢問這個數字。</string>
+    <string name="desc_result_1">將對手回應的結果，告訴小幫手。</string>
+    <string name="desc_result_2">按下\'輸入結果\'按鈕，目前的結果會被記錄下來。</string>
+    <string name="desc_result_3">然後，小幫手會繼續計算出下一個建議數字。</string>
+    <string name="desc_step_repeat">重複前述幾個步驟，直到對手的秘密數字被猜到為止。</string>
+    <string name="desc_notice_1">注意: 小幫手計算所需的時間，隨著使用數字的位數增加而加長，請保持耐心等候。</string>
 
 </resources>
