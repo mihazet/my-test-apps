@@ -3,8 +3,6 @@
 
     <ListPreference
         android:defaultValue="4"
-        android:entries="@array/prefs_digit_count_entries"
-        android:entryValues="@array/prefs_digit_count_values"
         android:key="prefs_digitCount"
         android:title="@string/prefs_digit_count" />
     <ListPreference

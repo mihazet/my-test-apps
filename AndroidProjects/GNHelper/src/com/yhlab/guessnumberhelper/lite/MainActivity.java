@@ -71,9 +71,14 @@ public class MainActivity extends SherlockFragmentActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        View v;
+
         switch (item.getItemId()) {
         case R.id.menu_settings:
-            startActivity(new Intent(this, SettingsActivity.class));
+            v = findViewById(R.id.guessed_number);
+            Intent intent = new Intent(this, SettingsActivity.class);
+            intent.putExtra(SettingsActivity.INTENT_KEY_WIDTH, v.getWidth());
+            startActivity(intent);
             return true;
 
         case R.id.menu_restart:
@@ -91,7 +96,7 @@ public class MainActivity extends SherlockFragmentActivity implements
             GNApp app = (GNApp) getApplication();
             app.rectAppArea = getAppArea();
 
-            View v = findViewById(R.id.btn_result_add);
+            v = findViewById(R.id.btn_result_add);
             app.rectAddResult = getRectOnScreen(v, offset);
 
             v = findViewById(R.id.menu_restart);
