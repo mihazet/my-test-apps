@@ -63,7 +63,6 @@ public class IntroActivity extends Activity {
     private class HelpView extends View {
 
         Context mContext;
-        Paint footPaint;
         Paint actionPaint;
         Paint rectPaint;
         GNApp app;
@@ -79,10 +78,6 @@ public class IntroActivity extends Activity {
             app = (GNApp) getApplication();
             finger = BitmapFactory.decodeResource(getResources(),
                     R.drawable.finger_rt);
-
-            footPaint = new Paint();
-            footPaint.setColor(Color.GREEN);
-            footPaint.setTextSize(25.0f);
 
             actionPaint = new Paint();
             actionPaint.setColor(0x801010F8);
@@ -200,8 +195,7 @@ public class IntroActivity extends Activity {
 
             /* draw footprint text */
             if (((sequence / 5) % 2) == 0)
-                canvas.drawText(footprint, 15, app.rectAppArea.bottom - 60,
-                        footPaint);
+                drawFootText(canvas, footprint);
         }
 
         private void drawTextOnCanvas(Canvas canvas, String text,
@@ -226,6 +220,24 @@ public class IntroActivity extends Activity {
             canvas.drawBitmap(tv.getDrawingCache(), left, top, null);
 
             // disable drawing cache
+            tv.setDrawingCacheEnabled(false);
+        }
+
+        private void drawFootText(Canvas canvas, String text) {
+
+            TextView tv = new TextView(mContext);
+            tv.setText(text);
+            tv.setTextColor(Color.GREEN);
+            tv.setTextSize(25.0f);
+            tv.setDrawingCacheEnabled(true);
+            tv.measure(
+                    MeasureSpec.makeMeasureSpec(canvas.getWidth() - 10,
+                            MeasureSpec.AT_MOST),
+                    MeasureSpec.makeMeasureSpec(canvas.getHeight(),
+                            MeasureSpec.AT_MOST));
+            tv.layout(0, 0, tv.getMeasuredWidth(), tv.getMeasuredHeight());
+            canvas.drawBitmap(tv.getDrawingCache(), 5, app.rectAppArea.bottom
+                    - tv.getHeight(), null);
             tv.setDrawingCacheEnabled(false);
         }
 

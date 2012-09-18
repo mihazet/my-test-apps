@@ -14,7 +14,6 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -335,16 +334,35 @@ public class MainActivity extends SherlockFragmentActivity implements
     private int getStatusbarHeight() {
         Rect rect = new Rect();
         getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+        Log.v(TAG, "sbar h:" + rect.top);
         return rect.top;
     }
 
     private Rect getAppArea() {
-        Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getMetrics(metrics);
+
+        /*
+         * The width and height returned by the DisplayMetrics may or may not
+         * exclude the decoration (ex: status bar) size. Someone said: From
+         * android version 3.2, it excludes the decoration, and prior 3.2, it
+         * includes the decoration. And I need the size without decoration here,
+         * so use another method I tried below.
+         */
+        // Display display = getWindowManager().getDefaultDisplay();
+        // DisplayMetrics metrics = new DisplayMetrics();
+        // display.getMetrics(metrics);
         // Log.v(TAG, "W:" + metrics.widthPixels + " H:" +
         // metrics.heightPixels);
-        return new Rect(0, 0, metrics.widthPixels, metrics.heightPixels);
+
+        View v = getWindow().findViewById(Window.ID_ANDROID_CONTENT);
+        // int h =
+        // getWindow().findViewById(Window.ID_ANDROID_CONTENT).getHeight();
+        // int t = getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
+        // int b =
+        // getWindow().findViewById(Window.ID_ANDROID_CONTENT).getBottom();
+        // int w =
+        // getWindow().findViewById(Window.ID_ANDROID_CONTENT).getWidth();
+        // Log.v(TAG, "content h:" + h + " t:" + t + " b:" + b + " w:" + w);
+        return new Rect(0, 0, v.getWidth(), v.getBottom());
     }
 
     private Rect getRectOnScreen(View view, int statusbarHeight) {
