@@ -7,6 +7,7 @@ import kankan.wheel.widget.adapters.SymbolWheelAdapter;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.LinearLayout;
 import com.yhlab.component.R;
 
@@ -92,7 +93,7 @@ public class GuessedNumber extends LinearLayout {
             wheel[i].setCurrentItem(symbols.length() - 1);
             wheel[i].setCyclic(true);
             wheel[i].addScrollingListener(scrolledListener);
-            // wheel[i].setInterpolator(new AnticipateOvershootInterpolator());
+            wheel[i].setInterpolator(new AnticipateOvershootInterpolator());
             addView(wheel[i]);
         }
     }
@@ -118,7 +119,7 @@ public class GuessedNumber extends LinearLayout {
         for (int id = 0; id < digitCount && ((number & 0xF) < limit); id++, number >>= 4) {
             if (scrool) {
                 current = wheel[id].getCurrentItem();
-                wheel[id].scroll((number & 0xF) - current, 3000);
+                wheel[id].scroll((number & 0xF) - current, 5000);
             } else {
                 wheel[id].setCurrentItem(number & 0xF);
             }
