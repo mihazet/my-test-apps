@@ -7,6 +7,7 @@
     <string name="menu_restart">重新开始</string>
     <string name="menu_settings">设定</string>
     <string name="menu_intro">介绍</string>
+    <string name="menu_facebook">脸书专页</string>
     <string name="menu_about">关于</string>
     <string name="label_guess">猜测</string>
     <string name="label_result">结果</string>

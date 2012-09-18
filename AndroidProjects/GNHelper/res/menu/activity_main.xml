@@ -18,6 +18,12 @@
         android:title="@string/menu_intro">
     </item>
     <item
+        android:id="@+id/menu_facebook"
+        android:icon="@drawable/ic_action_facebook"
+        android:showAsAction="never|withText"
+        android:title="@string/menu_facebook">
+    </item>
+    <item
         android:id="@+id/menu_about"
         android:icon="@drawable/ic_action_about"
         android:showAsAction="never|withText"

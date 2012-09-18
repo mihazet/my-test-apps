@@ -7,6 +7,7 @@
     <string name="menu_restart">重新開始</string>
     <string name="menu_settings">設定</string>
     <string name="menu_intro">介紹</string>
+    <string name="menu_facebook">臉書專頁</string>
     <string name="menu_about">關於</string>
     <string name="label_guess">猜測</string>
     <string name="label_result">結果</string>

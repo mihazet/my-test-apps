@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -71,11 +72,12 @@ public class MainActivity extends SherlockFragmentActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
 
         View v;
+        Intent intent;
 
         switch (item.getItemId()) {
         case R.id.menu_settings:
             v = findViewById(R.id.guessed_number);
-            Intent intent = new Intent(this, SettingsActivity.class);
+            intent = new Intent(this, SettingsActivity.class);
             intent.putExtra(SettingsActivity.INTENT_KEY_WIDTH, v.getWidth());
             startActivity(intent);
             return true;
@@ -111,6 +113,13 @@ public class MainActivity extends SherlockFragmentActivity implements
 
             startActivity(new Intent(this, IntroActivity.class));
 
+            return true;
+            
+        case R.id.menu_facebook:
+            
+            Uri uri = Uri.parse("http://www.facebook.com/GuessNumberHelper");
+            intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
             return true;
 
         case R.id.menu_about:
