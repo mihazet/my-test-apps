@@ -30,6 +30,6 @@
     <string name="desc_result_2">Press \'Add result\' button, the current result will be recorded.</string>
     <string name="desc_result_3">Then, helper will calculate the next suggested number.</string>
     <string name="desc_step_repeat">Repeat previous steps until the opponent\'s secret number is found.</string>
-    <string name="desc_notice_1">Notice: the calculate time is increased with the number of digits, please be patient.</string>
+    <string name="desc_notice_1">Notice: the calculating time is increased with the number of digits, please be patient.</string>
 
 </resources>
